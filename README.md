@@ -9,7 +9,7 @@ Then, let's code 🙂
 ## 1. Create a new project
 You must install [Git](https://git-scm.com/) on your computer, and create an account on [Github](https://github.com/) if you do not have one.
 
-Then, you need a repository for you game. You can either wait for us to create one, or use [our template on Github](https://github.com/gamepark/board-game-template) to [create a new repository](https://docs.github.com/fr/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
+Then, you need a repository for you game. You can either wait for us to create one, or use [our template on Github](https://github.com/gamepark/board-arackhan-wars) to [create a new repository](https://docs.github.com/fr/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
 
 We recommend to use this syntax to name the repository: "name-of-the-game"
 
@@ -157,7 +157,7 @@ Then, run:
 ```
 rclone config
 > n (For "New remote)
-name> game-template
+name> arackhan-wars
 Storage> s3 (Amazon S3 Compliant Storage Provider)
 provider> Other
 env_auth> false
@@ -175,7 +175,7 @@ This configuration is only required once.
 Now, to deploy a new version of the board game, you have 2 command lines to run:
 ```
 yarn build
-rclone sync app/build [game-template]:[game-template].game-park.com --progress --s3-acl=public-read
+rclone sync app/build [arackhan-wars]:[arackhan-wars].game-park.com --progress --s3-acl=public-read
 ```
 
 More details about this deployment method here: https://www.clever-cloud.com/blog/engineering/2020/06/24/deploy-cellar-s3-static-site/

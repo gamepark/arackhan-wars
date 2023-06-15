@@ -1,6 +1,6 @@
 import { ItemLocator } from '@gamepark/react-game'
-import { PlayerColor } from '@gamepark/game-template/PlayerColor'
-import { MaterialType } from '@gamepark/game-template/material/MaterialType'
-import { LocationType } from '@gamepark/game-template/material/LocationType'
+import { PlayerColor } from '@gamepark/arackhan-wars/PlayerColor'
+import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
+import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 
 export const Locators: Record<LocationType, ItemLocator<PlayerColor, MaterialType, LocationType>> = {}

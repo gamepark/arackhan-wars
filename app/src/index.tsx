@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css, Global } from '@emotion/react'
-import { GameOptionsSpec } from '@gamepark/game-template/GameOptions'
-import { GameRules } from '@gamepark/game-template/GameRules'
+import { GameOptionsSpec } from '@gamepark/arackhan-wars/GameOptions'
+import { GameRules } from '@gamepark/arackhan-wars/GameRules'
 import { GameProvider, MaterialGameAnimations, setupTranslation } from '@gamepark/react-game'
 import normalize from 'emotion-normalize'
 import { StrictMode } from 'react'
@@ -62,7 +62,7 @@ const style = css`
 
 ReactDOM.render(
   <StrictMode>
-    <GameProvider game="game-template" Rules={GameRules} optionsSpec={GameOptionsSpec}
+    <GameProvider game="arackhan-wars" Rules={GameRules} optionsSpec={GameOptionsSpec}
                   material={Material} locators={Locators} animations={new MaterialGameAnimations()}>
       <App/>
     </GameProvider>
