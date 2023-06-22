@@ -27,4 +27,5 @@ export default function App() {
 }
 
 const RulesHeaders: Record<RuleId, () => ReactJSXElement> = {
+  [RuleId.PlayerTurn]: () => <p></p>
 }

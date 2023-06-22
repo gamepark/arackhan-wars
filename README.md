@@ -7,14 +7,19 @@ First, make sure you have an agreement with us about the game you are going to a
 Then, let's code 🙂
 
 ## 1. Create a new project
+
 You must install [Git](https://git-scm.com/) on your computer, and create an account on [Github](https://github.com/) if you do not have one.
 
-Then, you need a repository for you game. You can either wait for us to create one, or use [our template on Github](https://github.com/gamepark/board-arackhan-wars) to [create a new repository](https://docs.github.com/fr/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
+Then, you need a repository for you game. You can either wait for us to create one, or
+use [our template on Github](https://github.com/gamepark/board-arackhan-wars)
+to [create a new repository](https://docs.github.com/fr/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
 
 We recommend to use this syntax to name the repository: "name-of-the-game"
 
 ## 2. Start the game
-Use [Visual Studio Code](https://code.visualstudio.com/), [Webstorm](https://www.jetbrains.com/fr-fr/webstorm/) or any IDE you like to open the code on you computer.
+
+Use [Visual Studio Code](https://code.visualstudio.com/), [Webstorm](https://www.jetbrains.com/fr-fr/webstorm/) or any IDE you like to open the code on you
+computer.
 
 You must also install [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/)
 
@@ -24,7 +29,8 @@ You must install the dependencies using Yarn. Run this command line in the proje
 
 Now, you should be able to start the game on your computer: `yarn start`
 
-It should open a browser window on http://localhost:3000 and display the first version of your game. It is a debug session: if you change something in the code, it will automatically apply the changes!
+It should open a browser window on http://localhost:3000 and display the first version of your game. It is a debug session: if you change something in the code,
+it will automatically apply the changes!
 
 This version does not interact with Game Park servers. It is 100% local. Inside the console of this browser window, you can run those commands:
 
@@ -38,34 +44,37 @@ Every game on Game Park has 2 parts: ["rules"](/rules) and ["app"](/app).
 
 The rules part contains the code that will run on Game Park servers once the game is deployed. Here we enforce the rules and the lifecycle of the game.
 
-The app part contains a [React](https://react.dev/) application, that will create static files and call the Game Park API to interact with other players in real-time.
+The app part contains a [React](https://react.dev/) application, that will create static files and call the Game Park API to interact with other players in
+real-time.
 
 ### 3.1 The Material
 
 Board game have Material, made of cards, boards, tokens...
 
-The file [MaterialType.ts](/rules/src/material/MaterialType.ts) lists the types of Material in the game.
+The file [ArackhanWarsMaterial.ts](/rules/src/material/MaterialType.ts) lists the types of Material in the game.
 
 _Tips: add you material types one by one. If you have different kinds of boards, cards or token that never mix together, use a different type for each of them._
 
 Example:
+
 ```
-export enum MaterialType {
+export enum ArackhanWarsMaterial {
   Card = 1
 }
 ```
 
-When you add a new MaterialType in the rules, you have to describe how it looks like in the app, inside [Material.tsx](/app/src/material/Material.tsx).
+When you add a new ArackhanWarsMaterial in the rules, you have to describe how it looks like in the app, inside [Material.tsx](/app/src/material/Material.tsx).
 
 Example:
+
 ```
 import back from '../images/cards/back.jpg'
 import card1 from '../images/cards/card-1.jpg'
 import card2 from '../images/cards/card-2.jpg'
 import card3 from '../images/cards/card-3.jpg'
 
-export const Material: Record<MaterialType, MaterialDescription> = {
-  [MaterialType.Card]: CardsDescription,
+export const Material: Record<ArackhanWarsMaterial, MaterialDescription> = {
+  [ArackhanWarsMaterial.Card]: CardsDescription,
 }
 
 export const CardsDescription: CardMaterialDescription = {
@@ -100,12 +109,13 @@ _Tips: add you location types one by one. Locations are used to position the Mat
 When you add a new LocationType in the rules, you have to create a new "Locator" in the app, inside [Locators.tsx](/app/src/locators/Locators.tsx).
 
 Example:
+
 ```
-export const Locators: Record<LocationType, ItemLocator<PlayerColor, MaterialType, LocationType>> = {
+export const Locators: Record<LocationType, ItemLocator<PlayerColor, ArackhanWarsMaterial, LocationType>> = {
   [LocationType.Hand]: new PlayerHandLocator(),
 }
 
-export class PlayerHandLocator extends HandLocator<PlayerColor, MaterialType, LocationType> {
+export class PlayerHandLocator extends HandLocator<PlayerColor, ArackhanWarsMaterial, LocationType> {
   getCoordinates() {
     return { x: 0, y: 20, z: 10 }
   }
@@ -114,13 +124,13 @@ export class PlayerHandLocator extends HandLocator<PlayerColor, MaterialType, Lo
 
 ### 3.3 The setup
 
-Once you have one Material type and one Location type, you can start to setup a new game in [GameRules.ts](/rules/src/GameRules.ts)
+Once you have one Material type and one Location type, you can start to setup a new game in [ArackhanWarsRules.ts](/rules/src/ArackhanWarsRules.ts)
 
 You can easily create and manipulate the material in the setup:
 
 ```
   setup() {
-    this.setupMaterial(MaterialType.Card).createItems([
+    this.setupMaterial(ArackhanWarsMaterial.Card).createItems([
       {id: TheCardEnumId.SomeId1, location: { type: LocationType.Hand }},
       {id: TheCardEnumId.SomeId2, location: { type: LocationType.Hand }},
       {id: TheCardEnumId.SomeId3, location: { type: LocationType.Hand }},
@@ -173,6 +183,7 @@ Edit advanced config> n
 This configuration is only required once.
 
 Now, to deploy a new version of the board game, you have 2 command lines to run:
+
 ```
 yarn build
 rclone sync app/build [arackhan-wars]:[arackhan-wars].game-park.com --progress --s3-acl=public-read

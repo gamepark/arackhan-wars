@@ -1,2 +1,3 @@
-export { GameRules } from './GameRules'
-export { GameOptionsSpec } from './GameOptions'
+export { ArackhanWarsRules } from './ArackhanWarsRules'
+export { GameOptionsSpec } from './ArackhanWarsOptions'
+export { spaceCoordinates } from './material/spaces'
