@@ -1,10 +1,11 @@
+/** @jsxImportSource @emotion/react */
 import { PileLocator, PlaceItemContext } from '@gamepark/react-game'
-import { Coordinates, MaterialItem } from '@gamepark/rules-api'
+import { Coordinates, Location, MaterialItem } from '@gamepark/rules-api'
 import { Faction } from '@gamepark/arackhan-wars/Faction'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 
-export class PlayerAreaLocator extends PileLocator<Faction, MaterialType, LocationType> {
+export class PlayerTokenStockLocator extends PileLocator<Faction, MaterialType, LocationType> {
   rotate = true
 
   getCoordinates({ location }: MaterialItem<Faction, LocationType>, context: PlaceItemContext<Faction, MaterialType, LocationType>): Coordinates {
@@ -13,6 +14,12 @@ export class PlayerAreaLocator extends PileLocator<Faction, MaterialType, Locati
     }
 
     return { x: 35, y: -28, z: 0 }
+  }
+
+  getLocations(): Location<Faction, LocationType>[] {
+    return [{
+      type: LocationType.PlayerTokenStock
+    }]
   }
 
   getRadius(): number {

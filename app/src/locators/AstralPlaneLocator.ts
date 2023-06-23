@@ -1,48 +1,52 @@
 /** @jsxImportSource @emotion/react */
-import { BaseContext, DeckLocator, LocationRulesProps } from '@gamepark/react-game'
-import { Location, XYCoordinates } from '../../../../workshop/packages/rules-api'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
+import { BaseContext, LineLocator } from '@gamepark/react-game'
 import { Faction } from '@gamepark/arackhan-wars/Faction'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { PlayerDiscardRules } from './PlayerDiscardRules'
-import { ReactNode } from 'react'
+import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
+import { Location, XYCoordinates } from '../../../../workshop/packages/rules-api'
 import { factionCardDescription } from '../material/FactionCardDescription'
 import { css, Interpolation, Theme } from '@emotion/react'
 
-export class PlayerDiscardLocator extends DeckLocator<Faction, MaterialType, LocationType> {
+export class AstralPlaneLocator extends LineLocator<Faction, MaterialType, LocationType> {
   parentItemType = MaterialType.PlayMat
 
   getLocationsOnParent(_parent: any, context: BaseContext<Faction, MaterialType, LocationType>): Location<Faction, LocationType>[] {
-    return context.game.players.map((player) => ({
-      type: LocationType.PlayerDiscard,
-      id: player,
-      player
-    }))
+    return context.game.players.flatMap((player) => {
+      return [{
+        type: LocationType.AstralPlane,
+        x: 0,
+        player: player
+      }, {
+        type: LocationType.AstralPlane,
+        x: 1,
+        player: player
+      }]
+    })
   }
 
   getPositionOnParent(location: Location<Faction, LocationType>, context: BaseContext<Faction, MaterialType, LocationType>): XYCoordinates {
+    const height = factionCardDescription.height
+    const width = height * factionCardDescription.ratio
     const index = this.getRelativePlayerIndex(context, location.player!)
-
     if (index === 0) {
-      return { x: 8.4, y: 90 }
+      return { x: 68.3 + ((location.x!) * (width + 5.3)), y: 90 }
     }
 
-    return { x: 91.4, y: 9.85 }
+    return { x: 31.55 - ((location.x!) * (width + 5.3)), y: 9.85 }
+
   }
 
   getLocationCss(_location: Location<Faction, LocationType>): Interpolation<Theme> {
     const height = factionCardDescription.height
     const width = height * factionCardDescription.ratio
     return css`
-      width: ${width + 0.2}em;
-      height: ${height + 0.2}em;
+      width: ${width}em;
+      height: ${height}em;
       border-radius: 0.2em;
     `
   }
 
-  getLocationRules(_props: LocationRulesProps<Faction, MaterialType, LocationType>): ReactNode {
-    return <PlayerDiscardRules {..._props} />
+  getDelta() {
+    return { x: 0, y: 9.4, z: 0 }
   }
-
-
 }

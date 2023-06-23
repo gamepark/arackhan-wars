@@ -1,10 +1,11 @@
 export enum LocationType {
-  Battlefield = 1, // The battlefield
+  Table = 1, // The table
   PlayerDeck, // The player deck
   Hand, // The player hand
-  Space, // The battlefield Space
-  PlayerArea, // The player area
+  Battlefield, // The battlefield Space
+  PlayerTokenStock, // The player area
   RoundTracker, // The round tracker location
-  RoundTrackerSpace, // THe round tracker space location
-  PlayerDiscard
+  PlayerDiscard, // The player discard
+  FactionCard, // The token on faction card,
+  AstralPlane // Cards in astral plane
 }

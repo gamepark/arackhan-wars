@@ -2,18 +2,18 @@
 import board from '../images/boards/core-box-battle-mat.jpg'
 import { BoardDescription } from '@gamepark/react-game'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { BattlefieldRules } from './BattlefieldRules'
+import { PlayMatRules } from './PlayMatRules'
 
 export const boardRatio = 576 / 576
 
-export class BattlefieldDescription extends BoardDescription {
+export class PlayMatDescription extends BoardDescription {
   height = 57.6
   ratio = boardRatio
   image = board
 
-  items = () => [{ location: { type: LocationType.Battlefield } }]
-  rules = BattlefieldRules
+  items = () => [{ location: { type: LocationType.Table } }]
+  rules = PlayMatRules
 }
 
-export const battlefieldDescription = new BattlefieldDescription()
+export const playMatDescription = new PlayMatDescription()
 

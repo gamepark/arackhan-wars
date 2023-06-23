@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-export const BattlefieldRules = () => {
+export const PlayMatRules = () => {
   return <>
 
   </>

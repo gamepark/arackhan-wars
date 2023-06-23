@@ -2,22 +2,24 @@ import { ItemLocator } from '@gamepark/react-game'
 import { Faction } from '@gamepark/arackhan-wars/Faction'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { BattlefieldLocator } from './BattlefieldLocator'
+import { TableLocator } from './TableLocator'
 import { PlayerDeckLocator } from './PlayerDeckLocator'
 import { PlayerHandLocator } from './PlayerHandLocator'
-import { SpaceLocator } from './SpaceLocator'
-import { PlayerAreaLocator } from './PlayerAreaLocator'
+import { BattlefieldLocator } from './BattlefieldLocator'
+import { PlayerTokenStockLocator } from './PlayerTokenStockLocator'
 import { RoundTrackerLocator } from './RoundTrackerLocator'
-import { RoundTrackerSpaceLocator } from './RoundTrackerSpaceLocator'
 import { PlayerDiscardLocator } from './PlayerDiscardLocator'
+import { FactionCardLocator } from './FactionCardLocator'
+import { AstralPlaneLocator } from './AstralPlaneLocator'
 
 export const Locators: Record<LocationType, ItemLocator<Faction, MaterialType, LocationType>> = {
-  [LocationType.Battlefield]: new BattlefieldLocator(),
+  [LocationType.Table]: new TableLocator(),
   [LocationType.PlayerDeck]: new PlayerDeckLocator(),
   [LocationType.Hand]: new PlayerHandLocator(),
-  [LocationType.Space]: new SpaceLocator(),
-  [LocationType.PlayerArea]: new PlayerAreaLocator(),
+  [LocationType.Battlefield]: new BattlefieldLocator(),
+  [LocationType.PlayerTokenStock]: new PlayerTokenStockLocator(),
   [LocationType.RoundTracker]: new RoundTrackerLocator(),
-  [LocationType.RoundTrackerSpace]: new RoundTrackerSpaceLocator(),
-  [LocationType.PlayerDiscard]: new PlayerDiscardLocator()
+  [LocationType.PlayerDiscard]: new PlayerDiscardLocator(),
+  [LocationType.FactionCard]: new FactionCardLocator(),
+  [LocationType.AstralPlane]: new AstralPlaneLocator()
 }

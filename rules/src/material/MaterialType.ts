@@ -1,5 +1,5 @@
 export enum MaterialType {
-  Battlefield = 1,
+  PlayMat = 1,
   FactionCard,
   FactionToken,
   RoundTracker,

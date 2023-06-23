@@ -23,11 +23,8 @@ export class ArackhanWarsSetup extends MaterialGameSetup<Faction, MaterialType, 
             id: { front: id, back: player }, location: { type: LocationType.PlayerDeck, player: player }
           })))
 
-      this.material(MaterialType.FactionToken)
-        .createItem({ id: player, location: { type: LocationType.PlayerArea, player: player }, quantity: 34 })
-
       this.material(MaterialType.RoundTrackerToken)
-        .createItem({ id: 1, location: { type: LocationType.RoundTrackerSpace, x: 1 } })
+        .createItem({ id: 1, location: { type: LocationType.RoundTracker, x: 1 } })
 
       this.material(MaterialType.FactionCard).player(player).shuffle()
 

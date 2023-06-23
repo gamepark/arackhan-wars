@@ -10,7 +10,7 @@ export class RoundTrackerDescription extends BoardDescription {
   image = roundTrack
   height = 3.6
   ratio = trackerRatio
-  items = () => [{ location: { type: LocationType.RoundTracker } }]
+  items = () => [{ location: { type: LocationType.Table } }]
   rules = RoundTrackerRules
 }
 

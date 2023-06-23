@@ -23,7 +23,7 @@ export const hideCardFrontToOthers: HidingStrategy = (
   item: MaterialItem<Faction, LocationType>, player?: Faction
 ) => item.location.player === player ? [] : ['id.front']
 
-export const hideCardInBattleField: HidingStrategy = (
+export const hideCardInBattlefield: HidingStrategy = (
   item: MaterialItem<Faction, LocationType>, player?: Faction
 ) => {
   if (item.rotation?.y) {
@@ -41,6 +41,6 @@ const hidingStrategies = {
   [MaterialType.FactionCard]: {
     [LocationType.PlayerDeck]: hideCardFront,
     [LocationType.Hand]: hideCardFrontToOthers,
-    [LocationType.Space]: hideCardInBattleField
+    [LocationType.Battlefield]: hideCardInBattlefield
   }
 }
