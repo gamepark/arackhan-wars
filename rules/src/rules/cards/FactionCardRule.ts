@@ -9,7 +9,7 @@ export enum CardAttributeType {
   Omnistrike
 }
 
-type FactionCardAttribute = {
+export type CardAttribute = {
   type: CardAttributeType,
   strength?: number
 }
@@ -27,7 +27,7 @@ abstract class FactionCardRule {
   defense?: number = 0
   astral?: boolean = false
   quantity?: number = 1
-  attributes?: FactionCardAttribute[] = []
+  attributes?: CardAttribute[] = []
 }
 
 export {

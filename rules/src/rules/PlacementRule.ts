@@ -58,7 +58,7 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
             x: 0,
             player: this.player
           },
-          rotation: { y: 180 }
+          rotation: { y: 1 }
         }
       ),
       ...cards.moveItems({
@@ -67,7 +67,7 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
             x: 1,
             player: this.player
           },
-          rotation: { y: 180 }
+          rotation: { y: 1 }
         }
       )]
   }

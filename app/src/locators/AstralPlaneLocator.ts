@@ -51,6 +51,6 @@ export class AstralPlaneLocator extends ItemLocator<PlayerId, MaterialType, Loca
   }
 
   isHidden(item: MaterialItem<PlayerId, LocationType>): boolean {
-    return item.rotation?.y === 180
+    return item.rotation?.y === 1
   }
 }

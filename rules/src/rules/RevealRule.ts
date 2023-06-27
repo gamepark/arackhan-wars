@@ -16,7 +16,7 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
 
     return [
       ...revealCards,
-      // TODO: create utils to get the next player
+      // TODO: Go the the next player that has initiative cards on board, if any go to the ActivationRule
       this.rules().startPlayerTurn(RuleId.InitiativeActivationRule, this.game.players[0])
     ]
   }
@@ -30,7 +30,7 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
             .player(revealedCard.location.player)
             .createItem({
               id: revealedCard.location.player,
-              location: { parent: revealedCard.id, type: LocationType.FactionCard, player: revealedCard.location.player }
+              location: { parent: move.itemIndex, type: LocationType.FactionCard, player: revealedCard.location.player }
             })
         ]
       }
