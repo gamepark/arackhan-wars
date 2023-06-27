@@ -1,8 +1,7 @@
-import { CardAttributeType, FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { CardAttributeType, FactionCardKind } from '../FactionCardRule'
+import { BlightCardRule } from './BlightCardRule'
 
-export class ForcedExile extends FactionCardRule {
-  faction = Faction.Blight
+export class ForcedExile extends BlightCardRule {
   kind = FactionCardKind.Spell
   astral = true
   attributes = [{ type: CardAttributeType.Initiative }]

@@ -1,8 +1,7 @@
-import { FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { FactionCardKind } from '../FactionCardRule'
+import { GrayOrderCardRule } from './GrayOrderCardRule'
 
-export class DrunkKnight extends FactionCardRule {
-  faction = Faction.GrayOrder
+export class DrunkKnight extends GrayOrderCardRule {
   kind = FactionCardKind.Creature
   attack = 1
   defense = 1

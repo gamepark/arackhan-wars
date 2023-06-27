@@ -1,8 +1,7 @@
-import { FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { FactionCardKind } from '../FactionCardRule'
+import { BlightCardRule } from './BlightCardRule'
 
-export class WesternForge extends FactionCardRule {
-  faction = Faction.Blight
+export class WesternForge extends BlightCardRule {
   kind = FactionCardKind.Land
   defense = 4
 }

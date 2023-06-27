@@ -1,15 +1,15 @@
 import { LocationType } from '../material/LocationType'
 import { Material, MaterialItem, MaterialMove, PlayerTurnRule, XYCoordinates } from '@gamepark/rules-api'
-import { Faction } from '../Faction'
 import { MaterialType } from '../material/MaterialType'
 import { battlefieldSpaceCoordinates, startingSpaces } from '../material/spaces'
 import { RuleId } from './RuleId'
 import { FactionCards } from '../material/FactionCardType'
+import { PlayerId } from '../ArackhanWarsOptions'
 
 const PLACED_CARD_PER_TURN = 2
 
-export class PlacementRule extends PlayerTurnRule<Faction, MaterialType, LocationType> {
-  getPlayerMoves(): MaterialMove<Faction, MaterialType, LocationType>[] {
+export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
+  getPlayerMoves(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     const moves: MaterialMove[] = []
     const nextStep = this.nextStep()
     if (nextStep) {
@@ -50,7 +50,7 @@ export class PlacementRule extends PlayerTurnRule<Faction, MaterialType, Locatio
     return moves
   }
 
-  moveToAstralPlane(cards: Material<Faction, MaterialType, LocationType>) {
+  moveToAstralPlane(cards: Material<PlayerId, MaterialType, LocationType>) {
     return [
       ...cards.moveItems({
           location: {
@@ -90,7 +90,7 @@ export class PlacementRule extends PlayerTurnRule<Faction, MaterialType, Locatio
     return
   }
 
-  moveToBattlefieldSpace(cards: Material<Faction, MaterialType, LocationType>, space: XYCoordinates) {
+  moveToBattlefieldSpace(cards: Material<PlayerId, MaterialType, LocationType>, space: XYCoordinates) {
     return cards.moveItems({
       location: {
         type: LocationType.Battlefield,
@@ -102,7 +102,7 @@ export class PlacementRule extends PlayerTurnRule<Faction, MaterialType, Locatio
     })
   }
 
-  isAdjacentToFactionCard(battlefield: MaterialItem<Faction, LocationType, MaterialType>[], position: XYCoordinates) {
+  isAdjacentToFactionCard(battlefield: MaterialItem<PlayerId, LocationType, MaterialType>[], position: XYCoordinates) {
     const north: XYCoordinates = { x: position.x, y: position.y - 1 }
     const east: XYCoordinates = { x: position.x + 1, y: position.y }
     const south: XYCoordinates = { x: position.x, y: position.y + 1 }

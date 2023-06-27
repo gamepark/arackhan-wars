@@ -1,8 +1,7 @@
-import { FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { FactionCardKind } from '../FactionCardRule'
+import { NakkaCardRule } from './NakkaCardRule'
 
-export class TreeOfLife extends FactionCardRule {
-  faction = Faction.Nakka
+export class TreeOfLife extends NakkaCardRule {
   kind = FactionCardKind.Land
   defense = 4
 }

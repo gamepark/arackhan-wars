@@ -1,8 +1,7 @@
-import { FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { FactionCardKind } from '../FactionCardRule'
+import { BlightCardRule } from './BlightCardRule'
 
-export class PlagueCollector extends FactionCardRule {
-  faction = Faction.Blight
+export class PlagueCollector extends BlightCardRule {
   kind = FactionCardKind.Creature
   attack = 1
   defense = 2

@@ -1,8 +1,7 @@
-import { FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { FactionCardKind } from '../FactionCardRule'
+import { BlightCardRule } from './BlightCardRule'
 
-export class Firestorm extends FactionCardRule {
-  faction = Faction.Blight
+export class Firestorm extends BlightCardRule {
   kind = FactionCardKind.Spell
   quantity = 2
 }

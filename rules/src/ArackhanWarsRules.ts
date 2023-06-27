@@ -1,4 +1,3 @@
-import { Faction } from './Faction'
 import { MaterialType } from './material/MaterialType'
 import { LocationType } from './material/LocationType'
 import { HidingStrategy, MaterialItem, MaterialRulesPartCreator, SecretMaterialRules } from '@gamepark/rules-api'
@@ -8,13 +7,14 @@ import { locationsStrategies } from './material/LocationStrategies'
 import { PlacementRule } from './rules/PlacementRule'
 import { RevealRule } from './rules/RevealRule'
 import { InitiativeActivationRule } from './rules/InitiativeActivationRule'
+import { PlayerId } from './ArackhanWarsOptions'
 
 
 /**
  * This class implements the rules of the board game.
  * It must follow Game Park "Rules" API so that the Game Park server can enforce the rules.
  */
-export class ArackhanWarsRules extends SecretMaterialRules<Faction, MaterialType, LocationType> {
+export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialType, LocationType> {
   rules = rules
   locationsStrategies = locationsStrategies
   hidingStrategies = hidingStrategies
@@ -23,11 +23,11 @@ export class ArackhanWarsRules extends SecretMaterialRules<Faction, MaterialType
 
 export const hideCardFront: HidingStrategy = () => ['id.front']
 export const hideCardFrontToOthers: HidingStrategy = (
-  item: MaterialItem<Faction, LocationType>, player?: Faction
+  item: MaterialItem<PlayerId, LocationType>, player?: PlayerId
 ) => item.location.player === player ? [] : ['id.front']
 
 export const hideCardWhenRotated: HidingStrategy = (
-  item: MaterialItem<Faction, LocationType>, player?: Faction
+  item: MaterialItem<PlayerId, LocationType>, player?: PlayerId
 ) => {
   if (item.rotation?.y) {
     return item.location.player === player ? [] : ['id.front']
@@ -36,7 +36,7 @@ export const hideCardWhenRotated: HidingStrategy = (
   return []
 }
 
-const rules: Record<number, MaterialRulesPartCreator<Faction, MaterialType, LocationType>> = {
+const rules: Record<number, MaterialRulesPartCreator<PlayerId, MaterialType, LocationType>> = {
   [RuleId.StartRule]: StartRule,
   [RuleId.PlacementRule]: PlacementRule,
   [RuleId.RevealRule]: RevealRule,

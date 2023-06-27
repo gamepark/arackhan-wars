@@ -1,8 +1,7 @@
-import { CardAttributeType, FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { CardAttributeType, FactionCardKind } from '../FactionCardRule'
+import { NakkaCardRule } from './NakkaCardRule'
 
-export class Xenodon extends FactionCardRule {
-  faction = Faction.Nakka
+export class Xenodon extends NakkaCardRule {
   kind = FactionCardKind.Creature
   attack = 1
   defense = 1

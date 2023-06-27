@@ -1,8 +1,7 @@
-import { CardAttributeType, FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { CardAttributeType, FactionCardKind } from '../FactionCardRule'
+import { WhitelandCardRule } from './WhitelandCardRule'
 
-export class NihilistPenguin extends FactionCardRule {
-  faction = Faction.Whitelands
+export class NihilistPenguin extends WhitelandCardRule {
   kind = FactionCardKind.Creature
   attack = 0
   defense = 1

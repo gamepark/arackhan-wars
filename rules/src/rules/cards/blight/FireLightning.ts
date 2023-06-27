@@ -1,8 +1,7 @@
-import { CardAttributeType, FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { CardAttributeType, FactionCardKind } from '../FactionCardRule'
+import { BlightCardRule } from './BlightCardRule'
 
-export class FireLightning extends FactionCardRule {
-  faction = Faction.Blight
+export class FireLightning extends BlightCardRule {
   kind = FactionCardKind.Spell
   attack = 2
   attributes = [

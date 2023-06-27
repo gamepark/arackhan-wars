@@ -1,8 +1,7 @@
-import { FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { FactionCardKind } from '../FactionCardRule'
+import { WhitelandCardRule } from './WhitelandCardRule'
 
-export class Blizzard extends FactionCardRule {
-  faction = Faction.Whitelands
+export class Blizzard extends WhitelandCardRule {
   kind = FactionCardKind.Spell
   astral = true
 }

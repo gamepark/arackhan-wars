@@ -1,5 +1,4 @@
 import { ItemLocator } from '@gamepark/react-game'
-import { Faction } from '@gamepark/arackhan-wars/Faction'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { TableLocator } from './TableLocator'
@@ -11,8 +10,9 @@ import { RoundTrackerLocator } from './RoundTrackerLocator'
 import { PlayerDiscardLocator } from './PlayerDiscardLocator'
 import { FactionCardLocator } from './FactionCardLocator'
 import { AstralPlaneLocator } from './AstralPlaneLocator'
+import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 
-export const Locators: Record<LocationType, ItemLocator<Faction, MaterialType, LocationType>> = {
+export const Locators: Record<LocationType, ItemLocator<PlayerId, MaterialType, LocationType>> = {
   [LocationType.Table]: new TableLocator(),
   [LocationType.PlayerDeck]: new PlayerDeckLocator(),
   [LocationType.Hand]: new PlayerHandLocator(),

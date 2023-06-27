@@ -1,8 +1,7 @@
-import { FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { FactionCardKind } from '../FactionCardRule'
+import { GrayOrderCardRule } from './GrayOrderCardRule'
 
-export class AvalonFortress extends FactionCardRule {
-  faction = Faction.GrayOrder
+export class AvalonFortress extends GrayOrderCardRule {
   kind = FactionCardKind.Land
   defense = 4
 }

@@ -1,9 +1,9 @@
 import { LocationType } from '../material/LocationType'
 import { CustomMove, MaterialItem, MaterialMove, MaterialRulesPart, MoveKind } from '@gamepark/rules-api'
-import { Faction } from '../Faction'
 import { MaterialType } from '../material/MaterialType'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { RuleId } from './RuleId'
+import { PlayerId } from '../ArackhanWarsOptions'
 
 type StartRulePlayerMemory = {
   end?: boolean
@@ -11,9 +11,9 @@ type StartRulePlayerMemory = {
 
 const HAND_LENGTH = 7
 
-export class StartRule extends MaterialRulesPart<Faction, MaterialType, LocationType> {
+export class StartRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
 
-  getLegalMoves(playerId: Faction): MaterialMove<Faction, MaterialType, LocationType>[] {
+  getLegalMoves(playerId: PlayerId): MaterialMove<PlayerId, MaterialType, LocationType>[] {
 
     if (this.getMemory<StartRulePlayerMemory>(playerId)?.end) {
       return []
@@ -47,11 +47,11 @@ export class StartRule extends MaterialRulesPart<Faction, MaterialType, Location
     ]
   }
 
-  nextPlayer(player: Faction): Faction {
+  nextPlayer(player: PlayerId): PlayerId {
     return this.game.players[(this.game.players.indexOf(player) + 1) % this.game.players.length]
   }
 
-  onCustomMove(move: CustomMove): MaterialMove<Faction, MaterialType, LocationType>[] {
+  onCustomMove(move: CustomMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     const moves = []
 
     if (move.type === CustomMoveType.Pass) {
@@ -89,11 +89,11 @@ export class StartRule extends MaterialRulesPart<Faction, MaterialType, Location
     return moves
   }
 
-  isUnpredictableMove(move: MaterialMove<Faction, MaterialType, LocationType>, player: Faction): boolean {
+  isUnpredictableMove(move: MaterialMove<PlayerId, MaterialType, LocationType>, player: PlayerId): boolean {
     return super.isUnpredictableMove?.(move, player) || (move.kind === MoveKind.CustomMove && move.type === CustomMoveType.Mulligan)
   }
 
-  isTurnToPlay(playerId: Faction): boolean {
+  isTurnToPlay(playerId: PlayerId): boolean {
     return !this.getMemory<StartRulePlayerMemory>(playerId)?.end
   }
 }

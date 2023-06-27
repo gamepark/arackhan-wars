@@ -1,8 +1,7 @@
-import { CardAttributeType, FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { CardAttributeType, FactionCardKind } from '../FactionCardRule'
+import { BlightCardRule } from './BlightCardRule'
 
-export class Slayer extends FactionCardRule {
-  faction = Faction.Blight
+export class Slayer extends BlightCardRule {
   kind = FactionCardKind.Creature
   attack = 2
   defense = 2

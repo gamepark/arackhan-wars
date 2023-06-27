@@ -5,7 +5,10 @@ import { Faction, playerFactions } from './Faction'
 /**
  * This is the options for each player in the game.
  */
-type PlayerOptions = { id: Faction }
+export type PlayerId = number
+export type  PlayerOptions = {
+  faction: Faction
+}
 
 /**
  * This is the type of object that the game receives when a new game is started.
@@ -21,23 +24,14 @@ export type ArackhanWarsOptions = {
  */
 export const GameOptionsSpec: OptionsSpec<ArackhanWarsOptions> = {
   players: {
-    id: {
+    faction: {
       label: (t: TFunction) => t('Player faction'),
       values: playerFactions,
-      valueSpec: color => ({ label: t => getPlayerName(color, t) })
+      valueSpec: (faction: Faction) => ({ label: (t: TFunction) => getPlayerName(faction, t) })
     }
   }
 }
 
-export function getPlayerName(playerId: Faction, t: TFunction) {
-  switch (playerId) {
-    case Faction.Whitelands:
-      return t('Whitelands')
-    case Faction.Blight:
-      return t('Blight')
-    case Faction.GrayOrder:
-      return t('Gray Order')
-    case Faction.Nakka:
-      return t('Naka')
-  }
+export function getPlayerName(playerId: PlayerId, t: TFunction) {
+  return t('Player {playerId}', { playerId })
 }

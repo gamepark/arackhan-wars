@@ -1,8 +1,7 @@
-import { CardAttributeType, FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { CardAttributeType, FactionCardKind } from '../FactionCardRule'
+import { BlightCardRule } from './BlightCardRule'
 
-export class AbominableHydra extends FactionCardRule {
-  faction = Faction.Blight
+export class AbominableHydra extends BlightCardRule {
   kind = FactionCardKind.Creature
   attack = 3
   defense = 2

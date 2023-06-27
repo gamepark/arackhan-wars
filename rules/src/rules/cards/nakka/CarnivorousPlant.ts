@@ -1,8 +1,7 @@
-import { FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { FactionCardKind } from '../FactionCardRule'
+import { NakkaCardRule } from './NakkaCardRule'
 
-export class CarnivorousPlant extends FactionCardRule {
-  faction = Faction.Nakka
+export class CarnivorousPlant extends NakkaCardRule {
   kind = FactionCardKind.Creature
   attack = 1
   defense = 1

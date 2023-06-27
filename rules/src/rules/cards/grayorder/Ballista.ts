@@ -1,8 +1,7 @@
-import { CardAttributeType, FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { CardAttributeType, FactionCardKind } from '../FactionCardRule'
+import { GrayOrderCardRule } from './GrayOrderCardRule'
 
-export class Ballista extends FactionCardRule {
-  faction = Faction.GrayOrder
+export class Ballista extends GrayOrderCardRule {
   kind = FactionCardKind.Creature
   attack = 1
   defense = 1

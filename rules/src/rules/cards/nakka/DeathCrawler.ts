@@ -1,8 +1,7 @@
-import { FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { FactionCardKind } from '../FactionCardRule'
+import { NakkaCardRule } from './NakkaCardRule'
 
-export class DeathCrawler extends FactionCardRule {
-  faction = Faction.Nakka
+export class DeathCrawler extends NakkaCardRule {
   kind = FactionCardKind.Creature
   attack = 2
 }

@@ -1,7 +1,6 @@
-import { FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { FactionCardKind } from '../FactionCardRule'
+import { GrayOrderCardRule } from './GrayOrderCardRule'
 
-export class HorseOfAvalon extends FactionCardRule {
-  faction = Faction.GrayOrder
+export class HorseOfAvalon extends GrayOrderCardRule {
   kind = FactionCardKind.Spell
 }

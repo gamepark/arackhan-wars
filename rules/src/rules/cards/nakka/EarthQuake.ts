@@ -1,8 +1,7 @@
-import { CardAttributeType, FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { CardAttributeType, FactionCardKind } from '../FactionCardRule'
+import { NakkaCardRule } from './NakkaCardRule'
 
-export class EarthQuake extends FactionCardRule {
-  faction = Faction.Nakka
+export class EarthQuake extends NakkaCardRule {
   kind = FactionCardKind.Spell
   attack = 2
   attributes = [{ type: CardAttributeType.Omnistrike }]

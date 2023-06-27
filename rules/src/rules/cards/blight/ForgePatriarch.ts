@@ -1,8 +1,7 @@
-import { FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { FactionCardKind } from '../FactionCardRule'
+import { BlightCardRule } from './BlightCardRule'
 
-export class ForgePatriarch extends FactionCardRule {
-  faction = Faction.Blight
+export class ForgePatriarch extends BlightCardRule {
   kind = FactionCardKind.Creature
   attack = 2
   defense = 2

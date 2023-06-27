@@ -1,8 +1,7 @@
-import { CardAttributeType, FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { CardAttributeType, FactionCardKind } from '../FactionCardRule'
+import { NakkaCardRule } from './NakkaCardRule'
 
-export class MountedBanshee extends FactionCardRule {
-  faction = Faction.Nakka
+export class MountedBanshee extends NakkaCardRule {
   kind = FactionCardKind.Creature
   attack = 2
   defense = 2

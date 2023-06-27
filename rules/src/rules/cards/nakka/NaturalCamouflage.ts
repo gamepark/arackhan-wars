@@ -1,7 +1,6 @@
-import { FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { FactionCardKind } from '../FactionCardRule'
+import { NakkaCardRule } from './NakkaCardRule'
 
-export class NaturalCamouflage extends FactionCardRule {
-  faction = Faction.Nakka
+export class NaturalCamouflage extends NakkaCardRule {
   kind = FactionCardKind.Spell
 }

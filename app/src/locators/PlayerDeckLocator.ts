@@ -1,16 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import { BaseContext, DeckLocator, PlaceLocationContext } from '@gamepark/react-game'
-import { Faction } from '@gamepark/arackhan-wars/Faction'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { Location, XYCoordinates } from '@gamepark/rules-api'
 import { css } from '@emotion/react'
 import { factionCardDescription } from '../material/FactionCardDescription'
+import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 
-export class PlayerDeckLocator extends DeckLocator<Faction, MaterialType, LocationType> {
+export class PlayerDeckLocator extends DeckLocator<PlayerId, MaterialType, LocationType> {
   parentItemType = MaterialType.PlayMat
 
-  getPositionOnParent(location: Location<Faction, LocationType>, context: BaseContext<Faction, MaterialType, LocationType>): XYCoordinates {
+  getPositionOnParent(location: Location<PlayerId, LocationType>, context: BaseContext<PlayerId, MaterialType, LocationType>): XYCoordinates {
     const index = this.getRelativePlayerIndex(context, location.player!)
     if (index === 0) {
       return { x: 92.2, y: 90 }
@@ -28,7 +28,7 @@ export class PlayerDeckLocator extends DeckLocator<Faction, MaterialType, Locati
     return true
   }
 
-  getLocations(context: PlaceLocationContext<Faction, MaterialType, LocationType>): Location<Faction, LocationType>[] {
+  getLocations(context: PlaceLocationContext<PlayerId, MaterialType, LocationType>): Location<PlayerId, LocationType>[] {
     return [{
       type: LocationType.PlayerDeck,
       player: context.player

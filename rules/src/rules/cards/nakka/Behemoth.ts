@@ -1,8 +1,7 @@
-import { FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { FactionCardKind } from '../FactionCardRule'
+import { NakkaCardRule } from './NakkaCardRule'
 
-export class Behemoth extends FactionCardRule {
-  faction = Faction.Nakka
+export class Behemoth extends NakkaCardRule {
   kind = FactionCardKind.Creature
   attack = 3
   defense = 2

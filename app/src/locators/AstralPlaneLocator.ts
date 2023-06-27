@@ -1,17 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import { BaseContext, ItemLocator, PlaceLocationContext } from '@gamepark/react-game'
-import { Faction } from '@gamepark/arackhan-wars/Faction'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { Location, MaterialItem, XYCoordinates } from '../../../../workshop/packages/rules-api'
 import { factionCardDescription } from '../material/FactionCardDescription'
 import { css, Interpolation, Theme } from '@emotion/react'
+import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 
-export class AstralPlaneLocator extends ItemLocator<Faction, MaterialType, LocationType> {
+export class AstralPlaneLocator extends ItemLocator<PlayerId, MaterialType, LocationType> {
   parentItemType = MaterialType.PlayMat
 
-  getLocations(context: PlaceLocationContext<Faction, MaterialType, LocationType>): Location<Faction, LocationType>[] {
-    return context.game.players.flatMap((player: Faction) => {
+  getLocations(context: PlaceLocationContext<PlayerId, MaterialType, LocationType>): Location<PlayerId, LocationType>[] {
+    return context.game.players.flatMap((player: PlayerId) => {
       return [{
         type: LocationType.AstralPlane,
         x: 0,
@@ -24,7 +24,7 @@ export class AstralPlaneLocator extends ItemLocator<Faction, MaterialType, Locat
     })
   }
 
-  getPositionOnParent(location: Location<Faction, LocationType>, context: BaseContext<Faction, MaterialType, LocationType>): XYCoordinates {
+  getPositionOnParent(location: Location<PlayerId, LocationType>, context: BaseContext<PlayerId, MaterialType, LocationType>): XYCoordinates {
     const height = factionCardDescription.height
     const width = height * factionCardDescription.ratio
     const index = this.getRelativePlayerIndex(context, location.player!)
@@ -36,7 +36,7 @@ export class AstralPlaneLocator extends ItemLocator<Faction, MaterialType, Locat
 
   }
 
-  getLocationCss(_location: Location<Faction, LocationType>): Interpolation<Theme> {
+  getLocationCss(_location: Location<PlayerId, LocationType>): Interpolation<Theme> {
     const height = factionCardDescription.height
     const width = height * factionCardDescription.ratio
     return css`
@@ -46,11 +46,11 @@ export class AstralPlaneLocator extends ItemLocator<Faction, MaterialType, Locat
     `
   }
 
-  isDragOnlyLocation(_location: Location<Faction, LocationType>, _context: PlaceLocationContext<Faction, MaterialType, LocationType>): boolean {
+  isDragOnlyLocation(_location: Location<PlayerId, LocationType>, _context: PlaceLocationContext<PlayerId, MaterialType, LocationType>): boolean {
     return true
   }
 
-  isHidden(item: MaterialItem<Faction, LocationType>): boolean {
+  isHidden(item: MaterialItem<PlayerId, LocationType>): boolean {
     return item.rotation?.y === 180
   }
 }

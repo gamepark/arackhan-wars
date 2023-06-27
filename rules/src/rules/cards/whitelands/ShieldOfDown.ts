@@ -1,8 +1,7 @@
-import { FactionCardKind, FactionCardRule } from '../FactionCardRule'
-import { Faction } from '../../../Faction'
+import { FactionCardKind } from '../FactionCardRule'
+import { WhitelandCardRule } from './WhitelandCardRule'
 
-export class ShieldOfDown extends FactionCardRule {
-  faction = Faction.Whitelands
+export class ShieldOfDown extends WhitelandCardRule {
   kind = FactionCardKind.Creature
   attack = 1
   defense = 2
