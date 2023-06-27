@@ -2,7 +2,7 @@ import { MaterialGameSetup } from '@gamepark/rules-api'
 import { Faction } from './Faction'
 import { MaterialType } from './material/MaterialType'
 import { LocationType } from './material/LocationType'
-import { CardsByFaction } from './material/FactionCardType'
+import { FactionCards } from './material/FactionCardType'
 import { ArackhanWarsOptions } from './ArackhanWarsOptions'
 import { RuleId } from './rules/RuleId'
 import { locationsStrategies } from './material/LocationStrategies'
@@ -16,30 +16,44 @@ export class ArackhanWarsSetup extends MaterialGameSetup<Faction, MaterialType, 
   locationsStrategies = locationsStrategies
 
   setupMaterial() {
-    this.players.forEach((player) => {
-      this.material(MaterialType.FactionCard)
-        .createItems(
-          CardsByFaction[player]!.map((id) => ({
-            id: { front: id, back: player }, location: { type: LocationType.PlayerDeck, player: player }
-          })))
+    this.setupPlayers()
+    this.placeRoundTracker()
+    this.start()
+  }
 
-      this.material(MaterialType.RoundTrackerToken)
-        .createItem({ id: 1, location: { type: LocationType.RoundTracker, x: 1 } })
+  setupPlayers() {
+    this.players.forEach((player) => this.setupPlayer(player))
+  }
 
-      this.material(MaterialType.FactionCard).player(player).shuffle()
+  setupPlayer(player: Faction) {
+    this.material(MaterialType.FactionCard)
+      .createItems(
+        Object.entries(FactionCards)
+          .filter(([, { faction }]) => faction === player)
+          .flatMap(([id, { faction, quantity = 1 }]) =>
+            Array.from(Array(quantity)).map(() => ({
+                id: { front: id, back: faction }, location: { type: LocationType.PlayerDeck, player: player }
+              })
+            )
+          )
+      )
 
-      this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(player)
-        .sort(item => -item.location.x!).limit(7)
-        .moveItems({ location: { type: LocationType.Hand, player } })
-    })
+    this.material(MaterialType.FactionCard).player(player).shuffle()
+
+    this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(player)
+      .sort(item => -item.location.x!).limit(7)
+      .moveItems({ location: { type: LocationType.Hand, player } })
+  }
+
+  placeRoundTracker() {
+    this.material(MaterialType.RoundTrackerToken)
+      .createItem({ id: 1, location: { type: LocationType.RoundTracker, x: 1 } })
   }
 
 
-  start(options: ArackhanWarsOptions) {
+  start() {
     return {
-      id: RuleId.PlayerTurn,
-      player: options.players[0].id,
-      memory: { round: 1 }
+      id: RuleId.StartRule
     }
   }
 }

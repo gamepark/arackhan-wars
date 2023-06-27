@@ -1,3 +1,10 @@
 export enum RuleId {
-  PlayerTurn = 1
+  StartRule = 1,
+  DrawRule,
+  PlacementRule,
+  RevealRule,
+  InitiativeActivationRule,
+  ActivationRule,
+  EndPhaseRule,
+  EndOfTheGameRule
 }

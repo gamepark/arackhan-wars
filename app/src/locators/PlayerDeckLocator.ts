@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { BaseContext, DeckLocator } from '@gamepark/react-game'
+import { BaseContext, DeckLocator, PlaceLocationContext } from '@gamepark/react-game'
 import { Faction } from '@gamepark/arackhan-wars/Faction'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { Location, XYCoordinates } from '@gamepark/rules-api'
+import { css } from '@emotion/react'
+import { factionCardDescription } from '../material/FactionCardDescription'
 
 export class PlayerDeckLocator extends DeckLocator<Faction, MaterialType, LocationType> {
   parentItemType = MaterialType.PlayMat
@@ -24,5 +26,26 @@ export class PlayerDeckLocator extends DeckLocator<Faction, MaterialType, Locati
 
   isHidden(): boolean {
     return true
+  }
+
+  getLocations(context: PlaceLocationContext<Faction, MaterialType, LocationType>): Location<Faction, LocationType>[] {
+    return [{
+      type: LocationType.PlayerDeck,
+      player: context.player
+    }]
+  }
+
+  isDragOnlyLocation(): boolean {
+    return true
+  }
+
+  getLocationCss() {
+    return css`
+      width: ${factionCardDescription.width + 1}em;
+      height: ${factionCardDescription.width / factionCardDescription.ratio + 1}em;
+      border-radius: ${(factionCardDescription.borderRadius)}em;
+      // TODO: maybe provide a way to put drop area at the top of position
+      transform: translate3d(-50%, -50%, 30em);
+    `
   }
 }

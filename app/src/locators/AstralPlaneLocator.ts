@@ -1,17 +1,17 @@
 /** @jsxImportSource @emotion/react */
-import { BaseContext, LineLocator } from '@gamepark/react-game'
+import { BaseContext, ItemLocator, PlaceLocationContext } from '@gamepark/react-game'
 import { Faction } from '@gamepark/arackhan-wars/Faction'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { Location, XYCoordinates } from '../../../../workshop/packages/rules-api'
+import { Location, MaterialItem, XYCoordinates } from '../../../../workshop/packages/rules-api'
 import { factionCardDescription } from '../material/FactionCardDescription'
 import { css, Interpolation, Theme } from '@emotion/react'
 
-export class AstralPlaneLocator extends LineLocator<Faction, MaterialType, LocationType> {
+export class AstralPlaneLocator extends ItemLocator<Faction, MaterialType, LocationType> {
   parentItemType = MaterialType.PlayMat
 
-  getLocationsOnParent(_parent: any, context: BaseContext<Faction, MaterialType, LocationType>): Location<Faction, LocationType>[] {
-    return context.game.players.flatMap((player) => {
+  getLocations(context: PlaceLocationContext<Faction, MaterialType, LocationType>): Location<Faction, LocationType>[] {
+    return context.game.players.flatMap((player: Faction) => {
       return [{
         type: LocationType.AstralPlane,
         x: 0,
@@ -46,7 +46,11 @@ export class AstralPlaneLocator extends LineLocator<Faction, MaterialType, Locat
     `
   }
 
-  getDelta() {
-    return { x: 0, y: 9.4, z: 0 }
+  isDragOnlyLocation(_location: Location<Faction, LocationType>, _context: PlaceLocationContext<Faction, MaterialType, LocationType>): boolean {
+    return true
+  }
+
+  isHidden(item: MaterialItem<Faction, LocationType>): boolean {
+    return item.rotation?.y === 180
   }
 }

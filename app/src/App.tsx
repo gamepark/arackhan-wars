@@ -6,6 +6,8 @@ import { MaterialGame } from '@gamepark/rules-api'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { GameOverHeader } from './headers/GameOverHeader'
+import { StartHeader } from './headers/StartHeader'
+import { PlacementHeader } from './headers/PlacementHeader'
 
 export default function App() {
   const game = useGame<MaterialGame>()
@@ -27,5 +29,12 @@ export default function App() {
 }
 
 const RulesHeaders: Record<RuleId, () => ReactJSXElement> = {
-  [RuleId.PlayerTurn]: () => <p></p>
+  [RuleId.StartRule]: StartHeader,
+  [RuleId.DrawRule]: () => <p></p>,
+  [RuleId.PlacementRule]: PlacementHeader,
+  [RuleId.RevealRule]: () => <p></p>,
+  [RuleId.InitiativeActivationRule]: () => <p></p>,
+  [RuleId.ActivationRule]: () => <p></p>,
+  [RuleId.EndPhaseRule]: () => <p></p>,
+  [RuleId.EndOfTheGameRule]: () => <p></p>
 }

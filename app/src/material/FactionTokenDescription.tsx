@@ -11,7 +11,6 @@ import { MaterialGame } from '../../../../workshop/packages/rules-api'
 
 export class FactionTokenDescription extends RoundTokenDescription {
   diameter = 1.4
-  ratio = 1
 
   images = {
     [Faction.Whitelands]: WhitelandToken,
@@ -22,6 +21,7 @@ export class FactionTokenDescription extends RoundTokenDescription {
 
   items = (game: MaterialGame) => {
     return game.players.map((player) => ({
+      id: player,
       quantity: 34,
       location: {
         type: LocationType.PlayerTokenStock,
@@ -30,10 +30,15 @@ export class FactionTokenDescription extends RoundTokenDescription {
     }))
   }
 
-  stock = {
-    location: {
-      type: LocationType.PlayerTokenStock
-    }
+  stocks = (game: MaterialGame) => {
+    return game.players.map((player) => ({
+        id: player,
+        location: {
+          type: LocationType.PlayerTokenStock,
+          player
+        }
+      })
+    )
   }
 
   rules = FactionTokenRules

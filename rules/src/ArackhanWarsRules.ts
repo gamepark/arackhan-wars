@@ -3,8 +3,11 @@ import { MaterialType } from './material/MaterialType'
 import { LocationType } from './material/LocationType'
 import { HidingStrategy, MaterialItem, MaterialRulesPartCreator, SecretMaterialRules } from '@gamepark/rules-api'
 import { RuleId } from './rules/RuleId'
-import { PlayerTurn } from './rules/PlayerTurn'
+import { StartRule } from './rules/StartRule'
 import { locationsStrategies } from './material/LocationStrategies'
+import { PlacementRule } from './rules/PlacementRule'
+import { RevealRule } from './rules/RevealRule'
+import { InitiativeActivationRule } from './rules/InitiativeActivationRule'
 
 
 /**
@@ -23,7 +26,7 @@ export const hideCardFrontToOthers: HidingStrategy = (
   item: MaterialItem<Faction, LocationType>, player?: Faction
 ) => item.location.player === player ? [] : ['id.front']
 
-export const hideCardInBattlefield: HidingStrategy = (
+export const hideCardWhenRotated: HidingStrategy = (
   item: MaterialItem<Faction, LocationType>, player?: Faction
 ) => {
   if (item.rotation?.y) {
@@ -34,13 +37,17 @@ export const hideCardInBattlefield: HidingStrategy = (
 }
 
 const rules: Record<number, MaterialRulesPartCreator<Faction, MaterialType, LocationType>> = {
-  [RuleId.PlayerTurn]: PlayerTurn
+  [RuleId.StartRule]: StartRule,
+  [RuleId.PlacementRule]: PlacementRule,
+  [RuleId.RevealRule]: RevealRule,
+  [RuleId.InitiativeActivationRule]: InitiativeActivationRule
 }
 
-const hidingStrategies = {
+const hidingStrategies: Partial<Record<MaterialType, Partial<Record<LocationType, HidingStrategy>>>> = {
   [MaterialType.FactionCard]: {
     [LocationType.PlayerDeck]: hideCardFront,
     [LocationType.Hand]: hideCardFrontToOthers,
-    [LocationType.Battlefield]: hideCardInBattlefield
+    [LocationType.Battlefield]: hideCardWhenRotated,
+    [LocationType.AstralPlane]: hideCardWhenRotated
   }
 }

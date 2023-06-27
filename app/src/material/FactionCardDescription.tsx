@@ -97,7 +97,7 @@ export class FactionCardDescription extends CardDescription {
     [FactionCardType.Behemoth]: Behemoth,
     [FactionCardType.MountedBanshee]: MountedBanshee,
     [FactionCardType.WrathOfTheForest]: WrathOfTheForest,
-    [FactionCardType.ThreeOfLife]: ThreeOfLife,
+    [FactionCardType.TreeOfLife]: ThreeOfLife,
     [FactionCardType.EarthQuake]: EarthQuake,
     [FactionCardType.UnstableGrowth]: UnstableGrowth,
     [FactionCardType.NaturalCamouflage]: NaturalCamouflage,
@@ -125,7 +125,7 @@ export class FactionCardDescription extends CardDescription {
     [FactionCardType.AbominableHydra]: AbominableHydra,
     [FactionCardType.ChildEater]: ChildEater,
     [FactionCardType.WesternForge]: WesternForge,
-    [FactionCardType.FireLighning]: FireLighning,
+    [FactionCardType.FireLightning]: FireLighning,
     [FactionCardType.Firestorm]: Firestorm,
     [FactionCardType.TheFear]: TheFear,
     [FactionCardType.ForcedExile]: ForcedExile

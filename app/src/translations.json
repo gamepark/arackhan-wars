@@ -1,6 +1,8 @@
 {
   "en": {
     "translation": {
+      "header.start.pass": "<0>Pass</0> without mulligan",
+      "header.placement.pass": "<0>Validate</0> your placements",
       "Menu": "Menu",
       "OK": "OK",
       "Validate": "Validate",

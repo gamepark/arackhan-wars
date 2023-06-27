@@ -2,7 +2,7 @@
 import { Faction } from '@gamepark/arackhan-wars/Faction'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { XYCoordinates } from '@gamepark/rules-api'
+import { Location, XYCoordinates } from '@gamepark/rules-api'
 import { ItemLocator, LocationRulesProps } from '@gamepark/react-game/dist/locators/ItemLocator'
 import { FactionCardTokenSpaceRules } from './FactionCardTokenSpaceRules'
 
@@ -11,6 +11,10 @@ export class FactionCardLocator extends ItemLocator<Faction, MaterialType, Locat
 
   getPositionOnParent(): XYCoordinates {
     return { x: 49.7, y: 64.5 }
+  }
+
+  getParentItemId(location: Location<Faction, LocationType>): number | undefined {
+    return location.id
   }
 
 
