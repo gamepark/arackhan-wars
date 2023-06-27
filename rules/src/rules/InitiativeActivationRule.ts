@@ -12,10 +12,8 @@ export class InitiativeActivationRule extends PlayerTurnRule<PlayerId, MaterialT
       .material(MaterialType.FactionCard)
       .location((location) => location.type === LocationType.Battlefield || location.type === LocationType.AstralPlane)
       .player(this.player)
-      .filter((item) => {
-          console.log('Item', item, FactionCards[item.id.front])
-          return FactionCards[item.id.front].attributes?.some((a: CardAttribute) => a.type === CardAttributeType.Initiative)
-        }
+      .filter((item) =>
+        FactionCards[item.id.front].attributes?.some((a: CardAttribute) => a.type === CardAttributeType.Initiative)
       )
       .indexes
       .map((card: number) =>
