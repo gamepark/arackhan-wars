@@ -1,33 +1,14 @@
-import { MaterialType } from '../material/MaterialType'
-import { LocationType } from '../material/LocationType'
-import { CustomMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { PlayerId } from '../ArackhanWarsOptions'
-import { CustomMoveType } from '../material/CustomMoveType'
-import { FactionCards } from '../material/FactionCardType'
-import { CardAttribute, CardAttributeType } from './cards/FactionCardRule'
+import { RuleId } from './RuleId'
+import { ActivationRule } from './ActivationRule'
 
-export class InitiativeActivationRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
-  getPlayerMoves(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
-    return this
-      .material(MaterialType.FactionCard)
-      .location((location) => location.type === LocationType.Battlefield || location.type === LocationType.AstralPlane)
-      .player(this.player)
-      .filter((item) =>
-        FactionCards[item.id.front].attributes?.some((a: CardAttribute) => a.type === CardAttributeType.Initiative)
-      )
-      .indexes
-      .map((card: number) =>
-        this.rules().customMove(CustomMoveType.ActivateCard, { card })
-      )
-  }
+export class InitiativeActivationRule extends ActivationRule {
+  initiative = true
 
-  onCustomMove(move: CustomMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
-    return [
-      this
-        .material(MaterialType.FactionToken)
-        .parent(move.data.card)
-        .moveItem({ rotation: { y: 1 } })
-    ]
+  endTurnMove = () => {
+    if (this.player == this.game.players[1]) {
+      return this.rules().startRule(RuleId.EndPhaseRule)
+    }
 
+    return this.rules().startPlayerTurn(RuleId.ActivationRule, this.nextPlayer)
   }
 }

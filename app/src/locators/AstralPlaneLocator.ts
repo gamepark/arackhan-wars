@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { BaseContext, ItemLocator, PlaceLocationContext } from '@gamepark/react-game'
+import { BaseContext, ItemLocator } from '@gamepark/react-game'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { Location, MaterialItem, XYCoordinates } from '../../../../workshop/packages/rules-api'
@@ -10,19 +10,6 @@ import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 export class AstralPlaneLocator extends ItemLocator<PlayerId, MaterialType, LocationType> {
   parentItemType = MaterialType.PlayMat
 
-  getLocations(context: PlaceLocationContext<PlayerId, MaterialType, LocationType>): Location<PlayerId, LocationType>[] {
-    return context.game.players.flatMap((player: PlayerId) => {
-      return [{
-        type: LocationType.AstralPlane,
-        x: 0,
-        player: player
-      }, {
-        type: LocationType.AstralPlane,
-        x: 1,
-        player: player
-      }]
-    })
-  }
 
   getPositionOnParent(location: Location<PlayerId, LocationType>, context: BaseContext<PlayerId, MaterialType, LocationType>): XYCoordinates {
     const height = factionCardDescription.height
@@ -46,7 +33,7 @@ export class AstralPlaneLocator extends ItemLocator<PlayerId, MaterialType, Loca
     `
   }
 
-  isDragOnlyLocation(_location: Location<PlayerId, LocationType>, _context: PlaceLocationContext<PlayerId, MaterialType, LocationType>): boolean {
+  isDragOnlyLocation(): boolean {
     return true
   }
 

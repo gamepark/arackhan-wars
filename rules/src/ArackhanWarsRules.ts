@@ -40,7 +40,8 @@ const rules: Record<number, MaterialRulesPartCreator<PlayerId, MaterialType, Loc
   [RuleId.StartRule]: StartRule,
   [RuleId.PlacementRule]: PlacementRule,
   [RuleId.RevealRule]: RevealRule,
-  [RuleId.InitiativeActivationRule]: InitiativeActivationRule
+  [RuleId.InitiativeActivationRule]: InitiativeActivationRule,
+  [RuleId.ActivationRule]: InitiativeActivationRule
 }
 
 const hidingStrategies: Partial<Record<MaterialType, Partial<Record<LocationType, HidingStrategy>>>> = {

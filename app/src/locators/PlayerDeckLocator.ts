@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { BaseContext, DeckLocator, PlaceLocationContext } from '@gamepark/react-game'
+import { BaseContext, DeckLocator } from '@gamepark/react-game'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { Location, XYCoordinates } from '@gamepark/rules-api'
@@ -26,13 +26,6 @@ export class PlayerDeckLocator extends DeckLocator<PlayerId, MaterialType, Locat
 
   isHidden(): boolean {
     return true
-  }
-
-  getLocations(context: PlaceLocationContext<PlayerId, MaterialType, LocationType>): Location<PlayerId, LocationType>[] {
-    return [{
-      type: LocationType.PlayerDeck,
-      player: context.player
-    }]
   }
 
   isDragOnlyLocation(): boolean {

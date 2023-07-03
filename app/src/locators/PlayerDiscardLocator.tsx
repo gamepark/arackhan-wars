@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { BaseContext, DeckLocator, LocationRulesProps, PlaceLocationContext } from '@gamepark/react-game'
+import { BaseContext, DeckLocator, LocationRulesProps } from '@gamepark/react-game'
 import { Location, XYCoordinates } from '../../../../workshop/packages/rules-api'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
@@ -11,15 +11,7 @@ import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 
 export class PlayerDiscardLocator extends DeckLocator<PlayerId, MaterialType, LocationType> {
   parentItemType = MaterialType.PlayMat
-
-  getLocations(context: PlaceLocationContext<PlayerId, MaterialType, LocationType>): Location<PlayerId, LocationType>[] {
-    return context.game.players.map((player: PlayerId) => ({
-      type: LocationType.PlayerDiscard,
-      id: player,
-      player
-    }))
-  }
-
+  
   getPositionOnParent(location: Location<PlayerId, LocationType>, context: BaseContext<PlayerId, MaterialType, LocationType>): XYCoordinates {
     const index = this.getRelativePlayerIndex(context, location.player!)
 

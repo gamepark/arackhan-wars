@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { ItemLocator, PlaceLocationContext } from '@gamepark/react-game'
+import { ItemLocator } from '@gamepark/react-game'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { Location, MaterialItem, XYCoordinates } from '@gamepark/rules-api'
@@ -11,14 +11,6 @@ import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 export class BattlefieldLocator extends ItemLocator<PlayerId, MaterialType, LocationType> {
   parentItemType = MaterialType.PlayMat
 
-  getLocations(): Location<PlayerId, LocationType>[] {
-    return battlefieldSpaceCoordinates.map((space) => ({
-      type: LocationType.Battlefield,
-      x: space.x,
-      y: space.y
-    }))
-  }
-
   getLocationCss(_location: Location<PlayerId, LocationType, Node>) {
     return [locationCss]
   }
@@ -29,7 +21,7 @@ export class BattlefieldLocator extends ItemLocator<PlayerId, MaterialType, Loca
       .position!
   }
 
-  isDragOnlyLocation(_location: Location<PlayerId, LocationType>, _context: PlaceLocationContext<PlayerId, MaterialType, LocationType>): boolean {
+  isDragOnlyLocation(): boolean {
     return true
   }
 

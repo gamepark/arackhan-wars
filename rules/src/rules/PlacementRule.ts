@@ -98,7 +98,7 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
         y: space.y,
         player: this.player
       },
-      rotation: { y: 180 }
+      rotation: { y: 1 }
     })
   }
 
