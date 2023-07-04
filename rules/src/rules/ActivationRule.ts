@@ -54,6 +54,5 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
         .parent(move.data.card)
         .moveItem({ rotation: { y: 1 } })
     ]
-
   }
 }

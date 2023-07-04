@@ -65,6 +65,9 @@ import { FactionCardRules } from './FactionCardRules'
 import { Faction } from '@gamepark/arackhan-wars/Faction'
 import { CardDescription } from '@gamepark/react-game'
 import { FactionCardType } from '@gamepark/arackhan-wars/material/FactionCardType'
+import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
+import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
+import { MaterialMove, MoveKind } from '@gamepark/rules-api'
 
 export const cardProps = {}
 
@@ -135,6 +138,14 @@ export class FactionCardDescription extends CardDescription {
     [Faction.Nakka]: NakkaBack,
     [Faction.GrayOrder]: GrayOrderBack,
     [Faction.Blight]: BlightBack
+  }
+
+  isActivable(move: MaterialMove, itemType: MaterialType, itemIndex: number): boolean {
+    if (move.kind === MoveKind.CustomMove && move.type === CustomMoveType.ActivateCard && move.data.card === itemIndex) {
+      return true
+    }
+
+    return super.isActivable(move, itemType, itemIndex)
   }
 
   rules = FactionCardRules

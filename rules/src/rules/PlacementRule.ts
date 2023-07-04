@@ -22,14 +22,10 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
     const astralCards = playerHand.filter((item) => FactionCards[item.id.front].astral)
     const otherCards = playerHand.filter((item) => !FactionCards[item.id.front].astral)
 
-    const isEmptyBattlefield = factionCards
-      .location(LocationType.Battlefield)
-      .length === 0
-
     moves.push(...this.moveToAstralPlane(astralCards))
 
-
-    if (isEmptyBattlefield) {
+    const cardsInBattlefield = factionCards.location(LocationType.Battlefield)
+    if (!cardsInBattlefield.rotation((rotation) => !rotation).length && !cardsInBattlefield.player(player => player !== this.player).length) {
       moves.push(
         ...startingSpaces
           .flatMap((index) => this.moveToBattlefieldSpace(otherCards, battlefieldSpaceCoordinates[index]))
