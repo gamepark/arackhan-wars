@@ -52,6 +52,10 @@ export class FactionTokenDescription extends RoundTokenDescription {
     )
   }
 
+  isActivable(): boolean {
+    return false
+  }
+
   rules = FactionTokenRules
 }
 

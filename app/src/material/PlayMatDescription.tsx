@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import board from '../images/boards/core-box-battle-mat.jpg'
-import { BaseContext, BoardDescription } from '@gamepark/react-game'
+import { BoardDescription, MaterialContext } from '@gamepark/react-game'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { PlayMatRules } from './PlayMatRules'
 import { battlefieldSpaceCoordinates } from '@gamepark/arackhan-wars/material/spaces'
@@ -16,7 +16,7 @@ export class PlayMatDescription extends BoardDescription {
 
   item = { location: { type: LocationType.Table } }
 
-  getLocations(_item: MaterialItem, context: BaseContext): Location[] {
+  getLocations(_item: MaterialItem, context: MaterialContext): Location[] {
     return [
       ...this.getBattlefieldSpaces(),
       ...this.getAstralPlanes(context),
@@ -35,7 +35,7 @@ export class PlayMatDescription extends BoardDescription {
     }))
   }
 
-  private getAstralPlanes = (context: BaseContext) => {
+  private getAstralPlanes = (context: MaterialContext) => {
     return context.game.players.flatMap((player: PlayerId) => {
       return [{
         type: LocationType.AstralPlane,
@@ -49,14 +49,14 @@ export class PlayMatDescription extends BoardDescription {
     })
   }
 
-  private getDecks(context: BaseContext) {
+  private getDecks(context: MaterialContext) {
     return [{
       type: LocationType.PlayerDeck,
       player: context.player
     }]
   }
 
-  private getDiscards(context: BaseContext) {
+  private getDiscards(context: MaterialContext) {
     return context.game.players.map((player: PlayerId) => ({
       type: LocationType.PlayerDiscard,
       id: player,

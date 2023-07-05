@@ -1,4 +1,8 @@
 import { Faction } from '../../Faction'
+import { MaterialItem } from '@gamepark/rules-api'
+import { PlayerId } from '../../ArackhanWarsOptions'
+import { MaterialType } from '../../material/MaterialType'
+import { LocationType } from '../../material/LocationType'
 
 export enum CardAttributeType {
   Flight = 1,
@@ -28,6 +32,21 @@ abstract class FactionCardRule {
   astral?: boolean = false
   quantity?: number = 1
   attributes?: CardAttribute[] = []
+
+  canAttack = (_attacker: MaterialItem<PlayerId, MaterialType, LocationType>, _opponent: MaterialItem<PlayerId, MaterialType, LocationType>) => {
+
+    // TODO: check distance, effects etc.
+    return this.attack !== undefined
+  }
+
+  canMove = () => {
+    return this.hasAttribute(CardAttributeType.Movement) || this.hasAttribute(CardAttributeType.Flight)
+  }
+
+  hasInitiative = () => this.hasAttribute(CardAttributeType.Initiative)
+  hasOmnistrike = () => this.hasAttribute(CardAttributeType.Omnistrike)
+
+  private hasAttribute = (attribute: CardAttributeType) => !!this.attributes?.some((a) => a.type === attribute)
 }
 
 export {

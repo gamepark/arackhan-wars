@@ -3,8 +3,7 @@ import { LocationType } from '../material/LocationType'
 import { CustomMove, ItemMove, ItemMoveType, Material, MaterialItem, MaterialMove, MoveItem, PlayerTurnRule } from '@gamepark/rules-api'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { CustomMoveType } from '../material/CustomMoveType'
-import { FactionCards } from '../material/FactionCardType'
-import { CardAttribute, CardAttributeType } from './cards/FactionCardRule'
+import { getFactionCard } from '../material/FactionCardType'
 import { RuleId } from './RuleId'
 import { battlefieldSpaceCoordinates } from '../material/spaces'
 
@@ -33,12 +32,11 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
 
     const moves = []
     const attackMoves: CustomMove[] = playableCards
-      .filter((cardIndex: number) => this.canAttack(playerCards.getItem(cardIndex)!, cardIndex))
-      .flatMap((cardIndex: number) => this.toAttackMoves(opponentsCards, cardIndex))
+      .flatMap((cardIndex: number) => this.computeAttackMoves(playerCards.getItem(cardIndex)!, opponentsCards, cardIndex))
 
     const moveMoves: MoveItem[] = playableCards
       .filter((cardIndex) => this.canMove(playerCards.getItem(cardIndex)!, cardIndex))
-      .flatMap((cardIndex: number) => this.toItemMoves(cardsInBattlefield, playerCards.getItem(cardIndex)!))
+      .flatMap((cardIndex: number) => this.computeItemMoves(playerCards.getItem(cardIndex)!, cardsInBattlefield))
 
     moves.push(
       ...attackMoves,
@@ -46,56 +44,54 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
       this.endTurnMove()
     )
 
-    moves.push(this.endTurnMove())
+    console.log('All activation moves', moves)
 
     return moves
   }
 
-  toAttackMoves(opponentsCards: Material<PlayerId, MaterialType, LocationType>, cardIndex: number) {
-    return opponentsCards.indexes.map((index) => (
-      // TODO: Compute real targets, now all cards are targetable
-      this.rules().customMove(CustomMoveType.Attack, { card: cardIndex, targets: [index] })
-    ))
+  computeAttackMoves(attacker: MaterialItem, opponentsCards: Material, cardIndex: number) {
+    return opponentsCards.indexes
+      // Asking to the card if it can attach the opponent
+      .filter((index: number) => getFactionCard(attacker.id.front).canAttack(attacker, opponentsCards.getItem(index)!))
+
+      // Convert attacks to custom moves
+      .map((index) => this.rules().customMove(CustomMoveType.Attack, { card: cardIndex, targets: [index] }))
   }
 
-  toItemMoves(cardsInBattlefield: Material<PlayerId, MaterialType, LocationType>, card: MaterialItem) {
+  computeItemMoves(card: MaterialItem, cardsInBattlefield: Material<PlayerId, MaterialType, LocationType>) {
     return battlefieldSpaceCoordinates
       .filter((space) => {
         const cardOnSpace = cardsInBattlefield.location((location) => location.x === space.x && location.y === space.y).getItem()
-        return !cardOnSpace || this.hasAttribute(cardOnSpace, CardAttributeType.Movement)
+        return !cardOnSpace || (getFactionCard(cardOnSpace.id.front).canMove() && cardOnSpace.id.front !== card.id.front)
       })
-      .flatMap((space) => cardsInBattlefield.id(card.id).moveItems({ location: { type: LocationType.Battlefield, x: space.x, y: space.y } }))
+      .flatMap((space) => (
+        cardsInBattlefield
+          .id(card.id)
+          .moveItems({ location: { type: LocationType.Battlefield, x: space.x, y: space.y } }))
+      )
   }
 
   canBePlayedInThisPhase = (item: MaterialItem) => {
     if (!this.initiative) return true
-    return this.hasAttribute(item, CardAttributeType.Initiative)
+    return getFactionCard(item.id.front).hasInitiative()
   }
 
-  hasAttribute = (item: MaterialItem, attribute: CardAttributeType) => {
-    return FactionCards[item.id.front].attributes?.some((a: CardAttribute) => a.type === attribute)
-  }
-
-  canAttack = (card: MaterialItem, cardIndex: number) => {
+  canAttack = (_card: MaterialItem, cardIndex: number) => {
     const { activatedCards = [] } = this.getPlayerMemory<ActivationRuleMemory>()
     const cardState = activatedCards.find((card) => card.card === cardIndex)
     if (!cardState) return true
-
-    const factionCard = FactionCards[card.id.front]
-
-    return cardState.targets === undefined
-      && cardState.omnistrike === undefined
-      && factionCard.attack !== undefined
+    return cardState.targets === undefined && cardState.omnistrike === undefined
   }
 
   canMove = (card: MaterialItem, cardIndex: number) => {
-    const factionCard = FactionCards[card.id.front]
+    const factionCard = getFactionCard(card.id.front)
     const { activatedCards = [] } = this.getPlayerMemory<ActivationRuleMemory>()
+
+    console.log(factionCard, !activatedCards.find((card) => card.card === cardIndex), factionCard.canMove())
 
     // 1. must not be in the memory
     // 2. must have the movement attribute
-    return !activatedCards.find((card) => card.card === cardIndex)
-      && factionCard.attributes?.some((a: CardAttribute) => a.type === CardAttributeType.Movement)
+    return !activatedCards.find((card) => card.card === cardIndex) && factionCard.canMove()
   }
 
   hasActiveToken = (card: number) => {
@@ -122,7 +118,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
       this.memorizeCardPlayed(player, {
         card: move.data.card,
         targets: move.data.targets,
-        omnistrike: this.hasAttribute(card, CardAttributeType.Omnistrike) && move.data.targets.length > 0
+        omnistrike: getFactionCard(card.id.front).hasOmnistrike()
       })
 
       return this.triggerAttack(move)
@@ -131,7 +127,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     return []
   }
 
-  private memorizeCardPlayed(player: PlayerId, activation: ActivatedCard) {
+  memorizeCardPlayed(player: PlayerId, activation: ActivatedCard) {
     const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(player)
     const activatedCard = activatedCards.findIndex((activatedCard) => activatedCard.card === activation.card)
     if (!activatedCard) {
@@ -141,7 +137,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
       Object.assign(activatedCard, activation)
     }
 
-    this.memorize<ActivationRuleMemory>({ activatedCards })
+    this.memorize<ActivationRuleMemory>({ activatedCards }, player)
   }
 
   triggerAttack(move: CustomMove) {

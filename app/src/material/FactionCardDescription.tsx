@@ -73,9 +73,6 @@ import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 export const cardProps = {}
 
 export class FactionCardDescription extends CardDescription {
-  height = 8.8
-  ratio = 5 / 7
-
   images = {
     [FactionCardType.NihilistPenguin]: NihilistPenguin,
     [FactionCardType.LunarWendigo]: LunarWendigo,

@@ -1,9 +1,7 @@
 import { PlayerId } from '../ArackhanWarsOptions'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import { XYCoordinates } from '@gamepark/rules-api/dist/material/location/Location'
-import { MaterialItem } from '@gamepark/rules-api/dist/material/items/MaterialItem'
-
+import { XYCoordinates, MaterialItem } from '@gamepark/rules-api'
 
 export const isAdjacentToFactionCard = (battlefield: MaterialItem<PlayerId, LocationType, MaterialType>[], position: XYCoordinates) => {
   const north: XYCoordinates = { x: position.x, y: position.y - 1 }

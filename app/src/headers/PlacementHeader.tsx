@@ -3,7 +3,7 @@ import { PlayMoveButton, useGame, useLegalMoves, usePlayerName } from '@gamepark
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { getPlayerName, PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
-import { isStartPlayerTurn, MaterialGame, MaterialMove } from '@gamepark/rules-api'
+import { isStartPlayerTurn, isStartRule, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 
 export const PlacementHeader = () => {
 
@@ -15,7 +15,7 @@ export const PlacementHeader = () => {
     return <>{t('header.turn', { player: playerName })}</>
   }
 
-  const passMove = legalMoves.find(move => isStartPlayerTurn(move))
+  const passMove = legalMoves.find(move => isStartPlayerTurn(move) || isStartRule(move))
   if (passMove) {
     return <Trans defaults="header.placement.pass" components={[<PlayMoveButton move={passMove}/>]}/>
   }

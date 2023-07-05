@@ -75,7 +75,10 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
       .rotation((rotation) => !!rotation?.y)
 
 
+    console.log('Hidden cards', hiddenCardsOnBattlefield.length)
+    console.log('Player count', (this.game.players.length * PLACED_CARD_PER_TURN))
     if (hiddenCardsOnBattlefield.length === (this.game.players.length * PLACED_CARD_PER_TURN)) {
+      console.log('Go to reveal')
       return this.rules().startRule(RuleId.RevealRule)
     }
 

@@ -1,18 +1,16 @@
 /** @jsxImportSource @emotion/react */
-import { BaseContext, DeckLocator, LocationRulesProps } from '@gamepark/react-game'
+import { DeckLocator, MaterialContext } from '@gamepark/react-game'
 import { Location, XYCoordinates } from '../../../../workshop/packages/rules-api'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { PlayerDiscardRules } from './PlayerDiscardRules'
-import { ReactNode } from 'react'
-import { factionCardDescription } from '../material/FactionCardDescription'
-import { css, Interpolation, Theme } from '@emotion/react'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
+import { PlayerDiscardDescription } from './PlayerDiscardDescription'
 
 export class PlayerDiscardLocator extends DeckLocator<PlayerId, MaterialType, LocationType> {
+  locationDescription = new PlayerDiscardDescription()
   parentItemType = MaterialType.PlayMat
-  
-  getPositionOnParent(location: Location<PlayerId, LocationType>, context: BaseContext<PlayerId, MaterialType, LocationType>): XYCoordinates {
+
+  getPositionOnParent(location: Location, context: MaterialContext): XYCoordinates {
     const index = this.getRelativePlayerIndex(context, location.player!)
 
     if (index === 0) {
@@ -21,20 +19,4 @@ export class PlayerDiscardLocator extends DeckLocator<PlayerId, MaterialType, Lo
 
     return { x: 91.4, y: 9.85 }
   }
-
-  getLocationCss(): Interpolation<Theme> {
-    const height = factionCardDescription.height
-    const width = height * factionCardDescription.ratio
-    return css`
-      width: ${width + 0.2}em;
-      height: ${height + 0.2}em;
-      border-radius: 0.2em;
-    `
-  }
-
-  getLocationRules(props: LocationRulesProps<PlayerId, MaterialType, LocationType>): ReactNode {
-    return <PlayerDiscardRules {...props} />
-  }
-
-
 }

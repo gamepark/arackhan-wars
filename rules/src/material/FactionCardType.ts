@@ -115,7 +115,7 @@ export enum FactionCardType {
   ForcedExile
 }
 
-
+export const getFactionCard = (type: FactionCardType) => FactionCards[type]
 export const FactionCards: Record<FactionCardType, FactionCardRule> = {
   // WHITELANDS
   [FactionCardType.NihilistPenguin]: new NihilistPenguin(),

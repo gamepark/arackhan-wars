@@ -2,11 +2,12 @@
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialItem, XYCoordinates } from '@gamepark/rules-api'
-import { ItemLocator, LocationRulesProps } from '@gamepark/react-game/dist/locators/ItemLocator'
-import { FactionCardTokenSpaceRules } from './FactionCardTokenSpaceRules'
+import { ItemLocator } from '@gamepark/react-game'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
+import { FactionTokenSpaceDescription } from './FactionTokenSpaceDescription'
 
 export class FactionTokenSpaceLocator extends ItemLocator<PlayerId, MaterialType, LocationType> {
+  locationDescription = new FactionTokenSpaceDescription()
   parentItemType = MaterialType.FactionCard
 
   getPositionOnParent(): XYCoordinates {
@@ -15,9 +16,5 @@ export class FactionTokenSpaceLocator extends ItemLocator<PlayerId, MaterialType
 
   isHidden(item: MaterialItem<PlayerId, LocationType>): boolean {
     return item.rotation?.y === 1
-  }
-
-  getLocationRules(props: LocationRulesProps<PlayerId, MaterialType, LocationType>): React.ReactNode {
-    return <FactionCardTokenSpaceRules {...props} />
   }
 }
