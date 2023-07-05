@@ -5,7 +5,12 @@ import { FactionCards } from './material/FactionCardType'
 import { ArackhanWarsOptions, PlayerId, PlayerOptions } from './ArackhanWarsOptions'
 import { RuleId } from './rules/RuleId'
 import { locationsStrategies } from './material/LocationStrategies'
+import shuffle from 'lodash/shuffle'
+import { Faction, playerFactions } from './Faction'
 
+export type GamePlayerMemory = {
+  faction: Faction
+}
 
 /**
  * This class implements the rules of the board game.
@@ -15,16 +20,39 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
   locationsStrategies = locationsStrategies
 
   setupMaterial(options: ArackhanWarsOptions) {
-    this.setupPlayers(options)
+    this.setupFactions(options)
+    this.setupPlayers()
     this.placeRoundTracker()
     this.start()
   }
 
-  setupPlayers(options: ArackhanWarsOptions) {
-    options.players.forEach((player, index) => this.setupPlayer(player, index + 1))
+  setupFactions(options: ArackhanWarsOptions) {
+    if (Array.isArray(options.players)) {
+      options.players.forEach((player, id) => {
+        const faction = player.faction
+        this.memorizeOnGame({ faction }, id + 1)
+      })
+    } else {
+      const numberOfPlayers = options.players ?? 2
+      const factions = shuffle(playerFactions)
+      return Array.from(Array(numberOfPlayers).keys()).forEach((id) => {
+        const playerId = id + 1
+        const faction = factions[playerId]
+        this.memorizeOnGame({ faction }, playerId)
+      })
+    }
+  }
+
+  setupPlayers() {
+    this.game.players.forEach((playerId) => {
+        console.log(playerId, this.game.playersMemory![playerId])
+        this.setupPlayer(this.game.playersMemory![playerId] as PlayerOptions, playerId)
+      }
+    )
   }
 
   setupPlayer(player: PlayerOptions, playerId: PlayerId) {
+    console.log(player)
     this.material(MaterialType.FactionCard)
       .createItems(
         Object.entries(FactionCards)

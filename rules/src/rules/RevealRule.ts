@@ -5,6 +5,7 @@ import { RuleId } from './RuleId'
 import { FactionCards } from '../material/FactionCardType'
 import { FactionCardKind } from './cards/FactionCardRule'
 import { PlayerId } from '../ArackhanWarsOptions'
+import { GamePlayerMemory } from '../ArackhanWarsSetup'
 
 export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
 
@@ -29,7 +30,8 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
           this.material(MaterialType.FactionToken)
             .player(revealedCard.location.player)
             .createItem({
-              id: revealedCard.location.player,
+              // Must be the faction instead of the player
+              id: this.getGameMemory<GamePlayerMemory>(revealedCard.location.player)!.faction,
               location: { parent: move.itemIndex, type: LocationType.FactionTokenSpace, player: revealedCard.location.player }
             })
         ]

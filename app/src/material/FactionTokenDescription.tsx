@@ -32,7 +32,7 @@ export class FactionTokenDescription extends RoundTokenDescription {
 
   getItems = (game: MaterialGame) => {
     return game.players.map((player) => ({
-      id: player,
+      id: game.playersMemory![player]!.faction,
       quantity: 34,
       location: {
         type: LocationType.PlayerTokenStock,
@@ -43,7 +43,7 @@ export class FactionTokenDescription extends RoundTokenDescription {
 
   stocks = (game: MaterialGame) => {
     return game.players.map((player) => ({
-        id: player,
+        id: game.playersMemory![player]!.faction,
         location: {
           type: LocationType.PlayerTokenStock,
           player
