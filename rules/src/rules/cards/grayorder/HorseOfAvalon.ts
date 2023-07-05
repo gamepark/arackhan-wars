@@ -11,7 +11,7 @@ export class HorseOfAvalon extends GrayOrderCardRule {
     return this.discardCard(rules)
   }
 
-  onRoundEnd = (rules: MaterialRulesPart) => {
+  onTurnEnd = (rules: MaterialRulesPart) => {
     return this.discardCard(rules)
   }
 }
