@@ -37,6 +37,5 @@ const RulesHeaders: Record<RuleId, () => ReactJSXElement> = {
   [RuleId.RevealRule]: () => <p></p>,
   [RuleId.InitiativeActivationRule]: PlacementHeader,
   [RuleId.ActivationRule]: PlacementHeader,
-  [RuleId.EndPhaseRule]: () => <p></p>,
-  [RuleId.EndOfTheGameRule]: () => <p></p>
+  [RuleId.EndPhaseRule]: () => <p></p>
 }

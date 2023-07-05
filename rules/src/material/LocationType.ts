@@ -6,7 +6,8 @@ export enum LocationType {
   PlayerTokenStock, // The player area
   RoundTracker, // The round tracker location
   PlayerDiscard, // The player discard
-  FactionCard, // The token on faction card,
+  FactionTokenSpace, // The token on faction card,
+  FactionCard,
   AstralPlane // Cards in astral plane
 }
 

@@ -8,6 +8,9 @@ import { PlacementRule } from './rules/PlacementRule'
 import { RevealRule } from './rules/RevealRule'
 import { InitiativeActivationRule } from './rules/InitiativeActivationRule'
 import { PlayerId } from './ArackhanWarsOptions'
+import { ActivationRule } from './rules/ActivationRule'
+import { EndPhaseRules } from './rules/EndPhaseRules'
+import { DrawRules } from './rules/DrawRules'
 
 
 /**
@@ -36,12 +39,14 @@ export const hideCardWhenRotated: HidingStrategy = (
   return []
 }
 
-const rules: Record<number, MaterialRulesPartCreator<PlayerId, MaterialType, LocationType>> = {
+const rules: Record<RuleId, MaterialRulesPartCreator<PlayerId, MaterialType, LocationType>> = {
   [RuleId.StartRule]: StartRule,
+  [RuleId.DrawRule]: DrawRules,
   [RuleId.PlacementRule]: PlacementRule,
   [RuleId.RevealRule]: RevealRule,
   [RuleId.InitiativeActivationRule]: InitiativeActivationRule,
-  [RuleId.ActivationRule]: InitiativeActivationRule
+  [RuleId.ActivationRule]: ActivationRule,
+  [RuleId.EndPhaseRule]: EndPhaseRules
 }
 
 const hidingStrategies: Partial<Record<MaterialType, Partial<Record<LocationType, HidingStrategy>>>> = {

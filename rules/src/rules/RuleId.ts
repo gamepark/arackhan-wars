@@ -6,5 +6,5 @@ export enum RuleId {
   InitiativeActivationRule,
   ActivationRule,
   EndPhaseRule,
-  EndOfTheGameRule
+  //EndOfTheGameRule
 }

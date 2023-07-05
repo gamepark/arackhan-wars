@@ -30,7 +30,7 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
             .player(revealedCard.location.player)
             .createItem({
               id: revealedCard.location.player,
-              location: { parent: move.itemIndex, type: LocationType.FactionCard, player: revealedCard.location.player }
+              location: { parent: move.itemIndex, type: LocationType.FactionTokenSpace, player: revealedCard.location.player }
             })
         ]
       }

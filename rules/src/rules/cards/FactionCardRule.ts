@@ -23,8 +23,8 @@ export enum FactionCardKind {
 abstract class FactionCardRule {
   abstract faction: Faction
   abstract kind: FactionCardKind
-  attack?: number = 0
-  defense?: number = 0
+  attack?: number
+  defense?: number
   astral?: boolean = false
   quantity?: number = 1
   attributes?: CardAttribute[] = []

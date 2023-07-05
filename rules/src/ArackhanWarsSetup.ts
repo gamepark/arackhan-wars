@@ -39,8 +39,11 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
 
     this.material(MaterialType.FactionCard).player(playerId).shuffle()
 
-    this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(playerId)
-      .sort(item => -item.location.x!).limit(7)
+    this.material(MaterialType.FactionCard)
+      .location(LocationType.PlayerDeck)
+      .player(playerId)
+      .sort(item => -item.location.x!)
+      .limit(7)
       .moveItems({ location: { type: LocationType.Hand, player: playerId } })
   }
 

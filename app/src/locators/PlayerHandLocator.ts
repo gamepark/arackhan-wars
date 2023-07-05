@@ -1,11 +1,11 @@
-import { HandLocator, PlaceItemContext } from '@gamepark/react-game'
+import { HandLocator, ItemContext } from '@gamepark/react-game'
 import { Location, MaterialItem } from '@gamepark/rules-api'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 
 export class PlayerHandLocator extends HandLocator<PlayerId, MaterialType, LocationType> {
-  getDisplayIndex(player: PlayerId, context: PlaceItemContext<PlayerId, MaterialType, LocationType>) {
+  getDisplayIndex(player: PlayerId, context: ItemContext) {
     if (context.player === undefined) {
       return this.getRelativePlayerIndex(context, player)
     } else {
@@ -14,11 +14,11 @@ export class PlayerHandLocator extends HandLocator<PlayerId, MaterialType, Locat
     }
   }
 
-  isHidden(item: MaterialItem<PlayerId, LocationType>, context: PlaceItemContext<PlayerId, MaterialType, LocationType>): boolean {
+  isHidden(item: MaterialItem<PlayerId, LocationType>, context: ItemContext<PlayerId, MaterialType, LocationType>): boolean {
     return item.location.player !== context.player
   }
 
-  getCoordinates(location: Location<PlayerId, LocationType>, context: PlaceItemContext<PlayerId, MaterialType, LocationType>) {
+  getCoordinates(location: Location<PlayerId, LocationType>, context: ItemContext<PlayerId, MaterialType, LocationType>) {
     if (location.player === context.player) {
       const count = this.countItems(location, context)
       return { x: -31 + count * 3, y: 28, z: 10 }
@@ -29,19 +29,19 @@ export class PlayerHandLocator extends HandLocator<PlayerId, MaterialType, Locat
     }
   }
 
-  getBaseAngle(item: MaterialItem<PlayerId, LocationType>, { player }: PlaceItemContext<PlayerId, MaterialType, LocationType>): number {
+  getBaseAngle(item: MaterialItem, { player }: ItemContext): number {
     return item.location.player === player ? 0 : -90
   }
 
-  getGapMaxAngle(item: MaterialItem<PlayerId, LocationType>, { player }: PlaceItemContext<PlayerId, MaterialType, LocationType>): number {
+  getGapMaxAngle(item: MaterialItem, { player }: ItemContext): number {
     return item.location.player === player ? 1.1 : 3
   }
 
-  getMaxAngle(item: MaterialItem<PlayerId, LocationType>, { player }: PlaceItemContext<PlayerId, MaterialType, LocationType>): number {
+  getMaxAngle(item: MaterialItem, { player }: ItemContext): number {
     return item.location.player === player ? 15 : 2.3
   }
 
-  getRadius(item: MaterialItem<PlayerId, LocationType>, { player }: PlaceItemContext<PlayerId, MaterialType, LocationType>): number {
+  getRadius(item: MaterialItem, { player }: ItemContext): number {
     return item.location.player === player ? 300 : 100
   }
 }

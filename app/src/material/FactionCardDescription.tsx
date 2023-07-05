@@ -63,11 +63,12 @@ import ForcedExile from '../images/cards/blight/en/s1-aw1-186-en-forced-exile.jp
 
 import { FactionCardRules } from './FactionCardRules'
 import { Faction } from '@gamepark/arackhan-wars/Faction'
-import { CardDescription } from '@gamepark/react-game'
+import { CardDescription, ItemContext } from '@gamepark/react-game'
 import { FactionCardType } from '@gamepark/arackhan-wars/material/FactionCardType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
-import { MaterialMove, MoveKind } from '@gamepark/rules-api'
+import { Location, MaterialItem, MaterialMove, MoveKind } from '@gamepark/rules-api'
+import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 
 export const cardProps = {}
 
@@ -140,8 +141,16 @@ export class FactionCardDescription extends CardDescription {
     [Faction.Blight]: BlightBack
   }
 
+  getLocations(item: MaterialItem, context: ItemContext): Location[] {
+    if (item.location.type !== LocationType.Battlefield) return []
+    return [{
+      type: LocationType.FactionCard,
+      parent: context.index
+    }]
+  }
+
   isActivable(move: MaterialMove, itemType: MaterialType, itemIndex: number): boolean {
-    if (move.kind === MoveKind.CustomMove && move.type === CustomMoveType.ActivateCard && move.data.card === itemIndex) {
+    if (move.kind === MoveKind.CustomMove && move.type === CustomMoveType.Attack && move.data.card === itemIndex) {
       return true
     }
 
