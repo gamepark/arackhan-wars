@@ -132,6 +132,26 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     return this.material(MaterialType.FactionToken).parent(move.data.card).moveItems({ rotation: { y: 1 } })
   }
 
+  endTurnMove = (): MaterialMove[] => {
+    if (this.player == this.game.players[1]) {
+      return [this.rules().startPlayerTurn(RuleId.EndPhaseRule, this.nextPlayer)]
+    }
+
+    // Apply onTurnEnd of card in case there is some effect
+    const moves = this
+      .material(MaterialType.FactionCard)
+      .location((location) => location.type === LocationType.Battlefield || location.type === LocationType.AstralPlane)
+      .player(this.player)
+      .getItems()
+      .flatMap((card) => getFactionCard(card.id.front).onTurnEnd(this))
+
+    moves.push(
+      this.rules().startPlayerTurn(RuleId.ActivationRule, this.nextPlayer)
+    )
+
+    return moves
+  }
+
   beforeItemMove(move: ItemMove<PlayerId, MaterialType, LocationType>): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     if (move.type === ItemMoveType.Move && move.itemType === MaterialType.FactionCard) {
 
@@ -157,25 +177,6 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     return []
   }
 
-  endTurnMove = (): MaterialMove[] => {
-    if (this.player == this.game.players[1]) {
-      return [this.rules().startPlayerTurn(RuleId.EndPhaseRule, this.nextPlayer)]
-    }
-
-    // Apply onTurnEnd of card in case there is some effect
-    const moves = this
-      .material(MaterialType.FactionCard)
-      .location((location) => location.type === LocationType.Battlefield || location.type === LocationType.AstralPlane)
-      .player(this.player)
-      .getItems()
-      .flatMap((card) => getFactionCard(card.id.front).onTurnEnd(this))
-
-    moves.push(
-      this.rules().startPlayerTurn(RuleId.ActivationRule, this.nextPlayer)
-    )
-
-    return moves
-  }
 
   onCustomMove(move: CustomMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     if (move.type === CustomMoveType.Attack) {
