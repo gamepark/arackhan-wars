@@ -85,7 +85,7 @@ abstract class FactionCardRule {
 
     const moves: MaterialMove[] = []
 
-    const factionToken = _rules.material(MaterialType.FactionToken).parent(thisCard.index)
+    const factionToken = _rules.material(MaterialType.FactionToken).parent(thisCard.getIndex())
     if (factionToken.getItem()) {
       moves.push(factionToken.deleteItem())
     }

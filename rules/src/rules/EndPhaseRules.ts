@@ -14,7 +14,7 @@ export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, Loc
 
     const discardCards: MaterialMove[] = []
     const indexes: number[] = []
-    for (const index of playedCards.indexes) {
+    for (const index of playedCards.getIndexes()) {
       const item = playedCards.getItem(index)!
       const discards = getFactionCard(item.id.front).onRoundEnd(this)
       discardCards.push(...discards)

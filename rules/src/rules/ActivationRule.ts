@@ -33,7 +33,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     // And with an active token on them
     const playableCards: number[] = playerCards
       .filter(this.canBePlayedInThisPhase)
-      .indexes
+      .getIndexes()
       .filter(this.isActivableCard)
 
     const moves: MaterialMove[] = []
@@ -57,7 +57,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
 
   computeAttackOpponentMoves(attacker: MaterialItem, opponentsCards: Material, cardIndex: number) {
     if (!this.canAttack(cardIndex)) return []
-    return opponentsCards.indexes
+    return opponentsCards.getIndexes()
       // Asking the card rule if it can attack the opponent
       .filter((index: number) => getFactionCard(attacker.id.front).canAttackThisOpponent(attacker, opponentsCards.getItem(index)!))
 
@@ -169,7 +169,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
           .material(MaterialType.FactionCard)
           .getItem(move.itemIndex)!
 
-        this.memorizeCardPlayed(cardOnDestination.getItem()!.location.player!, { card: cardOnDestination.index })
+        this.memorizeCardPlayed(cardOnDestination.getItem()!.location.player!, { card: cardOnDestination.getIndex() })
         return cardOnDestination.moveItems({ location: { ...sourceCard.location } })
       }
     }
