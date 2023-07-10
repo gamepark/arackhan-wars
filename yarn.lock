@@ -1472,10 +1472,10 @@
     fast-deep-equal "^3.1.3"
     lodash "^4.17.21"
 
-"@gamepark/rules-api@~6.0.9-alpha.0":
-  version "6.0.9-alpha.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-6.0.9-alpha.0.tgz#c683bbd9d03082f03ee16a79dc451d7350a38741"
-  integrity sha512-K2f2aIQ+Fyu9pVv6oaVEjeDNdnRP3UB13ktoujr6rtN8T69UR7UgE+SxQvD0HtLbwhwOjWwgUvPPMg3Ma95Lgw==
+"@gamepark/rules-api@~6.0.11-alpha.0":
+  version "6.0.11-alpha.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-6.0.11-alpha.0.tgz#79c94b9671dfabbd8ef7dacadb05469a9705304e"
+  integrity sha512-fyM1+cSZbBcDwwxObRHyZGSra2tPEgRYF+ghmVuMLEE7r5zoMoLhDeLE3cGMTfksMsGT/Mn2mRlQH9w1/N/daw==
   dependencies:
     fast-deep-equal "^3.1.3"
     lodash "^4.17.21"
