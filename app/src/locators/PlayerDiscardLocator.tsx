@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { DeckLocator, MaterialContext } from '@gamepark/react-game'
-import { Location, XYCoordinates } from '../../../../workshop/packages/rules-api'
+import { Location, XYCoordinates } from '@gamepark/rules-api'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'

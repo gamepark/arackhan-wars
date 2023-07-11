@@ -5,7 +5,7 @@ import { LocationDescription } from '@gamepark/react-game'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { css } from '@emotion/react'
 import { factionCardDescription } from '../material/FactionCardDescription'
-import { isCustomMove, Location, MaterialMove } from '../../../../workshop/packages/rules-api'
+import { isCustomMove, Location, MaterialMove } from '@gamepark/rules-api'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 
 export class FactionCardLocationDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {

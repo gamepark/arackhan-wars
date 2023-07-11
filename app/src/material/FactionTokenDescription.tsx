@@ -11,7 +11,7 @@ import BlightTokenBack from '../images/tokens/blight-token-back.jpg'
 import { FactionTokenRules } from './FactionTokenRules'
 import { MaterialContext, RoundTokenDescription } from '@gamepark/react-game'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { MaterialGame } from '../../../../workshop/packages/rules-api'
+import { MaterialGame } from '@gamepark/rules-api'
 
 export class FactionTokenDescription extends RoundTokenDescription {
   diameter = 1.4

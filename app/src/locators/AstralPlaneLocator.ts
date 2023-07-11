@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { MaterialContext, ItemLocator } from '@gamepark/react-game'
+import { ItemLocator, MaterialContext } from '@gamepark/react-game'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { Location, MaterialItem, XYCoordinates } from '../../../../workshop/packages/rules-api'
+import { Location, MaterialItem, XYCoordinates } from '@gamepark/rules-api'
 import { factionCardDescription } from '../material/FactionCardDescription'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { AstralPlaneDescription } from './AstralPlaneDescription'
