@@ -9,7 +9,7 @@ import NakkaTokenBack from '../images/tokens/nakka-token-back.jpg'
 import GreyOrderTokenBack from '../images/tokens/greyorder-token-back.jpg'
 import BlightTokenBack from '../images/tokens/blight-token-back.jpg'
 import { FactionTokenRules } from './FactionTokenRules'
-import { RoundTokenDescription } from '@gamepark/react-game'
+import { MaterialContext, RoundTokenDescription } from '@gamepark/react-game'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialGame } from '../../../../workshop/packages/rules-api'
 
@@ -41,7 +41,7 @@ export class FactionTokenDescription extends RoundTokenDescription {
     }))
   }
 
-  stocks = (game: MaterialGame) => {
+  getStocks({ game }: MaterialContext) {
     return game.players.map((player) => ({
         id: game.playersMemory![player]!.faction,
         location: {
