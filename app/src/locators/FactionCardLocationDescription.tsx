@@ -5,7 +5,7 @@ import { LocationDescription } from '@gamepark/react-game'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { css } from '@emotion/react'
 import { factionCardDescription } from '../material/FactionCardDescription'
-import { Location, MaterialMove, MoveKind } from '../../../../workshop/packages/rules-api'
+import { isCustomMove, Location, MaterialMove } from '../../../../workshop/packages/rules-api'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 
 export class FactionCardLocationDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
@@ -21,7 +21,7 @@ export class FactionCardLocationDescription extends LocationDescription<PlayerId
     `
   }
 
-  isDropLocation = (move: MaterialMove, location: Location): boolean => {
-    return move.kind === MoveKind.CustomMove && move.type === CustomMoveType.Attack && (move.data.targets ?? []).includes(location.parent)
+  canDrop(move: MaterialMove, location: Location) {
+    return isCustomMove(move, CustomMoveType.Attack) && Array.isArray(move.data.targets) && move.data.targets.includes(location.parent)
   }
 }
