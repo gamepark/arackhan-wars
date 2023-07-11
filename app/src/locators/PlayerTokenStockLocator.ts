@@ -7,7 +7,6 @@ import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 
 export class PlayerTokenStockLocator extends PileLocator<PlayerId, MaterialType, LocationType> {
   rotate = true
-  locations = [{ type: LocationType.PlayerTokenStock }]
   radius = 3
 
   getCoordinates({ location }: MaterialItem, context: ItemContext): Coordinates {
