@@ -11,7 +11,6 @@ import BlightTokenBack from '../images/tokens/blight-token-back.jpg'
 import { FactionTokenRules } from './FactionTokenRules'
 import { MaterialContext, RoundTokenDescription } from '@gamepark/react-game'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { MaterialGame } from '@gamepark/rules-api'
 
 export class FactionTokenDescription extends RoundTokenDescription {
   diameter = 1.4
@@ -30,7 +29,7 @@ export class FactionTokenDescription extends RoundTokenDescription {
     [Faction.Blight]: BlightTokenBack
   }
 
-  getItems = (game: MaterialGame) => {
+  getStaticItems = ({ game }: MaterialContext) => {
     return game.players.map((player) => ({
       id: game.playersMemory![player]!.faction,
       quantity: 34,

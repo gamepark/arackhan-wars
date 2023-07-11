@@ -14,7 +14,7 @@ export class PlayMatDescription extends BoardDescription {
   ratio = boardRatio
   image = board
 
-  item = { location: { type: LocationType.Table } }
+  staticItem = { location: { type: LocationType.Table } }
 
   getLocations(_item: MaterialItem, context: MaterialContext): Location[] {
     return [
