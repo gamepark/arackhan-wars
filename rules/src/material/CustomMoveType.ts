@@ -1,5 +1,6 @@
 export enum CustomMoveType {
   Mulligan = 1,
   Pass,
-  Attack
+  Attack,
+  SolveAttack,
 }

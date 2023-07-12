@@ -9,9 +9,9 @@ import { isCustomMove, Location, MaterialMove } from '@gamepark/rules-api'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 
 export class FactionCardLocationDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
-  alwaysVisible = false
   height = factionCardDescription.width / factionCardDescription.ratio
   width = factionCardDescription.width
+  alwaysVisible = false
 
   getExtraCss() {
     return css`

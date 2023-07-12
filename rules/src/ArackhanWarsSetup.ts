@@ -1,12 +1,12 @@
 import { MaterialGameSetup } from '@gamepark/rules-api'
 import { MaterialType } from './material/MaterialType'
 import { LocationType } from './material/LocationType'
-import { FactionCards } from './material/FactionCardType'
 import { ArackhanWarsOptions, PlayerId, PlayerOptions } from './ArackhanWarsOptions'
 import { RuleId } from './rules/RuleId'
 import { locationsStrategies } from './material/LocationStrategies'
 import shuffle from 'lodash/shuffle'
 import { Faction, playerFactions } from './Faction'
+import { FactionCardDescriptions } from './material/FactionCard'
 
 export type GamePlayerMemory = {
   faction: Faction
@@ -45,21 +45,19 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
 
   setupPlayers() {
     this.game.players.forEach((playerId) => {
-        console.log(playerId, this.game.playersMemory![playerId])
         this.setupPlayer(this.game.playersMemory![playerId] as PlayerOptions, playerId)
       }
     )
   }
 
   setupPlayer(player: PlayerOptions, playerId: PlayerId) {
-    console.log(player)
     this.material(MaterialType.FactionCard)
       .createItems(
-        Object.entries(FactionCards)
+        Object.entries(FactionCardDescriptions)
           .filter(([, { faction }]) => faction === player.faction)
           .flatMap(([id, { faction, quantity = 1 }]) =>
             Array.from(Array(quantity)).map(() => ({
-                id: { front: id, back: faction }, location: { type: LocationType.PlayerDeck, player: playerId }
+                id: { front: parseInt(id), back: faction }, location: { type: LocationType.PlayerDeck, player: playerId }
               })
             )
           )

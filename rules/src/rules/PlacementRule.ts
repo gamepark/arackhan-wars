@@ -3,9 +3,10 @@ import { Material, MaterialMove, PlayerTurnRule, XYCoordinates } from '@gamepark
 import { MaterialType } from '../material/MaterialType'
 import { battlefieldSpaceCoordinates, startingSpaces } from '../material/spaces'
 import { RuleId } from './RuleId'
-import { FactionCards } from '../material/FactionCardType'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { isAdjacentToFactionCard } from '../utils/IsAdjacent'
+import { getFactionCardDescription } from '../material/FactionCard'
+import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
 
 const PLACED_CARD_PER_TURN = 2
 
@@ -20,8 +21,8 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
 
     const factionCards = this.material(MaterialType.FactionCard)
     const playerHand = factionCards.location(LocationType.Hand).player(this.player)
-    const astralCards = playerHand.filter((item) => FactionCards[item.id.front].astral)
-    const otherCards = playerHand.filter((item) => !FactionCards[item.id.front].astral)
+    const astralCards = playerHand.filter((item) => getFactionCardDescription(item.id.front).astral as boolean)
+    const otherCards = playerHand.filter((item) => !getFactionCardDescription(item.id.front).astral)
 
     moves.push(...this.moveToAstralPlane(astralCards))
 
@@ -71,14 +72,10 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
 
   nextStep = () => {
     const hiddenCardsOnBattlefield = this.material(MaterialType.FactionCard)
-      .location((location) => location.type === LocationType.Battlefield || location.type === LocationType.AstralPlane)
+      .location(onBattlefieldAndAstralPlane)
       .rotation((rotation) => !!rotation?.y)
 
-
-    console.log('Hidden cards', hiddenCardsOnBattlefield.length)
-    console.log('Player count', (this.game.players.length * PLACED_CARD_PER_TURN))
     if (hiddenCardsOnBattlefield.length === (this.game.players.length * PLACED_CARD_PER_TURN)) {
-      console.log('Go to reveal')
       return this.rules().startRule(RuleId.RevealRule)
     }
 

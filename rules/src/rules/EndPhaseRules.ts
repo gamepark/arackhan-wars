@@ -1,30 +1,30 @@
 import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
-import { MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
+import { ItemMoveType, MaterialMove, MaterialRulesPart, MoveKind } from '@gamepark/rules-api'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { RuleId } from './RuleId'
-import { getFactionCard } from '../material/FactionCardType'
+import { getFactionCardRule } from '../material/FactionCard'
+import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
 
 export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
 
   getAutomaticMoves(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     const playedCards = this
       .material(MaterialType.FactionCard)
-      .location((location) => location.type === LocationType.Battlefield || location.type === LocationType.AstralPlane)
+      .location(onBattlefieldAndAstralPlane)
 
-    const discardCards: MaterialMove[] = []
+    const moves: MaterialMove[] = []
     const indexes: number[] = []
     for (const index of playedCards.getIndexes()) {
-      const item = playedCards.getItem(index)!
-      const discards = getFactionCard(item.id.front).onRoundEnd(this)
-      discardCards.push(...discards)
+      const cardMoves = getFactionCardRule(this.game, index).onRoundEnd()
+      moves.push(...cardMoves)
 
-      if (discards.length) {
+      const hasDiscard = cardMoves.some((m) => m.kind === MoveKind.ItemMove && m.type === ItemMoveType.Move && m.position.location?.type === LocationType.PlayerDiscard)
+      if (hasDiscard) {
         indexes.push(index)
       }
     }
 
-    // TODO: There will be an issue if there is token on discarded card
     const unflipTokens = this
       .material(MaterialType.FactionToken)
       .location(LocationType.FactionTokenSpace)
@@ -33,8 +33,8 @@ export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, Loc
       .moveItems({ rotation: { y: 0 } })
 
     return [
-      ...discardCards,
       ...unflipTokens,
+      ...moves,
       this.rules().startRule(RuleId.DrawRule)
     ]
   }

@@ -64,69 +64,69 @@ import ForcedExile from '../images/cards/blight/en/s1-aw1-186-en-forced-exile.jp
 import { FactionCardRules } from './FactionCardRules'
 import { Faction } from '@gamepark/arackhan-wars/Faction'
 import { CardDescription, ItemContext } from '@gamepark/react-game'
-import { FactionCardType } from '@gamepark/arackhan-wars/material/FactionCardType'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
-import { isCustomMove, Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { isCustomMove, isMoveItem, Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
+import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 
 export class FactionCardDescription extends CardDescription {
   images = {
-    [FactionCardType.NihilistPenguin]: NihilistPenguin,
-    [FactionCardType.LunarWendigo]: LunarWendigo,
-    [FactionCardType.ShieldOfDawn]: ShieldOfDawn,
-    [FactionCardType.IcePaladin]: IcePaladin,
-    [FactionCardType.Eagle]: Eagle,
-    [FactionCardType.PaladinOfTheGuard]: PaladinOfTheGuard,
-    [FactionCardType.SnowGriffin]: SnowGriffin,
-    [FactionCardType.Gabriel]: Gabriel,
-    [FactionCardType.IceGolem]: IceGolem,
-    [FactionCardType.FortressOfMyjir]: FortressOfMyjir,
-    [FactionCardType.IceMeteor]: IceMeteor,
-    [FactionCardType.WinterProtects]: WinterProtects,
-    [FactionCardType.Teleportation]: Teleportation,
-    [FactionCardType.Blizzard]: Blizzard,
-    [FactionCardType.DeathCrawler]: DeathCrawler,
-    [FactionCardType.Xenodon]: Xenodon,
-    [FactionCardType.NakkaArcher]: NakkaArcher,
-    [FactionCardType.SenileYhdorian]: SenileYhdorian,
-    [FactionCardType.Hexacarias]: Hexacarias,
-    [FactionCardType.CarnivorousPlant]: CarnivorousPlant,
-    [FactionCardType.Banshee]: Banshee,
-    [FactionCardType.Behemoth]: Behemoth,
-    [FactionCardType.MountedBanshee]: MountedBanshee,
-    [FactionCardType.WrathOfTheForest]: WrathOfTheForest,
-    [FactionCardType.TreeOfLife]: ThreeOfLife,
-    [FactionCardType.EarthQuake]: EarthQuake,
-    [FactionCardType.UnstableGrowth]: UnstableGrowth,
-    [FactionCardType.NaturalCamouflage]: NaturalCamouflage,
-    [FactionCardType.Mimicry]: Mimicry,
-    [FactionCardType.DrunkKnight]: DrunkKnight,
-    [FactionCardType.Infantryman]: Infantryman,
-    [FactionCardType.Phalanx]: Phalanx,
-    [FactionCardType.Ballista]: Ballista,
-    [FactionCardType.Champion]: Champion,
-    [FactionCardType.GreyHorseman]: GreyHorseman,
-    [FactionCardType.SiegeTower]: SiegeTower,
-    [FactionCardType.HeroOfTheBattleOfNerz]: HeroOfTheBattleOfNerz,
-    [FactionCardType.TheSeneschal]: TheSeneschal,
-    [FactionCardType.AvalonFortress]: AvalonFortress,
-    [FactionCardType.Warcry]: Warcry,
-    [FactionCardType.ShieldWall]: ShieldWall,
-    [FactionCardType.HorseOfAvalon]: HorseOfAvalon,
-    [FactionCardType.ScuttleJaw]: ScuttleJaw,
-    [FactionCardType.SwampOgre]: SwampOgre,
-    [FactionCardType.SwampTroll]: SwampTroll,
-    [FactionCardType.Berserker]: Berserker,
-    [FactionCardType.PlagueCollector]: PlagueCollector,
-    [FactionCardType.Slayer]: Slayer,
-    [FactionCardType.ForgePatriarch]: ForgePatriarch,
-    [FactionCardType.AbominableHydra]: AbominableHydra,
-    [FactionCardType.ChildEater]: ChildEater,
-    [FactionCardType.WesternForge]: WesternForge,
-    [FactionCardType.FireLightning]: FireLighning,
-    [FactionCardType.Firestorm]: Firestorm,
-    [FactionCardType.TheFear]: TheFear,
-    [FactionCardType.ForcedExile]: ForcedExile
+    [FactionCard.NihilistPenguin]: NihilistPenguin,
+    [FactionCard.LunarWendigo]: LunarWendigo,
+    [FactionCard.ShieldOfDawn]: ShieldOfDawn,
+    [FactionCard.IcePaladin]: IcePaladin,
+    [FactionCard.Eagle]: Eagle,
+    [FactionCard.PaladinOfTheGuard]: PaladinOfTheGuard,
+    [FactionCard.SnowGriffin]: SnowGriffin,
+    [FactionCard.Gabriel]: Gabriel,
+    [FactionCard.IceGolem]: IceGolem,
+    [FactionCard.FortressOfMyjir]: FortressOfMyjir,
+    [FactionCard.IceMeteor]: IceMeteor,
+    [FactionCard.WinterProtects]: WinterProtects,
+    [FactionCard.Teleportation]: Teleportation,
+    [FactionCard.Blizzard]: Blizzard,
+    [FactionCard.DeathCrawler]: DeathCrawler,
+    [FactionCard.Xenodon]: Xenodon,
+    [FactionCard.NakkaArcher]: NakkaArcher,
+    [FactionCard.SenileYhdorian]: SenileYhdorian,
+    [FactionCard.Hexacarias]: Hexacarias,
+    [FactionCard.CarnivorousPlant]: CarnivorousPlant,
+    [FactionCard.Banshee]: Banshee,
+    [FactionCard.Behemoth]: Behemoth,
+    [FactionCard.MountedBanshee]: MountedBanshee,
+    [FactionCard.WrathOfTheForest]: WrathOfTheForest,
+    [FactionCard.TreeOfLife]: ThreeOfLife,
+    [FactionCard.EarthQuake]: EarthQuake,
+    [FactionCard.UnstableGrowth]: UnstableGrowth,
+    [FactionCard.NaturalCamouflage]: NaturalCamouflage,
+    [FactionCard.Mimicry]: Mimicry,
+    [FactionCard.DrunkKnight]: DrunkKnight,
+    [FactionCard.Infantryman]: Infantryman,
+    [FactionCard.Phalanx]: Phalanx,
+    [FactionCard.Ballista]: Ballista,
+    [FactionCard.Champion]: Champion,
+    [FactionCard.GreyHorseman]: GreyHorseman,
+    [FactionCard.SiegeTower]: SiegeTower,
+    [FactionCard.HeroOfTheBattleOfNerz]: HeroOfTheBattleOfNerz,
+    [FactionCard.TheSeneschal]: TheSeneschal,
+    [FactionCard.AvalonFortress]: AvalonFortress,
+    [FactionCard.Warcry]: Warcry,
+    [FactionCard.ShieldWall]: ShieldWall,
+    [FactionCard.HorseOfAvalon]: HorseOfAvalon,
+    [FactionCard.ScuttleJaw]: ScuttleJaw,
+    [FactionCard.SwampOgre]: SwampOgre,
+    [FactionCard.SwampTroll]: SwampTroll,
+    [FactionCard.Berserker]: Berserker,
+    [FactionCard.PlagueCollector]: PlagueCollector,
+    [FactionCard.Slayer]: Slayer,
+    [FactionCard.ForgePatriarch]: ForgePatriarch,
+    [FactionCard.AbominableHydra]: AbominableHydra,
+    [FactionCard.ChildEater]: ChildEater,
+    [FactionCard.WesternForge]: WesternForge,
+    [FactionCard.FireLightning]: FireLighning,
+    [FactionCard.Firestorm]: Firestorm,
+    [FactionCard.TheFear]: TheFear,
+    [FactionCard.ForcedExile]: ForcedExile
   }
   backImages = {
     [Faction.Whitelands]: WhitelandsBack,
@@ -144,8 +144,16 @@ export class FactionCardDescription extends CardDescription {
   }
 
   canDrag(move: MaterialMove, context: ItemContext): boolean {
-    return (isCustomMove(move, CustomMoveType.Attack) && move.data.card === context.index)
-      || super.canDrag(move, context)
+    if (isCustomMove(move, CustomMoveType.Attack) && move.data.card === context.index) {
+      return true
+    }
+
+    if (isMoveItem(move, context.type, context.index)
+      && move.position.location?.type === LocationType.PlayerDiscard) {
+      return false
+    }
+
+    return super.canDrag(move, context)
   }
 
   rules = FactionCardRules

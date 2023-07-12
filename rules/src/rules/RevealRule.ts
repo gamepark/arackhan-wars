@@ -2,16 +2,17 @@ import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
 import { ItemMove, ItemMoveType, MaterialMove, MaterialRulesPart, MoveKind } from '@gamepark/rules-api'
 import { RuleId } from './RuleId'
-import { getFactionCard } from '../material/FactionCardType'
-import { FactionCardKind } from './cards/FactionCardRule'
+import { getFactionCardDescription } from '../material/FactionCard'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { GamePlayerMemory } from '../ArackhanWarsSetup'
+import { FactionCardKind } from './cards/descriptions/FactionCardDetail'
+import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
 
 export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
 
   getAutomaticMoves(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     const revealCards = this.material(MaterialType.FactionCard)
-      .location((location) => location.type === LocationType.Battlefield || location.type === LocationType.AstralPlane)
+      .location(onBattlefieldAndAstralPlane)
       .filter((item) => !!item.rotation?.y)
       .moveItems({ rotation: {} })
 
@@ -25,7 +26,7 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
   afterItemMove(move: ItemMove<PlayerId, MaterialType, LocationType>): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     if (move.kind === MoveKind.ItemMove && move.type === ItemMoveType.Move) {
       const revealedCard = this.material(move.itemType).getItems()[move.itemIndex]
-      if (getFactionCard(revealedCard.id.front).kind !== FactionCardKind.Spell) {
+      if (getFactionCardDescription(revealedCard.id.front).kind !== FactionCardKind.Spell) {
         return [
           this.material(MaterialType.FactionToken)
             .player(revealedCard.location.player)

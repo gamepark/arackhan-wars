@@ -4,14 +4,15 @@ import { MaterialType } from '../material/MaterialType'
 import { XYCoordinates, MaterialItem } from '@gamepark/rules-api'
 
 export const isAdjacentToFactionCard = (battlefield: MaterialItem<PlayerId, LocationType, MaterialType>[], position: XYCoordinates) => {
-  const north: XYCoordinates = { x: position.x, y: position.y - 1 }
-  const east: XYCoordinates = { x: position.x + 1, y: position.y }
-  const south: XYCoordinates = { x: position.x, y: position.y + 1 }
-  const west: XYCoordinates = { x: position.x - 1, y: position.y }
   return battlefield
-    .some((card) => (
-      [north, east, south, west]
-        .filter((position) => position.x >= 0 && position.y >= 0 && position.x <= 7 && position.y <= 5)
-        .some((position) => position.x === card.location.x && position.y === card.location.y)
-    ))
+    .some((card) => getDistance({ x: card.location.x!, y: card.location.y! }, position) === 1)
 }
+
+export const areAdjacent = (card1: MaterialItem, card2: MaterialItem) => getDistance(
+  { x: card1.location.x!, y: card1.location.y! },
+  { x: card2.location.x!, y: card2.location.y! }
+) === 1
+
+
+export const getDistance = (position1: XYCoordinates, position2: XYCoordinates) => Math.abs(position1.x - position2.x) + Math.abs(position1.y - position2.y)
+

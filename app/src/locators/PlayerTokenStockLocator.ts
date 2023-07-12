@@ -17,7 +17,5 @@ export class PlayerTokenStockLocator extends PileLocator<PlayerId, MaterialType,
     return { x: 35, y: -28, z: 0 }
   }
 
-  getPileId(item: MaterialItem): number {
-    return item.id
-  }
+
 }

@@ -21,7 +21,6 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
   rules = rules
   locationsStrategies = locationsStrategies
   hidingStrategies = hidingStrategies
-
 }
 
 export const hideCardFront: HidingStrategy = () => ['id.front']
@@ -39,7 +38,7 @@ export const hideCardWhenRotated: HidingStrategy = (
   return []
 }
 
-const rules: Record<RuleId, MaterialRulesPartCreator<PlayerId, MaterialType, LocationType>> = {
+export const rules: Record<RuleId, MaterialRulesPartCreator<PlayerId, MaterialType, LocationType>> = {
   [RuleId.StartRule]: StartRule,
   [RuleId.DrawRule]: DrawRules,
   [RuleId.PlacementRule]: PlacementRule,
@@ -49,7 +48,7 @@ const rules: Record<RuleId, MaterialRulesPartCreator<PlayerId, MaterialType, Loc
   [RuleId.EndPhaseRule]: EndPhaseRules
 }
 
-const hidingStrategies: Partial<Record<MaterialType, Partial<Record<LocationType, HidingStrategy>>>> = {
+export const hidingStrategies: Partial<Record<MaterialType, Partial<Record<LocationType, HidingStrategy>>>> = {
   [MaterialType.FactionCard]: {
     [LocationType.PlayerDeck]: hideCardFront,
     [LocationType.Hand]: hideCardFrontToOthers,

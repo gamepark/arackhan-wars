@@ -10,7 +10,7 @@ export class PlayerDeckLocator extends DeckLocator<PlayerId, MaterialType, Locat
   locationDescription = new PlayerDeckDescription()
   parentItemType = MaterialType.PlayMat
 
-  delta = { x: -0.05, y: -0.05, z: 0.1 }
+  delta = { x: -0.04, y: -0.04, z: 0.1 }
   hidden = true
 
   getPositionOnParent(location: Location, context: MaterialContext): XYCoordinates {
