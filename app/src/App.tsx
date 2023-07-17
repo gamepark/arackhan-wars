@@ -31,11 +31,15 @@ export default function App() {
 }
 
 const RulesHeaders: Record<RuleId, () => ReactJSXElement> = {
+  // TODO: all headers
   [RuleId.StartRule]: StartHeader,
   [RuleId.DrawRule]: () => <p></p>,
   [RuleId.PlacementRule]: PlacementHeader,
   [RuleId.RevealRule]: () => <p></p>,
   [RuleId.InitiativeActivationRule]: PlacementHeader,
   [RuleId.ActivationRule]: PlacementHeader,
-  [RuleId.EndPhaseRule]: () => <p></p>
+  [RuleId.EndPhaseRule]: () => <p></p>,
+  [RuleId.ForcedExileActionRule]: () => <p></p>,
+  [RuleId.HorseOfAvalonActionRule]: () => <p></p>,
+  [RuleId.TeleportationActionRule]: () => <p></p>
 }

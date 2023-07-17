@@ -1,18 +1,12 @@
 import { FactionCardRule } from './base/FactionCardRule'
+import { WinterProtectEffectRule } from './effect/WinterProtectEffectRule'
 
 export class WinterProtectsRule extends FactionCardRule {
-
-  isEffectApplicable(_cardIndex: number, isAlly: boolean): boolean {
-    return isAlly
+  effect() {
+    return new WinterProtectEffectRule(this.game, this.item, this.card, this.index)
   }
 
-  getAttackModifier() {
-    return {
-      defense: 2
-    }
-  }
-
-  onRoundEnd = () => {
+  onRoundEnd() {
     return this.discardCard()
   }
 }

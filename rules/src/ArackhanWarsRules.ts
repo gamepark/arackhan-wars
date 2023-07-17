@@ -11,6 +11,9 @@ import { PlayerId } from './ArackhanWarsOptions'
 import { ActivationRule } from './rules/ActivationRule'
 import { EndPhaseRules } from './rules/EndPhaseRules'
 import { DrawRules } from './rules/DrawRules'
+import { ForcedExileActionRule } from './rules/cards/rules/action/ForcedExileActionRule'
+import { HorseOfAvalonActionRule } from './rules/cards/rules/action/HorseOfAvalonActionRule'
+import { TeleportationActionRule } from './rules/cards/rules/action/TeleportationActionRule'
 
 
 /**
@@ -45,7 +48,10 @@ export const rules: Record<RuleId, MaterialRulesPartCreator<PlayerId, MaterialTy
   [RuleId.RevealRule]: RevealRule,
   [RuleId.InitiativeActivationRule]: InitiativeActivationRule,
   [RuleId.ActivationRule]: ActivationRule,
-  [RuleId.EndPhaseRule]: EndPhaseRules
+  [RuleId.EndPhaseRule]: EndPhaseRules,
+  [RuleId.ForcedExileActionRule]: ForcedExileActionRule,
+  [RuleId.HorseOfAvalonActionRule]: HorseOfAvalonActionRule,
+  [RuleId.TeleportationActionRule]: TeleportationActionRule
 }
 
 export const hidingStrategies: Partial<Record<MaterialType, Partial<Record<LocationType, HidingStrategy>>>> = {

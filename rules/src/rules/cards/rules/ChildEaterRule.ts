@@ -1,18 +1,8 @@
 import { FactionCardRule } from './base/FactionCardRule'
-import { MaterialMove } from '@gamepark/rules-api/dist/material/moves/MaterialMove'
-import { LocationType } from '../../../material/LocationType'
+import { ChildEaterAttackRule } from './attack/ChildEaterAttackRule'
 
 export class ChildEaterRule extends FactionCardRule {
-  afterAttack = (opponents: number[], destroyedOpponents: number): MaterialMove[] => {
-    if (destroyedOpponents < opponents.length) {
-      this.item.moveItems({
-        location: {
-          type: LocationType.PlayerDiscard,
-          player: this.item.getItem()!.location.player
-        }
-      })
-    }
-
-    return []
+  attack() {
+    return new ChildEaterAttackRule(this.game, this.item, this.card, this.index, this.battlefieldCards)
   }
 }

@@ -2,13 +2,14 @@ import { FactionCardRule } from './base/FactionCardRule'
 
 export class FireLightningRule extends FactionCardRule {
 
-  afterActivation = () => {
+  afterActivation() {
     return [
       ...super.afterActivation(),
       ...this.discardCard()
     ]
   }
-  onTurnEnd = () => {
+
+  onTurnEnd() {
     return this.discardCard()
   }
 }

@@ -1,21 +1,13 @@
 import { FactionCardRule } from './base/FactionCardRule'
-import { CardModification } from './base/EffectRule'
-import { MaterialMove } from '@gamepark/rules-api/dist/material/moves/MaterialMove'
+import { UnstableGrowthEffectRule } from './effect/UnstableGrowthEffectRule'
 
 export class UnstableGrowthRule extends FactionCardRule {
 
-  isEffectApplicable(_cardIndex: number, isAlly: boolean): boolean {
-    return isAlly
+  effect() {
+    return new UnstableGrowthEffectRule(this.game, this.item, this.card, this.index)
   }
 
-  getAttackModifier(): CardModification | undefined {
-    return {
-      attack: 2,
-      defense: -1
-    }
-  }
-
-  onRoundEnd(): MaterialMove[] {
+  onRoundEnd() {
     return super.discardCard()
   }
 }

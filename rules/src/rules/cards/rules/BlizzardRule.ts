@@ -1,15 +1,21 @@
 import { FactionCardRule } from './base/FactionCardRule'
+import { BlizzardEffectRule } from './effect/BlizzardEffectRule'
 
 export class BlizzardRule extends FactionCardRule {
 
-  blockSkills = true
-  blockAllAttributes = true
-
-  isEffectApplicable(_cardIndex: number, isAlly: boolean): boolean {
-    return !isAlly
+  effect() {
+    return new BlizzardEffectRule(this.game, this.item, this.card, this.index)
   }
 
-  onRoundEnd = () => {
+  skill() {
+
+  }
+
+  weakness() {
+
+  }
+
+  onRoundEnd() {
     return this.discardCard()
   }
 }

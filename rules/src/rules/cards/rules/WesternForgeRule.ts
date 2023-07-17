@@ -1,17 +1,9 @@
 import { FactionCardRule } from './base/FactionCardRule'
-import { CardModification } from './base/EffectRule'
+import { WesternForgeEffectRule } from './effect/WesternForgeEffectRule'
 
 export class WesternForgeRule extends FactionCardRule {
-
-  isEffectApplicable(_cardIndex: number, isAlly: boolean): boolean {
-    return isAlly
+  effect() {
+    return new WesternForgeEffectRule(this.game, this.item, this.card, this.index)
   }
-
-  getAttackModifier(): CardModification | undefined {
-    return {
-      defense: 2
-    }
-  }
-
 
 }

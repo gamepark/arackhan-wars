@@ -1,15 +1,9 @@
 import { FactionCardRule } from './base/FactionCardRule'
-import { CardModification } from './base/EffectRule'
+import { ShieldOfDawnEffectRule } from './effect/ShieldOfDawnEffectRule'
 
 export class ShieldOfDawnRule extends FactionCardRule {
 
-  isEffectApplicable(_cardIndex: number, isAlly: boolean): boolean {
-    return isAlly
-  }
-
-  getAttackModifier(): CardModification | undefined {
-    return {
-      defense: 1
-    }
+  effect() {
+    return new ShieldOfDawnEffectRule(this.game, this.item, this.card, this.index)
   }
 }

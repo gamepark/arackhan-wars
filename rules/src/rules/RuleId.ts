@@ -6,5 +6,8 @@ export enum RuleId {
   InitiativeActivationRule,
   ActivationRule,
   EndPhaseRule,
+  ForcedExileActionRule,
+  HorseOfAvalonActionRule,
+  TeleportationActionRule,
   //EndOfTheGameRule
 }

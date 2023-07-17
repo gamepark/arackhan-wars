@@ -1,14 +1,8 @@
 import { FactionCardRule } from './base/FactionCardRule'
+import { FortressOfMyjirEffectRule } from './effect/FortressOfMyjirEffectRule'
 
 export class FortressOfMyjirRule extends FactionCardRule {
-
-  isEffectApplicable(_cardIndex: number, isAlly: boolean): boolean {
-    return isAlly
-  }
-
-  getAttackModifier() {
-    return {
-      defense: 2
-    }
+  effect() {
+    return new FortressOfMyjirEffectRule(this.game, this.item, this.card, this.index)
   }
 }

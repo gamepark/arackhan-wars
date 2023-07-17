@@ -1,17 +1,13 @@
 import { FactionCardRule } from './base/FactionCardRule'
-import { CardModification } from './base/EffectRule'
+import { CarnivorousPlantEffectRule } from './effect/CarnivorousPlantEffectRule'
+import { CarnivorousPlantAttackRule } from './attack/CarnivorousPlantAttackRule'
 
 export class CarnivorousPlantRule extends FactionCardRule {
-
-  isEffectApplicable(_cardIndex: number, isAlly: boolean): boolean {
-    return isAlly
+  effect() {
+    return new CarnivorousPlantEffectRule(this.game, this.item, this.card, this.index)
   }
 
-  getAttackModifier(): CardModification | undefined {
-    return {
-      defense: 1
-    }
+  attack() {
+    return new CarnivorousPlantAttackRule(this.game, this.item, this.card, this.index, this.battlefieldCards)
   }
-
-  // TODO: can only be attacked in group attack
 }

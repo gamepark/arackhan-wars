@@ -1,7 +1,9 @@
 import { FactionCardRule } from './base/FactionCardRule'
 
 export class ShieldWallRule extends FactionCardRule {
-  onRoundEnd = () => {
+
+  // TODO: Code the effect
+  onRoundEnd() {
     return this.discardCard()
   }
 }

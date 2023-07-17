@@ -1,12 +1,12 @@
 import { LocationType } from '../material/LocationType'
-import { Material, MaterialMove, PlayerTurnRule, XYCoordinates } from '@gamepark/rules-api'
+import { isMoveItem, ItemMove, Material, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { MaterialType } from '../material/MaterialType'
 import { battlefieldSpaceCoordinates, startingSpaces } from '../material/spaces'
 import { RuleId } from './RuleId'
 import { PlayerId } from '../ArackhanWarsOptions'
-import { isAdjacentToFactionCard } from '../utils/IsAdjacent'
-import { getFactionCardDescription } from '../material/FactionCard'
+import { getFactionCardDescription, getFactionCardRule } from '../material/FactionCard'
 import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
+import { getAvailableCardPlacement, moveToBattlefieldSpace } from '../utils/move.utils'
 
 const PLACED_CARD_PER_TURN = 2
 
@@ -30,7 +30,7 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
     if (!cardsInBattlefield.rotation((rotation) => !rotation).length && !cardsInBattlefield.player(player => player !== this.player).length) {
       moves.push(
         ...startingSpaces
-          .flatMap((index) => this.moveToBattlefieldSpace(otherCards, battlefieldSpaceCoordinates[index]))
+          .flatMap((index) => moveToBattlefieldSpace(otherCards, battlefieldSpaceCoordinates[index], this.player))
       )
 
       return moves
@@ -39,10 +39,7 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
     const cardsOnBattlefield = factionCards.location(LocationType.Battlefield).getItems()
 
     moves.push(
-      ...battlefieldSpaceCoordinates
-        .filter((space) => !cardsOnBattlefield.some((card) => card.location.x === space.x && card.location.y === space.y))
-        .filter((space) => isAdjacentToFactionCard(cardsOnBattlefield, space))
-        .flatMap((space) => this.moveToBattlefieldSpace(otherCards, space))
+      ...getAvailableCardPlacement(cardsOnBattlefield, otherCards, this.player)
     )
 
     return moves
@@ -87,15 +84,14 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
     return
   }
 
-  moveToBattlefieldSpace(cards: Material<PlayerId, MaterialType, LocationType>, space: XYCoordinates) {
-    return cards.moveItems({
-      location: {
-        type: LocationType.Battlefield,
-        x: space.x,
-        y: space.y,
-        player: this.player
-      },
-      rotation: { y: 1 }
-    })
+  afterItemMove(move: ItemMove) {
+    if (isMoveItem(move, MaterialType.FactionCard) && (move.position.location?.type === LocationType.Battlefield || move.position.location?.type === LocationType.AstralPlane)) {
+      const rules = getFactionCardRule(this.game, move.itemIndex)
+      if (rules) {
+        return rules.onPlaceCard()
+      }
+    }
+
+    return []
   }
 }

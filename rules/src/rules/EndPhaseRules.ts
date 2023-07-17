@@ -25,6 +25,7 @@ export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, Loc
       }
     }
 
+    // TODO: There will be an issue if there is token on discarded card
     const unflipTokens = this
       .material(MaterialType.FactionToken)
       .location(LocationType.FactionTokenSpace)

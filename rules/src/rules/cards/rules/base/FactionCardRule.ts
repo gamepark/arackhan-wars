@@ -1,7 +1,7 @@
 import { MaterialType } from '../../../../material/MaterialType'
 import { getFactionCardDescription } from '../../../../material/FactionCard'
 import { FactionCardDetail, FactionCardKind } from '../../descriptions/FactionCardDetail'
-import { AttackRules } from './AttackRules'
+import { AttackRule } from './AttackRule'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { LocationType } from '../../../../material/LocationType'
 import { Material } from '@gamepark/rules-api/dist/material/items/Material'
@@ -10,18 +10,21 @@ import { MoveRules } from './MoveRules'
 import { MaterialRulesPart } from '@gamepark/rules-api/dist/material/rules/MaterialRulesPart'
 import { MaterialMove } from '@gamepark/rules-api/dist/material/moves/MaterialMove'
 import { EffectRule } from './EffectRule'
+import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 
 
 export class FactionCardRule extends MaterialRulesPart {
   readonly card: FactionCardDetail
   readonly item: Material<PlayerId, MaterialType, LocationType>
   readonly index: number
+  readonly battlefieldCards: Material
 
   constructor(game: MaterialGame, index: number) {
     super(game)
     this.item = this.material(MaterialType.FactionCard).index(index)
     this.card = getFactionCardDescription(this.item.getItem()!.id.front)
     this.index = index
+    this.battlefieldCards = this.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane)
   }
 
 
@@ -41,18 +44,22 @@ export class FactionCardRule extends MaterialRulesPart {
       .length
   }
 
-  attack(): AttackRules | undefined {
+  attack(): AttackRule | undefined {
     if (!this.card.canAttack()) return
-    return new AttackRules(this.game, this.item, this.card, this.index)
+    return new AttackRule(this.game, this.item, this.card, this.index, this.battlefieldCards)
   }
 
   move(): MoveRules | undefined {
     if (!this.card.hasMovement()) return
-    return new MoveRules(this.game, this.item, this.card, this.index)
+    return new MoveRules(this.game, this.item, this.card, this.index, this.battlefieldCards)
   }
 
   effect(): EffectRule | undefined {
     return
+  }
+
+  actionRule(): MaterialMove[] {
+    return []
   }
 
   onRoundEnd(): MaterialMove[] {
@@ -74,15 +81,7 @@ export class FactionCardRule extends MaterialRulesPart {
     return []
   }
 
-  beforeDiscard(): MaterialMove[] {
-    return []
-  }
-
   onPlaceCard(): MaterialMove[] {
-    return []
-  }
-
-  onMoveAdjacentCard(_cardIndex: number) {
     return []
   }
 

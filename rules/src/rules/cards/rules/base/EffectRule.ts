@@ -1,5 +1,5 @@
 import { MaterialType } from '../../../../material/MaterialType'
-import { areAdjacent } from '../../../../utils/IsAdjacent'
+import { areAdjacent } from '../../../../utils/adjacent.utils'
 import { Material, MaterialGame, MaterialItem, MaterialRulesPart } from '@gamepark/rules-api'
 import { CardAttributeType, FactionCardDetail } from '../../descriptions/FactionCardDetail'
 
@@ -25,65 +25,67 @@ export class EffectRule extends MaterialRulesPart {
     this.index = index
   }
 
-  
   // Used to apply block skills before any other skills
   blockSkills: boolean = false
   blockAllAttributes: boolean = false
   blockAttack: boolean = false
 
-  isLoosingAttributes(_cardIndex: number, _isAlly: boolean, _attribute?: CardAttributeType): boolean {
-    if (!this.isEffectApplicable(_cardIndex, _isAlly)) return false
+
+  isLoosingAttributes(_isAlly: boolean, _cardIndex: number, _attribute?: CardAttributeType): boolean {
+    if (!this.isApplicable(_isAlly, _cardIndex)) return false
     return this.blockAllAttributes
   }
 
-  isLoosingSkill(_cardIndex: number, _isAlly: boolean): boolean {
-    if (!this.isEffectApplicable(_cardIndex, _isAlly)) return false
+  isLoosingSkill(_isAlly: boolean, _cardIndex: number): boolean {
+    if (!this.isApplicable(_isAlly, _cardIndex)) return false
     return this.blockSkills
   }
 
-  isAttackBlocked(_cardIndex: number, _isAlly: boolean): boolean {
-    if (!this.isEffectApplicable(_cardIndex, _isAlly)) return false
+  isProtectedFromAttacks(_isAlly: boolean, _cardIndex: number): boolean {
+    if (!this.isApplicable(_isAlly, _cardIndex)) return false
     return this.blockAttack
   }
 
-  isEffectApplicable(_cardIndex: number, _isAlly: boolean): boolean {
+  isApplicable(_isAlly: boolean, _cardIndex: number): boolean {
     return true
   }
 
   getModification(cardIndex: number): CardModification | undefined {
     const comparedCard = this.material(MaterialType.FactionCard).index(cardIndex).getItem()!
     const isAlly = this.isAlly(cardIndex)
-    if (!this.isAdjacentTo(comparedCard) || !this.isEffectApplicable(cardIndex, isAlly)) return
+    if (!this.isAdjacentTo(comparedCard) || !this.isApplicable(isAlly, cardIndex)) return
 
-    const attackModification = this.getAttackModifier(comparedCard, cardIndex, isAlly)
+    const attackModification = this.getAttackModifier(isAlly, comparedCard, cardIndex)
     return {
       attack: attackModification?.attack ?? 0,
       defense: attackModification?.defense ?? 0,
-      looseSkill: this.isLoosingSkill(cardIndex, isAlly),
-      looseAllAttributes: this.isLoosingAttributes(cardIndex, isAlly),
-      protectedFromAttacks: this.isAttackBlocked(cardIndex, isAlly),
-      extraAttributes: this.getExtraAttributes(cardIndex, isAlly),
-      lostAttributes: this.getLostAttributes(cardIndex, isAlly)
+      looseSkill: this.isLoosingSkill(isAlly, cardIndex),
+      looseAllAttributes: this.isLoosingAttributes(isAlly, cardIndex),
+      protectedFromAttacks: this.isProtectedFromAttacks(isAlly, cardIndex),
+      extraAttributes: this.getExtraAttributes(isAlly, cardIndex),
+      lostAttributes: this.getLostAttributes(isAlly, cardIndex)
     }
   }
 
-  getAttackModifier(_cardItem: MaterialItem, _cardIndex: number, _isAlly: boolean): CardModification | undefined {
+  getAttackModifier(_isAlly: boolean, _cardItem: MaterialItem, _cardIndex: number): CardModification | undefined {
     return
   }
 
-  getExtraAttributes(_cardIndex: number, _isAlly: boolean): CardAttributeType[] {
+  getExtraAttributes(_isAlly: boolean, _cardIndex: number): CardAttributeType[] {
     return []
   }
 
-  getLostAttributes(_cardIndex: number, _isAlly: boolean): CardAttributeType[] {
+  getLostAttributes(_isAlly: boolean, _cardIndex: number): CardAttributeType[] {
     return []
   }
 
   isAlly(cardIndex: number) {
-    const thisFactionToken = this.material(MaterialType.FactionToken).parent(this.index).getItem()!.id.back
-    const cardFactionToken = this.material(MaterialType.FactionToken).parent(cardIndex).getItem()!.id.back
+    const thisFactionToken = this.material(MaterialType.FactionToken).parent(this.index).getItem()
+    const cardFactionToken = this.material(MaterialType.FactionToken).parent(cardIndex).getItem()
 
-    return thisFactionToken !== undefined && thisFactionToken === cardFactionToken
+    if (thisFactionToken && cardFactionToken) return thisFactionToken.id.front === cardFactionToken.id.front
+    const cardFaction = this.material(MaterialType.FactionCard).index(cardIndex).getItem()!
+    return cardFaction.id.back === this.card.faction
   }
 
   isAdjacentTo(card: MaterialItem) {

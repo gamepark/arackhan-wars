@@ -1,24 +1,12 @@
 import { FactionCardRule } from './base/FactionCardRule'
-import { MaterialItem } from '@gamepark/rules-api/dist/material/items/MaterialItem'
-import { CardModification } from './base/EffectRule'
+import { FirestormEffectRule } from './effect/FirestormEffectRule'
 
 export class FirestormRule extends FactionCardRule {
+  effect() {
+    return new FirestormEffectRule(this.game, this.item, this.card, this.index)
+  }
 
-  blockSkills = true
-  blockAllAttributes = true
-
-  onRoundEnd = () => {
+  onRoundEnd() {
     return this.discardCard()
-  }
-
-  isEffectApplicable(_cardIndex: number, isAlly: boolean): boolean {
-    return !isAlly
-  }
-
-  getAttackModifier(_cardItem: MaterialItem, _cardIndex: number, _isAllied: boolean): CardModification | undefined {
-    return {
-      attack: -1,
-      defense: -1
-    }
   }
 }

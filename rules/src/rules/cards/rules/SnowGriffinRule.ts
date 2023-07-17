@@ -1,13 +1,8 @@
 import { FactionCardRule } from './base/FactionCardRule'
-import { CardAttributeType } from '../descriptions/FactionCardDetail'
+import { SnowGriffinEffectRule } from './effect/SnowGriffinEffectRule'
 
 export class SnowGriffinRule extends FactionCardRule {
-
-  isEffectApplicable(_cardIndex: number, isAlly: boolean): boolean {
-    return !isAlly
-  }
-
-  getLostAttributes(): CardAttributeType[] {
-    return [CardAttributeType.Swarm]
+  effect() {
+    return new SnowGriffinEffectRule(this.game, this.item, this.card, this.index)
   }
 }

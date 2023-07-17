@@ -38,7 +38,8 @@ export abstract class FactionCardDetail {
   hasInitiative = () => this.hasAttribute(CardAttributeType.Initiative)
   hasOmnistrike = () => this.hasAttribute(CardAttributeType.Omnistrike)
   canFly = () => this.hasAttribute(CardAttributeType.Flight)
-  hasMovement = () => this.hasAttribute(CardAttributeType.Movement) ?? this.canFly()
+  hasMovement = () => this.hasAttribute(CardAttributeType.Movement)
+  canMove = () => this.hasMovement() ?? this.canFly()
 
 
   canAttack = () => this.attack !== undefined
