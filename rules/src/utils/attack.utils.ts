@@ -8,8 +8,8 @@ import { Material } from '@gamepark/rules-api/dist/material/items/Material'
 
 export const computeAttack = (game: MaterialGame, attacker: Material, opponent: Material, effectHelper: FactionCardEffectHelper, activatedCards: ActivatedCard[] = []) => {
   const cardAttack = effectHelper.getAttack(attacker.getIndex())
-  const attackerItem = attacker.getItem()!
-  const attackerCard = getFactionCardDescription(attackerItem.id.front)
+  const attackerCard = attacker.getItem()!
+  const attackerCardDescription = getFactionCardDescription(attackerCard.id.front)
 
   const otherAttackersOnThisTarget = activatedCards.filter((c: any) => c.card !== attacker.getIndex() && (c.targets ?? []).includes(opponent.getIndex()))
   let groupAttack = Math.max(cardAttack, 0)
@@ -17,7 +17,7 @@ export const computeAttack = (game: MaterialGame, attacker: Material, opponent: 
     groupAttack += Math.max(effectHelper.getAttack(otherAttacker.card), 0)
   }
 
-  attackerCard.getAttributes()
+  attackerCardDescription.getAttributes()
     .filter(isAttackAttribute)
     .filter((a) => !effectHelper.hasLostAttributes(attacker.getIndex(), a.type))
     .forEach((a) => groupAttack = a.getAttributeRule(game).getAttackValue(groupAttack, attacker, opponent))

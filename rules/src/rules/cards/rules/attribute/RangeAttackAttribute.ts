@@ -5,6 +5,7 @@ import { getDistance } from '../../../../utils/adjacent.utils'
 import { Material, MaterialMove } from '@gamepark/rules-api'
 import { AttackAttributeRule } from './AttackAttribute'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
+import { FactionCardEffectHelper } from '../helper/FactionCardEffectHelper'
 
 class RangeAttackAttributeRule extends AttackAttributeRule {
 
@@ -12,21 +13,22 @@ class RangeAttackAttributeRule extends AttackAttributeRule {
     super(game)
   }
 
-  getLegalAttacks(attacker: Material, opponentsCards: Material): MaterialMove[] {
+  getLegalAttacks(attacker: Material, opponentsCards: Material, effectHelper: FactionCardEffectHelper): MaterialMove[] {
     return opponentsCards.getIndexes()
-      .filter((index: number) => this.canAttack(attacker, opponentsCards.index(index)!))
+      .filter((index: number) => this.canAttack(attacker, opponentsCards.index(index)!, effectHelper))
       .map((index: number) => this.rules().customMove(CustomMoveType.Attack, {
         card: attacker.getIndex(),
         targets: [index]
       }))
   }
 
-  canAttack(attacker: Material, opponent: Material): boolean {
-    const attackerItem = attacker.getItem()!
-    const opponentItem = opponent.getItem()!
+  canAttack(attacker: Material, opponent: Material, effectHelper: FactionCardEffectHelper): boolean {
+    if (!effectHelper.canBeAttacked(attacker.getIndex(), opponent.getIndex())) return false
+    const attackerCard = attacker.getItem()!
+    const opponentCard = opponent.getItem()!
     return getDistance(
-      { x: attackerItem.location.x!, y: attackerItem.location.y! },
-      { x: opponentItem.location.x!, y: opponentItem.location.y! }
+      { x: attackerCard.location.x!, y: attackerCard.location.y! },
+      { x: opponentCard.location.x!, y: opponentCard.location.y! }
     ) <= this.strength
   }
 }

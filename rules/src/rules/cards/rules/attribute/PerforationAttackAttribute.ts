@@ -29,14 +29,14 @@ class PerforationAttackAttribute extends AttackAttributeRule {
   }
 
   getOpponentsInDirection(attacker: Material, opponentsCards: Material, direction: { x?: number, y?: number }) {
-    const attackerItem = attacker.getItem()!
-    const startingSearch = { x: attackerItem.location.x!, y: attackerItem.location.y! }
+    const attackerCard = attacker.getItem()!
+    const startingSearch = { x: attackerCard.location.x!, y: attackerCard.location.y! }
 
     const opponents: number[] = []
     for (let i = 1; i <= 8; i++) {
-      const newOpponent = opponentsCards.filter((item) =>
-        item.location.x === startingSearch.x + i * (direction.x ?? 0) &&
-        item.location.y === startingSearch.y + i * (direction.y ?? 0)
+      const newOpponent = opponentsCards.filter((opponentCard) =>
+        opponentCard.location.x === startingSearch.x + i * (direction.x ?? 0) &&
+        opponentCard.location.y === startingSearch.y + i * (direction.y ?? 0)
       )
 
       if (newOpponent.length) {
@@ -50,10 +50,10 @@ class PerforationAttackAttribute extends AttackAttributeRule {
   }
 
   getAttackValue(attack: number, _attacker: Material, _opponent: Material): number {
-    const attackerItem = _attacker.getItem()!
-    const opponentItem = _opponent.getItem()!
-    const axis = attackerItem.location.x === opponentItem.location.x ? 'y' : 'x'
-    return attack - (Math.abs(attackerItem.location[axis]! - opponentItem.location[axis]!) - 1)
+    const attackerCard = _attacker.getItem()!
+    const opponentCard = _opponent.getItem()!
+    const axis = attackerCard.location.x === opponentCard.location.x ? 'y' : 'x'
+    return attack - (Math.abs(attackerCard.location[axis]! - opponentCard.location[axis]!) - 1)
   }
 }
 

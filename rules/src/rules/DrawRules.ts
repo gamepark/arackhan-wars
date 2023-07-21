@@ -12,7 +12,7 @@ export class DrawRules extends MaterialRulesPart<PlayerId, MaterialType, Locatio
         .material(MaterialType.FactionCard)
         .location(LocationType.PlayerDeck)
         .player(player)
-        .sort(item => -item.location.x!)
+        .sort(card => -card.location.x!)
         .limit(2)
         .moveItems({ location: { type: LocationType.Hand, player } })
     ))

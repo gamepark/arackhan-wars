@@ -32,7 +32,7 @@ export class AttackRule extends MaterialRulesPart {
     const attributeAttacks = this.cardDescription.getAttributes()
       .filter(isAttackAttribute)
       .filter((a) => !this.effectHelper.hasLostAttributes(this.index, a.type))
-      .flatMap((attribute) => attribute.getAttributeRule(this.game).getLegalAttacks(this.item, opponentsCards.indexes(filteredOpponents)))
+      .flatMap((attribute) => attribute.getAttributeRule(this.game).getLegalAttacks(this.item, opponentsCards.indexes(filteredOpponents), this.effectHelper))
 
     if (attributeAttacks.length) {
       return attributeAttacks
@@ -54,17 +54,17 @@ export class AttackRule extends MaterialRulesPart {
   attack(opponents: number[]): MaterialMove[] {
     const moves = []
     for (const index of opponents) {
-      const opponentItem = this.material(MaterialType.FactionCard).index(index)
-      const opponentCard = getFactionCardDescription(opponentItem.getItem()!.id.front)
+      const opponentMaterial = this.material(MaterialType.FactionCard).index(index)
+      const opponentCardDescription = getFactionCardDescription(opponentMaterial.getItem()!.id.front)
 
       const opponentDefense = this.effectHelper.getDefense(index)
       const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.item.getItem()!.location.player)
-      const attackerAttack = computeAttack(this.game, this.item, opponentItem, this.effectHelper, activatedCards)
+      const attackerAttack = computeAttack(this.game, this.item, opponentMaterial, this.effectHelper, activatedCards)
       if (opponentDefense >= attackerAttack) continue
 
-      if (opponentCard.kind !== FactionCardKind.Land) {
+      if (opponentCardDescription.kind !== FactionCardKind.Land) {
         const opponentCardToken = this.material(MaterialType.FactionToken).parent(index)
-        moves.push(...discardCard(opponentItem, opponentCardToken))
+        moves.push(...discardCard(opponentMaterial, opponentCardToken))
       } else {
         moves.push(...this.conquerLand(index, this.index))
       }

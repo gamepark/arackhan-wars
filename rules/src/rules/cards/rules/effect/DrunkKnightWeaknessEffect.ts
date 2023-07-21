@@ -8,8 +8,8 @@ import { himself } from '../../descriptions/utils/applicable-filter.utils'
 export class DrunkKnightWeaknessEffect extends AttackEffect {
 
   canAttack(_attacker: number, opponent: number) {
-    const item = this.material(MaterialType.FactionCard).index(opponent).getItem()!
-    const otherCard = getFactionCardDescription(item.id.front)
+    const opponentCard = this.material(MaterialType.FactionCard).index(opponent).getItem()!
+    const otherCard = getFactionCardDescription(opponentCard.id.front)
     return otherCard.value % 2 === 0 && super.canAttack(_attacker, opponent)
   }
 }

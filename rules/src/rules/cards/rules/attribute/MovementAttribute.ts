@@ -29,8 +29,8 @@ export class MovementAttributeRule extends AttributeRule {
 
   hasEnoughMovement(source: Material, space: XYCoordinates) {
     if (!this.movement) return true
-    const item = source.getItem()!
-    const sourceCoordinates = { x: item.location.x!, y: item.location.y! }
+    const card = source.getItem()!
+    const sourceCoordinates = { x: card.location.x!, y: card.location.y! }
     return getDistance(sourceCoordinates, space) <= this.movement
   }
 
@@ -38,15 +38,15 @@ export class MovementAttributeRule extends AttributeRule {
     if (!this.hasEnoughMovement(source, space)) return false
 
     const battlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-    const item = source.getItem()!
-    const card = getFactionCardDescription(item.id.front)
-
-    if (!card.canMove() && !card.canFly()) return false
-    if (card.canFly() && effectHelper.hasLostAttributes(source.getIndex(), CardAttributeType.Flight)) return false
-    if (card.hasMovement() && effectHelper.hasLostAttributes(source.getIndex(), CardAttributeType.Movement)) return false
+    const card = source.getItem()!
+    const cardDescription = getFactionCardDescription(card.id.front)
+    
+    if (!cardDescription.canMove() && !cardDescription.canFly()) return false
+    if (cardDescription.canFly() && effectHelper.hasLostAttributes(source.getIndex(), CardAttributeType.Flight)) return false
+    if (cardDescription.hasMovement() && effectHelper.hasLostAttributes(source.getIndex(), CardAttributeType.Movement)) return false
 
     // Check the adjacency rule
-    const otherCardOnBattlefield = battlefield.filter((item) => !equal(item.location, source.getItem()!.location)).getItems()
+    const otherCardOnBattlefield = battlefield.filter((otherCard) => !equal(otherCard.location, card.location)).getItems()
     if (!isAdjacentToFactionCard(otherCardOnBattlefield, space)) return false
 
     // The space must be empty
@@ -54,12 +54,12 @@ export class MovementAttributeRule extends AttributeRule {
     if (!itemOnSpace) return true
 
     // It must not be the card itself
-    if (itemOnSpace.id.front === card.id) return false
+    if (itemOnSpace.id.front === card.id.front) return false
 
     const cardOnSpace = getFactionCardDescription(itemOnSpace.id.front)
 
     // It can be swapped if both card has movement or flight
-    return itemOnSpace.location.player === item.location.player && (cardOnSpace.hasMovement() || cardOnSpace.canFly())
+    return itemOnSpace.location.player === card.location.player && (cardOnSpace.hasMovement() || cardOnSpace.canFly())
   }
 }
 

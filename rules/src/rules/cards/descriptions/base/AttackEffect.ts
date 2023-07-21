@@ -20,8 +20,8 @@ export class AttackEffect extends PassiveEffect {
    * Used for the attacker
    */
   canAttack(_attacker: number, opponent: number, _otherAttackers: number[] = []): boolean {
-    const item = this.material(MaterialType.FactionCard).getItem(opponent)!
-    return !isSpell(getFactionCardDescription(item.id.front))
+    const card = this.material(MaterialType.FactionCard).getItem(opponent)!
+    return !isSpell(getFactionCardDescription(card.id.front))
 
   }
 

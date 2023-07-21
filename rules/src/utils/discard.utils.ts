@@ -10,11 +10,11 @@ export const discardCards = (cards: Material, tokens: Material, discardTiming?: 
   return cards
     .getIndexes()
     .flatMap((index: number) => {
-      const card = cards.index(index)!
-      const item = card.getItem(index)!
-      const description = getFactionCardDescription(item.id.front)
+      const cardMaterial = cards.index(index)
+      const card = cardMaterial.getItem()!
+      const description = getFactionCardDescription(card.id.front)
       if (isSpell(description) && description.discardTiming === discardTiming) {
-        return discardCard(card, tokens.parent(card.getIndex()))
+        return discardCard(cardMaterial, tokens.parent(index))
       }
 
       return []

@@ -29,9 +29,9 @@ export class FactionCardEffectHelper extends MaterialRulesPart {
     const modifications: Record<number, PassiveEffect[]> = this.computeBlockedEffects(battlefieldCards)
     for (const cardIndex of battlefieldCards.getIndexes()) {
       const cardMaterial = this.material(MaterialType.FactionCard).index(cardIndex)
-      const cardItem = cardMaterial.getItem()!
+      const card = cardMaterial.getItem()!
       const isSkillDisabled = (modifications[cardIndex] ?? []).some(isLooseSkillEffect)
-      const description = getFactionCardDescription(cardItem.id.front)
+      const description = getFactionCardDescription(card.id.front)
 
       for (const otherCardIndex of battlefieldCards.getIndexes()) {
         const otherCardMaterial = this.material(MaterialType.FactionCard).index(otherCardIndex)
@@ -53,8 +53,8 @@ export class FactionCardEffectHelper extends MaterialRulesPart {
     const modifications: Record<number, PassiveEffect[]> = {}
     for (const cardIndex of battlefieldCards.getIndexes()) {
       const cardMaterial = this.material(MaterialType.FactionCard).index(cardIndex)
-      const cardItem = cardMaterial.getItem()!
-      const description = getFactionCardDescription(cardItem.id.front)
+      const card = cardMaterial.getItem()!
+      const description = getFactionCardDescription(card.id.front)
 
       for (const otherCardIndex of battlefieldCards.getIndexes()) {
         if (otherCardIndex === cardIndex) continue
@@ -94,8 +94,8 @@ export class FactionCardEffectHelper extends MaterialRulesPart {
   }
 
   getAttack(cardIndex: number): number {
-    const item = this.material(MaterialType.FactionCard).getItem(cardIndex)!
-    const cardDescription = getFactionCardDescription(item.id.front)
+    const card = this.material(MaterialType.FactionCard).getItem(cardIndex)!
+    const cardDescription = getFactionCardDescription(card.id.front)
     if (!isSpell(cardDescription) && !isCreature(cardDescription)) return 0
     const baseAttack = cardDescription.attack ?? 0
 
@@ -105,8 +105,8 @@ export class FactionCardEffectHelper extends MaterialRulesPart {
   }
 
   getDefense(cardIndex: number): number {
-    const item = this.material(MaterialType.FactionCard).getItem(cardIndex)!
-    const cardDescription = getFactionCardDescription(item.id.front)
+    const card = this.material(MaterialType.FactionCard).getItem(cardIndex)!
+    const cardDescription = getFactionCardDescription(card.id.front)
     if (!isLand(cardDescription) && !isCreature(cardDescription)) return 0
     const baseDefense = cardDescription.defense ?? 0
     if (!(cardIndex in this.passiveEffects)) return baseDefense
@@ -124,7 +124,12 @@ export class FactionCardEffectHelper extends MaterialRulesPart {
   canAttack(attackerIndex: number, opponent: number): boolean {
     if (!(attackerIndex in this.passiveEffects)) return true
     // TODO: other attackers ?
-    return this.passiveEffects[attackerIndex].filter(isAttackEffect).every((e) => e.canAttack(attackerIndex, opponent))
+    return !this.passiveEffects[attackerIndex].filter(isAttackEffect).some((e) => !e.canAttack(attackerIndex, opponent))
+  }
+
+  canBeAttacked(attackerIndex: number, opponent: number): boolean {
+    if (!(opponent in this.passiveEffects)) return true
+    return !this.passiveEffects[opponent].filter(isAttackEffect).some((a) => !a.canBeAttacked(attackerIndex, opponent))
   }
 
 

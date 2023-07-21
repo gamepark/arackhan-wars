@@ -65,8 +65,8 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
   isActive(cardMaterial: Material, _effectHelper: FactionCardEffectHelper): boolean {
 
     // Spell is always considered activable
-    const item = cardMaterial.getItem()!
-    const factionCard = getFactionCardDescription(item.id.front)
+    const card = cardMaterial.getItem()!
+    const factionCard = getFactionCardDescription(card.id.front)
     if (isSpell(factionCard)) return true
 
     // Other cards are activable if there is a non returned token on it
@@ -154,10 +154,6 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     // Clean the activations
     this.memorize<ActivationRuleMemory>({ activatedCards: [] }, this.player)
 
-    /*const _modifications = this.computeCardModifications(
-      this.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane)
-    )*/
-
     // Apply end turn effect on card
     return discardCards(
       this
@@ -172,8 +168,8 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
   onCustomMove(move: CustomMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     if (move.type === CustomMoveType.Attack) {
       const attackerMaterial = this.material(MaterialType.FactionCard).index(move.data.card)
-      const attackerItem = attackerMaterial.getItem()!
-      const attacker = getFactionCardDescription(attackerItem.id.front)
+      const card = attackerMaterial.getItem()!
+      const cardDescription = getFactionCardDescription(card.id.front)
       const effectHelper = new FactionCardEffectHelper(this.game)
 
       delete this.game.droppedItem
@@ -182,11 +178,11 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
         card: move.data.card,
         targets: move.data.targets,
         // TODO: why ?
-        omnistrike: attacker.hasOmnistrike() && !effectHelper.hasLostAttributes(move.data.card, CardAttributeType.Omnistrike)
+        omnistrike: cardDescription.hasOmnistrike() && !effectHelper.hasLostAttributes(move.data.card, CardAttributeType.Omnistrike)
       })
 
 
-      const rule = new AttackRule(this.game, attackerMaterial, attacker, move.data.card, effectHelper)
+      const rule = new AttackRule(this.game, attackerMaterial, cardDescription, move.data.card, effectHelper)
       const attackConsequences = rule.attack(move.data.targets)
       const deadOpponents = attackConsequences.filter(this.isDiscardFactionCard)
       if (deadOpponents.length === move.data.targets.length) {
@@ -194,7 +190,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
       }
 
       const moves = attackConsequences
-      if (isSpell(attacker) && attacker.discardTiming === DiscardTiming.ActivationOrEndOfTurn) {
+      if (isSpell(cardDescription) && cardDescription.discardTiming === DiscardTiming.ActivationOrEndOfTurn) {
         moves.push(
           ...discardCard(
             attackerMaterial,
