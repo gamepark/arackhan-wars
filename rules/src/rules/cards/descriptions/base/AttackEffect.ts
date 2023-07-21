@@ -36,4 +36,4 @@ export class AttackEffect extends PassiveEffect {
   }
 }
 
-export const isAttackEffect = (effect: PassiveEffect): effect is AttackEffect => (typeof effect as any).canBeAttacked === 'function'
+export const isAttackEffect = (effect: PassiveEffect): effect is AttackEffect => typeof (effect as any).canBeAttacked === 'function'

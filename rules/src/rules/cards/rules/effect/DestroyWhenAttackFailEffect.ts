@@ -11,9 +11,7 @@ import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.uti
 
 class DestroyWhenAttackFailEffect extends AttackEffect {
   getAttackConsequences(attacker: Material) {
-    const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>()
-    // TODO: compute all attacks in memory, and check if one _attacker target fails
-    // Return moves
+    const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(attacker.getItem()!.location.player)
     const activatedCard = activatedCards.find((a: ActivatedCard) => a.card === attacker.getIndex())!
     if (!activatedCard.targets) return []
 
@@ -22,9 +20,12 @@ class DestroyWhenAttackFailEffect extends AttackEffect {
     for (const target of activatedCard.targets) {
       const attack = computeAttack(this.game, attacker, this.material(MaterialType.FactionCard).index(target), effectHelper, activatedCards)
       const defense = effectHelper.getDefense(target)
+      console.log('Target', target, defense)
+      console.log('Source', attacker.getIndexes(), attack)
       if (attack > defense) destroyedOpponent++
     }
 
+    attacker.getIndex() === 5 && console.log(destroyedOpponent, activatedCard)
     if (destroyedOpponent === activatedCard.targets.length) return []
 
     return discardCard(attacker, this.material(MaterialType.FactionToken).parent(attacker.getIndex()))

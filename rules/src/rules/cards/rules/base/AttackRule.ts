@@ -70,6 +70,7 @@ export class AttackRule extends MaterialRulesPart {
       }
     }
 
+    this.index === 5 && console.log('After attack', this.effectHelper.afterAttack(this.index))
     moves.push(
       ...this.effectHelper.afterAttack(this.index),
       // TODO: sometimes, there is no token (child eater)

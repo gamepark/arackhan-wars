@@ -11,8 +11,7 @@ export const computeAttack = (game: MaterialGame, attacker: Material, opponent: 
   const attackerItem = attacker.getItem()!
   const attackerCard = getFactionCardDescription(attackerItem.id.front)
 
-  const otherAttackersOnThisTarget = activatedCards.filter((c: any) => (c.targets ?? []).includes(opponent.getIndex()))
-
+  const otherAttackersOnThisTarget = activatedCards.filter((c: any) => c.card !== attacker.getIndex() && (c.targets ?? []).includes(opponent.getIndex()))
   let groupAttack = Math.max(cardAttack, 0)
   for (const otherAttacker of otherAttackersOnThisTarget) {
     groupAttack += Math.max(effectHelper.getAttack(otherAttacker.card), 0)

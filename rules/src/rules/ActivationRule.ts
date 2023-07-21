@@ -176,14 +176,6 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
       const attacker = getFactionCardDescription(attackerItem.id.front)
       const effectHelper = new FactionCardEffectHelper(this.game)
 
-      const rule = new AttackRule(this.game, attackerMaterial, attacker, move.data.card, effectHelper)
-
-      const attackConsequences = rule.attack(move.data.targets)
-      const deadOpponents = attackConsequences.filter(this.isDiscardFactionCard)
-      if (deadOpponents.length === move.data.targets.length) {
-        attackConsequences.push(this.rules().customMove(CustomMoveType.SolveAttack))
-      }
-
       delete this.game.droppedItem
 
       this.memorizeCardPlayed({
@@ -192,6 +184,14 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
         // TODO: why ?
         omnistrike: attacker.hasOmnistrike() && !effectHelper.hasLostAttributes(move.data.card, CardAttributeType.Omnistrike)
       })
+
+
+      const rule = new AttackRule(this.game, attackerMaterial, attacker, move.data.card, effectHelper)
+      const attackConsequences = rule.attack(move.data.targets)
+      const deadOpponents = attackConsequences.filter(this.isDiscardFactionCard)
+      if (deadOpponents.length === move.data.targets.length) {
+        attackConsequences.push(this.rules().customMove(CustomMoveType.SolveAttack))
+      }
 
       const moves = attackConsequences
       if (isSpell(attacker) && attacker.discardTiming === DiscardTiming.ActivationOrEndOfTurn) {

@@ -40,5 +40,5 @@ export class PassiveEffectWithConsequences extends PassiveEffect {
   }
 }
 
-export const isWithConsequences = (effect: PassiveEffect): effect is PassiveEffectWithConsequences => (typeof (effect as any).onReveal) === 'function'
+export const isWithConsequences = (effect: PassiveEffect): effect is PassiveEffectWithConsequences => typeof (effect as any).onReveal === 'function'
 
