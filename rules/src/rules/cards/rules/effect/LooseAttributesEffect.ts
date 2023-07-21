@@ -3,7 +3,6 @@ import { MaterialGame } from '@gamepark/rules-api/dist/material/MaterialGame'
 import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 
-// TODO: Typeguard
 class LooseAttributesEffect extends PassiveEffect {
 
   constructor(game: MaterialGame, readonly attributes?: CardAttributeType[]) {

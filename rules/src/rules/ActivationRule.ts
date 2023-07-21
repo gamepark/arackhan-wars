@@ -1,6 +1,6 @@
 import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
-import { CustomMove, isMoveItem, ItemMove, ItemMoveType, Material, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { CustomMove, ItemMove, ItemMoveType, Material, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { getFactionCardDescription } from '../material/FactionCard'
@@ -10,10 +10,11 @@ import { ActivatedCard, ActivationRuleMemory } from './types'
 import { CardAttributeType, DiscardTiming } from './cards/descriptions/base/FactionCardDetail'
 import { AttackRule } from './cards/rules/base/AttackRule'
 import { MoveRules } from './cards/rules/base/MoveRules'
-import { discardCard, discardCards } from '../utils/discard.utils'
+import { discardSpells } from '../utils/discard.utils'
 import { isSpell } from './cards/descriptions/base/Spell'
-import { activateTokens } from '../utils/activation.utils'
+import { deactivateTokens } from '../utils/activation.utils'
 import { FactionCardEffectHelper } from './cards/rules/helper/FactionCardEffectHelper'
+import uniq from 'lodash/uniq'
 
 
 export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
@@ -43,7 +44,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
 
       if (this.canAttack(index)) {
         moves.push(
-          ...new AttackRule(this.game, cardMaterial, card, index, effectHelper).getLegalAttacks(opponentsCards)
+          ...new AttackRule(this.game, this.player, effectHelper).getLegalAttacks(index, opponentsCards)
         )
       }
 
@@ -56,6 +57,11 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
       /**if (rule.actionRule().length) {
         moves.push(this.rules().customMove(CustomMoveType.CardAction, { card: index }))
       }**/
+    }
+
+    const { activatedCards = [] } = this.getPlayerMemory<ActivationRuleMemory>()
+    if (activatedCards.length) {
+      moves.push(this.rules().customMove(CustomMoveType.SolveAttack))
     }
 
     moves.push(this.endTurnMove())
@@ -155,12 +161,11 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     this.memorize<ActivationRuleMemory>({ activatedCards: [] }, this.player)
 
     // Apply end turn effect on card
-    return discardCards(
+    return discardSpells(
       this
         .material(MaterialType.FactionCard)
         .location(onBattlefieldAndAstralPlane)
         .player(this.player),
-      this.material(MaterialType.FactionToken),
       DiscardTiming.ActivationOrEndOfTurn
     )
   }
@@ -180,30 +185,10 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
         // TODO: why ?
         omnistrike: cardDescription.hasOmnistrike() && !effectHelper.hasLostAttributes(move.data.card, CardAttributeType.Omnistrike)
       })
-
-
-      const rule = new AttackRule(this.game, attackerMaterial, cardDescription, move.data.card, effectHelper)
-      const attackConsequences = rule.attack(move.data.targets)
-      const deadOpponents = attackConsequences.filter(this.isDiscardFactionCard)
-      if (deadOpponents.length === move.data.targets.length) {
-        attackConsequences.push(this.rules().customMove(CustomMoveType.SolveAttack))
-      }
-
-      const moves = attackConsequences
-      if (isSpell(cardDescription) && cardDescription.discardTiming === DiscardTiming.ActivationOrEndOfTurn) {
-        moves.push(
-          ...discardCard(
-            attackerMaterial,
-            this.material(MaterialType.FactionToken).parent(move.data.card)
-          )
-        )
-      }
-
-      return moves
     }
 
     if (move.type === CustomMoveType.SolveAttack) {
-      this.memorize<ActivationRuleMemory>({ activatedCards: [] }, this.player)
+      return this.solveAttack()
     }
 
     /*if (move.type === CustomMoveType.CardAction) {
@@ -214,8 +199,36 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     return []
   }
 
-  isDiscardFactionCard = (move: MaterialMove) => {
-    return isMoveItem(move) && move.itemType === MaterialType.FactionCard && move.position.location?.type === LocationType.PlayerDiscard
+  solveAttack(): MaterialMove[] {
+
+    const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
+    let targets: number[] = []
+    const moves: MaterialMove[] = []
+    for (const activation of activatedCards) {
+      targets = uniq([...targets, ...(activation.targets ?? [])])
+
+      const attackerMaterial = this.material(MaterialType.FactionCard).index(activation.card)
+      moves.push(
+        ...discardSpells(attackerMaterial, DiscardTiming.ActivationOrEndOfTurn)
+      )
+
+      const token = this.material(MaterialType.FactionToken).parent(activation.card)
+      if (token.length) {
+        moves.push(
+          ...deactivateTokens(token)
+        )
+      }
+    }
+
+    const effectHelper = new FactionCardEffectHelper(this.game)
+    const rule = new AttackRule(this.game, this.player, effectHelper)
+    for (const target of targets) {
+      // Attacks must be added first, then all discard and deactivation moves
+      moves.unshift(...rule.attack(target))
+    }
+
+    this.memorize<ActivationRuleMemory>({ activatedCards: [] }, this.player)
+    return moves
   }
 
   afterItemMove(move: ItemMove<PlayerId, MaterialType, LocationType>): MaterialMove<PlayerId, MaterialType, LocationType>[] {
@@ -229,15 +242,12 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
         .material(MaterialType.FactionCard)
         .location(onBattlefieldAndAstralPlane)
       const opponentsCards = battlefieldCards.player((player) => player !== this.player)
-      const cardMaterial = this.material(MaterialType.FactionCard).index(move.itemIndex)
-      const card = getFactionCardDescription(cardMaterial.getItem()!.id.front)
       const effectHelper = new FactionCardEffectHelper(this.game)
 
-
-      const rule = new AttackRule(this.game, cardMaterial, card, move.itemIndex, effectHelper)
-      if (!rule.getLegalAttacks(opponentsCards)) {
+      const rule = new AttackRule(this.game, this.player, effectHelper)
+      if (!rule.getLegalAttacks(move.itemIndex, opponentsCards)) {
         const token = this.material(MaterialType.FactionToken).parent(move.itemIndex)
-        moves.push(...activateTokens(token))
+        moves.push(...deactivateTokens(token))
       }
     }
 

@@ -6,7 +6,7 @@ import { Material } from '@gamepark/rules-api/dist/material/items/Material'
 import { MaterialMove } from '@gamepark/rules-api/dist/material/moves/MaterialMove'
 
 
-export const discardCards = (cards: Material, tokens: Material, discardTiming?: DiscardTiming): MaterialMove[] => {
+export const discardSpells = (cards: Material, discardTiming?: DiscardTiming): MaterialMove[] => {
   return cards
     .getIndexes()
     .flatMap((index: number) => {
@@ -14,18 +14,18 @@ export const discardCards = (cards: Material, tokens: Material, discardTiming?: 
       const card = cardMaterial.getItem()!
       const description = getFactionCardDescription(card.id.front)
       if (isSpell(description) && description.discardTiming === discardTiming) {
-        return discardCard(cardMaterial, tokens.parent(index))
+        return discardCard(cardMaterial)
       }
 
       return []
     })
 }
 
-export const discardCard = (card: Material, token: Material): MaterialMove[] => {
+export const discardCard = (card: Material, token?: Material): MaterialMove[] => {
 
   const moves: MaterialMove[] = []
 
-  if (token.getItem()) {
+  if (token?.length) {
     moves.push(token.deleteItem())
   }
 

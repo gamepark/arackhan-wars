@@ -24,8 +24,7 @@ export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, Loc
       const card = getFactionCardDescription(cardMaterial.getItem()!.id.front)
 
       if (isSpell(card) && card.discardTiming === DiscardTiming.EndOfRound) {
-        const token = this.material(MaterialType.FactionToken).parent(index)
-        moves.push(...discardCard(cardMaterial, token))
+        moves.push(...discardCard(cardMaterial))
         indexes.push(index)
       }
     }

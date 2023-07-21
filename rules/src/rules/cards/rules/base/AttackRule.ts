@@ -1,5 +1,5 @@
 import { Material, MaterialGame, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
-import { FactionCardDetail, FactionCardKind } from '../../descriptions/base/FactionCardDetail'
+import { FactionCardKind } from '../../descriptions/base/FactionCardDetail'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
 import { getFactionCardDescription } from '../../../../material/FactionCard'
@@ -10,29 +10,30 @@ import { FactionCardEffectHelper } from '../helper/FactionCardEffectHelper'
 import { discardCard } from '../../../../utils/discard.utils'
 import { areAdjacent } from '../../../../utils/adjacent.utils'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
-import { deactivateTokens } from '../../../../utils/activation.utils'
 import { computeAttack } from '../../../../utils/attack.utils'
+import { PlayerId } from '../../../../ArackhanWarsOptions'
 
 export class AttackRule extends MaterialRulesPart {
   constructor(game: MaterialGame,
-              readonly item: Material,
-              readonly cardDescription: FactionCardDetail,
-              readonly index: number,
+              readonly player: PlayerId,
               readonly effectHelper: FactionCardEffectHelper) {
     super(game)
   }
 
-  getLegalAttacks(opponentsCards: Material): MaterialMove[] {
-    if (!this.canAttack()) return []
+  getLegalAttacks(attacker: number, opponentsCards: Material): MaterialMove[] {
+    const cardMaterial = this.material(MaterialType.FactionCard).index(attacker)
+    const card = cardMaterial.getItem()!
+    const cardDescription = getFactionCardDescription(card.id.front)
+    if (!cardDescription.canAttack()) return []
 
     const filteredOpponents = opponentsCards
       .getIndexes()
-      .filter((o) => this.effectHelper.canAttack(this.index, o))
+      .filter((o) => this.effectHelper.canAttack(attacker, o))
 
-    const attributeAttacks = this.cardDescription.getAttributes()
+    const attributeAttacks = cardDescription.getAttributes()
       .filter(isAttackAttribute)
-      .filter((a) => !this.effectHelper.hasLostAttributes(this.index, a.type))
-      .flatMap((attribute) => attribute.getAttributeRule(this.game).getLegalAttacks(this.item, opponentsCards.indexes(filteredOpponents), this.effectHelper))
+      .filter((a) => !this.effectHelper.hasLostAttributes(attacker, a.type))
+      .flatMap((attribute) => attribute.getAttributeRule(this.game).getLegalAttacks(cardMaterial, opponentsCards.indexes(filteredOpponents), this.effectHelper))
 
     if (attributeAttacks.length) {
       return attributeAttacks
@@ -40,58 +41,55 @@ export class AttackRule extends MaterialRulesPart {
 
     const moves = []
     for (const cardIndex of filteredOpponents) {
-      if (!areAdjacent(this.item, opponentsCards.index(cardIndex))) continue
-      moves.push(this.rules().customMove(CustomMoveType.Attack, { card: this.index, targets: [cardIndex] }))
+      if (!areAdjacent(cardMaterial, opponentsCards.index(cardIndex))) continue
+      moves.push(this.rules().customMove(CustomMoveType.Attack, { card: attacker, targets: [cardIndex] }))
     }
 
     return moves
   }
 
-  canAttack() {
-    return this.cardDescription.canAttack()
-  }
+  attack(opponent: number): MaterialMove[] {
+    const opponentMaterial = this.material(MaterialType.FactionCard).index(opponent)
+    const opponentCardDescription = getFactionCardDescription(opponentMaterial.getItem()!.id.front)
+    const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
 
-  attack(opponents: number[]): MaterialMove[] {
+    const attacksOnThisOpponent = activatedCards.filter((a) => (a.targets ?? []).includes(opponent))
+    let attackValue = 0
     const moves = []
-    for (const index of opponents) {
-      const opponentMaterial = this.material(MaterialType.FactionCard).index(index)
-      const opponentCardDescription = getFactionCardDescription(opponentMaterial.getItem()!.id.front)
-
-      const opponentDefense = this.effectHelper.getDefense(index)
-      const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.item.getItem()!.location.player)
-      const attackerAttack = computeAttack(this.game, this.item, opponentMaterial, this.effectHelper, activatedCards)
-      if (opponentDefense >= attackerAttack) continue
-
-      if (opponentCardDescription.kind !== FactionCardKind.Land) {
-        const opponentCardToken = this.material(MaterialType.FactionToken).parent(index)
-        moves.push(...discardCard(opponentMaterial, opponentCardToken))
-      } else {
-        moves.push(...this.conquerLand(index, this.index))
-      }
+    for (const attack of attacksOnThisOpponent) {
+      const attackerCard = this.material(MaterialType.FactionCard).index(attack.card)
+      attackValue += computeAttack(this.game, attackerCard, opponentMaterial, this.effectHelper, activatedCards)
     }
 
-    this.index === 5 && console.log('After attack', this.effectHelper.afterAttack(this.index))
+    const opponentDefense = this.effectHelper.getDefense(opponent)
+    if (opponentDefense >= attackValue) return []
+
+    if (opponentCardDescription.kind !== FactionCardKind.Land) {
+      const opponentCardToken = this.material(MaterialType.FactionToken).parent(opponent)
+      moves.push(...discardCard(opponentMaterial, opponentCardToken))
+    } else {
+      moves.push(...this.conquerLand(opponent))
+    }
+
+
     moves.push(
-      ...this.effectHelper.afterAttack(this.index),
-      // TODO: sometimes, there is no token (child eater)
-      ...deactivateTokens(this.material(MaterialType.FactionToken).parent(this.index))
+      ...activatedCards.flatMap((a) => this.effectHelper.afterAttack(a.card))
     )
 
 
     return moves
   }
 
-  conquerLand(opponentIndex: number, attackerIndex: number): MaterialMove[] {
-    const attackerCard = this.material(MaterialType.FactionCard).index(attackerIndex).getItem()!
+  conquerLand(opponentIndex: number): MaterialMove[] {
     const opponentCard = this.material(MaterialType.FactionCard).index(opponentIndex).getItem()!
-    opponentCard.location.player = attackerCard.location.player
+    opponentCard.location.player = this.player
 
     return [
       this.material(MaterialType.FactionToken).parent(opponentIndex).deleteItem(),
       this.material(MaterialType.FactionToken).parent(opponentIndex).createItem({
         // Must be the faction instead of the player
-        id: this.getGameMemory<GamePlayerMemory>(attackerCard.location.player)!.faction,
-        location: { parent: opponentIndex, type: LocationType.FactionTokenSpace, player: attackerCard.location.player }
+        id: this.getGameMemory<GamePlayerMemory>(this.player)!.faction,
+        location: { parent: opponentIndex, type: LocationType.FactionTokenSpace, player: this.player }
       })
 
     ]

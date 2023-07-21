@@ -20,8 +20,6 @@ class DestroyWhenAttackFailEffect extends AttackEffect {
     for (const target of activatedCard.targets) {
       const attack = computeAttack(this.game, attacker, this.material(MaterialType.FactionCard).index(target), effectHelper, activatedCards)
       const defense = effectHelper.getDefense(target)
-      console.log('Target', target, defense)
-      console.log('Source', attacker.getIndexes(), attack)
       if (attack > defense) destroyedOpponent++
     }
 
