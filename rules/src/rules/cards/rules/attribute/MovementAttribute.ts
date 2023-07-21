@@ -10,6 +10,7 @@ import { Material } from '@gamepark/rules-api/dist/material/items/Material'
 import { MaterialMove } from '@gamepark/rules-api/dist/material/moves/MaterialMove'
 import { XYCoordinates } from '@gamepark/rules-api/dist/material/location/Location'
 import { FactionCardEffectHelper } from '../helper/FactionCardEffectHelper'
+import equal from 'fast-deep-equal'
 
 
 export class MovementAttributeRule extends AttributeRule {
@@ -45,7 +46,8 @@ export class MovementAttributeRule extends AttributeRule {
     if (card.hasMovement() && effectHelper.hasLostAttributes(source.getIndex(), CardAttributeType.Movement)) return false
 
     // Check the adjacency rule
-    if (!isAdjacentToFactionCard(battlefield.getItems(), space)) return false
+    const otherCardOnBattlefield = battlefield.filter((item) => !equal(item.location, source.getItem()!.location)).getItems()
+    if (!isAdjacentToFactionCard(otherCardOnBattlefield, space)) return false
 
     // The space must be empty
     const itemOnSpace = battlefield.location((location) => location.x === space.x && location.y === space.y).getItem()

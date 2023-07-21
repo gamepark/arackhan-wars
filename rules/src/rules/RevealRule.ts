@@ -26,18 +26,17 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
 
   afterItemMove(move: ItemMove<PlayerId, MaterialType, LocationType>): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     if (move.kind === MoveKind.ItemMove && move.type === ItemMoveType.Move) {
-      const revealedCard = this.material(move.itemType).getItems()[move.itemIndex]
-      if (!isSpell(getFactionCardDescription(revealedCard.id.front))) {
-        return [
-          this.material(MaterialType.FactionToken)
-            .player(revealedCard.location.player)
-            .createItem({
-              // Must be the faction instead of the player
-              id: this.getGameMemory<GamePlayerMemory>(revealedCard.location.player)!.faction,
-              location: { parent: move.itemIndex, type: LocationType.FactionTokenSpace, player: revealedCard.location.player }
-            })
-        ]
-      }
+      const revealedCard = this.material(move.itemType).getItem(move.itemIndex)!
+      if (isSpell(getFactionCardDescription(revealedCard.id.front))) return []
+
+      return [
+        this.material(MaterialType.FactionToken)
+          .player(revealedCard.location.player)
+          .createItem({
+            id: this.getGameMemory<GamePlayerMemory>(revealedCard.location.player)!.faction,
+            location: { parent: move.itemIndex, type: LocationType.FactionTokenSpace, player: revealedCard.location.player }
+          })
+      ]
     }
 
     return []
