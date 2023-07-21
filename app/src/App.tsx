@@ -9,6 +9,8 @@ import { GameOverHeader } from './headers/GameOverHeader'
 import { MulliganHeader } from './headers/MulliganHeader'
 import { PlacementHeader } from './headers/PlacementHeader'
 import { ChooseStartPlayerHeader } from './headers/ChooseStartPlayerHeader'
+import { InitiativeHeader } from './headers/InitiativeHeader'
+import { ActivationHeader } from './headers/ActivationHeader'
 
 export default function App() {
   const game = useGame<MaterialGame>()
@@ -38,8 +40,8 @@ const RulesHeaders: Record<RuleId, () => ReactJSXElement> = {
   [RuleId.DrawRule]: () => <p></p>,
   [RuleId.PlacementRule]: PlacementHeader,
   [RuleId.RevealRule]: () => <p></p>,
-  [RuleId.InitiativeActivationRule]: PlacementHeader,
-  [RuleId.ActivationRule]: PlacementHeader,
+  [RuleId.InitiativeActivationRule]: InitiativeHeader,
+  [RuleId.ActivationRule]: ActivationHeader,
   [RuleId.EndPhaseRule]: () => <p></p>,
   [RuleId.ForcedExileActionRule]: () => <p></p>,
   [RuleId.HorseOfAvalonActionRule]: () => <p></p>,
