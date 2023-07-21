@@ -219,7 +219,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
   }
 
   isDiscardFactionCard = (move: MaterialMove) => {
-    return isMoveItem(move, MaterialType.FactionCard) && move.position.location?.type === LocationType.PlayerDiscard
+    return isMoveItem(move) && move.itemType === MaterialType.FactionCard && move.position.location?.type === LocationType.PlayerDiscard
   }
 
   afterItemMove(move: ItemMove<PlayerId, MaterialType, LocationType>): MaterialMove<PlayerId, MaterialType, LocationType>[] {

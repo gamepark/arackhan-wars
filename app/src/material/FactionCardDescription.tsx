@@ -65,7 +65,7 @@ import { FactionCardRules } from './FactionCardRules'
 import { Faction } from '@gamepark/arackhan-wars/Faction'
 import { CardDescription, ItemContext } from '@gamepark/react-game'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
-import { isCustomMove, isMoveItem, Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { isCustomMove, Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 
@@ -144,13 +144,8 @@ export class FactionCardDescription extends CardDescription {
   }
 
   canDrag(move: MaterialMove, context: ItemContext): boolean {
-    if ((isCustomMove(move, CustomMoveType.Attack) || isCustomMove(move, CustomMoveType.CardAction)) && move.data.card === context.index) {
-      return true
-    }
-
-    if (isMoveItem(move, context.type, context.index)
-      && move.position.location?.type === LocationType.PlayerDiscard) {
-      return false
+    if (isCustomMove(move)) {
+      return (move.type === CustomMoveType.Attack || move.type === CustomMoveType.CardAction) && move.data.card === context.index
     }
 
     return super.canDrag(move, context)

@@ -2,7 +2,7 @@ import { PlayerTurnRule } from '@gamepark/rules-api/dist/material/rules/PlayerTu
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
 import { getAvailableCardPlacement } from '../../../../utils/move.utils'
-import { ItemMove, MaterialMove, isMoveItem } from '@gamepark/rules-api'
+import { isMoveItem, ItemMove, MaterialMove } from '@gamepark/rules-api'
 import { RuleId } from '../../../RuleId'
 import { getFactionCardDescription } from '../../../../material/FactionCard'
 import { FactionCardKind } from '../../descriptions/base/FactionCardDetail'
@@ -18,7 +18,7 @@ export class ForcedExileActionRule extends PlayerTurnRule {
   }
 
   afterItemMove(move: ItemMove<number, number, number>): MaterialMove<number, number, number>[] {
-    if (!isMoveItem(move, MaterialType.FactionCard)) return []
+    if (!isMoveItem(move) || move.itemType !== MaterialType.FactionCard) return []
 
     return [
       this.rules().startPlayerTurn(RuleId.ActivationRule, this.player)

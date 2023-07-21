@@ -22,6 +22,6 @@ export class FactionCardLocationDescription extends LocationDescription<PlayerId
   }
 
   canDrop(move: MaterialMove, location: Location) {
-    return isCustomMove(move, CustomMoveType.Attack) && Array.isArray(move.data.targets) && move.data.targets.includes(location.parent)
+    return isCustomMove(move) && move.type === CustomMoveType.Attack && Array.isArray(move.data.targets) && move.data.targets.includes(location.parent)
   }
 }

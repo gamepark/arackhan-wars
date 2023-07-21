@@ -25,7 +25,7 @@ export class HorseOfAvalonActionRule extends PlayerTurnRule {
   }
 
   afterItemMove(move: ItemMove<number, number, number>): MaterialMove<number, number, number>[] {
-    if (!isMoveItem(move, MaterialType.FactionCard)) return []
+    if (!isMoveItem(move) || move.itemType !== MaterialType.FactionCard) return []
     return [
       this.material(MaterialType.FactionToken)
         .player(this.player)
