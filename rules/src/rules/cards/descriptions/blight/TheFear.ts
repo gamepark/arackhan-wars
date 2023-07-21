@@ -1,9 +1,21 @@
-import { FactionCardKind } from '../FactionCardDetail'
-import { BlightCard } from './BlightCard'
 import { FactionCard } from '../../../../material/FactionCard'
+import { Faction } from '../../../../Faction'
+import { Spell } from '../base/Spell'
+import { DiscardTiming } from '../base/FactionCardDetail'
+import { deactivate } from '../../rules/effect/DeactivateEffect'
+import { adjacent, enemy } from '../utils/applicable-filter.utils'
+import { reactivate } from '../../rules/effect/ReactivateEffect'
 
-export class TheFear extends BlightCard {
-  kind = FactionCardKind.Spell
+export class TheFear extends Spell {
   id = FactionCard.TheFear
+  faction = Faction.Blight
+
   value = 5
+
+  effects = [
+    deactivate([adjacent, enemy]),
+    reactivate([adjacent, enemy])
+  ]
+
+  discardTiming = DiscardTiming.EndOfRound
 }

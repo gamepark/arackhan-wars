@@ -1,11 +1,17 @@
-import { CardAttributeType, FactionCardKind } from '../FactionCardDetail'
-import { NakkaCard } from './NakkaCard'
 import { FactionCard } from '../../../../material/FactionCard'
+import { Spell } from '../base/Spell'
+import { Faction } from '../../../../Faction'
+import { DiscardTiming } from '../base/FactionCardDetail'
+import { omnistrike } from '../../rules/attribute'
 
-export class EarthQuake extends NakkaCard {
-  kind = FactionCardKind.Spell
+export class EarthQuake extends Spell {
   id = FactionCard.EarthQuake
+  faction = Faction.Nakka
+
   value = 2
   attack = 2
-  attributes = [{ type: CardAttributeType.Omnistrike }]
+
+  attribute = omnistrike
+
+  discardTiming = DiscardTiming.ActivationOrEndOfTurn
 }

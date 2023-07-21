@@ -1,12 +1,15 @@
-import { CardAttributeType, FactionCardKind } from '../FactionCardDetail'
-import { GrayOrderCard } from './GrayOrderCard'
 import { FactionCard } from '../../../../material/FactionCard'
+import { Faction } from '../../../../Faction'
+import { Creature } from '../base/Creature'
+import { perforation } from '../../rules/attribute'
 
-export class SiegeTower extends GrayOrderCard {
-  kind = FactionCardKind.Creature
+export class SiegeTower extends Creature {
   id = FactionCard.SiegeTower
+  faction = Faction.GrayOrder
+
   value = 10
   attack = 4
   defense = 1
-  attributes = [{ type: CardAttributeType.Perforation }]
+
+  attribute = perforation
 }

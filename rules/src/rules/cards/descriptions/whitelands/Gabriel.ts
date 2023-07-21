@@ -1,12 +1,15 @@
-import { CardAttributeType, FactionCardKind } from '../FactionCardDetail'
-import { WhitelandCard } from './WhitelandCard'
 import { FactionCard } from '../../../../material/FactionCard'
+import { Faction } from '../../../../Faction'
+import { Creature } from '../base/Creature'
+import { initiative } from '../../rules/attribute'
 
-export class Gabriel extends WhitelandCard {
-  kind = FactionCardKind.Creature
+export class Gabriel extends Creature {
   id = FactionCard.Gabriel
+  faction = Faction.Whitelands
+
   value = 10
   attack = 3
   defense = 2
-  attributes = [{ type: CardAttributeType.Initiative }]
+
+  attribute = initiative
 }

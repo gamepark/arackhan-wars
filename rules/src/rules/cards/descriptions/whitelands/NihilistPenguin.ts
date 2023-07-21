@@ -1,16 +1,17 @@
-import { CardAttributeType, FactionCardKind } from '../FactionCardDetail'
-import { WhitelandCard } from './WhitelandCard'
 import { FactionCard } from '../../../../material/FactionCard'
+import { Creature } from '../base/Creature'
+import { Faction } from '../../../../Faction'
+import { movement } from '../../rules/attribute'
 
-export class NihilistPenguin extends WhitelandCard {
-  kind = FactionCardKind.Creature
+export class NihilistPenguin extends Creature {
   id = FactionCard.NihilistPenguin
+  faction = Faction.Whitelands
+
   value = 1
   attack = 0
   defense = 1
-  attributes = [{
-    type: CardAttributeType.Movement,
-    strength: 2
-  }]
+
+  attribute = movement(2)
+
   quantity = 4
 }

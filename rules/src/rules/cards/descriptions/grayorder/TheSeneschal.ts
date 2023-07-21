@@ -1,12 +1,15 @@
-import { CardAttributeType, FactionCardKind } from '../FactionCardDetail'
-import { GrayOrderCard } from './GrayOrderCard'
 import { FactionCard } from '../../../../material/FactionCard'
+import { Faction } from '../../../../Faction'
+import { Creature } from '../base/Creature'
+import { omnistrike } from '../../rules/attribute'
 
-export class TheSeneschal extends GrayOrderCard {
-  kind = FactionCardKind.Creature
+export class TheSeneschal extends Creature {
   id = FactionCard.TheSeneschal
+  faction = Faction.GrayOrder
+
   value = 14
   attack = 4
   defense = 2
-  attributes = [{ type: CardAttributeType.Omnistrike }]
+
+  attribute = omnistrike
 }

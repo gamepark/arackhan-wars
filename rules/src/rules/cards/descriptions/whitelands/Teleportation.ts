@@ -1,11 +1,17 @@
-import { CardAttributeType, FactionCardKind } from '../FactionCardDetail'
-import { WhitelandCard } from './WhitelandCard'
+import { DiscardTiming } from '../base/FactionCardDetail'
 import { FactionCard } from '../../../../material/FactionCard'
+import { Spell } from '../base/Spell'
+import { Faction } from '../../../../Faction'
+import { initiative } from '../../rules/attribute'
 
-export class Teleportation extends WhitelandCard {
-  kind = FactionCardKind.Spell
+export class Teleportation extends Spell {
   id = FactionCard.Teleportation
+  faction = Faction.Whitelands
+
   value = 4
   astral = true
-  attributes = [{ type: CardAttributeType.Initiative }]
+
+  attribute = initiative
+
+  discardTiming = DiscardTiming.ActivationOrEndOfTurn
 }

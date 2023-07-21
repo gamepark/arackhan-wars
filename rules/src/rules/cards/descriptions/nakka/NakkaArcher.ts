@@ -1,13 +1,17 @@
-import { CardAttributeType, FactionCardKind } from '../FactionCardDetail'
-import { NakkaCard } from './NakkaCard'
 import { FactionCard } from '../../../../material/FactionCard'
+import { Creature } from '../base/Creature'
+import { Faction } from '../../../../Faction'
+import { rangedAttack } from '../../rules/attribute'
 
-export class NakkaArcher extends NakkaCard {
-  kind = FactionCardKind.Creature
+export class NakkaArcher extends Creature {
   id = FactionCard.NakkaArcher
+  faction = Faction.Nakka
+
   value = 3
   attack = 1
   defense = 1
-  attributes = [{ type: CardAttributeType.RangeAttack, strength: 2 }]
+
+  attribute = rangedAttack(2)
+
   quantity = 3
 }

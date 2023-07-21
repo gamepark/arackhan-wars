@@ -1,5 +1,4 @@
 import { NihilistPenguin } from '../rules/cards/descriptions/whitelands/NihilistPenguin'
-import { FactionCardRule } from '../rules/cards/rules/base/FactionCardRule'
 import { LunarWendigo } from '../rules/cards/descriptions/whitelands/LunarWendigo'
 import { ShieldOfDown } from '../rules/cards/descriptions/whitelands/ShieldOfDown'
 import { IcePaladin } from '../rules/cards/descriptions/whitelands/IcePaladin'
@@ -55,40 +54,7 @@ import { FireLightning } from '../rules/cards/descriptions/blight/FireLightning'
 import { Firestorm } from '../rules/cards/descriptions/blight/Firestorm'
 import { TheFear } from '../rules/cards/descriptions/blight/TheFear'
 import { ForcedExile } from '../rules/cards/descriptions/blight/ForcedExile'
-import { MaterialGame } from '@gamepark/rules-api/dist/material/MaterialGame'
-import { ShieldWallRule } from '../rules/cards/rules/ShieldWallRule'
-import { FactionCardDetail } from '../rules/cards/descriptions/FactionCardDetail'
-import { BlizzardRule } from '../rules/cards/rules/BlizzardRule'
-import { IceMeteorRule } from '../rules/cards/rules/IceMeteorRule'
-import { TeleportationRule } from '../rules/cards/rules/TeleportationRule'
-import { WinterProtectsRule } from '../rules/cards/rules/WinterProtectsRule'
-import { EarthQuakeRule } from '../rules/cards/rules/EarthQuakeRule'
-import { MimicryRule } from '../rules/cards/rules/MimicryRule'
-import { NaturalCamouflageRule } from '../rules/cards/rules/NaturalCamouflageRule'
-import { UnstableGrowthRule } from '../rules/cards/rules/UnstableGrowthRule'
-import { HorseOfAvalonRule } from '../rules/cards/rules/HorseOfAvalonRule'
-import { WarcryRule } from '../rules/cards/rules/WarcryRule'
-import { FireLightningRule } from '../rules/cards/rules/FireLightningRule'
-import { FirestormRule } from '../rules/cards/rules/FirestormRule'
-import { ForcedExileRule } from '../rules/cards/rules/ForcedExileRule'
-import { TheFearRule } from '../rules/cards/rules/TheFearRule'
-import { MaterialType } from './MaterialType'
-import { ChildEaterRule } from '../rules/cards/rules/ChildEaterRule'
-import { ForgePatriarchRule } from '../rules/cards/rules/ForgePatriarchRule'
-import { PlagueCollectorRule } from '../rules/cards/rules/PlagueCollectorRule'
-import { PhalanxRule } from '../rules/cards/rules/PhalanxRule'
-import { WesternForgeRule } from '../rules/cards/rules/WesternForgeRule'
-import { AvalonFortressRule } from '../rules/cards/rules/AvalonFortressRule'
-import { CarnivorousPlantRule } from '../rules/cards/rules/CarnivorousPlantRule'
-import { ChampionRule } from '../rules/cards/rules/ChampionRule'
-import { DrunkKnightRule } from '../rules/cards/rules/DrunkKnightRule'
-import { FortressOfMyjirRule } from '../rules/cards/rules/FortressOfMyjirRule'
-import { HeroOfTheBattleOfNerzRule } from '../rules/cards/rules/HeroOfTheBattleOfNerzRule'
-import { InfantrymanRule } from '../rules/cards/rules/InfantrymanRule'
-import { ShieldOfDawnRule } from '../rules/cards/rules/ShieldOfDawnRule'
-import { SnowGriffinRule } from '../rules/cards/rules/SnowGriffinRule'
-import { TreeOfLifeRule } from '../rules/cards/rules/TreeOfLifeRule'
-import { SwampTrollRule } from '../rules/cards/rules/SwampTrollRule'
+import { FactionCardDetail } from '../rules/cards/descriptions/base/FactionCardDetail'
 
 export enum FactionCard {
   NihilistPenguin = 1,
@@ -214,56 +180,4 @@ export const FactionCardDescriptions: Record<FactionCard, FactionCardDetail> = {
   [FactionCard.Firestorm]: new Firestorm(),
   [FactionCard.TheFear]: new TheFear(),
   [FactionCard.ForcedExile]: new ForcedExile()
-}
-
-
-export interface FactionCardRuleCreator<Player extends number = number,
-  MaterialType extends number = number,
-  LocationType extends number = number> {
-  new(
-    game: MaterialGame<Player, MaterialType, LocationType>,
-    index: number
-  ): FactionCardRule
-}
-
-export const SpecificFactionCardRules: Partial<Record<FactionCard, FactionCardRuleCreator>> = {
-  [FactionCard.AvalonFortress]: AvalonFortressRule,
-  [FactionCard.Blizzard]: BlizzardRule,
-  [FactionCard.CarnivorousPlant]: CarnivorousPlantRule,
-  [FactionCard.Champion]: ChampionRule,
-  [FactionCard.ChildEater]: ChildEaterRule,
-  [FactionCard.DrunkKnight]: DrunkKnightRule,
-  [FactionCard.EarthQuake]: EarthQuakeRule,
-  [FactionCard.FireLightning]: FireLightningRule,
-  [FactionCard.Firestorm]: FirestormRule,
-  [FactionCard.ForcedExile]: ForcedExileRule,
-  [FactionCard.ForgePatriarch]: ForgePatriarchRule,
-  [FactionCard.FortressOfMyjir]: FortressOfMyjirRule,
-  [FactionCard.HeroOfTheBattleOfNerz]: HeroOfTheBattleOfNerzRule,
-  [FactionCard.HorseOfAvalon]: HorseOfAvalonRule,
-  [FactionCard.IceMeteor]: IceMeteorRule,
-  [FactionCard.Infantryman]: InfantrymanRule,
-  [FactionCard.Mimicry]: MimicryRule,
-  [FactionCard.NaturalCamouflage]: NaturalCamouflageRule,
-  [FactionCard.Phalanx]: PhalanxRule,
-  [FactionCard.PlagueCollector]: PlagueCollectorRule,
-  [FactionCard.ShieldOfDawn]: ShieldOfDawnRule,
-  [FactionCard.ShieldWall]: ShieldWallRule,
-  [FactionCard.SnowGriffin]: SnowGriffinRule,
-  [FactionCard.Teleportation]: TeleportationRule,
-  [FactionCard.TheFear]: TheFearRule,
-  [FactionCard.TreeOfLife]: TreeOfLifeRule,
-  [FactionCard.UnstableGrowth]: UnstableGrowthRule,
-  [FactionCard.Warcry]: WarcryRule,
-  [FactionCard.WesternForge]: WesternForgeRule,
-  [FactionCard.WinterProtects]: WinterProtectsRule,
-  [FactionCard.SwampTroll]: SwampTrollRule
-}
-
-export const getFactionCardRule = (game: MaterialGame, index: number): FactionCardRule => {
-  const id = game.items[MaterialType.FactionCard]![index].id.front
-  const specificCardRule = SpecificFactionCardRules[id]
-  if (specificCardRule) return new specificCardRule(game, index)
-
-  return new FactionCardRule(game, index)
 }

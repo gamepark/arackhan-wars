@@ -5,7 +5,7 @@ import { getAvailableCardPlacement } from '../../../../utils/move.utils'
 import { isMoveItem, ItemMove, MaterialMove } from '@gamepark/rules-api'
 import { RuleId } from '../../../RuleId'
 import { getFactionCardDescription } from '../../../../material/FactionCard'
-import { FactionCardKind } from '../../descriptions/FactionCardDetail'
+import { FactionCardKind } from '../../descriptions/base/FactionCardDetail'
 
 export class TeleportationActionRule extends PlayerTurnRule {
   getPlayerMoves() {

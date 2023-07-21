@@ -1,16 +1,20 @@
-import { CardAttributeType, FactionCardKind } from '../FactionCardDetail'
-import { BlightCard } from './BlightCard'
 import { FactionCard } from '../../../../material/FactionCard'
+import { Faction } from '../../../../Faction'
+import { Creature } from '../base/Creature'
+import { initiative, omnistrike } from '../../rules/attribute'
 
-export class Berserker extends BlightCard {
-  kind = FactionCardKind.Creature
+export class Berserker extends Creature {
   id = FactionCard.Berserker
+  faction = Faction.Blight
+
   value = 4
   attack = 1
   defense = 1
-  quantity = 2
+
   attributes = [
-    { type: CardAttributeType.Initiative },
-    { type: CardAttributeType.Omnistrike }
+    initiative,
+    omnistrike
   ]
+
+  quantity = 2
 }

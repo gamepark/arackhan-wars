@@ -1,12 +1,14 @@
-import { FactionCardKind } from '../FactionCardDetail'
-import { NakkaCard } from './NakkaCard'
 import { FactionCard } from '../../../../material/FactionCard'
+import { Creature } from '../base/Creature'
+import { Faction } from '../../../../Faction'
 
-export class SenileYhdorian extends NakkaCard {
-  kind = FactionCardKind.Creature
+export class SenileYhdorian extends Creature {
   id = FactionCard.SenileYhdorian
+  faction = Faction.Nakka
+
   value = 5
   attack = 1
   defense = 3
+
   quantity = 2
 }

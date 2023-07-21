@@ -1,13 +1,17 @@
-import { CardAttributeType, FactionCardKind } from '../FactionCardDetail'
-import { NakkaCard } from './NakkaCard'
 import { FactionCard } from '../../../../material/FactionCard'
+import { Faction } from '../../../../Faction'
+import { Creature } from '../base/Creature'
+import { initiative } from '../../rules/attribute'
 
-export class Banshee extends NakkaCard {
-  kind = FactionCardKind.Creature
+export class Banshee extends Creature {
   id = FactionCard.Banshee
+  faction = Faction.Nakka
+
   value = 6
   attack = 2
   defense = 1
-  attributes = [{ type: CardAttributeType.Initiative }]
+
+  attribute = initiative
+
   quantity = 2
 }

@@ -4,7 +4,7 @@ import { LocationType } from '../../../../material/LocationType'
 import { isMoveItem, ItemMove, MaterialMove, XYCoordinates } from '@gamepark/rules-api'
 import { RuleId } from '../../../RuleId'
 import { getFactionCardDescription } from '../../../../material/FactionCard'
-import { FactionCardKind } from '../../descriptions/FactionCardDetail'
+import { FactionCardKind } from '../../descriptions/base/FactionCardDetail'
 import { GamePlayerMemory } from '../../../../ArackhanWarsSetup'
 
 type HorseOfAvalonActionRuleMemory = {

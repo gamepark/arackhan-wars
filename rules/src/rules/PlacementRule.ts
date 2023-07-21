@@ -1,12 +1,13 @@
 import { LocationType } from '../material/LocationType'
-import { isMoveItem, ItemMove, Material, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { Material, MaterialItem, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { MaterialType } from '../material/MaterialType'
 import { battlefieldSpaceCoordinates, startingSpaces } from '../material/spaces'
 import { RuleId } from './RuleId'
 import { PlayerId } from '../ArackhanWarsOptions'
-import { getFactionCardDescription, getFactionCardRule } from '../material/FactionCard'
+import { getFactionCardDescription } from '../material/FactionCard'
 import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
 import { getAvailableCardPlacement, moveToBattlefieldSpace } from '../utils/move.utils'
+import { isSpell } from './cards/descriptions/base/Spell'
 
 const PLACED_CARD_PER_TURN = 2
 
@@ -21,8 +22,8 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
 
     const factionCards = this.material(MaterialType.FactionCard)
     const playerHand = factionCards.location(LocationType.Hand).player(this.player)
-    const astralCards = playerHand.filter((item) => getFactionCardDescription(item.id.front).astral as boolean)
-    const otherCards = playerHand.filter((item) => !getFactionCardDescription(item.id.front).astral)
+    const astralCards = playerHand.filter(this.isAstral)
+    const otherCards = playerHand.filter((item) => !this.isAstral(item))
 
     moves.push(...this.moveToAstralPlane(astralCards))
 
@@ -43,6 +44,11 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
     )
 
     return moves
+  }
+
+  isAstral(item: MaterialItem): boolean {
+    const card = getFactionCardDescription(item.id.front)
+    return isSpell(card) && card.astral
   }
 
   moveToAstralPlane(cards: Material<PlayerId, MaterialType, LocationType>) {
@@ -83,15 +89,5 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
 
     return
   }
-
-  afterItemMove(move: ItemMove) {
-    if (isMoveItem(move, MaterialType.FactionCard) && (move.position.location?.type === LocationType.Battlefield || move.position.location?.type === LocationType.AstralPlane)) {
-      const rules = getFactionCardRule(this.game, move.itemIndex)
-      if (rules) {
-        return rules.onPlaceCard()
-      }
-    }
-
-    return []
-  }
 }
+

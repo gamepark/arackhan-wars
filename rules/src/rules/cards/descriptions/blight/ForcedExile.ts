@@ -1,11 +1,17 @@
-import { CardAttributeType, FactionCardKind } from '../FactionCardDetail'
-import { BlightCard } from './BlightCard'
+import { DiscardTiming } from '../base/FactionCardDetail'
 import { FactionCard } from '../../../../material/FactionCard'
+import { Faction } from '../../../../Faction'
+import { Spell } from '../base/Spell'
+import { initiative } from '../../rules/attribute'
 
-export class ForcedExile extends BlightCard {
-  kind = FactionCardKind.Spell
+export class ForcedExile extends Spell {
   id = FactionCard.ForcedExile
+  faction = Faction.Blight
+
   value = 6
   astral = true
-  attributes = [{ type: CardAttributeType.Initiative }]
+
+  attribute = initiative
+
+  discardTiming = DiscardTiming.ActivationOrEndOfTurn
 }

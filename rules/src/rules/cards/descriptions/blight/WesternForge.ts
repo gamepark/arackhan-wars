@@ -1,10 +1,15 @@
-import { FactionCardKind } from '../FactionCardDetail'
-import { BlightCard } from './BlightCard'
 import { FactionCard } from '../../../../material/FactionCard'
+import { valueModifier } from '../../rules/effect/ValueModifierEffect'
+import { adjacent, allied, creature } from '../utils/applicable-filter.utils'
+import { Faction } from '../../../../Faction'
+import { Land } from '../base/Land'
 
-export class WesternForge extends BlightCard {
-  kind = FactionCardKind.Land
+export class WesternForge extends Land {
   id = FactionCard.WesternForge
+  faction = Faction.Blight
+
   value = 10
   defense = 4
+
+  benefit = valueModifier([adjacent, allied, creature], { attack: +2 })
 }
