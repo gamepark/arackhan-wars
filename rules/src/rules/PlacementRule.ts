@@ -14,11 +14,6 @@ const PLACED_CARD_PER_TURN = 2
 export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   getPlayerMoves(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     const moves: MaterialMove[] = []
-    const nextStep = this.nextStep()
-    if (nextStep) {
-      moves.push(nextStep)
-      return moves
-    }
 
     const factionCards = this.material(MaterialType.FactionCard)
     const playerHand = factionCards.location(LocationType.Hand).player(this.player)
@@ -73,21 +68,21 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
       )]
   }
 
-  nextStep = () => {
+  getAutomaticMoves() {
     const hiddenCardsOnBattlefield = this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
       .rotation((rotation) => !!rotation?.y)
 
     if (hiddenCardsOnBattlefield.length === (this.game.players.length * PLACED_CARD_PER_TURN)) {
-      return this.rules().startRule(RuleId.RevealRule)
+      return [this.rules().startRule(RuleId.RevealRule)]
     }
 
     const playerHiddenCards = hiddenCardsOnBattlefield.player(this.player)
     if (playerHiddenCards.length === 2) {
-      return this.rules().startPlayerTurn(RuleId.PlacementRule, this.nextPlayer)
+      return [this.rules().startPlayerTurn(RuleId.PlacementRule, this.nextPlayer)]
     }
 
-    return
+    return []
   }
 }
 

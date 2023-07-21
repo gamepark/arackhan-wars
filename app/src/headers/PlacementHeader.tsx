@@ -1,24 +1,16 @@
-import { Trans, useTranslation } from 'react-i18next'
-import { PlayMoveButton, useGame, useLegalMoves, usePlayerName } from '@gamepark/react-game'
-import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
-import { isStartPlayerTurn, isStartRule, MaterialGame, MaterialMove } from '@gamepark/rules-api'
+import { useTranslation } from 'react-i18next'
+import { useGame, usePlayerId, usePlayerName } from '@gamepark/react-game'
+import { MaterialGame } from '@gamepark/rules-api'
 
 export const PlacementHeader = () => {
-
   const { t } = useTranslation()
-  const game = useGame<MaterialGame<PlayerId, MaterialType, LocationType>>()!
-  const legalMoves = useLegalMoves<MaterialMove>()
-  const playerName = usePlayerName(game.rule!.player!)
-  if (!legalMoves.length) {
-    return <>{t('header.turn', { player: playerName })}</>
-  }
+  const activePlayer = useGame<MaterialGame>()!.rule!.player!
+  const player = usePlayerId()
+  const playerName = usePlayerName(activePlayer)
 
-  const passMove = legalMoves.find(move => isStartPlayerTurn(move) || isStartRule(move))
-  if (passMove) {
-    return <Trans defaults="header.placement.pass" components={[<PlayMoveButton move={passMove}/>]}/>
+  if (player !== activePlayer) {
+    return <>{t('header.placement', { player: playerName })}</>
+  } else {
+    return <>{t('header.placement.me')}</>
   }
-
-  return <>Nothing to tell</>
 }
