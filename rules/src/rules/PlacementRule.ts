@@ -1,7 +1,7 @@
 import { LocationType } from '../material/LocationType'
 import { Material, MaterialItem, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { MaterialType } from '../material/MaterialType'
-import { battlefieldSpaceCoordinates, startingSpaces } from '../material/spaces'
+import { startingCoordinates } from '../material/spaces'
 import { RuleId } from './RuleId'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { getFactionCardDescription } from '../material/FactionCard'
@@ -23,9 +23,9 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
     moves.push(...this.moveToAstralPlane(astralCards))
 
     const cardsOnBattlefield = factionCards.location(LocationType.Battlefield).getItems()
-    if (cardsOnBattlefield.every(card => !card.rotation && card.location.player === this.player)) {
+    if (cardsOnBattlefield.every(card => card.rotation && card.location.player === this.player)) {
       moves.push(
-        ...startingSpaces.map(index => battlefieldSpaceCoordinates[index])
+        ...startingCoordinates
           .filter(space => !cardsOnBattlefield.some((card) => card.location.x === space.x && card.location.y === space.y))
           .flatMap(space => moveToBattlefieldSpace(otherCards, space, this.player))
       )

@@ -1,46 +1,10 @@
 import { XYCoordinates } from '@gamepark/rules-api'
+import range from 'lodash/range'
 
-export const startingSpaces = [15, 16, 23, 24]
+export const startingCoordinates = [{x: 3, y: 2}, {x: 3, y: 3}, {x: 4, y: 2}, {x: 4, y: 3}]
 
-export const battlefieldSpaceCoordinates: (XYCoordinates & { position: XYCoordinates })[] = [
-  { x: 3, y: 0, position: { x: 44.3, y: 10.5 } },
-  { x: 4, y: 0, position: { x: 55.65, y: 10.5 } },
-  { x: 5, y: 0, position: { x: 67, y: 10.5 } },
-  { x: 6, y: 0, position: { x: 78.35, y: 10.5 } },
-  { x: 0, y: 1, position: { x: 10.2, y: 26.3 } },
-  { x: 1, y: 1, position: { x: 21.55, y: 26.3 } },
-  { x: 2, y: 1, position: { x: 32.9, y: 26.3 } },
-  { x: 3, y: 1, position: { x: 44.3, y: 26.3 } },
-  { x: 4, y: 1, position: { x: 55.65, y: 26.3 } },
-  { x: 5, y: 1, position: { x: 67, y: 26.3 } },
-  { x: 6, y: 1, position: { x: 78.35, y: 26.3 } },
-  { x: 7, y: 1, position: { x: 89.70, y: 26.3 } },
-  { x: 0, y: 2, position: { x: 10.2, y: 42.1 } },
-  { x: 1, y: 2, position: { x: 21.55, y: 42.1 } },
-  { x: 2, y: 2, position: { x: 32.9, y: 42.1 } },
-  { x: 3, y: 2, position: { x: 44.3, y: 42.1 } },
-  { x: 4, y: 2, position: { x: 55.65, y: 42.1 } },
-  { x: 5, y: 2, position: { x: 67, y: 42.1 } },
-  { x: 6, y: 2, position: { x: 78.35, y: 42.1 } },
-  { x: 7, y: 2, position: { x: 89.70, y: 42.1 } },
-  { x: 0, y: 3, position: { x: 10.2, y: 57.9 } },
-  { x: 1, y: 3, position: { x: 21.55, y: 57.9 } },
-  { x: 2, y: 3, position: { x: 32.9, y: 57.9 } },
-  { x: 3, y: 3, position: { x: 44.3, y: 57.9 } },
-  { x: 4, y: 3, position: { x: 55.65, y: 57.9 } },
-  { x: 5, y: 3, position: { x: 67, y: 57.9 } },
-  { x: 6, y: 3, position: { x: 78.35, y: 57.9 } },
-  { x: 7, y: 3, position: { x: 89.70, y: 57.9 } },
-  { x: 0, y: 4, position: { x: 10.2, y: 73.7 } },
-  { x: 1, y: 4, position: { x: 21.55, y: 73.7 } },
-  { x: 2, y: 4, position: { x: 32.9, y: 73.7 } },
-  { x: 3, y: 4, position: { x: 44.3, y: 73.7 } },
-  { x: 4, y: 4, position: { x: 55.65, y: 73.7 } },
-  { x: 5, y: 4, position: { x: 67, y: 73.7 } },
-  { x: 6, y: 4, position: { x: 78.35, y: 73.7 } },
-  { x: 7, y: 4, position: { x: 89.70, y: 73.7 } },
-  { x: 1, y: 5, position: { x: 21.55, y: 89.5 } },
-  { x: 2, y: 5, position: { x: 32.9, y: 89.5 } },
-  { x: 3, y: 5, position: { x: 44.3, y: 89.5 } },
-  { x: 4, y: 5, position: { x: 55.65, y: 89.5 } }
+export const battlefieldSpaceCoordinates: XYCoordinates[] = [
+  ...range(3, 7).map(x => ({ x, y: 0 })),
+  ...range(8).flatMap(x => range(1, 5).map(y => ({ x, y }))),
+  ...range(1, 5).map(x => ({ x, y: 5 }))
 ]
