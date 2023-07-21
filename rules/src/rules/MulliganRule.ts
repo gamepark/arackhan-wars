@@ -1,13 +1,9 @@
 import { LocationType } from '../material/LocationType'
-import { CustomMove, MaterialItem, MaterialMove, MaterialRulesPart, MoveKind } from '@gamepark/rules-api'
+import { CustomMove, MaterialMove, SimultaneousRule } from '@gamepark/rules-api'
 import { MaterialType } from '../material/MaterialType'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { RuleId } from './RuleId'
 import { PlayerId } from '../ArackhanWarsOptions'
-
-type StartRulePlayerMemory = {
-  end?: boolean
-}
 
 type StartPlayerMemory = {
   startPlayer: number
@@ -15,85 +11,68 @@ type StartPlayerMemory = {
 
 const HAND_LENGTH = 7
 
-export class MulliganRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
+export class MulliganRule extends SimultaneousRule<PlayerId, MaterialType, LocationType> {
 
-  getLegalMoves(playerId: PlayerId): MaterialMove<PlayerId, MaterialType, LocationType>[] {
+  getLegalMoves(player: PlayerId): MaterialMove<PlayerId, MaterialType, LocationType>[] {
 
-    if (this.getMemory<StartRulePlayerMemory>(playerId)?.end) {
+    if (!this.isTurnToPlay(player)) {
       return []
     }
 
     const cardsInHand = this
       .material(MaterialType.FactionCard)
       .location(LocationType.Hand)
-      .player(playerId)
+      .player(player)
 
 
-    const discardCards =
+    const moves: MaterialMove[] =
       cardsInHand.moveItems({
         location: {
           type: LocationType.PlayerDeck,
-          player: playerId
+          player
         }
       })
 
     if (cardsInHand.length < HAND_LENGTH) {
-      return [
-        ...discardCards,
-        this.rules().customMove(CustomMoveType.Mulligan, { player: playerId })
-      ]
-    }
-
-    return [
-      // TODO: Improve rules() to ass endTurn() to handle simultaneous players
-      ...discardCards,
-      this.rules().customMove(CustomMoveType.Pass, { player: playerId })
-    ]
-  }
-
-  onCustomMove(move: CustomMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
-    const moves = []
-
-    if (move.type === CustomMoveType.Pass) {
-      this.memorize<StartRulePlayerMemory>({ end: true }, move.data.player)
-    }
-
-    if (move.type === CustomMoveType.Mulligan) {
-      const cardsInDeck = this
-        .material(MaterialType.FactionCard)
-        .location(LocationType.PlayerDeck)
-        .player(move.data.player)
-
-      const cardsInHand = this
-        .material(MaterialType.FactionCard)
-        .location(LocationType.Hand)
-        .player(move.data.player)
-        .length
-
-      this.memorize<StartRulePlayerMemory>({ end: true }, move.data.player)
-
-      moves.push(
-        cardsInDeck.shuffle(),
-        ...cardsInDeck
-          .sort((item: MaterialItem) => -item.location.x!)
-          .limit(HAND_LENGTH - cardsInHand)
-          .moveItems({ location: { type: LocationType.Hand, player: move.data.player } })
-      )
-    }
-
-
-    if (this.game.players.every((p) => this.getMemory<StartRulePlayerMemory>(p).end)) {
-      moves.push(this.rules().startPlayerTurn(RuleId.PlacementRule, this.getMemory<StartPlayerMemory>().startPlayer))
+      moves.push(this.rules().customMove(CustomMoveType.Mulligan, { player }))
+    } else {
+      moves.push(this.rules().endPlayerTurn(player))
     }
 
     return moves
   }
 
-  isUnpredictableMove(move: MaterialMove<PlayerId, MaterialType, LocationType>, player: PlayerId): boolean {
-    return super.isUnpredictableMove?.(move, player) || (move.kind === MoveKind.CustomMove && move.type === CustomMoveType.Mulligan)
+  onCustomMove(move: CustomMove) {
+    if (move.type !== CustomMoveType.Mulligan) return []
+
+    const player = move.data.player
+
+    const cardsInDeck = this
+      .material(MaterialType.FactionCard)
+      .location(LocationType.PlayerDeck)
+      .player(player)
+
+    const moves: MaterialMove[] = [cardsInDeck.shuffle()]
+
+    const cardsInHand = this
+      .material(MaterialType.FactionCard)
+      .location(LocationType.Hand)
+      .player(player)
+      .length
+
+    moves.push(
+      ...cardsInDeck
+        .sort(card => -card.location.x!)
+        .limit(HAND_LENGTH - cardsInHand)
+        .moveItems({ location: { type: LocationType.Hand, player } })
+    )
+
+    moves.push(this.rules().endPlayerTurn(player))
+
+    return moves
   }
 
-  isTurnToPlay(playerId: PlayerId): boolean {
-    return !this.getMemory<StartRulePlayerMemory>(playerId)?.end
+  getMovesAfterPlayersDone() {
+    return [this.rules().startPlayerTurn(RuleId.PlacementRule, this.getMemory<StartPlayerMemory>().startPlayer)]
   }
 }

@@ -4,8 +4,7 @@ import { PlayMoveButton, useGame, useLegalMoves, usePlayerName } from '@gamepark
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
-import { MaterialGame, MaterialMove, MoveKind } from '@gamepark/rules-api'
-import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
+import { isEndPlayerTurn, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 
 export const MulliganHeader = () => {
   const { t } = useTranslation()
@@ -15,7 +14,7 @@ export const MulliganHeader = () => {
   if (!legalMoves.length) {
     return <>{t('header.turn', { player: playerName })}</>
   }
-  const passMove = legalMoves.find(move => move.kind === MoveKind.CustomMove && move.type === CustomMoveType.Pass)
+  const passMove = legalMoves.find(isEndPlayerTurn)
   if (passMove) {
     return <Trans defaults="header.start.pass"><PlayMoveButton move={passMove}/></Trans>
   }
