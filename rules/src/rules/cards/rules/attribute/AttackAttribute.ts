@@ -4,7 +4,7 @@ import { MaterialMove } from '@gamepark/rules-api/dist/material/moves/MaterialMo
 
 
 export abstract class AttackAttributeRule extends AttributeRule {
-  abstract OgetLegalAttacks(_attacker: Material, opponentsCards: Material): MaterialMove[]
+  abstract getLegalAttacks(_attacker: Material, opponentsCards: Material): MaterialMove[]
 
   getAttackValue(attack: number, _attacker: Material, _opponent: Material): number {
     return attack
