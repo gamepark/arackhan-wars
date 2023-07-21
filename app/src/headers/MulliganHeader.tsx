@@ -1,23 +1,26 @@
 /** @jsxImportSource @emotion/react */
 import { Trans, useTranslation } from 'react-i18next'
-import { PlayMoveButton, useGame, useLegalMoves, usePlayerName } from '@gamepark/react-game'
+import { PlayMoveButton, useLegalMoves, usePlayerId, useRules } from '@gamepark/react-game'
+import { isCustomMove, isEndPlayerTurn, MaterialMove } from '@gamepark/rules-api'
+import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
-import { isEndPlayerTurn, MaterialGame, MaterialMove } from '@gamepark/rules-api'
+import { START_HAND } from '@gamepark/arackhan-wars/rules/MulliganRule'
+import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 
 export const MulliganHeader = () => {
   const { t } = useTranslation()
-  const game = useGame<MaterialGame<PlayerId, MaterialType, LocationType>>()!
+  const rules = useRules<ArackhanWarsRules>()
+  const player = usePlayerId()
   const legalMoves = useLegalMoves<MaterialMove>()
-  const playerName = usePlayerName(game.rule!.player!)
-  if (!legalMoves.length) {
-    return <>{t('header.turn', { player: playerName })}</>
-  }
   const passMove = legalMoves.find(isEndPlayerTurn)
   if (passMove) {
-    return <Trans defaults="header.start.pass"><PlayMoveButton move={passMove}/></Trans>
+    return <Trans defaults="header.mulligan.pass"><PlayMoveButton move={passMove}/></Trans>
   }
-
-  return <>Nothing to tell</>
+  const mulliganMove = legalMoves.find(move => isCustomMove(move, CustomMoveType.Mulligan))
+  if (mulliganMove && rules) {
+    const cards = START_HAND - rules.material(MaterialType.FactionCard).location(LocationType.Hand).player(player).length
+    return <Trans defaults="header.mulligan.done" values={{ cards }}><PlayMoveButton move={mulliganMove}/></Trans>
+  }
+  return <>{t('header.mulligan')}</>
 }

@@ -9,7 +9,7 @@ type StartPlayerMemory = {
   startPlayer: number
 }
 
-const HAND_LENGTH = 7
+export const START_HAND = 7
 
 export class MulliganRule extends SimultaneousRule<PlayerId, MaterialType, LocationType> {
 
@@ -33,7 +33,7 @@ export class MulliganRule extends SimultaneousRule<PlayerId, MaterialType, Locat
         }
       })
 
-    if (cardsInHand.length < HAND_LENGTH) {
+    if (cardsInHand.length < START_HAND) {
       moves.push(this.rules().customMove(CustomMoveType.Mulligan, { player }))
     } else {
       moves.push(this.rules().endPlayerTurn(player))
@@ -63,7 +63,7 @@ export class MulliganRule extends SimultaneousRule<PlayerId, MaterialType, Locat
     moves.push(
       ...cardsInDeck
         .sort(card => -card.location.x!)
-        .limit(HAND_LENGTH - cardsInHand)
+        .limit(START_HAND - cardsInHand)
         .moveItems({ location: { type: LocationType.Hand, player } })
     )
 
