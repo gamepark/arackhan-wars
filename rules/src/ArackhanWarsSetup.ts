@@ -78,10 +78,7 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
       .createItem({ id: 1, location: { type: LocationType.RoundTracker, x: 1 } })
   }
 
-
   start() {
-    return {
-      id: RuleId.StartRule
-    }
+    return { id: RuleId.ChooseStartPlayer, player: this.game.players[0] }
   }
 }

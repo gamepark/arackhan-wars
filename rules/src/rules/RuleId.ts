@@ -1,5 +1,6 @@
 export enum RuleId {
-  StartRule = 1,
+  ChooseStartPlayer = 1,
+  Mulligan,
   DrawRule,
   PlacementRule,
   RevealRule,

@@ -9,9 +9,13 @@ type StartRulePlayerMemory = {
   end?: boolean
 }
 
+type StartPlayerMemory = {
+  startPlayer: number
+}
+
 const HAND_LENGTH = 7
 
-export class StartRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
+export class MulliganRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
 
   getLegalMoves(playerId: PlayerId): MaterialMove<PlayerId, MaterialType, LocationType>[] {
 
@@ -47,10 +51,6 @@ export class StartRule extends MaterialRulesPart<PlayerId, MaterialType, Locatio
     ]
   }
 
-  nextPlayer(player: PlayerId): PlayerId {
-    return this.game.players[(this.game.players.indexOf(player) + 1) % this.game.players.length]
-  }
-
   onCustomMove(move: CustomMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     const moves = []
 
@@ -83,7 +83,7 @@ export class StartRule extends MaterialRulesPart<PlayerId, MaterialType, Locatio
 
 
     if (this.game.players.every((p) => this.getMemory<StartRulePlayerMemory>(p).end)) {
-      moves.push(this.rules().startRule(RuleId.PlacementRule, this.game.players[0]))
+      moves.push(this.rules().startRule(RuleId.PlacementRule, this.getMemory<StartPlayerMemory>().startPlayer))
     }
 
     return moves

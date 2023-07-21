@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { Trans, useTranslation } from 'react-i18next'
 import { PlayMoveButton, useGame, useLegalMoves, usePlayerName } from '@gamepark/react-game'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
@@ -6,8 +7,7 @@ import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { MaterialGame, MaterialMove, MoveKind } from '@gamepark/rules-api'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 
-export const StartHeader = () => {
-
+export const MulliganHeader = () => {
   const { t } = useTranslation()
   const game = useGame<MaterialGame<PlayerId, MaterialType, LocationType>>()!
   const legalMoves = useLegalMoves<MaterialMove>()
@@ -17,7 +17,7 @@ export const StartHeader = () => {
   }
   const passMove = legalMoves.find(move => move.kind === MoveKind.CustomMove && move.type === CustomMoveType.Pass)
   if (passMove) {
-    return <Trans defaults="header.start.pass" components={[<PlayMoveButton move={passMove}/>]}/>
+    return <Trans defaults="header.start.pass"><PlayMoveButton move={passMove}/></Trans>
   }
 
   return <>Nothing to tell</>

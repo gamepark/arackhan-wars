@@ -2,7 +2,7 @@ import { MaterialType } from './material/MaterialType'
 import { LocationType } from './material/LocationType'
 import { HidingStrategy, MaterialItem, MaterialRulesPartCreator, SecretMaterialRules } from '@gamepark/rules-api'
 import { RuleId } from './rules/RuleId'
-import { StartRule } from './rules/StartRule'
+import { MulliganRule } from './rules/MulliganRule'
 import { locationsStrategies } from './material/LocationStrategies'
 import { PlacementRule } from './rules/PlacementRule'
 import { RevealRule } from './rules/RevealRule'
@@ -14,6 +14,7 @@ import { DrawRules } from './rules/DrawRules'
 import { ForcedExileActionRule } from './rules/cards/rules/action/ForcedExileActionRule'
 import { HorseOfAvalonActionRule } from './rules/cards/rules/action/HorseOfAvalonActionRule'
 import { TeleportationActionRule } from './rules/cards/rules/action/TeleportationActionRule'
+import { ChooseStartPlayerRule } from './rules/ChooseStartPlayerRule'
 
 
 /**
@@ -42,7 +43,8 @@ export const hideCardWhenRotated: HidingStrategy = (
 }
 
 export const rules: Record<RuleId, MaterialRulesPartCreator<PlayerId, MaterialType, LocationType>> = {
-  [RuleId.StartRule]: StartRule,
+  [RuleId.ChooseStartPlayer]: ChooseStartPlayerRule,
+  [RuleId.Mulligan]: MulliganRule,
   [RuleId.DrawRule]: DrawRules,
   [RuleId.PlacementRule]: PlacementRule,
   [RuleId.RevealRule]: RevealRule,
