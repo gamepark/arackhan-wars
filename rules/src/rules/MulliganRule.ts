@@ -83,7 +83,7 @@ export class MulliganRule extends MaterialRulesPart<PlayerId, MaterialType, Loca
 
 
     if (this.game.players.every((p) => this.getMemory<StartRulePlayerMemory>(p).end)) {
-      moves.push(this.rules().startRule(RuleId.PlacementRule, this.getMemory<StartPlayerMemory>().startPlayer))
+      moves.push(this.rules().startPlayerTurn(RuleId.PlacementRule, this.getMemory<StartPlayerMemory>().startPlayer))
     }
 
     return moves
