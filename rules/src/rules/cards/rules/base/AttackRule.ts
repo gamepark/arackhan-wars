@@ -80,11 +80,16 @@ export class AttackRule extends PlayerTurnRule {
   getAuthorizedTargets(attacker: Material, opponentCards: Material): number[] {
     const attackerIndex = attacker.getIndex()
     const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
-    if (!activatedCards.length || !activatedCards.some((a) => a.targets)) return opponentCards.getIndexes()
+    if (!activatedCards.length || !activatedCards.some((a) => a.targets)) return opponentCards
+      .filter((item) => !isSpell(getFactionCardDescription(item.id.front)))
+      .getIndexes()
 
     return opponentCards.getIndexes().filter((o) => {
       const opponentMaterial = this.material(MaterialType.FactionCard).index(o)
-      if (!this.effectHelper.canAttack(attackerIndex, opponentMaterial.getIndex())) return false
+
+      if (isSpell(getFactionCardDescription(opponentMaterial.getItem()!.id.front))
+        || !this.effectHelper.canAttack(attackerIndex, o)) return false
+
       return activatedCards.some((a) => {
         if (!(a.targets ?? []).includes(o)) return false
         const cardMaterial = this.material(MaterialType.FactionCard).index(a.card)

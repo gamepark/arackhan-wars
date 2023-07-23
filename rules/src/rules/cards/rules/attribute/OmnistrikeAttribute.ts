@@ -4,7 +4,6 @@ import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
 import { AttackAttributeRule } from './AttackAttribute'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
 import { getFactionCardDescription } from '../../../../material/FactionCard'
-import { isSpell } from '../../descriptions/base/Spell'
 import { getAdjacentCards } from '../../../../utils/move.utils'
 
 
@@ -15,7 +14,6 @@ export class OmnistrikeAttribute extends AttackAttributeRule {
 
   getLegalAttacks(attacker: Material, opponentsCards: Material) {
     const opponents = getAdjacentCards(attacker, opponentsCards)
-      .filter((index: number) => !isSpell(getFactionCardDescription(opponentsCards.getItem(index)!.id.front)))
 
     if (!opponents.length || this.isBlocked(attacker)) return []
     return [
@@ -27,9 +25,8 @@ export class OmnistrikeAttribute extends AttackAttributeRule {
 
   getTargets(attacker: Material, opponent: Material, opponentsCards: Material): number[] {
     if (!opponent.length || this.isBlocked(attacker)) return []
-    
+
     return getAdjacentCards(attacker, opponentsCards)
-      .filter((index: number) => !isSpell(getFactionCardDescription(opponentsCards.getItem(index)!.id.front)))
   }
 
   isBlocked(attacker: Material): boolean {

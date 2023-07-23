@@ -77,9 +77,9 @@ class PerforationAttackAttribute extends AttackAttributeRule {
     return this.getOpponentsInDirection(attacker, opponentsCards, delta)
   }
 
-  getAttackValue(attack: number, _attacker: Material, _opponent: Material): number {
-    const attackerCard = _attacker.getItem()!
-    const opponentCard = _opponent.getItem()!
+  getAttackValue(attack: number, attacker: Material, opponent: Material): number {
+    const attackerCard = attacker.getItem()!
+    const opponentCard = opponent.getItem()!
     const axis = attackerCard.location.x === opponentCard.location.x ? 'y' : 'x'
     return attack - (Math.abs(attackerCard.location[axis]! - opponentCard.location[axis]!) - 1)
   }
