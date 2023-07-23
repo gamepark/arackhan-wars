@@ -1,9 +1,10 @@
-import { MaterialGame } from '@gamepark/rules-api/dist/material/MaterialGame'
+import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { Attribute, AttributeKind } from './Attribute'
 import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
-import { Material, MaterialMove } from '@gamepark/rules-api'
 import { AttackAttributeRule } from './AttackAttribute'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
+import { getFactionCardDescription } from '../../../../material/FactionCard'
+import uniq from 'lodash/uniq'
 
 class PerforationAttackAttribute extends AttackAttributeRule {
 
@@ -22,10 +23,14 @@ class PerforationAttackAttribute extends AttackAttributeRule {
       southOpponents,
       westOpponents,
       eastOpponents
-    ].map((opponents) => this.rules().customMove(CustomMoveType.Attack, {
-      card: attacker.getIndex(),
-      targets: opponents
-    }))
+    ].flatMap((opponents) => {
+      if (!opponents.length) return []
+
+      return this.rules().customMove(CustomMoveType.Attack, {
+        card: attacker.getIndex(),
+        target: opponents[0]
+      })
+    })
   }
 
   getOpponentsInDirection(attacker: Material, opponentsCards: Material, direction: { x?: number, y?: number }) {
@@ -47,6 +52,29 @@ class PerforationAttackAttribute extends AttackAttributeRule {
     }
 
     return opponents
+  }
+
+  getTargets(attacker: Material, opponent: Material, opponentsCards: Material): number[] {
+    if (!opponent.length) return []
+    const attackerCard = attacker.getItem()!
+    const opponentCard = opponent.getItem()!
+
+    const attackerCardDescription = getFactionCardDescription(attackerCard.id.front)
+
+    if (attackerCardDescription.hasOmnistrike()) {
+      const northOpponents = this.getOpponentsInDirection(attacker, opponentsCards, { y: -1 })
+      const southOpponents = this.getOpponentsInDirection(attacker, opponentsCards, { y: 1 })
+      const westOpponents = this.getOpponentsInDirection(attacker, opponentsCards, { x: -1 })
+      const eastOpponents = this.getOpponentsInDirection(attacker, opponentsCards, { x: 1 })
+      return uniq([...northOpponents, ...southOpponents, ...westOpponents, ...eastOpponents])
+    }
+
+    const delta = {
+      x: opponentCard.location.x! - attackerCard.location.x!,
+      y: opponentCard.location.y! - attackerCard.location.y!
+    }
+
+    return this.getOpponentsInDirection(attacker, opponentsCards, delta)
   }
 
   getAttackValue(attack: number, _attacker: Material, _opponent: Material): number {

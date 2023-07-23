@@ -1,6 +1,5 @@
 import { Attribute, AttributeKind, AttributeRule } from './Attribute'
-import { Material } from '@gamepark/rules-api/dist/material/items/Material'
-import { MaterialMove } from '@gamepark/rules-api/dist/material/moves/MaterialMove'
+import { Material, MaterialMove } from '@gamepark/rules-api'
 import { FactionCardEffectHelper } from '../helper/FactionCardEffectHelper'
 
 
@@ -9,6 +8,13 @@ export abstract class AttackAttributeRule extends AttributeRule {
 
   getAttackValue(attack: number, _attacker: Material, _opponent: Material): number {
     return attack
+  }
+
+  getTargets(_attacker: Material, opponent: Material, _opponentsCards: Material): number[] {
+    if (!opponent.length) return []
+    return [
+      opponent.getIndex()
+    ]
   }
 }
 

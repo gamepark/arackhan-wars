@@ -7,12 +7,6 @@ export class InitiativeAttributeRule extends AttributeRule {
   constructor(game: MaterialGame) {
     super(game)
   }
-
-  canBeActivated(initiative: boolean) {
-    return initiative
-  }
-
-
 }
 
 export const initiative = new class extends Attribute<InitiativeAttributeRule> {

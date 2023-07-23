@@ -1,9 +1,8 @@
 import { Effect } from '../../descriptions/base/Effect'
-import { MaterialGame } from '@gamepark/rules-api/dist/material/MaterialGame'
+import { Material, MaterialGame } from '@gamepark/rules-api'
 import { AttackEffect } from '../../descriptions/base/AttackEffect'
 import { computeAttack } from '../../../../utils/attack.utils'
 import { MaterialType } from '../../../../material/MaterialType'
-import { Material } from '@gamepark/rules-api/dist/material/items/Material'
 import { ActivatedCard, ActivationRuleMemory } from '../../../types'
 import { FactionCardEffectHelper } from '../helper/FactionCardEffectHelper'
 import { discardCard } from '../../../../utils/discard.utils'
@@ -23,7 +22,6 @@ class DestroyWhenAttackFailEffect extends AttackEffect {
       if (attack > defense) destroyedOpponent++
     }
 
-    attacker.getIndex() === 5 && console.log(destroyedOpponent, activatedCard)
     if (destroyedOpponent === activatedCard.targets.length) return []
 
     return discardCard(attacker, this.material(MaterialType.FactionToken).parent(attacker.getIndex()))

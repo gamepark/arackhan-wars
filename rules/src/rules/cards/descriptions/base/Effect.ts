@@ -1,8 +1,5 @@
-import { MaterialRulesPart } from '@gamepark/rules-api/dist/material/rules/MaterialRulesPart'
-import { Material } from '@gamepark/rules-api/dist/material/items/Material'
-import { MaterialGame } from '@gamepark/rules-api/dist/material/MaterialGame'
+import { Material, MaterialGame, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
 import { ApplicableFilter } from '../utils/applicable-filter.utils'
-import { MaterialMove } from '@gamepark/rules-api/dist/material/moves/MaterialMove'
 
 export abstract class Effect {
 
@@ -23,19 +20,11 @@ export class PassiveEffect extends MaterialRulesPart {
 }
 
 export class PassiveEffectWithConsequences extends PassiveEffect {
-  onReveal(_source: Material, _target: Material): MaterialMove[] {
+  onCasterMoveTo(_caster: Material, _target: Material): MaterialMove[] {
     return []
   }
 
-  beforeMoveTarget(_source: Material, _target: Material): MaterialMove[] {
-    return []
-  }
-
-  afterMoveTarget(_source: Material, _target: Material): MaterialMove[] {
-    return []
-  }
-
-  onDiscard(_source: Material, _target: Material): MaterialMove[] {
+  onCasterMoveAway(_caster: Material, _target: Material): MaterialMove[] {
     return []
   }
 }

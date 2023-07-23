@@ -1,4 +1,4 @@
-import { PassiveEffect } from '../../descriptions/base/Effect'
+import { isWithConsequences, PassiveEffect } from '../../descriptions/base/Effect'
 import { isLooseSkillEffect } from '../effect/LooseSkillsEffect'
 import { CardAttributeType, FactionCardDetail } from '../../descriptions/base/FactionCardDetail'
 import { isLooseAttributesEffect } from '../effect/LooseAttributesEffect'
@@ -8,13 +8,10 @@ import { isCreature } from '../../descriptions/base/Creature'
 import { isValueModifierEffect } from '../effect/ValueModifierEffect'
 import sumBy from 'lodash/sumBy'
 import { isAttackEffect } from '../../descriptions/base/AttackEffect'
-import { MaterialMove } from '@gamepark/rules-api/dist/material/moves/MaterialMove'
-import { MaterialRulesPart } from '@gamepark/rules-api/dist/material/rules/MaterialRulesPart'
-import { MaterialGame } from '@gamepark/rules-api/dist/material/MaterialGame'
+import { Material, MaterialGame, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
 import { getFactionCardDescription } from '../../../../material/FactionCard'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
-import { Material } from '@gamepark/rules-api/dist/material/items/Material'
 
 export class FactionCardEffectHelper extends MaterialRulesPart {
   readonly passiveEffects: Record<number, PassiveEffect[]> = {}
@@ -121,16 +118,40 @@ export class FactionCardEffectHelper extends MaterialRulesPart {
       .flatMap((e) => e.getAttackConsequences(this.material(MaterialType.FactionCard).index(cardIndex)))
   }
 
-  canAttack(attackerIndex: number, opponent: number): boolean {
+  canAttack(attackerIndex: number, targetIndex: number): boolean {
     if (!(attackerIndex in this.passiveEffects)) return true
     // TODO: other attackers ?
-    return !this.passiveEffects[attackerIndex].filter(isAttackEffect).some((e) => !e.canAttack(attackerIndex, opponent))
+    return !this.passiveEffects[attackerIndex].filter(isAttackEffect).some((e) => !e.canAttack(attackerIndex, targetIndex))
   }
 
-  canBeAttacked(attackerIndex: number, opponent: number): boolean {
-    if (!(opponent in this.passiveEffects)) return true
-    return !this.passiveEffects[opponent].filter(isAttackEffect).some((a) => !a.canBeAttacked(attackerIndex, opponent))
+  canBeAttacked(attackerIndex: number, targetIndex: number): boolean {
+    if (!(targetIndex in this.passiveEffects)) return true
+    return !this.passiveEffects[targetIndex].filter(isAttackEffect).some((a) => !a.canBeAttacked(attackerIndex, targetIndex))
   }
 
+  onCasterMoveTo(casterIndex: number, targetIndex: number): MaterialMove[] {
+    if (!(targetIndex in this.passiveEffects)) return []
+    this.passiveEffects[targetIndex]
+      .flatMap((effect) => {
+        if (!isWithConsequences(effect)) return []
+        const caster = this.material(MaterialType.FactionCard).index(casterIndex)!
+        const target = this.material(MaterialType.FactionCard).index(targetIndex)!
+        return effect.onCasterMoveTo(caster, target)
+      })
 
+    return []
+  }
+
+  onCasterMoveAway(casterIndex: number, targetIndex: number): MaterialMove[] {
+    if (!(targetIndex in this.passiveEffects)) return []
+    this.passiveEffects[targetIndex]
+      .flatMap((effect) => {
+        if (!isWithConsequences(effect)) return []
+        const caster = this.material(MaterialType.FactionCard).index(casterIndex)!
+        const target = this.material(MaterialType.FactionCard).index(targetIndex)!
+        return effect.onCasterMoveAway(caster, target)
+      })
+
+    return []
+  }
 }

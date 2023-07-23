@@ -1,4 +1,4 @@
-import { Material } from '@gamepark/rules-api/dist/material/items/Material'
+import { Material } from '@gamepark/rules-api'
 
 
 export const deactivateTokens = (tokens: Material) => {
@@ -12,3 +12,4 @@ export const activateTokens = (tokens: Material) => {
 
   return tokens.moveItems({})
 }
+

@@ -1,9 +1,8 @@
 import { Effect, PassiveEffectWithConsequences } from '../../descriptions/base/Effect'
-import { MaterialGame } from '@gamepark/rules-api/dist/material/MaterialGame'
+import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
-import { MaterialMove } from '@gamepark/rules-api/dist/material/moves/MaterialMove'
 import { MaterialType } from '../../../../material/MaterialType'
-import { Material } from '@gamepark/rules-api/dist/material/items/Material'
+import { activateTokens } from '../../../../utils/activation.utils'
 
 class ReactivateEffect extends PassiveEffectWithConsequences {
 
@@ -11,16 +10,8 @@ class ReactivateEffect extends PassiveEffectWithConsequences {
     super(game)
   }
 
-  beforeMoveTarget(_source: Material, target: Material) {
-    return this.activateCreature(target)
-  }
-
-  onDiscard(_source: Material, target: Material) {
-    return this.activateCreature(target)
-  }
-
-  activateCreature(target: Material): MaterialMove[] {
-    return this.material(MaterialType.FactionToken).parent(target.getIndex()).moveItems({})
+  onCasterMoveAway(_source: Material, target: Material): MaterialMove[] {
+    return activateTokens(this.material(MaterialType.FactionToken).parent(target.getIndex()))
   }
 }
 

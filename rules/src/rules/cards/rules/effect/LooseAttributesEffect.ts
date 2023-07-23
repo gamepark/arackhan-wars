@@ -1,5 +1,5 @@
 import { Effect, PassiveEffect } from '../../descriptions/base/Effect'
-import { MaterialGame } from '@gamepark/rules-api/dist/material/MaterialGame'
+import { MaterialGame } from '@gamepark/rules-api'
 import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 

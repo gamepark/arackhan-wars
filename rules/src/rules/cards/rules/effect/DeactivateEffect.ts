@@ -1,9 +1,8 @@
 import { Effect, PassiveEffectWithConsequences } from '../../descriptions/base/Effect'
-import { MaterialGame } from '@gamepark/rules-api/dist/material/MaterialGame'
+import { Material, MaterialGame } from '@gamepark/rules-api'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
+import { activateTokens } from '../../../../utils/activation.utils'
 import { MaterialType } from '../../../../material/MaterialType'
-import { Material } from '@gamepark/rules-api/dist/material/items/Material'
-import { deactivateTokens } from '../../../../utils/activation.utils'
 
 class DeactivateEffect extends PassiveEffectWithConsequences {
 
@@ -11,18 +10,9 @@ class DeactivateEffect extends PassiveEffectWithConsequences {
     super(game)
   }
 
-  onReveal(_source: Material, target: Material) {
-    return this.deactivateCreature(target)
+  onCasterMoveTo(_source: Material, target: Material) {
+    return activateTokens(this.material(MaterialType.FactionToken).parent(target.getIndex()))
   }
-
-  afterMoveTarget(_source: Material, target: Material) {
-    return this.deactivateCreature(target)
-  }
-
-  deactivateCreature(target: Material) {
-    return deactivateTokens(this.material(MaterialType.FactionToken).parent(target.getIndex()))
-  }
-
 }
 
 export const deactivate = (filters: ApplicableFilter[]) => new class extends Effect {

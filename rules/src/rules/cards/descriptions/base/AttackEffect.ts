@@ -1,6 +1,5 @@
 import { PassiveEffect } from './Effect'
-import { MaterialMove } from '@gamepark/rules-api/dist/material/moves/MaterialMove'
-import { Material } from '@gamepark/rules-api/dist/material/items/Material'
+import { Material, MaterialMove } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
 import { isSpell } from './Spell'
 import { getFactionCardDescription } from '../../../../material/FactionCard'

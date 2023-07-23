@@ -48,6 +48,8 @@ export abstract class FactionCardDetail {
 
   hasInitiative = () => this.hasAttribute(CardAttributeType.Initiative)
   hasOmnistrike = () => this.hasAttribute(CardAttributeType.Omnistrike)
+  hasPerforation = () => this.hasAttribute(CardAttributeType.Perforation)
+  hasRangeAttack = () => this.hasAttribute(CardAttributeType.RangedAttack)
   canFly = () => this.hasAttribute(CardAttributeType.Flight)
   hasMovement = () => this.hasAttribute(CardAttributeType.Movement)
   canMove = () => this.hasMovement() ?? this.canFly()

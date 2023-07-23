@@ -1,11 +1,9 @@
 import { PlayerId } from '../ArackhanWarsOptions'
 import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
-import { Material } from '@gamepark/rules-api/dist/material/items/Material'
-import { XYCoordinates } from '@gamepark/rules-api/dist/material/location/Location'
+import { Material, MaterialItem, XYCoordinates } from '@gamepark/rules-api'
 import { battlefieldSpaceCoordinates } from '../material/spaces'
-import { isAdjacentToFactionCard } from './adjacent.utils'
-import { MaterialItem } from '@gamepark/rules-api/dist/material/items/MaterialItem'
+import { areAdjacent, isAdjacentToFactionCard } from './adjacent.utils'
 
 export const moveToBattlefieldSpace = (cards: Material<PlayerId, MaterialType, LocationType>, space: XYCoordinates, player: PlayerId) => {
   return cards
@@ -26,4 +24,10 @@ export const getAvailableCardPlacement = (cardsOnBattlefield: MaterialItem[], pl
     .filter((space) => !cardsOnBattlefield.some((card) => card.location.x === space.x && card.location.y === space.y))
     .filter((space) => isAdjacentToFactionCard(cardsOnBattlefield, space))
     .flatMap((space) => moveToBattlefieldSpace(playableCards, space, player))
+}
+
+export const getAdjacentCards = (card: Material, otherCards: Material) => {
+  return otherCards
+    .getIndexes()
+    .filter((otherCardIndex) => areAdjacent(otherCards.index(otherCardIndex), card))
 }

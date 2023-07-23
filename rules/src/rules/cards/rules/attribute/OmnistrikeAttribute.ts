@@ -1,12 +1,11 @@
-import { MaterialGame } from '@gamepark/rules-api'
+import { Material, MaterialGame } from '@gamepark/rules-api'
 import { Attribute, AttributeKind } from './Attribute'
 import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
-import { areAdjacent } from '../../../../utils/adjacent.utils'
-import { Material } from '@gamepark/rules-api/dist/material/items/Material'
 import { AttackAttributeRule } from './AttackAttribute'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
 import { getFactionCardDescription } from '../../../../material/FactionCard'
 import { isSpell } from '../../descriptions/base/Spell'
+import { getAdjacentCards } from '../../../../utils/move.utils'
 
 
 export class OmnistrikeAttribute extends AttackAttributeRule {
@@ -15,20 +14,28 @@ export class OmnistrikeAttribute extends AttackAttributeRule {
   }
 
   getLegalAttacks(attacker: Material, opponentsCards: Material) {
-    const opponents = opponentsCards.getIndexes()
-      .filter((index: number) => {
-        const opponentMaterial = opponentsCards.index(index)
-        return areAdjacent(attacker, opponentMaterial) && !isSpell(getFactionCardDescription(opponentMaterial.getItem()!.id.front))
-      })
+    const opponents = getAdjacentCards(attacker, opponentsCards)
+      .filter((index: number) => !isSpell(getFactionCardDescription(opponentsCards.getItem(index)!.id.front)))
 
-    if (!opponents.length) return []
-
+    if (!opponents.length || this.isBlocked(attacker)) return []
     return [
       this.rules().customMove(CustomMoveType.Attack, {
-        card: attacker.getIndex(),
-        targets: opponents
+        card: attacker.getIndex()
       })
     ]
+  }
+
+  getTargets(attacker: Material, opponent: Material, opponentsCards: Material): number[] {
+    if (!opponent.length || this.isBlocked(attacker)) return []
+    
+    return getAdjacentCards(attacker, opponentsCards)
+      .filter((index: number) => !isSpell(getFactionCardDescription(opponentsCards.getItem(index)!.id.front)))
+  }
+
+  isBlocked(attacker: Material): boolean {
+    const attackerCard = attacker.getItem()!
+    const attackerCardDescription = getFactionCardDescription(attackerCard.id.front)
+    return attackerCardDescription.hasPerforation()
   }
 }
 

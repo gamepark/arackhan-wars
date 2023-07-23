@@ -1,6 +1,6 @@
 import { AttackEffect } from '../../descriptions/base/AttackEffect'
 import { Effect, PassiveEffect } from '../../descriptions/base/Effect'
-import { MaterialGame } from '@gamepark/rules-api/dist/material/MaterialGame'
+import { MaterialGame } from '@gamepark/rules-api'
 
 export class CantBeAttackedByGroup extends AttackEffect {
 

@@ -2,8 +2,7 @@ import { DiscardTiming } from '../rules/cards/descriptions/base/FactionCardDetai
 import { getFactionCardDescription } from '../material/FactionCard'
 import { isSpell } from '../rules/cards/descriptions/base/Spell'
 import { LocationType } from '../material/LocationType'
-import { Material } from '@gamepark/rules-api/dist/material/items/Material'
-import { MaterialMove } from '@gamepark/rules-api/dist/material/moves/MaterialMove'
+import { Material, MaterialMove } from '@gamepark/rules-api'
 
 
 export const discardSpells = (cards: Material, discardTiming?: DiscardTiming): MaterialMove[] => {

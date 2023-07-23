@@ -1,8 +1,7 @@
-import { MaterialGame } from '@gamepark/rules-api/dist/material/MaterialGame'
+import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { Attribute, AttributeKind } from './Attribute'
 import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
 import { getDistance } from '../../../../utils/adjacent.utils'
-import { Material, MaterialMove } from '@gamepark/rules-api'
 import { AttackAttributeRule } from './AttackAttribute'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
 import { FactionCardEffectHelper } from '../helper/FactionCardEffectHelper'
@@ -18,7 +17,7 @@ class RangeAttackAttributeRule extends AttackAttributeRule {
       .filter((index: number) => this.canAttack(attacker, opponentsCards.index(index)!, effectHelper))
       .map((index: number) => this.rules().customMove(CustomMoveType.Attack, {
         card: attacker.getIndex(),
-        targets: [index]
+        target: index
       }))
   }
 
@@ -30,6 +29,10 @@ class RangeAttackAttributeRule extends AttackAttributeRule {
       { x: attackerCard.location.x!, y: attackerCard.location.y! },
       { x: opponentCard.location.x!, y: opponentCard.location.y! }
     ) <= this.strength
+  }
+
+  canAttackInGroup(): boolean {
+    return true
   }
 }
 

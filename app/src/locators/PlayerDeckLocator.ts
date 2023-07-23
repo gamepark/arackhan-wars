@@ -21,5 +21,4 @@ export class PlayerDeckLocator extends DeckLocator<PlayerId, MaterialType, Locat
 
     return { x: 7.7, y: 9.9 }
   }
-
 }

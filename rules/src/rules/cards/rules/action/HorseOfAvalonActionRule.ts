@@ -1,7 +1,6 @@
-import { PlayerTurnRule } from '@gamepark/rules-api/dist/material/rules/PlayerTurnRule'
+import { isMoveItem, ItemMove, MaterialMove, PlayerTurnRule, XYCoordinates } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
-import { isMoveItem, ItemMove, MaterialMove, XYCoordinates } from '@gamepark/rules-api'
 import { RuleId } from '../../../RuleId'
 import { getFactionCardDescription } from '../../../../material/FactionCard'
 import { FactionCardKind } from '../../descriptions/base/FactionCardDetail'

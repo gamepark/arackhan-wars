@@ -6,8 +6,8 @@ import { getFactionCardDescription } from '../material/FactionCard'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { GamePlayerMemory } from '../ArackhanWarsSetup'
 import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
-import { isWithConsequences } from './cards/descriptions/base/Effect'
 import { isSpell } from './cards/descriptions/base/Spell'
+import { FactionCardEffectHelper } from './cards/rules/helper/FactionCardEffectHelper'
 
 export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
 
@@ -48,27 +48,11 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
 
     const indexes = battlefield.getIndexes()
     const moves = []
-
+    const effectHelper = new FactionCardEffectHelper(this.game)
     // Not optimal, but run once
     for (const source of indexes) {
       for (const target of indexes) {
-        if (source === target) continue
-        const sourceMaterial = battlefield.index(source)
-        const targetMaterial = battlefield.index(target)
-        const sourceCard = getFactionCardDescription(this.material(MaterialType.FactionCard).getItem(source)!.id.front)
-
-        const passiveEffects = sourceCard.getPassiveEffects()
-        if (!passiveEffects.length) continue
-
-        moves.push(
-          ...passiveEffects
-            .filter((effect) => effect.isApplicable(sourceMaterial, targetMaterial))
-            .flatMap((effect) => {
-              const rule = effect.getEffectRule(this.game)
-              if (!isWithConsequences(rule)) return []
-              return rule.onReveal(sourceMaterial, targetMaterial)
-            })
-        )
+        moves.push(...effectHelper.onCasterMoveTo(source, target))
       }
 
     }

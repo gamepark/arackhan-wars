@@ -2,8 +2,7 @@ import { FactionCardEffectHelper } from '../rules/cards/rules/helper/FactionCard
 import { ActivatedCard } from '../rules/types'
 import { getFactionCardDescription } from '../material/FactionCard'
 import { isAttackAttribute } from '../rules/cards/rules/attribute/AttackAttribute'
-import { MaterialGame } from '@gamepark/rules-api/dist/material/MaterialGame'
-import { Material } from '@gamepark/rules-api/dist/material/items/Material'
+import { Material, MaterialGame } from '@gamepark/rules-api'
 
 
 export const computeAttack = (game: MaterialGame, attacker: Material, opponent: Material, effectHelper: FactionCardEffectHelper, activatedCards: ActivatedCard[] = []) => {

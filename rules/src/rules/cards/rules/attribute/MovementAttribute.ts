@@ -1,4 +1,4 @@
-import { MaterialGame } from '@gamepark/rules-api/dist/material/MaterialGame'
+import { Material, MaterialGame, MaterialMove, XYCoordinates } from '@gamepark/rules-api'
 import { Attribute, AttributeKind, AttributeRule } from './Attribute'
 import { battlefieldSpaceCoordinates } from '../../../../material/spaces'
 import { LocationType } from '../../../../material/LocationType'
@@ -6,9 +6,6 @@ import { getDistance, isAdjacentToFactionCard } from '../../../../utils/adjacent
 import { MaterialType } from '../../../../material/MaterialType'
 import { getFactionCardDescription } from '../../../../material/FactionCard'
 import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
-import { Material } from '@gamepark/rules-api/dist/material/items/Material'
-import { MaterialMove } from '@gamepark/rules-api/dist/material/moves/MaterialMove'
-import { XYCoordinates } from '@gamepark/rules-api/dist/material/location/Location'
 import { FactionCardEffectHelper } from '../helper/FactionCardEffectHelper'
 import equal from 'fast-deep-equal'
 
@@ -40,7 +37,7 @@ export class MovementAttributeRule extends AttributeRule {
     const battlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
     const card = source.getItem()!
     const cardDescription = getFactionCardDescription(card.id.front)
-    
+
     if (!cardDescription.canMove() && !cardDescription.canFly()) return false
     if (cardDescription.canFly() && effectHelper.hasLostAttributes(source.getIndex(), CardAttributeType.Flight)) return false
     if (cardDescription.hasMovement() && effectHelper.hasLostAttributes(source.getIndex(), CardAttributeType.Movement)) return false
