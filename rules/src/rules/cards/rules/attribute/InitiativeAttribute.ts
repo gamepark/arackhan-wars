@@ -18,4 +18,4 @@ export const initiative = new class extends Attribute<InitiativeAttributeRule> {
 
 }
 
-export const isInitiative = (attribute: Attribute<any>): attribute is Attribute<InitiativeAttributeRule> => attribute.type === CardAttributeType.Initiative
+export const isInitiative = (attribute: Attribute): attribute is Attribute<InitiativeAttributeRule> => attribute.type === CardAttributeType.Initiative

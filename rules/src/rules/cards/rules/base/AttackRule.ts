@@ -133,6 +133,7 @@ export class AttackRule extends PlayerTurnRule {
   }
 
   attack(opponent: number): MaterialMove[] {
+    console.log(opponent, this.material(MaterialType.FactionCard).index(opponent))
     const opponentMaterial = this.material(MaterialType.FactionCard).index(opponent)
     const opponentCardDescription = getFactionCardDescription(opponentMaterial.getItem()!.id.front)
     const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
@@ -181,9 +182,6 @@ export class AttackRule extends PlayerTurnRule {
 
   onCustomMove(move: CustomMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     if (move.type === CustomMoveType.Attack) {
-      //const attackerMaterial = this.material(MaterialType.FactionCard).index(move.data.card)
-      //const card = attackerMaterial.getItem()!
-      //const cardDescription = getFactionCardDescription(card.id.front)
 
       delete this.game.droppedItem
 
@@ -203,7 +201,7 @@ export class AttackRule extends PlayerTurnRule {
         .filter((a) => !this.effectHelper.hasLostAttributes(move.data.card, a.type))
         .flatMap((attribute) => attribute.getAttributeRule(this.game).getTargets(cardMaterial, opponentMaterial, opponents.indexes(filteredOpponents)))
 
-      const targets = uniq(attributeTargets.length ? attributeTargets : [move.data.target])
+      const targets = attributeTargets ? uniq(attributeTargets) : [move.data.target]
       this.memorizeCardPlayed({
         card: move.data.card,
         targets: targets
@@ -223,6 +221,7 @@ export class AttackRule extends PlayerTurnRule {
     const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
     let targets: number[] = []
     const moves: MaterialMove[] = []
+    console.log(activatedCards)
     for (const activation of activatedCards) {
       targets = uniq([...targets, ...(activation.targets ?? [])])
 

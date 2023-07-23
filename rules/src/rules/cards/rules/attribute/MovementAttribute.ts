@@ -79,4 +79,4 @@ export const flight = new class extends Attribute<MovementAttributeRule> {
   }
 }
 
-export const isMovementAttribute = (attribute: Attribute<any>): attribute is Attribute<MovementAttributeRule> => attribute.kind === AttributeKind.Move
+export const isMovementAttribute = (attribute: Attribute): attribute is Attribute<MovementAttributeRule> => attribute.kind === AttributeKind.Move

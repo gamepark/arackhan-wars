@@ -10,12 +10,12 @@ export abstract class AttackAttributeRule extends AttributeRule {
     return attack
   }
 
-  getTargets(_attacker: Material, opponent: Material, _opponentsCards: Material): number[] {
-    if (!opponent.length) return []
+  getTargets(_source: Material, target: Material, _opponentsCards: Material): number[] {
+    if (!target.length) return []
     return [
-      opponent.getIndex()
+      target.getIndex()
     ]
   }
 }
 
-export const isAttackAttribute = (attribute: Attribute<any>): attribute is Attribute<AttackAttributeRule> => attribute.kind === AttributeKind.Attack
+export const isAttackAttribute = (attribute: Attribute): attribute is Attribute<AttackAttributeRule> => attribute.kind === AttributeKind.Attack

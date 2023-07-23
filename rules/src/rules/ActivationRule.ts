@@ -5,7 +5,6 @@ import { PlayerId } from '../ArackhanWarsOptions'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { RuleId } from './RuleId'
 import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
-import { ActivationRuleMemory } from './types'
 import { DiscardTiming } from './cards/descriptions/base/FactionCardDetail'
 import { AttackRule } from './cards/rules/base/AttackRule'
 import { MoveRules } from './cards/rules/base/MoveRules'
@@ -23,17 +22,21 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
   }
 
   getPlayerMoves(): MaterialMove[] {
+    console.time()
     const effectHelper = new FactionCardEffectHelper(this.game)
-    const { activatedCards = [] } = this.getPlayerMemory<ActivationRuleMemory>()
+    //const { activatedCards = [] } = this.getPlayerMemory<ActivationRuleMemory>()
 
     const moves: MaterialMove[] = []
     moves.push(...new AttackRule(this.game, effectHelper).getPlayerMoves())
 
-    if (!activatedCards.some((a) => a.targets)) {
-      moves.push(...new MoveRules(this.game, effectHelper).getPlayerMoves())
-    }
+    // TODO: in practice, move can be done only if the card can attack after being moves
+    // TODO: into MoveRules, check if after movement, the card can attack in grouped attack
+    //if (!activatedCards.some((a) => a.targets)) {
+    moves.push(...new MoveRules(this.game, effectHelper).getPlayerMoves())
+    //}
 
     moves.push(this.endTurnMove())
+    console.timeEnd()
     return moves
   }
 

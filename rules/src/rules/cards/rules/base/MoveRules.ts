@@ -51,8 +51,7 @@ export class MoveRules extends PlayerTurnRule {
   canMove = (cardIndex: number) => {
     const card = this.material(MaterialType.FactionCard).index(cardIndex)
     if (!this.isActive(card)) return false
-
-
+    
     const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
 
     // 1. must not be in the memory

@@ -36,11 +36,11 @@ export abstract class FactionCardDetail {
   abstract id: FactionCard
   abstract value: number
   quantity?: number = 1
-  attribute?: Attribute<any>
-  attributes: Attribute<any>[] = []
+  attribute?: Attribute
+  attributes: Attribute[] = []
   family?: string
 
-  getAttributes(): Attribute<any>[] {
+  getAttributes(): Attribute[] {
     return this.attribute ? [this.attribute] : this.attributes
   }
 
