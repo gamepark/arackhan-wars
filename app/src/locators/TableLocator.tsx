@@ -10,19 +10,10 @@ export class TableLocator extends ItemLocator<PlayerId, MaterialType, LocationTy
   getPosition(item: MaterialItem<PlayerId, LocationType>, context: ItemContext): Coordinates {
     switch (context.type) {
       case MaterialType.PlayMat:
-        return { x: -10, y: -5, z: 0 }
+        return { x: 0, y: 0, z: 0 }
       case MaterialType.RoundTracker:
-        return { x: 21.3, y: -20.6, z: 0 }
+        return { x: 48, y: 0, z: 0 }
     }
-
     return super.getPosition(item, context)
-  }
-
-  getRotation(_item: MaterialItem<PlayerId, LocationType>, context: ItemContext): number {
-    if (context.type === MaterialType.RoundTracker) {
-      return 90
-    }
-
-    return 0
   }
 }

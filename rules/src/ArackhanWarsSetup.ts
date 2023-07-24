@@ -12,6 +12,8 @@ export type GamePlayerMemory = {
   faction: Faction
 }
 
+export const START_HAND = 7
+
 /**
  * This class implements the rules of the board game.
  * It must follow Game Park "Rules" API so that the Game Park server can enforce the rules.
@@ -69,7 +71,7 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
       .location(LocationType.PlayerDeck)
       .player(playerId)
       .sort(card => -card.location.x!)
-      .limit(7)
+      .limit(START_HAND)
       .moveItems({ location: { type: LocationType.Hand, player: playerId } })
   }
 

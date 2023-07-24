@@ -4,12 +4,11 @@ import { MaterialType } from '../material/MaterialType'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { RuleId } from './RuleId'
 import { PlayerId } from '../ArackhanWarsOptions'
+import { START_HAND } from '../ArackhanWarsSetup'
 
 type StartPlayerMemory = {
   startPlayer: number
 }
-
-export const START_HAND = 7
 
 export class MulliganRule extends SimultaneousRule<PlayerId, MaterialType, LocationType> {
 

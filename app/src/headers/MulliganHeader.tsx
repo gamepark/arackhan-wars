@@ -5,8 +5,8 @@ import { isCustomMoveType, isEndPlayerTurn, MaterialMove } from '@gamepark/rules
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { START_HAND } from '@gamepark/arackhan-wars/rules/MulliganRule'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
+import { START_HAND } from '@gamepark/arackhan-wars/ArackhanWarsSetup'
 
 export const MulliganHeader = () => {
   const { t } = useTranslation()

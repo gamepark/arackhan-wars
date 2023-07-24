@@ -23,7 +23,7 @@ export default function App() {
   return (
     <>
       {!loading && <GameDisplay/>}
-      <LoadingScreen display={loading} author="Someone" artist="Somebody" publisher="Nobody" developer="You"/>
+      <LoadingScreen display={loading} author={['Mickaël Bour', 'Robert Palmer']} artist="Robert Palmer" publisher="Nothing But Games" developer="Game Park"/>
       <MaterialHeader rulesStepsHeaders={RulesHeaders} GameOver={GameOverHeader}/>
       <MaterialImageLoader onImagesLoad={() => setImagesLoading(false)}/>
       <Menu/>

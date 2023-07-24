@@ -31,8 +31,8 @@ const style = css`
     margin: 0;
     font-family: 'Oswald', "Roboto Light", serif;
     font-size: 1vh;
-    @media (max-aspect-ratio: 16/9) {
-      font-size: calc(9vw / 16);
+    @media (max-aspect-ratio: 185/100) {
+      font-size: calc(100vw / 185);
     }
   }
 
