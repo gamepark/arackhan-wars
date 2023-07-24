@@ -20,12 +20,9 @@ export class PlayerHandLocator extends HandLocator<PlayerId, MaterialType, Locat
 
   getCoordinates(location: Location<PlayerId, LocationType>, context: ItemContext<PlayerId, MaterialType, LocationType>) {
     if (location.player === context.player) {
-      const count = this.countItems(location, context)
-      return { x: -31 + count * 3, y: 28, z: 10 }
+      return { x: -10, y: 28, z: 10 }
     } else {
-      const index = this.getDisplayIndex(location.player!, context)
-      const baseLocation = index * 54.5 / (context.game.players.length - 1)
-      return { x: 45, y: -28 + baseLocation, z: 10 }
+      return { x: 28, y: -23, z: 10 }
     }
   }
 
@@ -34,14 +31,14 @@ export class PlayerHandLocator extends HandLocator<PlayerId, MaterialType, Locat
   }
 
   getGapMaxAngle(item: MaterialItem, { player }: ItemContext): number {
-    return item.location.player === player ? 1.1 : 3
+    return item.location.player === player ? 1.1 : 1
   }
 
   getMaxAngle(item: MaterialItem, { player }: ItemContext): number {
-    return item.location.player === player ? 15 : 2.3
+    return item.location.player === player ? 15 : 5
   }
 
   getRadius(item: MaterialItem, { player }: ItemContext): number {
-    return item.location.player === player ? 300 : 100
+    return item.location.player === player ? 300 : 200
   }
 }
