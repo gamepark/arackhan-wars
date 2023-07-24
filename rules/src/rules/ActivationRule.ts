@@ -11,6 +11,7 @@ import { MoveRules } from './cards/rules/base/MoveRules'
 import { discardSpells } from '../utils/discard.utils'
 import { deactivateTokens } from '../utils/activation.utils'
 import { FactionCardEffectHelper } from './cards/rules/helper/FactionCardEffectHelper'
+import { ActionRule } from './cards/rules/base/ActionRule'
 
 
 export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
@@ -34,6 +35,13 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     //if (!activatedCards.some((a) => a.targets)) {
     moves.push(...new MoveRules(this.game, effectHelper).getPlayerMoves())
     //}
+
+    moves.push(...new ActionRule(this.game, effectHelper).getPlayerMoves())
+
+
+    /**if (rule.actionRule().length) {
+        moves.push(this.rules().customMove(CustomMoveType.CardAction, { card: index }))
+      }**/
 
     moves.push(this.endTurnMove())
     console.timeEnd()

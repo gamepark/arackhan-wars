@@ -144,7 +144,7 @@ export class FactionCardDescription extends CardDescription {
   }
 
   canDrag(move: MaterialMove, context: ItemContext): boolean {
-    if (isCustomMoveType(CustomMoveType.Attack)(move) || isCustomMoveType(CustomMoveType.CardAction)(move)) {
+    if (isCustomMoveType(CustomMoveType.Attack)(move)) {
       return move.data.card === context.index
     }
 

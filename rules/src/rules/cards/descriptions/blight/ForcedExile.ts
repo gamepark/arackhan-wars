@@ -3,6 +3,7 @@ import { FactionCard } from '../../../../material/FactionCard'
 import { Faction } from '../../../../Faction'
 import { Spell } from '../base/Spell'
 import { initiative } from '../../rules/attribute'
+import { RuleId } from '../../../RuleId'
 
 export class ForcedExile extends Spell {
   id = FactionCard.ForcedExile
@@ -12,6 +13,8 @@ export class ForcedExile extends Spell {
   astral = true
 
   attribute = initiative
+
+  actionRule = RuleId.ForcedExileActionRule
 
   discardTiming = DiscardTiming.ActivationOrEndOfTurn
 }

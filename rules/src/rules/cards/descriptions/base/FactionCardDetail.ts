@@ -2,6 +2,7 @@ import { Faction } from '../../../../Faction'
 import { FactionCard } from '../../../../material/FactionCard'
 import { Effect } from './Effect'
 import { Attribute } from '../../rules/attribute/Attribute'
+import { RuleId } from '../../../RuleId'
 
 export enum CardAttributeType {
   Flight = 1,
@@ -39,6 +40,7 @@ export abstract class FactionCardDetail {
   attribute?: Attribute
   attributes: Attribute[] = []
   family?: string
+  actionRule?: RuleId
 
   getAttributes(): Attribute[] {
     return this.attribute ? [this.attribute] : this.attributes

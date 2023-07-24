@@ -5,6 +5,7 @@ import { getAvailableCardPlacement } from '../../../../utils/move.utils'
 import { RuleId } from '../../../RuleId'
 import { getFactionCardDescription } from '../../../../material/FactionCard'
 import { FactionCardKind } from '../../descriptions/base/FactionCardDetail'
+import { discardCard } from '../../../../utils/discard.utils'
 
 export class TeleportationActionRule extends PlayerTurnRule {
   getPlayerMoves() {
@@ -18,8 +19,10 @@ export class TeleportationActionRule extends PlayerTurnRule {
 
   afterItemMove(move: ItemMove<number, number, number>): MaterialMove<number, number, number>[] {
     if (!(isMoveItem(move) && move.itemType === MaterialType.FactionCard)) return []
+    const card = this.material(MaterialType.FactionCard).index(move.itemIndex)
 
     return [
+      ...discardCard(card),
       this.rules().startPlayerTurn(RuleId.ActivationRule, this.player)
     ]
   }
