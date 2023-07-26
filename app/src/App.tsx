@@ -45,5 +45,6 @@ const RulesHeaders: Record<RuleId, () => ReactJSXElement> = {
   [RuleId.EndPhaseRule]: () => <p></p>,
   [RuleId.ForcedExileActionRule]: () => <p></p>,
   [RuleId.HorseOfAvalonActionRule]: () => <p></p>,
-  [RuleId.TeleportationActionRule]: () => <p></p>
+  [RuleId.TeleportationActionRule]: () => <p></p>,
+  [RuleId.MimicryActionRule]: () => <p></p>
 }

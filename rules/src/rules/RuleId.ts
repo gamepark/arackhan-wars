@@ -10,5 +10,5 @@ export enum RuleId {
   ForcedExileActionRule,
   HorseOfAvalonActionRule,
   TeleportationActionRule,
-  //EndOfTheGameRule
+  MimicryActionRule
 }

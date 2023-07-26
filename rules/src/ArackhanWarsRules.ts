@@ -1,6 +1,15 @@
 import { MaterialType } from './material/MaterialType'
 import { LocationType } from './material/LocationType'
-import { HidingStrategy, MaterialItem, MaterialRulesPartCreator, SecretMaterialRules } from '@gamepark/rules-api'
+import {
+  Competitive,
+  HidingStrategy,
+  MaterialGame,
+  MaterialItem,
+  MaterialMove,
+  MaterialRulesPartCreator,
+  SecretMaterialRules,
+  TimeLimit
+} from '@gamepark/rules-api'
 import { RuleId } from './rules/RuleId'
 import { MulliganRule } from './rules/MulliganRule'
 import { locationsStrategies } from './material/LocationStrategies'
@@ -15,16 +24,41 @@ import { ForcedExileActionRule } from './rules/cards/rules/action/ForcedExileAct
 import { HorseOfAvalonActionRule } from './rules/cards/rules/action/HorseOfAvalonActionRule'
 import { TeleportationActionRule } from './rules/cards/rules/action/TeleportationActionRule'
 import { ChooseStartPlayerRule } from './rules/ChooseStartPlayerRule'
+import sum from 'lodash/sum'
+import { getFactionCardDescription } from './material/FactionCard'
+import { MimicryActionRule } from './rules/cards/rules/action/MimicryActionRule'
 
 
 /**
  * This class implements the rules of the board game.
  * It must follow Game Park "Rules" API so that the Game Park server can enforce the rules.
  */
-export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialType, LocationType> {
+export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialType, LocationType> implements Competitive<MaterialGame<PlayerId, MaterialType, LocationType>, MaterialMove<PlayerId, MaterialType, LocationType>, PlayerId>,
+  TimeLimit<MaterialGame<PlayerId, MaterialType, LocationType>, MaterialMove<PlayerId, MaterialType, LocationType>, PlayerId> {
   rules = rules
   locationsStrategies = locationsStrategies
   hidingStrategies = hidingStrategies
+
+  giveTime(): number {
+    return 30
+  }
+
+  rankPlayers(playerA: PlayerId, playerB: PlayerId): number {
+    const scoreA = this.getScore(playerA)
+    const scoreB = this.getScore(playerB)
+    return scoreB - scoreA
+  }
+
+  getScore(playerId: PlayerId): number {
+    const cardsOnBattlefield = this
+      .material(MaterialType.FactionCard)
+      .location(LocationType.Battlefield)
+      .player(playerId)
+      .getItems()
+      .map((i) => getFactionCardDescription(i.id.front).value)
+
+    return sum(cardsOnBattlefield)
+  }
 }
 
 export const hideCardFront: HidingStrategy = () => ['id.front']
@@ -53,7 +87,8 @@ export const rules: Record<RuleId, MaterialRulesPartCreator<PlayerId, MaterialTy
   [RuleId.EndPhaseRule]: EndPhaseRules,
   [RuleId.ForcedExileActionRule]: ForcedExileActionRule,
   [RuleId.HorseOfAvalonActionRule]: HorseOfAvalonActionRule,
-  [RuleId.TeleportationActionRule]: TeleportationActionRule
+  [RuleId.TeleportationActionRule]: TeleportationActionRule,
+  [RuleId.MimicryActionRule]: MimicryActionRule
 }
 
 export const hidingStrategies: Partial<Record<MaterialType, Partial<Record<LocationType, HidingStrategy>>>> = {

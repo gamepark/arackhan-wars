@@ -6,7 +6,7 @@ import { getFactionCardDescription } from '../../../../material/FactionCard'
 import { ActivatedCard, ActivationRuleMemory } from '../../../types'
 import { GamePlayerMemory } from '../../../../ArackhanWarsSetup'
 import { isAttackAttribute } from '../attribute/AttackAttribute'
-import { FactionCardEffectHelper } from '../helper/FactionCardEffectHelper'
+import { FactionCardInspector } from '../helper/FactionCardInspector'
 import { discardCard, discardSpells } from '../../../../utils/discard.utils'
 import { areAdjacent } from '../../../../utils/adjacent.utils'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
@@ -19,12 +19,12 @@ import { deactivateTokens } from '../../../../utils/activation.utils'
 import { RuleId } from '../../../RuleId'
 
 export class AttackRule extends PlayerTurnRule {
-  private readonly effectHelper: FactionCardEffectHelper
+  private readonly cardInspector: FactionCardInspector
 
   constructor(game: MaterialGame,
-              effectHelper?: FactionCardEffectHelper) {
+              cardInspector?: FactionCardInspector) {
     super(game)
-    this.effectHelper = effectHelper ?? new FactionCardEffectHelper(game)
+    this.cardInspector = cardInspector ?? new FactionCardInspector(game)
   }
 
 
@@ -61,8 +61,8 @@ export class AttackRule extends PlayerTurnRule {
 
     const attributeAttacks = cardDescription.getAttributes()
       .filter(isAttackAttribute)
-      .filter((a) => !this.effectHelper.hasLostAttributes(attacker, a.type))
-      .flatMap((attribute) => attribute.getAttributeRule(this.game).getLegalAttacks(cardMaterial, opponentsCards.indexes(filteredOpponents), this.effectHelper))
+      .filter((a) => !this.cardInspector.hasLostAttributes(attacker, a.type))
+      .flatMap((attribute) => attribute.getAttributeRule(this.game).getLegalAttacks(cardMaterial, opponentsCards.indexes(filteredOpponents), this.cardInspector))
 
     if (attributeAttacks.length) {
       return attributeAttacks
@@ -80,15 +80,15 @@ export class AttackRule extends PlayerTurnRule {
   getAuthorizedTargets(attacker: Material, opponentCards: Material): number[] {
     const attackerIndex = attacker.getIndex()
     const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
-    if (!activatedCards.length || !activatedCards.some((a) => a.targets)) return opponentCards
-      .filter((item) => !isSpell(getFactionCardDescription(item.id.front)))
-      .getIndexes()
 
+    const hasAlreadyAttacked = activatedCards.length && activatedCards.some((a) => a.targets)
     return opponentCards.getIndexes().filter((o) => {
       const opponentMaterial = this.material(MaterialType.FactionCard).index(o)
 
       if (isSpell(getFactionCardDescription(opponentMaterial.getItem()!.id.front))
-        || !this.effectHelper.canAttack(attackerIndex, o)) return false
+        || !this.cardInspector.canAttack(attackerIndex, o)) return false
+
+      if (!hasAlreadyAttacked) return true
 
       return activatedCards.some((a) => {
         if (!(a.targets ?? []).includes(o)) return false
@@ -121,7 +121,7 @@ export class AttackRule extends PlayerTurnRule {
     const cardDescription = getFactionCardDescription(card.id.front)
 
     const isInitiativeRule = this.game.rule!.id === RuleId.InitiativeActivationRule
-    if (isInitiativeRule && (!cardDescription.hasInitiative() || this.effectHelper.hasLostAttributes(cardMaterial.getIndex(), CardAttributeType.Initiative))) return false
+    if (isInitiativeRule && (!cardDescription.hasInitiative() || this.cardInspector.hasLostAttributes(cardMaterial.getIndex(), CardAttributeType.Initiative))) return false
     if (isSpell(cardDescription)) return true
 
     // Other cards are activable if there is a non returned token on it
@@ -133,7 +133,6 @@ export class AttackRule extends PlayerTurnRule {
   }
 
   attack(opponent: number): MaterialMove[] {
-    console.log(opponent, this.material(MaterialType.FactionCard).index(opponent))
     const opponentMaterial = this.material(MaterialType.FactionCard).index(opponent)
     const opponentCardDescription = getFactionCardDescription(opponentMaterial.getItem()!.id.front)
     const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
@@ -143,10 +142,10 @@ export class AttackRule extends PlayerTurnRule {
     const moves = []
     for (const attack of attacksOnThisOpponent) {
       const attackerCard = this.material(MaterialType.FactionCard).index(attack.card)
-      attackValue += computeAttack(this.game, attackerCard, opponentMaterial, this.effectHelper, activatedCards)
+      attackValue += computeAttack(attackerCard, opponentMaterial, this.cardInspector, activatedCards)
     }
 
-    const opponentDefense = this.effectHelper.getDefense(opponent)
+    const opponentDefense = this.cardInspector.getDefense(opponent)
     if (opponentDefense >= attackValue) return []
 
     if (opponentCardDescription.kind !== FactionCardKind.Land) {
@@ -158,7 +157,7 @@ export class AttackRule extends PlayerTurnRule {
 
 
     moves.push(
-      ...activatedCards.flatMap((a) => this.effectHelper.afterAttack(a.card))
+      ...activatedCards.flatMap((a) => this.cardInspector.afterAttack(a.card))
     )
 
 
@@ -198,10 +197,10 @@ export class AttackRule extends PlayerTurnRule {
 
       const cardDescription = getFactionCardDescription(cardMaterial.getItem()!.id.front)
       const attributeTargets = cardDescription.getAttributes().filter(isAttackAttribute)
-        .filter((a) => !this.effectHelper.hasLostAttributes(move.data.card, a.type))
+        .filter((a) => !this.cardInspector.hasLostAttributes(move.data.card, a.type))
         .flatMap((attribute) => attribute.getAttributeRule(this.game).getTargets(cardMaterial, opponentMaterial, opponents.indexes(filteredOpponents)))
 
-      const targets = attributeTargets ? uniq(attributeTargets) : [move.data.target]
+      const targets = attributeTargets.length ? uniq(attributeTargets) : [move.data.target]
       this.memorizeCardPlayed({
         card: move.data.card,
         targets: targets
@@ -221,7 +220,6 @@ export class AttackRule extends PlayerTurnRule {
     const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
     let targets: number[] = []
     const moves: MaterialMove[] = []
-    console.log(activatedCards)
     for (const activation of activatedCards) {
       targets = uniq([...targets, ...(activation.targets ?? [])])
 

@@ -15,31 +15,38 @@ import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { isAttackAttribute } from '../attribute/AttackAttribute'
 import sum from 'lodash/sum'
 import { Attribute } from '../attribute/Attribute'
+import { GetCardDescription } from './GetCardDescription'
 
-export class FactionCardEffectHelper extends MaterialRulesPart {
+export class FactionCardInspector extends MaterialRulesPart {
   readonly passiveEffects: Record<number, PassiveEffect[]> = {}
+  readonly battlefield: Material
+  readonly cardDescriptionHelper: GetCardDescription
 
   constructor(game: MaterialGame) {
     super(game)
+    this.battlefield = this.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane)
+    this.cardDescriptionHelper = new GetCardDescription(this.game)
     this.passiveEffects = this.computeCardPassiveEffects()
   }
 
   computeCardPassiveEffects(): Record<number, PassiveEffect[]> {
-    const battlefieldCards = this.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane)
-    const modifications: Record<number, PassiveEffect[]> = this.computeBlockedEffects(battlefieldCards)
-    for (const cardIndex of battlefieldCards.getIndexes()) {
-      const cardMaterial = this.material(MaterialType.FactionCard).index(cardIndex)
-      const card = cardMaterial.getItem()!
-      const description = getFactionCardDescription(card.id.front)
-      const passiveEffects = this.getPassiveEffects(description, this.hasLostSkill(cardIndex))
+    const modifications: Record<number, PassiveEffect[]> = this.computeBlockedEffects()
+    const battlefieldIndexes = this.battlefield.getIndexes()
+
+    for (const cardIndex of battlefieldIndexes) {
+      const originalCard = this.material(MaterialType.FactionCard).index(cardIndex)
+      const description = this.cardDescriptionHelper.get(cardIndex)
+      const passiveEffects = this.getPassiveEffects(description, this.hasLostSkill(cardIndex, modifications))
+
 
       const attributes = description.getAttributes()
         .filter(isAttackAttribute)
 
-      for (const otherCardIndex of battlefieldCards.getIndexes()) {
+      for (const otherCardIndex of battlefieldIndexes) {
         const otherCardMaterial = this.material(MaterialType.FactionCard).index(otherCardIndex)
-        this.applyPassiveEffect(passiveEffects, cardMaterial, otherCardMaterial, modifications, otherCardIndex)
-        this.applyAttributes(attributes, cardMaterial, otherCardMaterial, modifications, otherCardIndex)
+        // TODO: before appliying passing effect, eschange card characteristics but keep the location
+        this.applyPassiveEffect(passiveEffects, originalCard, otherCardMaterial, modifications, otherCardIndex)
+        this.applyAttributes(attributes, originalCard, otherCardMaterial, modifications, otherCardIndex)
       }
     }
     return modifications
@@ -58,7 +65,7 @@ export class FactionCardEffectHelper extends MaterialRulesPart {
 
   private applyPassiveEffect(effects: Effect[], cardMaterial: Material, otherCardMaterial: Material, modifications: Record<number, PassiveEffect[]>, otherCardIndex: number) {
     const passiveEffects = effects
-      .filter((e) => e.isApplicable(cardMaterial, otherCardMaterial))
+      .filter((e) => e.isApplicable(cardMaterial, otherCardMaterial, this.cardDescriptionHelper))
       .map((e) => e.getEffectRule(this.game))
 
     if (passiveEffects.length) {
@@ -67,19 +74,19 @@ export class FactionCardEffectHelper extends MaterialRulesPart {
     }
   }
 
-  computeBlockedEffects(battlefieldCards: Material): Record<number, PassiveEffect[]> {
+  computeBlockedEffects(): Record<number, PassiveEffect[]> {
     const modifications: Record<number, PassiveEffect[]> = {}
-    for (const cardIndex of battlefieldCards.getIndexes()) {
+    const battlefieldIndexes = this.battlefield.getIndexes()
+    for (const cardIndex of battlefieldIndexes) {
       const cardMaterial = this.material(MaterialType.FactionCard).index(cardIndex)
-      const card = cardMaterial.getItem()!
-      const description = getFactionCardDescription(card.id.front)
+      const description = this.cardDescriptionHelper.get(cardIndex)
 
-      for (const otherCardIndex of battlefieldCards.getIndexes()) {
+      for (const otherCardIndex of battlefieldIndexes) {
         if (otherCardIndex === cardIndex) continue
 
         const otherCardMaterial = this.material(MaterialType.FactionCard).index(otherCardIndex)
         const passiveEffects = this.getPassiveEffects(description)
-          .filter((e) => e.isApplicable(cardMaterial, otherCardMaterial))
+          .filter((e) => e.isApplicable(cardMaterial, otherCardMaterial, this.cardDescriptionHelper))
           .map((e) => e.getEffectRule(this.game))
           .filter(isLooseSkillEffect)
 
@@ -116,8 +123,7 @@ export class FactionCardEffectHelper extends MaterialRulesPart {
   }
 
   getAttack(cardIndex: number): number {
-    const card = this.material(MaterialType.FactionCard).getItem(cardIndex)!
-    const cardDescription = getFactionCardDescription(card.id.front)
+    const cardDescription = this.cardDescriptionHelper.get(cardIndex)
     if (!isSpell(cardDescription) && !isCreature(cardDescription)) return 0
     const baseAttack = cardDescription.attack ?? 0
 
@@ -127,8 +133,7 @@ export class FactionCardEffectHelper extends MaterialRulesPart {
   }
 
   getDefense(cardIndex: number): number {
-    const card = this.material(MaterialType.FactionCard).getItem(cardIndex)!
-    const cardDescription = getFactionCardDescription(card.id.front)
+    const cardDescription = getFactionCardDescription(cardIndex)
     if (!isLand(cardDescription) && !isCreature(cardDescription)) return 0
     const baseDefense = cardDescription.defense ?? 0
     if (!(cardIndex in this.passiveEffects)) return baseDefense
@@ -146,12 +151,13 @@ export class FactionCardEffectHelper extends MaterialRulesPart {
   canAttack(attackerIndex: number, targetIndex: number): boolean {
     if (!(attackerIndex in this.passiveEffects)) return true
     // TODO: other attackers ?
-    return !this.passiveEffects[attackerIndex].filter(isAttackEffect).some((e) => !e.canAttack(attackerIndex, targetIndex))
+    return !this.passiveEffects[attackerIndex].filter(isAttackEffect).some((e) => !e.canAttack(attackerIndex, targetIndex, [], this.cardDescriptionHelper))
   }
 
   canBeAttacked(attackerIndex: number, targetIndex: number): boolean {
     if (!(targetIndex in this.passiveEffects)) return true
-    return !this.passiveEffects[targetIndex].filter(isAttackEffect).some((a) => !a.canBeAttacked(attackerIndex, targetIndex))
+    // TODO: other attackers ?
+    return !this.passiveEffects[targetIndex].filter(isAttackEffect).some((a) => !a.canBeAttacked(attackerIndex, targetIndex, [], this.cardDescriptionHelper))
   }
 
   onCasterMoveTo(casterIndex: number, targetIndex: number): MaterialMove[] {
@@ -178,5 +184,16 @@ export class FactionCardEffectHelper extends MaterialRulesPart {
       })
 
     return []
+  }
+
+  getAttackForOpponent(attacker: Material, opponent: Material, baseAttack: number) {
+    const attackerIndex = attacker.getIndex()
+    const cardDescription = this.cardDescriptionHelper.get(attackerIndex)
+    cardDescription.getAttributes()
+      .filter(isAttackAttribute)
+      .filter((a) => !this.hasLostAttributes(attackerIndex, a.type))
+      .forEach((a) => baseAttack = a.getAttributeRule(this.game).getAttackValue(baseAttack, attacker, opponent))
+
+    return baseAttack
   }
 }

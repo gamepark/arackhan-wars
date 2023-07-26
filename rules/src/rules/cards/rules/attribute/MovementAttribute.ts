@@ -6,7 +6,7 @@ import { getDistance, isAdjacentToFactionCard } from '../../../../utils/adjacent
 import { MaterialType } from '../../../../material/MaterialType'
 import { getFactionCardDescription } from '../../../../material/FactionCard'
 import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
-import { FactionCardEffectHelper } from '../helper/FactionCardEffectHelper'
+import { FactionCardInspector } from '../helper/FactionCardInspector'
 import equal from 'fast-deep-equal'
 
 
@@ -15,9 +15,9 @@ export class MovementAttributeRule extends AttributeRule {
     super(game)
   }
 
-  getLegalMovements(source: Material, effectHelper: FactionCardEffectHelper): MaterialMove[] {
+  getLegalMovements(source: Material, cardInspector: FactionCardInspector): MaterialMove[] {
     return battlefieldSpaceCoordinates
-      .filter((space) => this.canMoveTo(source, space, effectHelper))
+      .filter((space) => this.canMoveTo(source, space, cardInspector))
       .map((space) => (
         source
           .moveItem({ location: { type: LocationType.Battlefield, x: space.x, y: space.y, player: source.getItem()?.location.player } }))
@@ -31,7 +31,7 @@ export class MovementAttributeRule extends AttributeRule {
     return getDistance(sourceCoordinates, space) <= this.movement
   }
 
-  canMoveTo(source: Material, space: XYCoordinates, effectHelper: FactionCardEffectHelper) {
+  canMoveTo(source: Material, space: XYCoordinates, cardInspector: FactionCardInspector) {
     if (!this.hasEnoughMovement(source, space)) return false
 
     const battlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
@@ -39,8 +39,8 @@ export class MovementAttributeRule extends AttributeRule {
     const cardDescription = getFactionCardDescription(card.id.front)
 
     if (!cardDescription.canMove() && !cardDescription.canFly()) return false
-    if (cardDescription.canFly() && effectHelper.hasLostAttributes(source.getIndex(), CardAttributeType.Flight)) return false
-    if (cardDescription.hasMovement() && effectHelper.hasLostAttributes(source.getIndex(), CardAttributeType.Movement)) return false
+    if (cardDescription.canFly() && cardInspector.hasLostAttributes(source.getIndex(), CardAttributeType.Flight)) return false
+    if (cardDescription.hasMovement() && cardInspector.hasLostAttributes(source.getIndex(), CardAttributeType.Movement)) return false
 
     // Check the adjacency rule
     const otherCardOnBattlefield = battlefield.filter((otherCard) => !equal(otherCard.location, card.location)).getItems()

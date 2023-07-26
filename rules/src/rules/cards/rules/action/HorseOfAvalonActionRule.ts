@@ -1,21 +1,17 @@
-import { isMoveItem, ItemMove, Location, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { isMoveItem, ItemMove, MaterialMove } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
-import { RuleId } from '../../../RuleId'
 import { getFactionCardDescription } from '../../../../material/FactionCard'
 import { FactionCardKind } from '../../descriptions/base/FactionCardDetail'
 import { GamePlayerMemory } from '../../../../ArackhanWarsSetup'
-import { discardCard } from '../../../../utils/discard.utils'
+import { CardActionRule } from './CardActionRule'
+import { ActionRuleMemory } from './ActionMemory'
 
-type HorseOfAvalonActionRuleMemory = {
-  location: Location
-}
 
-export class HorseOfAvalonActionRule extends PlayerTurnRule {
+export class HorseOfAvalonActionRule extends CardActionRule {
 
   getPlayerMoves() {
-    // TODO: Where was it placed ?
-    const { location } = this.getMemory<HorseOfAvalonActionRuleMemory>()
+    const { location } = this.getMemory<ActionRuleMemory>()
 
     return this
       .material(MaterialType.FactionCard)
@@ -27,7 +23,6 @@ export class HorseOfAvalonActionRule extends PlayerTurnRule {
 
   afterItemMove(move: ItemMove<number, number, number>): MaterialMove<number, number, number>[] {
     if (!isMoveItem(move) || move.itemType !== MaterialType.FactionCard) return []
-    const card = this.material(MaterialType.FactionCard).index(move.itemIndex)
     return [
       this.material(MaterialType.FactionToken)
         .player(this.player)
@@ -36,8 +31,7 @@ export class HorseOfAvalonActionRule extends PlayerTurnRule {
           id: this.getGameMemory<GamePlayerMemory>(this.player)!.faction,
           location: { parent: move.itemIndex, type: LocationType.FactionTokenSpace, player: this.player }
         }),
-      ...discardCard(card),
-      this.rules().startPlayerTurn(RuleId.ActivationRule, this.player)
+      ...super.afterCardAction()
     ]
   }
 }

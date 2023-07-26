@@ -1,6 +1,6 @@
 import { Material, MaterialGame, MaterialMove, MoveItem, PlayerTurnRule } from '@gamepark/rules-api'
 import { isMovementAttribute } from '../attribute/MovementAttribute'
-import { FactionCardEffectHelper } from '../helper/FactionCardEffectHelper'
+import { FactionCardInspector } from '../helper/FactionCardInspector'
 import { getFactionCardDescription } from '../../../../material/FactionCard'
 import { isSpell } from '../../descriptions/base/Spell'
 import { MaterialType } from '../../../../material/MaterialType'
@@ -13,12 +13,12 @@ import { RuleId } from '../../../RuleId'
 import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
 
 export class MoveRules extends PlayerTurnRule {
-  private readonly effectHelper: FactionCardEffectHelper
+  private readonly cardInspector: FactionCardInspector
 
   constructor(game: MaterialGame,
-              effectHelper?: FactionCardEffectHelper) {
+              cardInspector?: FactionCardInspector) {
     super(game)
-    this.effectHelper = effectHelper ?? new FactionCardEffectHelper(game)
+    this.cardInspector = cardInspector ?? new FactionCardInspector(game)
   }
 
   getPlayerMoves(): MaterialMove<number, number, number>[] {
@@ -45,13 +45,13 @@ export class MoveRules extends PlayerTurnRule {
     return cardDescription
       .getAttributes()
       .filter(isMovementAttribute)
-      .flatMap((attribute) => attribute.getAttributeRule(this.game).getLegalMovements(cardMaterial, this.effectHelper))
+      .flatMap((attribute) => attribute.getAttributeRule(this.game).getLegalMovements(cardMaterial, this.cardInspector))
   }
 
   canMove = (cardIndex: number) => {
     const card = this.material(MaterialType.FactionCard).index(cardIndex)
     if (!this.isActive(card)) return false
-    
+
     const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
 
     // 1. must not be in the memory
@@ -65,7 +65,7 @@ export class MoveRules extends PlayerTurnRule {
     const cardDescription = getFactionCardDescription(card.id.front)
 
     const isInitiativeRule = this.game.rule!.id === RuleId.InitiativeActivationRule
-    if (isInitiativeRule && (!cardDescription.hasInitiative() || this.effectHelper.hasLostAttributes(cardMaterial.getIndex(), CardAttributeType.Initiative))) return false
+    if (isInitiativeRule && (!cardDescription.hasInitiative() || this.cardInspector.hasLostAttributes(cardMaterial.getIndex(), CardAttributeType.Initiative))) return false
     if (isSpell(cardDescription)) return false
 
     // Other cards are activable if there is a non returned token on it
@@ -102,7 +102,7 @@ export class MoveRules extends PlayerTurnRule {
     if (equal(move.position.location, card.getItem()!.location)) return []
     const battlefieldCards = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
     // TODO: in case of a > 2 player game with same faction, it is possible to have 2 "The fear" around the card (in this cas, it must remains deactivated
-    moves.push(...getAdjacentCards(card, battlefieldCards).flatMap((targetIndex) => this.effectHelper.onCasterMoveAway(move.itemIndex, targetIndex)))
+    moves.push(...getAdjacentCards(card, battlefieldCards).flatMap((targetIndex) => this.cardInspector.onCasterMoveAway(move.itemIndex, targetIndex)))
 
     return moves
   }
@@ -112,7 +112,7 @@ export class MoveRules extends PlayerTurnRule {
 
     const card = this.material(MaterialType.FactionCard).index(move.itemIndex)
     const battlefieldCards = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-    return getAdjacentCards(card, battlefieldCards).flatMap((targetIndex) => this.effectHelper.onCasterMoveTo(move.itemIndex, targetIndex))
+    return getAdjacentCards(card, battlefieldCards).flatMap((targetIndex) => this.cardInspector.onCasterMoveTo(move.itemIndex, targetIndex))
   }
 
   memorizeCardPlayed(activation: ActivatedCard) {

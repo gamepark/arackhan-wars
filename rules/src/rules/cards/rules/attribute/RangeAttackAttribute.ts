@@ -4,7 +4,7 @@ import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
 import { getDistance } from '../../../../utils/adjacent.utils'
 import { AttackAttributeRule } from './AttackAttribute'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
-import { FactionCardEffectHelper } from '../helper/FactionCardEffectHelper'
+import { FactionCardInspector } from '../helper/FactionCardInspector'
 
 class RangeAttackAttributeRule extends AttackAttributeRule {
 
@@ -12,17 +12,17 @@ class RangeAttackAttributeRule extends AttackAttributeRule {
     super(game)
   }
 
-  getLegalAttacks(attacker: Material, opponentsCards: Material, effectHelper: FactionCardEffectHelper): MaterialMove[] {
+  getLegalAttacks(attacker: Material, opponentsCards: Material, cardInspector: FactionCardInspector): MaterialMove[] {
     return opponentsCards.getIndexes()
-      .filter((index: number) => this.canAttack(attacker, opponentsCards.index(index)!, effectHelper))
+      .filter((index: number) => this.canAttack(attacker, opponentsCards.index(index)!, cardInspector))
       .map((index: number) => this.rules().customMove(CustomMoveType.Attack, {
         card: attacker.getIndex(),
         target: index
       }))
   }
 
-  canAttack(attacker: Material, opponent: Material, effectHelper: FactionCardEffectHelper): boolean {
-    if (!effectHelper.canBeAttacked(attacker.getIndex(), opponent.getIndex())) return false
+  canAttack(attacker: Material, opponent: Material, cardInspector: FactionCardInspector): boolean {
+    if (!cardInspector.canBeAttacked(attacker.getIndex(), opponent.getIndex())) return false
     const attackerCard = attacker.getItem()!
     const opponentCard = opponent.getItem()!
     return getDistance(

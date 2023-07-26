@@ -37,11 +37,8 @@ export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, Loc
         .rotation((rotation) => !!rotation?.y)
     )
 
-    moves.push(
-      ...unflipTokens,
-      ...moves
-    )
-
+    moves.push(...unflipTokens)
+    
     const turn = this.material(MaterialType.RoundTrackerToken).getItem()!.location.x!
     if (turn === 9) {
       moves.push(this.rules().endGame())

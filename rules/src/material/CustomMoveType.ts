@@ -3,5 +3,5 @@ export enum CustomMoveType {
   Pass,
   Attack,
   SolveAttack,
-  CardAction,
+  ExchangeCharacteristics
 }

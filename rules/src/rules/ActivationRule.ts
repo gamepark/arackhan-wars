@@ -10,7 +10,7 @@ import { AttackRule } from './cards/rules/base/AttackRule'
 import { MoveRules } from './cards/rules/base/MoveRules'
 import { discardSpells } from '../utils/discard.utils'
 import { deactivateTokens } from '../utils/activation.utils'
-import { FactionCardEffectHelper } from './cards/rules/helper/FactionCardEffectHelper'
+import { FactionCardInspector } from './cards/rules/helper/FactionCardInspector'
 import { ActionRule } from './cards/rules/base/ActionRule'
 
 
@@ -24,19 +24,19 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
 
   getPlayerMoves(): MaterialMove[] {
     console.time()
-    const effectHelper = new FactionCardEffectHelper(this.game)
+    const cardInspector = new FactionCardInspector(this.game)
     //const { activatedCards = [] } = this.getPlayerMemory<ActivationRuleMemory>()
 
     const moves: MaterialMove[] = []
-    moves.push(...new AttackRule(this.game, effectHelper).getPlayerMoves())
+    moves.push(...new AttackRule(this.game, cardInspector).getPlayerMoves())
 
     // TODO: in practice, move can be done only if the card can attack after being moves
     // TODO: into MoveRules, check if after movement, the card can attack in grouped attack
     //if (!activatedCards.some((a) => a.targets)) {
-    moves.push(...new MoveRules(this.game, effectHelper).getPlayerMoves())
+    moves.push(...new MoveRules(this.game, cardInspector).getPlayerMoves())
     //}
 
-    moves.push(...new ActionRule(this.game, effectHelper).getPlayerMoves())
+    moves.push(...new ActionRule(this.game, cardInspector).getPlayerMoves())
 
 
     /**if (rule.actionRule().length) {
@@ -96,11 +96,11 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
 
     if (move.position.location?.type === LocationType.Battlefield) {
 
-      const effectHelper = new FactionCardEffectHelper(this.game)
-      const moves: MaterialMove[] = new MoveRules(this.game, effectHelper).afterItemMove(move)
+      const cardInspector = new FactionCardInspector(this.game)
+      const moves: MaterialMove[] = new MoveRules(this.game, cardInspector).afterItemMove(move)
 
       // After a move, if there is no attack (TODO: or action) possible, deactivate token
-      const attackMoves = new AttackRule(this.game, effectHelper).getPlayerMoves()
+      const attackMoves = new AttackRule(this.game, cardInspector).getPlayerMoves()
       if (!attackMoves.length) {
         const token = this.material(MaterialType.FactionToken).parent(move.itemIndex)
         moves.push(...deactivateTokens(token))

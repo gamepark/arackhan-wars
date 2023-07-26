@@ -1,10 +1,10 @@
 import { Attribute, AttributeKind, AttributeRule } from './Attribute'
 import { Material, MaterialMove } from '@gamepark/rules-api'
-import { FactionCardEffectHelper } from '../helper/FactionCardEffectHelper'
+import { FactionCardInspector } from '../helper/FactionCardInspector'
 
 
 export abstract class AttackAttributeRule extends AttributeRule {
-  abstract getLegalAttacks(attacker: Material, opponentsCards: Material, effectHelper: FactionCardEffectHelper): MaterialMove[]
+  abstract getLegalAttacks(attacker: Material, opponentsCards: Material, cardInspector: FactionCardInspector): MaterialMove[]
 
   getAttackValue(attack: number, _attacker: Material, _opponent: Material): number {
     return attack

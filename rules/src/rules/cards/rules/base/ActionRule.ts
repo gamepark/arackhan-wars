@@ -1,19 +1,19 @@
 import { Material, MaterialGame, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
 import { getFactionCardDescription } from '../../../../material/FactionCard'
-import { FactionCardEffectHelper } from '../helper/FactionCardEffectHelper'
+import { FactionCardInspector } from '../helper/FactionCardInspector'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { RuleId } from '../../../RuleId'
 import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
 import { isSpell } from '../../descriptions/base/Spell'
 
 export class ActionRule extends PlayerTurnRule {
-  private readonly effectHelper: FactionCardEffectHelper
+  private readonly cardInspector: FactionCardInspector
 
   constructor(game: MaterialGame,
-              effectHelper?: FactionCardEffectHelper) {
+              cardInspector?: FactionCardInspector) {
     super(game)
-    this.effectHelper = effectHelper ?? new FactionCardEffectHelper(game)
+    this.cardInspector = cardInspector ?? new FactionCardInspector(game)
   }
 
 
@@ -21,7 +21,7 @@ export class ActionRule extends PlayerTurnRule {
     const playerCard = this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
       .player(this.player)
-    
+
     const moves = []
     for (const cardIndex of playerCard.getIndexes()) {
       const cardMaterial = playerCard.index(cardIndex)
@@ -42,7 +42,7 @@ export class ActionRule extends PlayerTurnRule {
     const cardDescription = getFactionCardDescription(card.id.front)
 
     const isInitiativeRule = this.game.rule!.id === RuleId.InitiativeActivationRule
-    if (isInitiativeRule && (!cardDescription.hasInitiative() || this.effectHelper.hasLostAttributes(cardMaterial.getIndex(), CardAttributeType.Initiative))) return false
+    if (isInitiativeRule && (!cardDescription.hasInitiative() || this.cardInspector.hasLostAttributes(cardMaterial.getIndex(), CardAttributeType.Initiative))) return false
     if (isSpell(cardDescription)) return true
 
     // Other cards are activable if there is a non returned token on it

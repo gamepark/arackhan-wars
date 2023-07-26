@@ -1,16 +1,15 @@
-import { getFactionCardDescription } from '../../../../material/FactionCard'
-import { MaterialType } from '../../../../material/MaterialType'
 import { Effect } from '../../descriptions/base/Effect'
 import { MaterialGame } from '@gamepark/rules-api'
 import { AttackEffect } from '../../descriptions/base/AttackEffect'
 import { himself } from '../../descriptions/utils/applicable-filter.utils'
+import { GetCardDescription } from '../helper/GetCardDescription'
+
 
 export class DrunkKnightWeaknessEffect extends AttackEffect {
 
-  canAttack(_attacker: number, opponent: number) {
-    const opponentCard = this.material(MaterialType.FactionCard).index(opponent).getItem()!
-    const otherCard = getFactionCardDescription(opponentCard.id.front)
-    return otherCard.value % 2 === 0 && super.canAttack(_attacker, opponent)
+  canAttack(_attacker: number, opponent: number, _otherAttackers: number[] = [], cardDescriptionHelper: GetCardDescription) {
+    const otherCard = cardDescriptionHelper.get(opponent)
+    return otherCard.value % 2 === 0 && super.canAttack(_attacker, opponent, _otherAttackers, cardDescriptionHelper)
   }
 }
 

@@ -7,7 +7,7 @@ import { PlayerId } from '../ArackhanWarsOptions'
 import { GamePlayerMemory } from '../ArackhanWarsSetup'
 import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
 import { isSpell } from './cards/descriptions/base/Spell'
-import { FactionCardEffectHelper } from './cards/rules/helper/FactionCardEffectHelper'
+import { FactionCardInspector } from './cards/rules/helper/FactionCardInspector'
 
 export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
 
@@ -48,11 +48,11 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
 
     const indexes = battlefield.getIndexes()
     const moves = []
-    const effectHelper = new FactionCardEffectHelper(this.game)
+    const cardInspector = new FactionCardInspector(this.game)
     // Not optimal, but run once
     for (const source of indexes) {
       for (const target of indexes) {
-        moves.push(...effectHelper.onCasterMoveTo(source, target))
+        moves.push(...cardInspector.onCasterMoveTo(source, target))
       }
 
     }
