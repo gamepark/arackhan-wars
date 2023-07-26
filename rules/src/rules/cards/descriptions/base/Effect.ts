@@ -1,17 +1,15 @@
 import { Material, MaterialGame, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
 import { ApplicableFilter } from '../utils/applicable-filter.utils'
-import { GetCardDescription } from '../../rules/helper/GetCardDescription'
-
 
 export abstract class Effect {
 
   constructor(readonly filters: ApplicableFilter[] = []) {
   }
 
-  isApplicable(source: Material, target: Material, cardDescription: GetCardDescription) {
+  isApplicable(game: MaterialGame, source: Material, target: Material) {
     if (!source.getItem() || !target.getItem()) return false
 
-    return this.filters.every((filter) => filter(source, target, cardDescription))
+    return this.filters.every((filter) => filter(source, target, game))
   }
 
   abstract getEffectRule(_game: MaterialGame): PassiveEffect

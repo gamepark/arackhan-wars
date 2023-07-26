@@ -65,7 +65,7 @@ export class FactionCardInspector extends MaterialRulesPart {
 
   private applyPassiveEffect(effects: Effect[], cardMaterial: Material, otherCardMaterial: Material, modifications: Record<number, PassiveEffect[]>, otherCardIndex: number) {
     const passiveEffects = effects
-      .filter((e) => e.isApplicable(cardMaterial, otherCardMaterial, this.cardDescriptionHelper))
+      .filter((e) => e.isApplicable(this.game, cardMaterial, otherCardMaterial))
       .map((e) => e.getEffectRule(this.game))
 
     if (passiveEffects.length) {
@@ -86,7 +86,7 @@ export class FactionCardInspector extends MaterialRulesPart {
 
         const otherCardMaterial = this.material(MaterialType.FactionCard).index(otherCardIndex)
         const passiveEffects = this.getPassiveEffects(description)
-          .filter((e) => e.isApplicable(cardMaterial, otherCardMaterial, this.cardDescriptionHelper))
+          .filter((e) => e.isApplicable(this.game, cardMaterial, otherCardMaterial))
           .map((e) => e.getEffectRule(this.game))
           .filter(isLooseSkillEffect)
 
