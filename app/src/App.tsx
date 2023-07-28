@@ -24,7 +24,7 @@ export default function App() {
     <>
       <GameDisplay/>
       <LoadingScreen display={loading} author={['Mickaël Bour', 'Robert Palmer']} artist="Robert Palmer" publisher="Nothing But Games" developer="Game Park"/>
-      <MaterialHeader rulesStepsHeaders={RulesHeaders} GameOver={GameOverHeader}/>
+      <MaterialHeader rulesStepsHeaders={RulesHeaders} GameOver={GameOverHeader} loading={loading}/>
       <MaterialImageLoader onImagesLoad={() => setImagesLoading(false)}/>
       <Menu/>
       <FailuresDialog/>
