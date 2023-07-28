@@ -22,7 +22,7 @@ export default function App() {
   const loading = !game || isJustDisplayed || isImagesLoading
   return (
     <>
-      {!loading && <GameDisplay/>}
+      <GameDisplay/>
       <LoadingScreen display={loading} author={['Mickaël Bour', 'Robert Palmer']} artist="Robert Palmer" publisher="Nothing But Games" developer="Game Park"/>
       <MaterialHeader rulesStepsHeaders={RulesHeaders} GameOver={GameOverHeader}/>
       <MaterialImageLoader onImagesLoad={() => setImagesLoading(false)}/>

@@ -11,9 +11,9 @@ export class PlayerHandLocator extends HandLocator<PlayerId, MaterialType, Locat
 
   getCoordinates(location: Location<PlayerId, LocationType>, context: ItemContext<PlayerId, MaterialType, LocationType>) {
     if (location.player === context.player) {
-      return { x: 48, y: 23, z: 10 }
+      return { x: 50, y: 12, z: 10 }
     } else {
-      return { x: 48, y: -23, z: 10 }
+      return { x: 50, y: -12, z: 10 }
     }
   }
 
@@ -22,11 +22,11 @@ export class PlayerHandLocator extends HandLocator<PlayerId, MaterialType, Locat
   }
 
   getGapMaxAngle(): number {
-    return 1.1
+    return 1.2
   }
 
   getMaxAngle(): number {
-    return 6.5
+    return 9
   }
 
   getRadius(): number {

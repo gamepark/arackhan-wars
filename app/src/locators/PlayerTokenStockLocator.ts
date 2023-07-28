@@ -11,10 +11,10 @@ export class PlayerTokenStockLocator extends PileLocator<PlayerId, MaterialType,
 
   getCoordinates({ location }: MaterialItem, context: ItemContext): Coordinates {
     if (location.player === context.player) {
-      return { x: 38, y: 10, z: 0 }
+      return { x: 35, y: 23, z: 0 }
     }
 
-    return { x: 38, y: -10, z: 0 }
+    return { x: 35, y: -23, z: 0 }
   }
 
 

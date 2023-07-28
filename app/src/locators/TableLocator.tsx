@@ -12,7 +12,7 @@ export class TableLocator extends ItemLocator<PlayerId, MaterialType, LocationTy
       case MaterialType.PlayMat:
         return { x: 0, y: 0, z: 0 }
       case MaterialType.RoundTracker:
-        return { x: 48, y: 0, z: 0 }
+        return { x: 50, y: 0, z: 0 }
     }
     return super.getPosition(item, context)
   }
