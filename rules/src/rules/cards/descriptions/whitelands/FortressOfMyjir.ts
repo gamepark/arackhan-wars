@@ -7,8 +7,9 @@ import { Faction } from '../../../../Faction'
 export class FortressOfMyjir extends Land {
   id = FactionCard.FortressOfMyjir
   faction = Faction.Whitelands
-
+  legendary = true
   value = 10
+
   defense = 4
 
   benefit = valueModifier([adjacent, allied, creature], { defense: +2 })

@@ -6,8 +6,9 @@ import { omnistrike } from '../../rules/attribute'
 export class TheSeneschal extends Creature {
   id = FactionCard.TheSeneschal
   faction = Faction.GrayOrder
-
+  legendary = true
   value = 14
+
   attack = 4
   defense = 2
 

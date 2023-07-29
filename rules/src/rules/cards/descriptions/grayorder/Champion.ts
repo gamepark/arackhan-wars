@@ -7,9 +7,11 @@ import { Faction } from '../../../../Faction'
 export class Champion extends Creature {
   id = FactionCard.Champion
   faction = Faction.GrayOrder
+  limit = 4
+  value = 8
+
   family = '6th-legion'
 
-  value = 8
   attack = 2
   defense = 2
 

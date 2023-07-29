@@ -7,8 +7,9 @@ import { Faction } from '../../../../Faction'
 export class AvalonFortress extends Land {
   id = FactionCard.AvalonFortress
   faction = Faction.GrayOrder
-
+  legendary = true
   value = 10
+
   defense = 4
 
   benefit = valueModifier([adjacent, allied, creature], { attack: +1, defense: +1 })

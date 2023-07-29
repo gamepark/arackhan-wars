@@ -9,7 +9,7 @@ import { looseSkills } from '../../rules/effect/LooseSkillsEffect'
 export class Firestorm extends Spell {
   id = FactionCard.Firestorm
   faction = Faction.Blight
-
+  limit = 2
   value = 3
 
   effects = [

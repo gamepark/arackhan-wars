@@ -7,7 +7,7 @@ import { Faction } from '../../../../Faction'
 export class NaturalCamouflage extends Spell {
   id = FactionCard.NaturalCamouflage
   faction = Faction.Nakka
-
+  limit = 2
   value = 3
 
   effect = cantBeAttacked([adjacent, allied, or(creature, land)])

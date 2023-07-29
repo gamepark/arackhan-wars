@@ -7,8 +7,9 @@ import { RuleId } from '../../../RuleId'
 export class Teleportation extends Spell {
   id = FactionCard.Teleportation
   faction = Faction.Whitelands
-
+  limit = 2
   value = 4
+
   astral = true
 
   attribute = initiative

@@ -8,7 +8,7 @@ import { reactivate } from '../../rules/effect/ReactivateEffect'
 export class TheFear extends Spell {
   id = FactionCard.TheFear
   faction = Faction.Blight
-
+  legendary = true
   value = 5
 
   effects = [

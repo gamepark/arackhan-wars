@@ -8,8 +8,9 @@ import { Spell } from '../base/Spell'
 export class Blizzard extends Spell {
   id = FactionCard.Blizzard
   faction = Faction.Whitelands
-
+  limit = 2
   value = 6
+
   astral = true
 
   effects = [

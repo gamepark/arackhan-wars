@@ -8,8 +8,9 @@ import { Faction } from '../../../../Faction'
 export class TreeOfLife extends Land {
   id = FactionCard.TreeOfLife
   faction = Faction.Nakka
-
+  legendary = true
   value = 12
+
   defense = 4
 
   benefit = gainAttributes([adjacent, allied, creature], [CardAttributeType.Regeneration])

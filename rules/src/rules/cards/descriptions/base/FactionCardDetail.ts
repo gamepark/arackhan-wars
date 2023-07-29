@@ -40,6 +40,8 @@ export abstract class FactionCardDetail {
   attributes: Attribute[] = []
   family?: string
   actionRule?: RuleId
+  protected limit?: number
+  legendary = false
 
   getAttributes(): Attribute[] {
     return this.attribute ? [this.attribute] : this.attributes
@@ -58,4 +60,8 @@ export abstract class FactionCardDetail {
   canAttack = (): boolean => false
 
   private hasAttribute = (attribute: CardAttributeType) => this.getAttributes().some((a) => a.type === attribute)
+
+  getLimit(): number {
+    return this.legendary ? 1 : this.limit ?? Infinity
+  }
 }
