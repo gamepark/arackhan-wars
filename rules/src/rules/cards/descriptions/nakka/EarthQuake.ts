@@ -1,7 +1,6 @@
 import { FactionCard } from '../../../../material/FactionCard'
 import { Spell } from '../base/Spell'
 import { Faction } from '../../../../Faction'
-import { DiscardTiming } from '../base/FactionCardDetail'
 import { omnistrike } from '../../rules/attribute'
 
 export class EarthQuake extends Spell {
@@ -12,6 +11,4 @@ export class EarthQuake extends Spell {
   attack = 2
 
   attribute = omnistrike
-
-  discardTiming = DiscardTiming.ActivationOrEndOfTurn
 }

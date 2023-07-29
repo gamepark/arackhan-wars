@@ -1,4 +1,3 @@
-import { DiscardTiming } from '../base/FactionCardDetail'
 import { FactionCard } from '../../../../material/FactionCard'
 import { valueModifier } from '../../rules/effect/ValueModifierEffect'
 import { adjacent, allied, creature, land, or } from '../utils/applicable-filter.utils'
@@ -13,6 +12,4 @@ export class WinterProtects extends Spell {
   quantity = 2
 
   effect = valueModifier([adjacent, allied, or(creature, land)], { defense: +2 })
-
-  discardTiming = DiscardTiming.EndOfRound
 }

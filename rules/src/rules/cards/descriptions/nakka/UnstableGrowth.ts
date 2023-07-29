@@ -1,4 +1,3 @@
-import { DiscardTiming } from '../base/FactionCardDetail'
 import { FactionCard } from '../../../../material/FactionCard'
 import { valueModifier } from '../../rules/effect/ValueModifierEffect'
 import { adjacent, allied, creature } from '../utils/applicable-filter.utils'
@@ -12,6 +11,4 @@ export class UnstableGrowth extends Spell {
   value = 2
 
   effect = valueModifier([adjacent, allied, creature], { attack: +2, defense: -1 })
-
-  discardTiming = DiscardTiming.EndOfRound
 }

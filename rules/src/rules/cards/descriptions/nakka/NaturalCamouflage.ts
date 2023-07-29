@@ -3,7 +3,6 @@ import { cantBeAttacked } from '../../rules/effect/CantBeAttackedEffect'
 import { adjacent, allied, creature, land, or } from '../utils/applicable-filter.utils'
 import { Spell } from '../base/Spell'
 import { Faction } from '../../../../Faction'
-import { DiscardTiming } from '../base/FactionCardDetail'
 
 export class NaturalCamouflage extends Spell {
   id = FactionCard.NaturalCamouflage
@@ -12,6 +11,4 @@ export class NaturalCamouflage extends Spell {
   value = 3
 
   effect = cantBeAttacked([adjacent, allied, or(creature, land)])
-
-  discardTiming = DiscardTiming.EndOfRound
 }

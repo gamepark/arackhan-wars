@@ -4,7 +4,6 @@ import { creature, enemy } from '../utils/applicable-filter.utils'
 import { looseSkills } from '../../rules/effect/LooseSkillsEffect'
 import { Faction } from '../../../../Faction'
 import { Spell } from '../base/Spell'
-import { DiscardTiming } from '../base/FactionCardDetail'
 
 export class Blizzard extends Spell {
   id = FactionCard.Blizzard
@@ -17,6 +16,4 @@ export class Blizzard extends Spell {
     looseAttributes([enemy, creature]),
     looseSkills([enemy, creature])
   ]
-
-  discardTiming = DiscardTiming.EndOfRound
 }

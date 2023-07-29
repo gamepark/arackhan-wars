@@ -5,7 +5,6 @@ import { valueModifier } from '../../rules/effect/ValueModifierEffect'
 import { adjacent, creature, enemy } from '../utils/applicable-filter.utils'
 import { looseAttributes } from '../../rules/effect/LooseAttributesEffect'
 import { looseSkills } from '../../rules/effect/LooseSkillsEffect'
-import { DiscardTiming } from '../base/FactionCardDetail'
 
 export class Firestorm extends Spell {
   id = FactionCard.Firestorm
@@ -18,8 +17,6 @@ export class Firestorm extends Spell {
     looseAttributes([adjacent, enemy, creature]),
     looseSkills([adjacent, enemy, creature])
   ]
-
-  discardTiming = DiscardTiming.EndOfRound
 
   quantity = 2
 }

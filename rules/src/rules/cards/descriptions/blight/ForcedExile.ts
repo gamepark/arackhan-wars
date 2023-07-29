@@ -1,4 +1,3 @@
-import { DiscardTiming } from '../base/FactionCardDetail'
 import { FactionCard } from '../../../../material/FactionCard'
 import { Faction } from '../../../../Faction'
 import { Spell } from '../base/Spell'
@@ -15,6 +14,4 @@ export class ForcedExile extends Spell {
   attribute = initiative
 
   actionRule = RuleId.ForcedExileActionRule
-
-  discardTiming = DiscardTiming.ActivationOrEndOfTurn
 }

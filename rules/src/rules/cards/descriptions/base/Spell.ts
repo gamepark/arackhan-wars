@@ -5,7 +5,6 @@ export abstract class Spell extends FactionCardDetail {
   kind: FactionCardKind = FactionCardKind.Spell
   attack?: number
   astral: boolean = false
-  abstract discardTiming: DiscardTiming
 
   effect?: Effect
   effects: Effect[] = []
@@ -19,6 +18,10 @@ export abstract class Spell extends FactionCardDetail {
   }
 
   canAttack = () => this.attack !== undefined
+
+  get discardTiming() {
+    return this.getEffects().length > 0 ? DiscardTiming.EndOfRound : DiscardTiming.ActivationOrEndOfTurn
+  }
 }
 
 export const isSpell = (detail: FactionCardDetail): detail is Spell => detail.kind === FactionCardKind.Spell

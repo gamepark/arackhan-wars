@@ -1,4 +1,3 @@
-import { DiscardTiming } from '../base/FactionCardDetail'
 import { FactionCard } from '../../../../material/FactionCard'
 import { Spell } from '../base/Spell'
 import { Faction } from '../../../../Faction'
@@ -15,6 +14,4 @@ export class Teleportation extends Spell {
   attribute = initiative
 
   actionRule = RuleId.TeleportationActionRule
-
-  discardTiming = DiscardTiming.ActivationOrEndOfTurn
 }

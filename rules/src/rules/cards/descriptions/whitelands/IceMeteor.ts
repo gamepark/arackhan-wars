@@ -1,4 +1,3 @@
-import { DiscardTiming } from '../base/FactionCardDetail'
 import { FactionCard } from '../../../../material/FactionCard'
 import { Spell } from '../base/Spell'
 import { Faction } from '../../../../Faction'
@@ -13,6 +12,4 @@ export class IceMeteor extends Spell {
   defense = 2
 
   attribute = rangedAttack(3)
-
-  discardTiming = DiscardTiming.ActivationOrEndOfTurn
 }

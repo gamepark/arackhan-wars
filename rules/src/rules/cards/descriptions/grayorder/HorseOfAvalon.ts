@@ -1,7 +1,6 @@
 import { FactionCard } from '../../../../material/FactionCard'
 import { Spell } from '../base/Spell'
 import { Faction } from '../../../../Faction'
-import { DiscardTiming } from '../base/FactionCardDetail'
 import { RuleId } from '../../../RuleId'
 
 export class HorseOfAvalon extends Spell {
@@ -11,6 +10,4 @@ export class HorseOfAvalon extends Spell {
   value = 7
 
   actionRule = RuleId.HorseOfAvalonActionRule
-
-  discardTiming = DiscardTiming.ActivationOrEndOfTurn
 }

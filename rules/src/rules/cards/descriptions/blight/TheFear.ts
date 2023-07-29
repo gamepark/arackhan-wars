@@ -1,7 +1,6 @@
 import { FactionCard } from '../../../../material/FactionCard'
 import { Faction } from '../../../../Faction'
 import { Spell } from '../base/Spell'
-import { DiscardTiming } from '../base/FactionCardDetail'
 import { deactivate } from '../../rules/effect/DeactivateEffect'
 import { adjacent, enemy } from '../utils/applicable-filter.utils'
 import { reactivate } from '../../rules/effect/ReactivateEffect'
@@ -16,6 +15,4 @@ export class TheFear extends Spell {
     deactivate([adjacent, enemy]),
     reactivate([adjacent, enemy])
   ]
-
-  discardTiming = DiscardTiming.EndOfRound
 }
