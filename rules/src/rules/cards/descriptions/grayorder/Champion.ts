@@ -14,6 +14,4 @@ export class Champion extends Creature {
   defense = 2
 
   skill = valueModifier([adjacent, allied, family(this.family), creature], { attack: +1, defense: +1 })
-
-  quantity = 2
 }

@@ -12,6 +12,4 @@ export class Eagle extends Creature {
   defense = 1
 
   attribute = flight
-
-  quantity = 2
 }

@@ -9,7 +9,6 @@ export class WinterProtects extends Spell {
   faction = Faction.Whitelands
 
   value = 4
-  quantity = 2
 
   effect = valueModifier([adjacent, allied, or(creature, land)], { defense: +2 })
 }

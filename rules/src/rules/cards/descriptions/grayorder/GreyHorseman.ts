@@ -12,6 +12,4 @@ export class GreyHorseman extends Creature {
   defense = 2
 
   attribute = movement(2)
-
-  quantity = 2
 }

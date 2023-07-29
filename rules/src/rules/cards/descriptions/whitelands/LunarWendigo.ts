@@ -9,6 +9,4 @@ export class LunarWendigo extends Creature {
   value = 3
   attack = 1
   defense = 2
-
-  quantity = 2
 }

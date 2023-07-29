@@ -6,7 +6,7 @@ import { RuleId } from './rules/RuleId'
 import { locationsStrategies } from './material/LocationStrategies'
 import shuffle from 'lodash/shuffle'
 import { Faction, playerFactions } from './Faction'
-import { FactionCardDescriptions } from './material/FactionCard'
+import { PreBuildDecks } from './rules/cards/PreBuildDecks'
 
 export type GamePlayerMemory = {
   faction: Faction
@@ -47,17 +47,21 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
 
   setupPlayers() {
     this.game.players.forEach((playerId) => {
-        this.setupPlayer(this.game.playersMemory![playerId] as PlayerOptions, playerId)
+        this.setupPlayer(playerId)
       }
     )
   }
 
-  setupPlayer(player: PlayerOptions, playerId: PlayerId) {
+  getFaction(playerId: number) {
+    return (this.game.playersMemory![playerId] as PlayerOptions).faction
+  }
+
+  setupPlayer(playerId: PlayerId) {
+    const faction = this.getFaction(playerId)
     this.material(MaterialType.FactionCard)
       .createItems(
-        Object.entries(FactionCardDescriptions)
-          .filter(([, { faction }]) => faction === player.faction)
-          .flatMap(([id, { faction, quantity = 1 }]) =>
+        Object.entries(PreBuildDecks[faction])
+          .flatMap(([id, quantity]) =>
             Array.from(Array(quantity)).map(() => ({
                 id: { front: parseInt(id), back: faction }, location: { type: LocationType.PlayerDeck, player: playerId }
               })

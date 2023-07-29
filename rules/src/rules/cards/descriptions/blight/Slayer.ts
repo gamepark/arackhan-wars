@@ -12,6 +12,4 @@ export class Slayer extends Creature {
   defense = 2
 
   attribute = omnistrike
-
-  quantity = 2
 }

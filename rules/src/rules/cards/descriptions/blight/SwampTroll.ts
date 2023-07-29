@@ -12,6 +12,4 @@ export class SwampTroll extends Creature {
   defense = 1
 
   skill = onlyNotGroupedAttack
-
-  quantity = 3
 }

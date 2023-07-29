@@ -17,6 +17,4 @@ export class CarnivorousPlant extends Creature {
     valueModifier([adjacent, allied, creature], { defense: +1 }),
     onlyAttackedByGroup
   ]
-
-  quantity = 2
 }

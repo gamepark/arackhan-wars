@@ -13,6 +13,4 @@ export class ForgePatriarch extends Creature {
   defense = 2
 
   skill = valueModifier([adjacent, allied, creature], { attack: +1 })
-
-  quantity = 2
 }

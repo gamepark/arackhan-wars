@@ -36,7 +36,6 @@ export abstract class FactionCardDetail {
   abstract kind: FactionCardKind
   abstract id: FactionCard
   abstract value: number
-  quantity?: number = 1
   attribute?: Attribute
   attributes: Attribute[] = []
   family?: string

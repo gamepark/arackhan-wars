@@ -12,6 +12,4 @@ export class NihilistPenguin extends Creature {
   defense = 1
 
   attribute = movement(2)
-
-  quantity = 4
 }

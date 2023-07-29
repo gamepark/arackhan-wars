@@ -12,6 +12,4 @@ export class Banshee extends Creature {
   defense = 1
 
   attribute = initiative
-
-  quantity = 2
 }

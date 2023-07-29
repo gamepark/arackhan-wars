@@ -9,6 +9,4 @@ export class SwampOgre extends Creature {
   value = 3
   attack = 2
   defense = 1
-
-  quantity = 2
 }

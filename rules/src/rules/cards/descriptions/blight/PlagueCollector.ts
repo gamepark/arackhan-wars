@@ -14,6 +14,4 @@ export class PlagueCollector extends Creature {
 
   skill = looseAttributes([adjacent, enemy, creature])
   weakness = looseAttributes([adjacent, allied, creature])
-
-  quantity = 2
 }

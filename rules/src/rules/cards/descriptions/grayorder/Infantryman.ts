@@ -14,6 +14,4 @@ export class Infantryman extends Creature {
   defense = 1
   
   skill = valueModifier([adjacent, allied, family(this.family), creature], { attack: +1 })
-
-  quantity = 3
 }

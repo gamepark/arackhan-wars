@@ -17,6 +17,4 @@ export class Firestorm extends Spell {
     looseAttributes([adjacent, enemy, creature]),
     looseSkills([adjacent, enemy, creature])
   ]
-
-  quantity = 2
 }

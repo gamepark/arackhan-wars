@@ -11,6 +11,4 @@ export class FireLightning extends Spell {
   attack = 2
 
   attribute = rangedAttack(3)
-
-  quantity = 2
 }

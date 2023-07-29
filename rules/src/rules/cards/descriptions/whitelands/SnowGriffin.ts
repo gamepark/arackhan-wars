@@ -17,6 +17,4 @@ export class SnowGriffin extends Creature {
   attribute = flight
 
   skill = looseAttributes([adjacent, enemy, creature], [CardAttributeType.Swarm])
-
-  quantity = 2
 }

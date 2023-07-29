@@ -15,6 +15,4 @@ export class Berserker extends Creature {
     initiative,
     omnistrike
   ]
-
-  quantity = 2
 }

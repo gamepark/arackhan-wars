@@ -13,6 +13,4 @@ export class Ballista extends Creature {
   defense = 1
 
   attribute = rangedAttack(3)
-
-  quantity = 2
 }

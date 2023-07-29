@@ -13,6 +13,4 @@ export class ShieldOfDown extends Creature {
   defense = 2
 
   skill = valueModifier([adjacent, allied, creature], { defense: +1 })
-
-  quantity = 3
 }

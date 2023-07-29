@@ -12,6 +12,4 @@ export class Xenodon extends Creature {
   defense = 1
 
   attribute = movement(2)
-
-  quantity = 3
 }

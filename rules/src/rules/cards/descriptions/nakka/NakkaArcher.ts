@@ -12,6 +12,4 @@ export class NakkaArcher extends Creature {
   defense = 1
 
   attribute = rangedAttack(2)
-
-  quantity = 3
 }

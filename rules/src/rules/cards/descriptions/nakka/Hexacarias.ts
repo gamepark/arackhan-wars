@@ -9,6 +9,4 @@ export class Hexacarias extends Creature {
   value = 5
   attack = 2
   defense = 2
-
-  quantity = 2
 }

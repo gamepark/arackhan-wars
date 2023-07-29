@@ -14,6 +14,4 @@ export class Phalanx extends Creature {
   defense = 1
 
   skill = valueModifier([adjacent, allied, family(this.family), creature], { defense: +1 })
-
-  quantity = 3
 }

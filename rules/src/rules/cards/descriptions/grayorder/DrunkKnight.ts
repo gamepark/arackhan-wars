@@ -12,6 +12,4 @@ export class DrunkKnight extends Creature {
   defense = 1
 
   weakness = drunkKnight
-
-  quantity = 4
 }

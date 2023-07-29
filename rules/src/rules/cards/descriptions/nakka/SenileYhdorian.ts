@@ -9,6 +9,4 @@ export class SenileYhdorian extends Creature {
   value = 5
   attack = 1
   defense = 3
-
-  quantity = 2
 }
