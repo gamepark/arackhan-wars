@@ -34,11 +34,12 @@ export abstract class FactionCardDetail {
   abstract faction: Faction
   abstract kind: FactionCardKind
   abstract value: number
-  attribute?: Attribute
-  attributes: Attribute[] = []
-  action?: RuleId
   protected limit?: number
   legendary = false
+  action?: RuleId
+
+  protected attribute?: Attribute
+  protected attributes: Attribute[] = []
 
   getAttributes(): Attribute[] {
     return this.attribute ? [this.attribute] : this.attributes
@@ -56,7 +57,7 @@ export abstract class FactionCardDetail {
 
   canAttack = (): boolean => false
 
-  private hasAttribute = (attribute: CardAttributeType) => this.getAttributes().some((a) => a.type === attribute)
+  private hasAttribute = (type: CardAttributeType) => this.getAttributes().some(attribute => attribute.type === type)
 
   getLimit(): number {
     return this.legendary ? 1 : this.limit ?? Infinity
