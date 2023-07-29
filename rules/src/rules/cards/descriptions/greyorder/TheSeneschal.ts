@@ -3,7 +3,7 @@ import { Creature } from '../base/Creature'
 import { omnistrike } from '../../rules/attribute'
 
 export class TheSeneschal extends Creature {
-  faction = Faction.GrayOrder
+  faction = Faction.GreyOrder
   legendary = true
   value = 14
 

@@ -5,7 +5,7 @@ import { Spell } from '../base/Spell'
 import { Family } from '../base/Family'
 
 export class Warcry extends Spell {
-  faction = Faction.GrayOrder
+  faction = Faction.GreyOrder
   value = 2
 
   astral = true

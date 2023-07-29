@@ -19,14 +19,14 @@ export class FactionTokenDescription extends RoundTokenDescription {
   images = {
     [Faction.Whitelands]: WhitelandToken,
     [Faction.Nakka]: NakkaToken,
-    [Faction.GrayOrder]: GreyOrderToken,
+    [Faction.GreyOrder]: GreyOrderToken,
     [Faction.Blight]: BlightToken
   }
 
   backImages = {
     [Faction.Whitelands]: WhitelandTokenBack,
     [Faction.Nakka]: NakkaTokenBack,
-    [Faction.GrayOrder]: GreyOrderTokenBack,
+    [Faction.GreyOrder]: GreyOrderTokenBack,
     [Faction.Blight]: BlightTokenBack
   }
 

@@ -2,13 +2,15 @@ import { valueModifier } from '../../rules/effect/ValueModifierEffect'
 import { adjacent, allied, creature } from '../utils/applicable-filter.utils'
 import { Creature } from '../base/Creature'
 import { Faction } from '../../../../Faction'
+import { Family } from '../base/Family'
 
-export class HeroOfTheBattleOfNerz extends Creature {
-  faction = Faction.GrayOrder
-  value = 10
+export class ShieldOfDawn extends Creature {
+  faction = Faction.Whitelands
+  value = 5
 
-  attack = 2
-  defense = 3
+  family = Family.ChildrenOfDawn
+  attack = 1
+  defense = 2
 
   skill = valueModifier([adjacent, allied, creature], { defense: +1 })
 }

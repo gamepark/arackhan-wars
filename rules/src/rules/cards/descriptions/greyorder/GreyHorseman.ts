@@ -3,7 +3,7 @@ import { Faction } from '../../../../Faction'
 import { movement } from '../../rules/attribute'
 
 export class GreyHorseman extends Creature {
-  faction = Faction.GrayOrder
+  faction = Faction.GreyOrder
   value = 7
 
   attack = 2

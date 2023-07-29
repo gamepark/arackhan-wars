@@ -4,14 +4,13 @@ import { Creature } from '../base/Creature'
 import { Faction } from '../../../../Faction'
 import { Family } from '../base/Family'
 
-export class Champion extends Creature {
-  faction = Faction.GrayOrder
-  limit = 4
-  value = 8
+export class Infantryman extends Creature {
+  faction = Faction.GreyOrder
+  value = 3
 
   family = Family.SixthLegion
-  attack = 2
-  defense = 2
+  attack = 1
+  defense = 1
 
-  skill = valueModifier([adjacent, allied, family(Family.SixthLegion), creature], { attack: +1, defense: +1 })
+  skill = valueModifier([adjacent, allied, family(Family.SixthLegion), creature], { attack: +1 })
 }

@@ -3,7 +3,7 @@ import { Creature } from '../base/Creature'
 import { perforation } from '../../rules/attribute'
 
 export class SiegeTower extends Creature {
-  faction = Faction.GrayOrder
+  faction = Faction.GreyOrder
   value = 10
 
   attack = 4

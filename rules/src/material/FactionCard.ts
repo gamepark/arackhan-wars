@@ -1,6 +1,6 @@
 import { NihilistPenguin } from '../rules/cards/descriptions/whitelands/NihilistPenguin'
 import { LunarWendigo } from '../rules/cards/descriptions/whitelands/LunarWendigo'
-import { ShieldOfDown } from '../rules/cards/descriptions/whitelands/ShieldOfDown'
+import { ShieldOfDawn } from '../rules/cards/descriptions/whitelands/ShieldOfDawn'
 import { IcePaladin } from '../rules/cards/descriptions/whitelands/IcePaladin'
 import { Eagle } from '../rules/cards/descriptions/whitelands/Eagle'
 import { PaladinOfTheGuard } from '../rules/cards/descriptions/whitelands/PaladinOfTheGuard'
@@ -27,19 +27,19 @@ import { EarthQuake } from '../rules/cards/descriptions/nakka/EarthQuake'
 import { UnstableGrowth } from '../rules/cards/descriptions/nakka/UnstableGrowth'
 import { NaturalCamouflage } from '../rules/cards/descriptions/nakka/NaturalCamouflage'
 import { Mimicry } from '../rules/cards/descriptions/nakka/Mimicry'
-import { DrunkKnight } from '../rules/cards/descriptions/grayorder/DrunkKnight'
-import { Infantryman } from '../rules/cards/descriptions/grayorder/Infantryman'
-import { Phalanx } from '../rules/cards/descriptions/grayorder/Phalanx'
-import { Ballista } from '../rules/cards/descriptions/grayorder/Ballista'
-import { Champion } from '../rules/cards/descriptions/grayorder/Champion'
-import { GreyHorseman } from '../rules/cards/descriptions/grayorder/GreyHorseman'
-import { SiegeTower } from '../rules/cards/descriptions/grayorder/SiegeTower'
-import { HeroOfTheBattleOfNerz } from '../rules/cards/descriptions/grayorder/HeroOfTheBattleOfNerz'
-import { TheSeneschal } from '../rules/cards/descriptions/grayorder/TheSeneschal'
-import { AvalonFortress } from '../rules/cards/descriptions/grayorder/AvalonFortress'
-import { Warcry } from '../rules/cards/descriptions/grayorder/Warcry'
-import { ShieldWall } from '../rules/cards/descriptions/grayorder/ShieldWall'
-import { HorseOfAvalon } from '../rules/cards/descriptions/grayorder/HorseOfAvalon'
+import { DrunkKnight } from '../rules/cards/descriptions/greyorder/DrunkKnight'
+import { Infantryman } from '../rules/cards/descriptions/greyorder/Infantryman'
+import { Phalanx } from '../rules/cards/descriptions/greyorder/Phalanx'
+import { Ballista } from '../rules/cards/descriptions/greyorder/Ballista'
+import { Champion } from '../rules/cards/descriptions/greyorder/Champion'
+import { GreyHorseman } from '../rules/cards/descriptions/greyorder/GreyHorseman'
+import { SiegeTower } from '../rules/cards/descriptions/greyorder/SiegeTower'
+import { HeroOfTheBattleOfNerz } from '../rules/cards/descriptions/greyorder/HeroOfTheBattleOfNerz'
+import { TheSeneschal } from '../rules/cards/descriptions/greyorder/TheSeneschal'
+import { AvalonFortress } from '../rules/cards/descriptions/greyorder/AvalonFortress'
+import { Warcry } from '../rules/cards/descriptions/greyorder/Warcry'
+import { ShieldWall } from '../rules/cards/descriptions/greyorder/ShieldWall'
+import { HorseOfAvalon } from '../rules/cards/descriptions/greyorder/HorseOfAvalon'
 import { ScuttleJaw } from '../rules/cards/descriptions/blight/ScuttleJaw'
 import { SwampOgre } from '../rules/cards/descriptions/blight/SwampOgre'
 import { SwampTroll } from '../rules/cards/descriptions/blight/SwampTroll'
@@ -120,7 +120,7 @@ export const FactionCardDescriptions: Record<FactionCard, FactionCardDetail> = {
   // WHITELANDS
   [FactionCard.NihilistPenguin]: new NihilistPenguin(),
   [FactionCard.LunarWendigo]: new LunarWendigo(),
-  [FactionCard.ShieldOfDawn]: new ShieldOfDown(),
+  [FactionCard.ShieldOfDawn]: new ShieldOfDawn(),
   [FactionCard.IcePaladin]: new IcePaladin(),
   [FactionCard.Eagle]: new Eagle(),
   [FactionCard.PaladinOfTheGuard]: new PaladinOfTheGuard(),

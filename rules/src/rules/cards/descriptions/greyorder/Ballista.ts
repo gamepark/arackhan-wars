@@ -4,7 +4,7 @@ import { Faction } from '../../../../Faction'
 import { Family } from '../base/Family'
 
 export class Ballista extends Creature {
-  faction = Faction.GrayOrder
+  faction = Faction.GreyOrder
   value = 5
 
   family = Family.Artillery

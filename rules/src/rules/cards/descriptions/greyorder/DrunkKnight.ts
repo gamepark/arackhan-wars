@@ -3,7 +3,7 @@ import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
 
 export class DrunkKnight extends Creature {
-  faction = Faction.GrayOrder
+  faction = Faction.GreyOrder
   value = 1
 
   attack = 1

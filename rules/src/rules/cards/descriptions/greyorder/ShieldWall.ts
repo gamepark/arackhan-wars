@@ -6,7 +6,7 @@ import { Faction } from '../../../../Faction'
 import { Family } from '../base/Family'
 
 export class ShieldWall extends Spell {
-  faction = Faction.GrayOrder
+  faction = Faction.GreyOrder
   value = 2
 
   astral = true

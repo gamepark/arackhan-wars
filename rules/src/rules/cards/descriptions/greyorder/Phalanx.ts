@@ -5,7 +5,7 @@ import { Creature } from '../base/Creature'
 import { Family } from '../base/Family'
 
 export class Phalanx extends Creature {
-  faction = Faction.GrayOrder
+  faction = Faction.GreyOrder
   value = 3
 
   family = Family.SixthLegion

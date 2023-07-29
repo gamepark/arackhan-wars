@@ -2,7 +2,7 @@
 import WhitelandsBack from '../images/cards/whitelands/whitelands-card-back.jpg'
 import BlightBack from '../images/cards/blight/blight-card-back.jpg'
 import NakkaBack from '../images/cards/nakka/nakka-card-back.jpg'
-import GrayOrderBack from '../images/cards/greyorder/greyorder-card-back.jpeg'
+import GreyOrderBack from '../images/cards/greyorder/greyorder-card-back.jpeg'
 
 import NihilistPenguin from '../images/cards/whitelands/en/s1-aw1-022-en-nihilist-penguin.jpg'
 import LunarWendigo from '../images/cards/whitelands/en/s1-aw1-019-en-lunar-wendigo.jpg'
@@ -131,7 +131,7 @@ export class FactionCardDescription extends CardDescription {
   backImages = {
     [Faction.Whitelands]: WhitelandsBack,
     [Faction.Nakka]: NakkaBack,
-    [Faction.GrayOrder]: GrayOrderBack,
+    [Faction.GreyOrder]: GreyOrderBack,
     [Faction.Blight]: BlightBack
   }
 
