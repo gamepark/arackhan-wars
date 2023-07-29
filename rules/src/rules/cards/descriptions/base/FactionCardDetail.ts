@@ -1,5 +1,4 @@
 import { Faction } from '../../../../Faction'
-import { FactionCard } from '../../../../material/FactionCard'
 import { Effect } from './Effect'
 import { Attribute } from '../../rules/attribute/Attribute'
 import { RuleId } from '../../../RuleId'
@@ -34,7 +33,6 @@ export enum DiscardTiming {
 export abstract class FactionCardDetail {
   abstract faction: Faction
   abstract kind: FactionCardKind
-  abstract id: FactionCard
   abstract value: number
   attribute?: Attribute
   attributes: Attribute[] = []

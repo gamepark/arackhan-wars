@@ -1,4 +1,3 @@
-import { FactionCard } from '../../../../material/FactionCard'
 import { looseAttributes } from '../../rules/effect/LooseAttributesEffect'
 import { creature, enemy } from '../utils/applicable-filter.utils'
 import { looseSkills } from '../../rules/effect/LooseSkillsEffect'
@@ -6,7 +5,6 @@ import { Faction } from '../../../../Faction'
 import { Spell } from '../base/Spell'
 
 export class Blizzard extends Spell {
-  id = FactionCard.Blizzard
   faction = Faction.Whitelands
   limit = 2
   value = 6

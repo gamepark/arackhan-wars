@@ -1,4 +1,3 @@
-import { FactionCard } from '../../../../material/FactionCard'
 import { Faction } from '../../../../Faction'
 import { Spell } from '../base/Spell'
 import { valueModifier } from '../../rules/effect/ValueModifierEffect'
@@ -7,7 +6,6 @@ import { looseAttributes } from '../../rules/effect/LooseAttributesEffect'
 import { looseSkills } from '../../rules/effect/LooseSkillsEffect'
 
 export class Firestorm extends Spell {
-  id = FactionCard.Firestorm
   faction = Faction.Blight
   limit = 2
   value = 3

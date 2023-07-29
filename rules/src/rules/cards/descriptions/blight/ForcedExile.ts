@@ -1,11 +1,9 @@
-import { FactionCard } from '../../../../material/FactionCard'
 import { Faction } from '../../../../Faction'
 import { Spell } from '../base/Spell'
 import { initiative } from '../../rules/attribute'
 import { RuleId } from '../../../RuleId'
 
 export class ForcedExile extends Spell {
-  id = FactionCard.ForcedExile
   faction = Faction.Blight
   legendary = true
   value = 6
