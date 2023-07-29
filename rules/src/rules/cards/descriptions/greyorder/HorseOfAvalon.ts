@@ -7,5 +7,5 @@ export class HorseOfAvalon extends Spell {
   limit = 2
   value = 7
 
-  actionRule = RuleId.HorseOfAvalonActionRule
+  action = RuleId.HorseOfAvalonActionRule
 }

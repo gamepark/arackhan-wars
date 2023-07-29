@@ -12,5 +12,5 @@ export class Teleportation extends Spell {
 
   attribute = initiative
 
-  actionRule = RuleId.TeleportationActionRule
+  action = RuleId.TeleportationActionRule
 }

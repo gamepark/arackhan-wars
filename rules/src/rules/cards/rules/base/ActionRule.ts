@@ -6,6 +6,7 @@ import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { RuleId } from '../../../RuleId'
 import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
 import { isSpell } from '../../descriptions/base/Spell'
+import { CustomMoveType } from '../../../../material/CustomMoveType'
 
 export class ActionRule extends PlayerTurnRule {
   private readonly cardInspector: FactionCardInspector
@@ -28,8 +29,8 @@ export class ActionRule extends PlayerTurnRule {
       if (!this.isActive(cardMaterial)) continue
       const card = cardMaterial.getItem()!
       const cardDescription = getFactionCardDescription(card.id.front)
-      if (cardDescription.actionRule) {
-        moves.push(this.rules().customMove(cardDescription.actionRule, { card: cardIndex, location: card.location }))
+      if (cardDescription.action) {
+        moves.push(this.rules().customMove(CustomMoveType.CardAction, { card: cardIndex, action: cardDescription.action }))
       }
     }
 

@@ -8,5 +8,5 @@ export class Mimicry extends Spell {
 
   astral = true
 
-  actionRule = RuleId.MimicryActionRule
+  action = RuleId.MimicryActionRule
 }

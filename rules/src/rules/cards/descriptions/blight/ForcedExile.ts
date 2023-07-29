@@ -12,5 +12,5 @@ export class ForcedExile extends Spell {
 
   attribute = initiative
 
-  actionRule = RuleId.ForcedExileActionRule
+  action = RuleId.ForcedExileActionRule
 }

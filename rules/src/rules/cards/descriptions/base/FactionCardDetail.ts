@@ -36,7 +36,7 @@ export abstract class FactionCardDetail {
   abstract value: number
   attribute?: Attribute
   attributes: Attribute[] = []
-  actionRule?: RuleId
+  action?: RuleId
   protected limit?: number
   legendary = false
 
