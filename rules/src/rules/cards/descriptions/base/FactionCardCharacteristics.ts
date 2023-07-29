@@ -30,7 +30,7 @@ export enum DiscardTiming {
   ActivationOrEndOfTurn
 }
 
-export abstract class FactionCardDetail {
+export abstract class FactionCardCharacteristics {
   abstract faction: Faction
   abstract kind: FactionCardKind
   abstract value: number

@@ -1,8 +1,8 @@
-import { FactionCardDetail, FactionCardKind } from './FactionCardDetail'
+import { FactionCardCharacteristics, FactionCardKind } from './FactionCardCharacteristics'
 import { Effect } from './Effect'
 import { Family } from './Family'
 
-export abstract class Creature extends FactionCardDetail {
+export abstract class Creature extends FactionCardCharacteristics {
   kind: FactionCardKind = FactionCardKind.Creature
 
   family?: Family
@@ -33,4 +33,4 @@ export abstract class Creature extends FactionCardDetail {
   canAttack = () => true
 }
 
-export const isCreature = (detail: FactionCardDetail): detail is Creature => detail.kind === FactionCardKind.Creature
+export const isCreature = (detail?: FactionCardCharacteristics): detail is Creature => detail?.kind === FactionCardKind.Creature

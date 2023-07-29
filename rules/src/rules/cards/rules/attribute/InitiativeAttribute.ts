@@ -1,6 +1,6 @@
 import { MaterialGame } from '@gamepark/rules-api'
 import { Attribute, AttributeRule } from './Attribute'
-import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
+import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 
 
 export class InitiativeAttributeRule extends AttributeRule {

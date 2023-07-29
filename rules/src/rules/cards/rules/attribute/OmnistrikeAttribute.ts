@@ -1,9 +1,9 @@
 import { Material, MaterialGame } from '@gamepark/rules-api'
 import { Attribute, AttributeKind } from './Attribute'
-import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
+import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { AttackAttributeRule } from './AttackAttribute'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
-import { getFactionCardDescription } from '../../../../material/FactionCard'
+import { getCharacteristics } from '../../../../material/FactionCard'
 import { getAdjacentCards } from '../../../../utils/move.utils'
 
 
@@ -31,8 +31,7 @@ export class OmnistrikeAttribute extends AttackAttributeRule {
   }
 
   isBlocked(attacker: Material): boolean {
-    const attackerCard = attacker.getItem()!
-    const attackerCardDescription = getFactionCardDescription(attackerCard.id.front)
+    const attackerCardDescription = getCharacteristics(attacker.getIndex(), this.game)
     return attackerCardDescription.hasPerforation()
   }
 }

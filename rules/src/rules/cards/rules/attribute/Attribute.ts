@@ -1,5 +1,5 @@
 import { Material, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
-import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
+import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { PassiveEffect } from '../../descriptions/base/Effect'
 
 export enum AttributeKind {

@@ -1,17 +1,15 @@
-import { DiscardTiming } from '../rules/cards/descriptions/base/FactionCardDetail'
-import { getFactionCardDescription } from '../material/FactionCard'
+import { DiscardTiming } from '../rules/cards/descriptions/base/FactionCardCharacteristics'
+import { getCharacteristics } from '../material/FactionCard'
 import { isSpell } from '../rules/cards/descriptions/base/Spell'
 import { LocationType } from '../material/LocationType'
-import { Material, MaterialMove } from '@gamepark/rules-api'
+import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 
-
-export const discardSpells = (cards: Material, discardTiming?: DiscardTiming): MaterialMove[] => {
+export const discardSpells = (game: MaterialGame, cards: Material, discardTiming?: DiscardTiming): MaterialMove[] => {
   return cards
     .getIndexes()
     .flatMap((index: number) => {
       const cardMaterial = cards.index(index)
-      const card = cardMaterial.getItem()!
-      const description = getFactionCardDescription(card.id.front)
+      const description = getCharacteristics(index, game)
       if (isSpell(description) && description.discardTiming === discardTiming) {
         return discardCard(cardMaterial)
       }

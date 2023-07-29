@@ -1,9 +1,9 @@
 import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { Attribute, AttributeKind } from './Attribute'
-import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
+import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { AttackAttributeRule } from './AttackAttribute'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
-import { getFactionCardDescription } from '../../../../material/FactionCard'
+import { getCharacteristics } from '../../../../material/FactionCard'
 import uniq from 'lodash/uniq'
 
 class PerforationAttackAttribute extends AttackAttributeRule {
@@ -59,7 +59,7 @@ class PerforationAttackAttribute extends AttackAttributeRule {
     const attackerCard = attacker.getItem()!
     const opponentCard = opponent.getItem()!
 
-    const attackerCardDescription = getFactionCardDescription(attackerCard.id.front)
+    const attackerCardDescription = getCharacteristics(attacker.getIndex(), this.game)
 
     if (attackerCardDescription.hasOmnistrike()) {
       const northOpponents = this.getOpponentsInDirection(attacker, opponentsCards, { y: -1 })

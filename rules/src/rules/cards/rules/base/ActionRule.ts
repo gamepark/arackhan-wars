@@ -1,14 +1,15 @@
-import { Material, MaterialGame, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
-import { getFactionCardDescription } from '../../../../material/FactionCard'
+import { getCharacteristics } from '../../../../material/FactionCard'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { RuleId } from '../../../RuleId'
-import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
+import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { isSpell } from '../../descriptions/base/Spell'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
+import { ActivationPhaseRule } from '../../../ActivationPhaseRule'
 
-export class ActionRule extends PlayerTurnRule {
+export class ActionRule extends ActivationPhaseRule {
   private readonly cardInspector: FactionCardInspector
 
   constructor(game: MaterialGame,
@@ -25,31 +26,28 @@ export class ActionRule extends PlayerTurnRule {
 
     const moves = []
     for (const cardIndex of playerCard.getIndexes()) {
-      const cardMaterial = playerCard.index(cardIndex)
-      if (!this.isActive(cardMaterial)) continue
-      const card = cardMaterial.getItem()!
-      const cardDescription = getFactionCardDescription(card.id.front)
-      if (cardDescription.action) {
-        moves.push(this.rules().customMove(CustomMoveType.CardAction, { card: cardIndex, action: cardDescription.action }))
+      if (!this.isActive(cardIndex)) continue
+      const characteristics = getCharacteristics(cardIndex, this.game)
+      if (characteristics.action) {
+        moves.push(this.rules().customMove(CustomMoveType.CardAction, { card: cardIndex, action: characteristics.action }))
       }
     }
 
     return moves
   }
 
-  isActive(cardMaterial: Material): boolean {
+  isActive(cardIndex: number): boolean {
     // Spell is always considered activable
-    const card = cardMaterial.getItem()!
-    const cardDescription = getFactionCardDescription(card.id.front)
+    const characteristics = getCharacteristics(cardIndex, this.game)
 
     const isInitiativeRule = this.game.rule!.id === RuleId.InitiativeActivationRule
-    if (isInitiativeRule && (!cardDescription.hasInitiative() || this.cardInspector.hasLostAttributes(cardMaterial.getIndex(), CardAttributeType.Initiative))) return false
-    if (isSpell(cardDescription)) return true
+    if (isInitiativeRule && (!characteristics.hasInitiative() || this.cardInspector.hasLostAttributes(cardIndex, CardAttributeType.Initiative))) return false
+    if (isSpell(characteristics)) return true
 
     // Other cards are activable if there is a non returned token on it
     return !!this
       .material(MaterialType.FactionToken)
-      .parent(cardMaterial.getIndex())
+      .parent(cardIndex)
       .rotation((rotation) => !rotation?.y)
       .length
   }

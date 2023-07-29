@@ -24,8 +24,8 @@ import { ForcedExileActionRule } from './rules/cards/rules/action/ForcedExileAct
 import { HorseOfAvalonActionRule } from './rules/cards/rules/action/HorseOfAvalonActionRule'
 import { TeleportationActionRule } from './rules/cards/rules/action/TeleportationActionRule'
 import { ChooseStartPlayerRule } from './rules/ChooseStartPlayerRule'
-import sum from 'lodash/sum'
-import { getFactionCardDescription } from './material/FactionCard'
+import sumBy from 'lodash/sumBy'
+import { FactionCardsCharacteristics } from './material/FactionCard'
 import { MimicryActionRule } from './rules/cards/rules/action/MimicryActionRule'
 
 
@@ -55,9 +55,8 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
       .location(LocationType.Battlefield)
       .player(playerId)
       .getItems()
-      .map((i) => getFactionCardDescription(i.id.front).value)
 
-    return sum(cardsOnBattlefield)
+    return sumBy(cardsOnBattlefield, card => FactionCardsCharacteristics[card.id.front].value)
   }
 }
 

@@ -1,7 +1,7 @@
-import { Material, MaterialGame, MaterialMove, MoveItem, PlayerTurnRule } from '@gamepark/rules-api'
+import { MaterialGame, MaterialMove, MoveItem } from '@gamepark/rules-api'
 import { isMovementAttribute } from '../attribute/MovementAttribute'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
-import { getFactionCardDescription } from '../../../../material/FactionCard'
+import { getCharacteristics } from '../../../../material/FactionCard'
 import { isSpell } from '../../descriptions/base/Spell'
 import { MaterialType } from '../../../../material/MaterialType'
 import { ActivatedCard, ActivationRuleMemory } from '../../../types'
@@ -10,9 +10,10 @@ import { LocationType } from '../../../../material/LocationType'
 import equal from 'fast-deep-equal'
 import { getAdjacentCards } from '../../../../utils/move.utils'
 import { RuleId } from '../../../RuleId'
-import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
+import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
+import { ActivationPhaseRule } from '../../../ActivationPhaseRule'
 
-export class MoveRules extends PlayerTurnRule {
+export class MoveRules extends ActivationPhaseRule {
   private readonly cardInspector: FactionCardInspector
 
   constructor(game: MaterialGame,
@@ -39,8 +40,7 @@ export class MoveRules extends PlayerTurnRule {
   getMoves(cardIndex: number): MaterialMove[] {
     if (!this.canMove(cardIndex)) return []
     const cardMaterial = this.material(MaterialType.FactionCard).index(cardIndex)
-    const card = cardMaterial.getItem()!
-    const cardDescription = getFactionCardDescription(card.id.front)
+    const cardDescription = getCharacteristics(cardIndex, this.game)
 
     return cardDescription
       .getAttributes()
@@ -49,8 +49,7 @@ export class MoveRules extends PlayerTurnRule {
   }
 
   canMove = (cardIndex: number) => {
-    const card = this.material(MaterialType.FactionCard).index(cardIndex)
-    if (!this.isActive(card)) return false
+    if (!this.isActive(cardIndex)) return false
 
     const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
 
@@ -58,20 +57,19 @@ export class MoveRules extends PlayerTurnRule {
     return !activatedCards.find((card) => card.card === cardIndex)
   }
 
-  isActive(cardMaterial: Material): boolean {
+  isActive(cardIndex: number): boolean {
 
     // Spell is always considered non activable
-    const card = cardMaterial.getItem()!
-    const cardDescription = getFactionCardDescription(card.id.front)
+    const characteristics = getCharacteristics(cardIndex, this.game)
 
     const isInitiativeRule = this.game.rule!.id === RuleId.InitiativeActivationRule
-    if (isInitiativeRule && (!cardDescription.hasInitiative() || this.cardInspector.hasLostAttributes(cardMaterial.getIndex(), CardAttributeType.Initiative))) return false
-    if (isSpell(cardDescription)) return false
+    if (isInitiativeRule && (!characteristics.hasInitiative() || this.cardInspector.hasLostAttributes(cardIndex, CardAttributeType.Initiative))) return false
+    if (isSpell(characteristics)) return false
 
     // Other cards are activable if there is a non returned token on it
     return !!this
       .material(MaterialType.FactionToken)
-      .parent(cardMaterial.getIndex())
+      .parent(cardIndex)
       .rotation((rotation) => !rotation?.y)
       .length
   }

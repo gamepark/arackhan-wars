@@ -1,9 +1,8 @@
 import { Material, MaterialGame } from '@gamepark/rules-api'
 import { areAdjacent } from '../../../../utils/adjacent.utils'
-import { getFactionCardDescription } from '../../../../material/FactionCard'
+import { FactionCardsCharacteristics, getCharacteristics } from '../../../../material/FactionCard'
 import { isCreature } from '../base/Creature'
 import { isLand } from '../base/Land'
-import { GetCardDescription } from '../../rules/helper/GetCardDescription'
 import { Family } from '../base/Family'
 
 
@@ -15,10 +14,10 @@ export const adjacent = (source: Material, target: Material) => areAdjacent(sour
 export const enemy = (source: Material, target: Material) => source.getItem()!.location.player !== target.getItem()!.location.player
 export const allied = (source: Material, target: Material) => !enemy(source, target)
 export const family = (family: Family) => (_source: Material, target: Material, game: MaterialGame) => {
-  const details = new GetCardDescription(game).get(target.getIndex())
+  const details = getCharacteristics(target.getIndex(), game)
   return isCreature(details) && details.family === family
 }
 
-export const creature = (_source: Material, target: Material) => isCreature(getFactionCardDescription(target.getItem()!.id.front))
-export const land = (_source: Material, target: Material) => isLand(getFactionCardDescription(target.getItem()!.id.front))
+export const creature = (_source: Material, target: Material) => isCreature(FactionCardsCharacteristics[target.getItem()!.id.front])
+export const land = (_source: Material, target: Material) => isLand(FactionCardsCharacteristics[target.getItem()!.id.front])
 export const or = (...filters: ApplicableFilter[]) => (source: Material, target: Material, game: MaterialGame) => filters.some(filter => filter(source, target, game))

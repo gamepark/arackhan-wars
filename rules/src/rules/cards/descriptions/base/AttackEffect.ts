@@ -1,14 +1,14 @@
 import { PassiveEffect } from './Effect'
-import { Material, MaterialMove } from '@gamepark/rules-api'
+import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { isSpell } from './Spell'
-import { GetCardDescription } from '../../rules/helper/GetCardDescription'
+import { getCharacteristics } from '../../../../material/FactionCard'
 
 export class AttackEffect extends PassiveEffect {
   /**
    * Used in legal moves to know if the player can declare an attack on the opponent
    * Used for the opponent
    */
-  canBeAttacked(_attacker: number, _opponent: number, _otherAttackers: number[] = [], _cardDescriptionHelper: GetCardDescription): boolean {
+  canBeAttacked(_attacker: number, _opponent: number, _otherAttackers: number[] = [], _game: MaterialGame): boolean {
     return true
   }
 
@@ -17,8 +17,8 @@ export class AttackEffect extends PassiveEffect {
    * Used in legal moves to know if the player can declare an attack on the opponent
    * Used for the attacker
    */
-  canAttack(_attacker: number, opponent: number, _otherAttackers: number[] = [], cardDescriptionHelper: GetCardDescription): boolean {
-    return !isSpell(cardDescriptionHelper.get(opponent))
+  canAttack(_attacker: number, opponent: number, _otherAttackers: number[] = [], game: MaterialGame): boolean {
+    return !isSpell(getCharacteristics(opponent, game))
   }
 
   /**

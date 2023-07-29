@@ -1,11 +1,11 @@
 import { isMoveItem, ItemMove, MaterialMove } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
-import { getFactionCardDescription } from '../../../../material/FactionCard'
-import { FactionCardKind } from '../../descriptions/base/FactionCardDetail'
+import { getCharacteristics } from '../../../../material/FactionCard'
 import { GamePlayerMemory } from '../../../../ArackhanWarsSetup'
 import { CardActionRule } from './CardActionRule'
 import { ActionRuleMemory } from './ActionMemory'
+import { isCreature } from '../../descriptions/base/Creature'
 
 
 export class HorseOfAvalonActionRule extends CardActionRule {
@@ -17,7 +17,7 @@ export class HorseOfAvalonActionRule extends CardActionRule {
       .material(MaterialType.FactionCard)
       .location(LocationType.Hand)
       .player(this.player)
-      .filter((item) => getFactionCardDescription(item.id.front).kind === FactionCardKind.Creature)
+      .filter((_, index) => isCreature(getCharacteristics(index, this.game)))
       .moveItems({ location })
   }
 

@@ -1,9 +1,9 @@
 import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { Attribute, AttributeKind } from './Attribute'
-import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
+import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { AttackAttributeRule } from './AttackAttribute'
 import { MaterialType } from '../../../../material/MaterialType'
-import { getFactionCardDescription } from '../../../../material/FactionCard'
+import { getCharacteristics } from '../../../../material/FactionCard'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { ValueModifierEffect } from '../effect/ValueModifierEffect'
 import { PassiveEffect } from '../../descriptions/base/Effect'
@@ -21,17 +21,16 @@ class SwarmAttackAttribute extends AttackAttributeRule {
 
   getPassiveEffect(source: Material, target: Material): PassiveEffect | undefined {
     const sourceCard = source.getItem()!
-    const targetCard = target.getItem()!
-    const sourceCardDescription = getFactionCardDescription(sourceCard.id.front)
-    const sourceFamily = isCreature(sourceCardDescription) ? sourceCardDescription.family : undefined
-    const targetCardDescription = getFactionCardDescription(targetCard.id.front)
-    const targetFamily = isCreature(targetCardDescription) ? targetCardDescription.family : undefined
+    const sourceCharacteristics = getCharacteristics(source.getIndex(), this.game)
+    const sourceFamily = isCreature(sourceCharacteristics) ? sourceCharacteristics.family : undefined
+    const targetCharacteristics = getCharacteristics(target.getIndex(), this.game)
+    const targetFamily = isCreature(targetCharacteristics) ? targetCharacteristics.family : undefined
 
     const cardsWithSameFamily = this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
       .player(sourceCard.location.player)
-      .filter(item => {
-        const details = getFactionCardDescription(item.id.front)
+      .filter((_, index) => {
+        const details = getCharacteristics(index, this.game)
         return isCreature(details) && details.family === sourceFamily
       })
       .length

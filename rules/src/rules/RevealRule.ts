@@ -2,7 +2,7 @@ import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
 import { ItemMove, ItemMoveType, MaterialMove, MaterialRulesPart, MoveKind, RuleMove } from '@gamepark/rules-api'
 import { RuleId } from './RuleId'
-import { getFactionCardDescription } from '../material/FactionCard'
+import { getCharacteristics } from '../material/FactionCard'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { GamePlayerMemory } from '../ArackhanWarsSetup'
 import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
@@ -27,7 +27,7 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
   afterItemMove(move: ItemMove<PlayerId, MaterialType, LocationType>): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     if (move.kind === MoveKind.ItemMove && move.type === ItemMoveType.Move) {
       const revealedCard = this.material(move.itemType).getItem(move.itemIndex)!
-      if (isSpell(getFactionCardDescription(revealedCard.id.front))) return []
+      if (isSpell(getCharacteristics(move.itemIndex, this.game))) return []
 
       return [
         this.material(MaterialType.FactionToken)

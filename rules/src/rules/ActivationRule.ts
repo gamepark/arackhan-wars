@@ -1,20 +1,20 @@
 import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
-import { CustomMove, isCustomMoveType, isMoveItemType, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { CustomMove, isCustomMoveType, isMoveItemType, ItemMove, MaterialMove } from '@gamepark/rules-api'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { RuleId } from './RuleId'
 import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
-import { DiscardTiming } from './cards/descriptions/base/FactionCardDetail'
+import { DiscardTiming } from './cards/descriptions/base/FactionCardCharacteristics'
 import { AttackRule } from './cards/rules/base/AttackRule'
 import { MoveRules } from './cards/rules/base/MoveRules'
 import { discardSpells } from '../utils/discard.utils'
 import { deactivateTokens } from '../utils/activation.utils'
 import { FactionCardInspector } from './cards/rules/helper/FactionCardInspector'
 import { ActionRule } from './cards/rules/base/ActionRule'
+import { ActivationPhaseRule } from './ActivationPhaseRule'
 
-
-export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
+export class ActivationRule extends ActivationPhaseRule {
 
   getAutomaticMoves() {
     const remainingMoves = this.getPlayerMoves()
@@ -69,7 +69,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
 
   onRuleEnd(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     // Apply end turn effect on card
-    return discardSpells(
+    return discardSpells(this.game,
       this
         .material(MaterialType.FactionCard)
         .location(onBattlefieldAndAstralPlane)

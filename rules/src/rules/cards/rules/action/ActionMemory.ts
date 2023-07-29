@@ -9,10 +9,3 @@ export type ActionRuleMemory = {
 export type ActionMemory = {
   previousRule: RuleId
 }
-
-export type ExchangedCharacteristics = {
-  exchanges?: {
-    source: number
-    target: number
-  }[]
-}

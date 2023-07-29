@@ -4,10 +4,10 @@ import { MaterialType } from '../material/MaterialType'
 import { startingCoordinates } from '../material/spaces'
 import { RuleId } from './RuleId'
 import { PlayerId } from '../ArackhanWarsOptions'
-import { getFactionCardDescription } from '../material/FactionCard'
 import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
 import { getAvailableCardPlacement, moveToBattlefieldSpace } from '../utils/move.utils'
 import { isSpell } from './cards/descriptions/base/Spell'
+import { FactionCardCharacteristics } from './cards/descriptions/base/FactionCardCharacteristics'
 
 const PLACED_CARD_PER_TURN = 2
 
@@ -41,7 +41,7 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
   }
 
   isAstral(item: MaterialItem): boolean {
-    const card = getFactionCardDescription(item.id.front)
+    const card = FactionCardCharacteristics[item.id.front]
     return isSpell(card) && card.astral
   }
 

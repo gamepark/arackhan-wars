@@ -1,7 +1,7 @@
-import { DiscardTiming, FactionCardDetail, FactionCardKind } from './FactionCardDetail'
+import { DiscardTiming, FactionCardCharacteristics, FactionCardKind } from './FactionCardCharacteristics'
 import { Effect } from './Effect'
 
-export abstract class Spell extends FactionCardDetail {
+export abstract class Spell extends FactionCardCharacteristics {
   kind: FactionCardKind = FactionCardKind.Spell
   attack?: number
   astral: boolean = false
@@ -24,4 +24,4 @@ export abstract class Spell extends FactionCardDetail {
   }
 }
 
-export const isSpell = (detail: FactionCardDetail): detail is Spell => detail.kind === FactionCardKind.Spell
+export const isSpell = (detail?: FactionCardCharacteristics): detail is Spell => detail?.kind === FactionCardKind.Spell

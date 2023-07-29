@@ -1,8 +1,8 @@
-import { CustomMove, Material, MaterialGame, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { CardAttributeType, DiscardTiming, FactionCardKind } from '../../descriptions/base/FactionCardDetail'
+import { CustomMove, Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
+import { CardAttributeType, DiscardTiming, FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
-import { getFactionCardDescription } from '../../../../material/FactionCard'
+import { getCharacteristics } from '../../../../material/FactionCard'
 import { ActivatedCard, ActivationRuleMemory } from '../../../types'
 import { GamePlayerMemory } from '../../../../ArackhanWarsSetup'
 import { isAttackAttribute } from '../attribute/AttackAttribute'
@@ -17,8 +17,10 @@ import { PlayerId } from '../../../../ArackhanWarsOptions'
 import uniq from 'lodash/uniq'
 import { deactivateTokens } from '../../../../utils/activation.utils'
 import { RuleId } from '../../../RuleId'
+import { ActivationPhaseRule } from '../../../ActivationPhaseRule'
+import { isLand } from '../../descriptions/base/Land'
 
-export class AttackRule extends PlayerTurnRule {
+export class AttackRule extends ActivationPhaseRule {
   private readonly cardInspector: FactionCardInspector
 
   constructor(game: MaterialGame,
@@ -55,11 +57,10 @@ export class AttackRule extends PlayerTurnRule {
     const cardMaterial = this.material(MaterialType.FactionCard).index(attacker)
     // filter the list of opponent in order to check if card can participate to group attack
     const filteredOpponents = this.getAuthorizedTargets(cardMaterial, opponentsCards)
-    const card = cardMaterial.getItem()!
-    const cardDescription = getFactionCardDescription(card.id.front)
-    if (!cardDescription.canAttack()) return []
+    const characteristics = getCharacteristics(attacker, this.game)
+    if (!characteristics.canAttack()) return []
 
-    const attributeAttacks = cardDescription.getAttributes()
+    const attributeAttacks = characteristics.getAttributes()
       .filter(isAttackAttribute)
       .filter((a) => !this.cardInspector.hasLostAttributes(attacker, a.type))
       .flatMap((attribute) => attribute.getAttributeRule(this.game).getLegalAttacks(cardMaterial, opponentsCards.indexes(filteredOpponents), this.cardInspector))
@@ -85,7 +86,7 @@ export class AttackRule extends PlayerTurnRule {
     return opponentCards.getIndexes().filter((o) => {
       const opponentMaterial = this.material(MaterialType.FactionCard).index(o)
 
-      if (isSpell(getFactionCardDescription(opponentMaterial.getItem()!.id.front))
+      if (isSpell(FactionCardCharacteristics[opponentMaterial.getItem()!.id.front])
         || !this.cardInspector.canAttack(attackerIndex, o)) return false
 
       if (!hasAlreadyAttacked) return true
@@ -93,16 +94,15 @@ export class AttackRule extends PlayerTurnRule {
       return activatedCards.some((a) => {
         if (!(a.targets ?? []).includes(o)) return false
         const cardMaterial = this.material(MaterialType.FactionCard).index(a.card)
-        const cardDescription = getFactionCardDescription(cardMaterial.getItem()!.id.front)
-        if (cardDescription.hasRangeAttack()) return true
+        const characteristics = getCharacteristics(a.card, this.game)
+        if (characteristics.hasRangeAttack()) return true
         return areAdjacent(attacker, opponentMaterial) && areAdjacent(cardMaterial, opponentMaterial)
       })
     })
   }
 
   canAttack = (cardIndex: number) => {
-    const card = this.material(MaterialType.FactionCard).index(cardIndex)
-    if (!this.isActive(card)) return false
+    if (!this.isActive(cardIndex)) return false
     const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
 
     // For cards that can attack, verify that it was not activated
@@ -115,26 +115,25 @@ export class AttackRule extends PlayerTurnRule {
     return activatedCard.targets === undefined && activatedCard.omnistrike === undefined
   }
 
-  isActive(cardMaterial: Material): boolean {
+  isActive(cardIndex: number): boolean {
     // Spell is always considered activable
-    const card = cardMaterial.getItem()!
-    const cardDescription = getFactionCardDescription(card.id.front)
+    const cardDescription = getCharacteristics(cardIndex, this.game)
 
     const isInitiativeRule = this.game.rule!.id === RuleId.InitiativeActivationRule
-    if (isInitiativeRule && (!cardDescription.hasInitiative() || this.cardInspector.hasLostAttributes(cardMaterial.getIndex(), CardAttributeType.Initiative))) return false
+    if (isInitiativeRule && (!cardDescription.hasInitiative() || this.cardInspector.hasLostAttributes(cardIndex, CardAttributeType.Initiative))) return false
     if (isSpell(cardDescription)) return true
 
     // Other cards are activable if there is a non returned token on it
     return !!this
       .material(MaterialType.FactionToken)
-      .parent(cardMaterial.getIndex())
+      .parent(cardIndex)
       .rotation((rotation) => !rotation?.y)
       .length
   }
 
   attack(opponent: number): MaterialMove[] {
     const opponentMaterial = this.material(MaterialType.FactionCard).index(opponent)
-    const opponentCardDescription = getFactionCardDescription(opponentMaterial.getItem()!.id.front)
+    const opponentCardCharacteristics = getCharacteristics(opponent, this.game)
     const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
 
     const attacksOnThisOpponent = activatedCards.filter((a) => (a.targets ?? []).includes(opponent))
@@ -148,11 +147,11 @@ export class AttackRule extends PlayerTurnRule {
     const opponentDefense = this.cardInspector.getDefense(opponent)
     if (opponentDefense >= attackValue) return []
 
-    if (opponentCardDescription.kind !== FactionCardKind.Land) {
+    if (isLand(opponentCardCharacteristics)) {
+      moves.push(...this.conquerLand(opponent))
+    } else {
       const opponentCardToken = this.material(MaterialType.FactionToken).parent(opponent)
       moves.push(...discardCard(opponentMaterial, opponentCardToken))
-    } else {
-      moves.push(...this.conquerLand(opponent))
     }
 
 
@@ -195,8 +194,8 @@ export class AttackRule extends PlayerTurnRule {
       const opponents = battlefieldCards.player((player) => player !== this.player)
       const filteredOpponents = this.getAuthorizedTargets(cardMaterial, opponents)
 
-      const cardDescription = getFactionCardDescription(cardMaterial.getItem()!.id.front)
-      const attributeTargets = cardDescription.getAttributes().filter(isAttackAttribute)
+      const characteristics = getCharacteristics(move.data.card, this.game)
+      const attributeTargets = characteristics.getAttributes().filter(isAttackAttribute)
         .filter((a) => !this.cardInspector.hasLostAttributes(move.data.card, a.type))
         .flatMap((attribute) => attribute.getAttributeRule(this.game).getTargets(cardMaterial, opponentMaterial, opponents.indexes(filteredOpponents)))
 
@@ -225,7 +224,7 @@ export class AttackRule extends PlayerTurnRule {
 
       const attackerMaterial = this.material(MaterialType.FactionCard).index(activation.card)
       moves.push(
-        ...discardSpells(attackerMaterial, DiscardTiming.ActivationOrEndOfTurn)
+        ...discardSpells(this.game, attackerMaterial, DiscardTiming.ActivationOrEndOfTurn)
       )
 
       const token = this.material(MaterialType.FactionToken).parent(activation.card)

@@ -1,6 +1,6 @@
 import { Effect, PassiveEffect } from '../../descriptions/base/Effect'
 import { MaterialGame } from '@gamepark/rules-api'
-import { CardAttributeType } from '../../descriptions/base/FactionCardDetail'
+import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 
 class LooseAttributesEffect extends PassiveEffect {

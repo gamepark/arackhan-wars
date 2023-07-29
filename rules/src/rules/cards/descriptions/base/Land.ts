@@ -1,7 +1,7 @@
-import { FactionCardDetail, FactionCardKind } from './FactionCardDetail'
+import { FactionCardCharacteristics, FactionCardKind } from './FactionCardCharacteristics'
 import { Effect } from './Effect'
 
-export abstract class Land extends FactionCardDetail {
+export abstract class Land extends FactionCardCharacteristics {
   kind: FactionCardKind = FactionCardKind.Land
   abstract defense: number
 
@@ -17,4 +17,4 @@ export abstract class Land extends FactionCardDetail {
   }
 }
 
-export const isLand = (detail: FactionCardDetail): detail is Land => detail.kind === FactionCardKind.Land
+export const isLand = (detail?: FactionCardCharacteristics): detail is Land => detail?.kind === FactionCardKind.Land

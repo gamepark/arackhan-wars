@@ -1,4 +1,4 @@
-import { CardAttributeType } from '../base/FactionCardDetail'
+import { CardAttributeType } from '../base/FactionCardCharacteristics'
 import { looseAttributes } from '../../rules/effect/LooseAttributesEffect'
 import { adjacent, creature, enemy } from '../utils/applicable-filter.utils'
 import { Faction } from '../../../../Faction'

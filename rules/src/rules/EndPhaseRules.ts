@@ -5,9 +5,9 @@ import { PlayerId } from '../ArackhanWarsOptions'
 import { RuleId } from './RuleId'
 import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
 import { activateTokens } from '../utils/activation.utils'
-import { getFactionCardDescription } from '../material/FactionCard'
+import { getCharacteristics } from '../material/FactionCard'
 import { isSpell } from './cards/descriptions/base/Spell'
-import { DiscardTiming } from './cards/descriptions/base/FactionCardDetail'
+import { DiscardTiming } from './cards/descriptions/base/FactionCardCharacteristics'
 import { discardCard } from '../utils/discard.utils'
 
 export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
@@ -21,7 +21,7 @@ export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, Loc
     const indexes: number[] = []
     for (const index of battlefieldCards.getIndexes()) {
       const cardMaterial = this.material(MaterialType.FactionCard).index(index)!
-      const card = getFactionCardDescription(cardMaterial.getItem()!.id.front)
+      const card = getCharacteristics(index, this.game)
 
       if (isSpell(card) && card.discardTiming === DiscardTiming.EndOfRound) {
         moves.push(...discardCard(cardMaterial))
