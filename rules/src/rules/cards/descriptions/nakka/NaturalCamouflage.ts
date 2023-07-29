@@ -11,7 +11,7 @@ export class NaturalCamouflage extends Spell {
 
   value = 3
 
-  skill = cantBeAttacked([adjacent, allied, or(creature, land)])
+  effect = cantBeAttacked([adjacent, allied, or(creature, land)])
 
   discardTiming = DiscardTiming.EndOfRound
 }
