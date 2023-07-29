@@ -1,8 +1,11 @@
 import { FactionCardDetail, FactionCardKind } from './FactionCardDetail'
 import { Effect } from './Effect'
+import { Family } from './Family'
 
 export abstract class Creature extends FactionCardDetail {
   kind: FactionCardKind = FactionCardKind.Creature
+
+  family?: Family
   abstract attack: number
   abstract defense: number
 

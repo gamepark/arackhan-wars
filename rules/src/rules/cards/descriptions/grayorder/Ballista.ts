@@ -1,12 +1,13 @@
 import { rangedAttack } from '../../rules/attribute'
 import { Creature } from '../base/Creature'
 import { Faction } from '../../../../Faction'
+import { Family } from '../base/Family'
 
 export class Ballista extends Creature {
   faction = Faction.GrayOrder
   value = 5
 
-  family = 'artillery'
+  family = Family.Artillery
   attack = 1
   defense = 1
 

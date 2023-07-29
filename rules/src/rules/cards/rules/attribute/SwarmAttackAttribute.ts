@@ -7,6 +7,7 @@ import { getFactionCardDescription } from '../../../../material/FactionCard'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { ValueModifierEffect } from '../effect/ValueModifierEffect'
 import { PassiveEffect } from '../../descriptions/base/Effect'
+import { isCreature } from '../../descriptions/base/Creature'
 
 class SwarmAttackAttribute extends AttackAttributeRule {
 
@@ -22,15 +23,20 @@ class SwarmAttackAttribute extends AttackAttributeRule {
     const sourceCard = source.getItem()!
     const targetCard = target.getItem()!
     const sourceCardDescription = getFactionCardDescription(sourceCard.id.front)
+    const sourceFamily = isCreature(sourceCardDescription) ? sourceCardDescription.family : undefined
     const targetCardDescription = getFactionCardDescription(targetCard.id.front)
+    const targetFamily = isCreature(targetCardDescription) ? targetCardDescription.family : undefined
 
     const cardsWithSameFamily = this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
       .player(sourceCard.location.player)
-      .filter((item) => getFactionCardDescription(item.id.front).family === sourceCardDescription.family)
+      .filter(item => {
+        const details = getFactionCardDescription(item.id.front)
+        return isCreature(details) && details.family === sourceFamily
+      })
       .length
 
-    if (cardsWithSameFamily === 1 ?? sourceCardDescription.family !== targetCardDescription.family) return
+    if (cardsWithSameFamily === 1 ?? sourceFamily !== targetFamily) return
     return new ValueModifierEffect(this.game, { attack: cardsWithSameFamily })
   }
 
