@@ -1,7 +1,8 @@
 export enum CustomMoveType {
-  Mulligan = 1,
+  ChoosePlayer = 1,
+  Mulligan,
   Attack,
   SolveAttack,
   CardAction,
-  ChooseTarget
+  ChooseCard
 }

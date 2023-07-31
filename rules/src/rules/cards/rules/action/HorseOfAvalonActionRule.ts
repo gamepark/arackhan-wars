@@ -1,17 +1,16 @@
-import { isMoveItem, ItemMove, MaterialMove } from '@gamepark/rules-api'
+import { isMoveItem, ItemMove, Location, MaterialMove } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
 import { getCharacteristics } from '../../../../material/FactionCard'
-import { GamePlayerMemory } from '../../../../ArackhanWarsSetup'
 import { CardActionRule } from './CardActionRule'
-import { ActionRuleMemory } from './ActionMemory'
 import { isCreature } from '../../descriptions/base/Creature'
+import { Memory } from '../../../Memory'
 
 
 export class HorseOfAvalonActionRule extends CardActionRule {
 
   getPlayerMoves() {
-    const { location } = this.getMemory<ActionRuleMemory>()
+    const location = this.remind<Location>(Memory.Location)
 
     return this
       .material(MaterialType.FactionCard)
@@ -28,7 +27,7 @@ export class HorseOfAvalonActionRule extends CardActionRule {
         .player(this.player)
         .createItem({
           // Must be the faction instead of the player
-          id: this.getGameMemory<GamePlayerMemory>(this.player)!.faction,
+          id: this.remind(Memory.Faction, this.player),
           location: { parent: move.itemIndex, type: LocationType.FactionTokenSpace, player: this.player }
         }),
       ...super.afterCardAction()

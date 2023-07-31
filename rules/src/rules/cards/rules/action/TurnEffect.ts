@@ -13,9 +13,5 @@ export type MimicryEffect = {
 }
 
 export const getTurnEffects = (game: MaterialGame): TurnEffect[] => {
-  return game.rule?.memory?.turnEffects ?? []
-}
-
-export type TurnEffectsMemory = {
-  turnEffects?: TurnEffect[]
+  return game.memory?.turnEffects ?? []
 }

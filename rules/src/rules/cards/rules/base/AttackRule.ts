@@ -1,10 +1,9 @@
-import { CustomMove, Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
+import { CustomMove, Material, MaterialGame, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { CardAttributeType, DiscardTiming, FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
 import { getCharacteristics } from '../../../../material/FactionCard'
-import { ActivatedCard, ActivationRuleMemory } from '../../../types'
-import { GamePlayerMemory } from '../../../../ArackhanWarsSetup'
+import { ActivatedCard } from '../../../types'
 import { isAttackAttribute } from '../attribute/AttackAttribute'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
 import { discardCard, discardSpells } from '../../../../utils/discard.utils'
@@ -17,10 +16,10 @@ import { PlayerId } from '../../../../ArackhanWarsOptions'
 import uniq from 'lodash/uniq'
 import { deactivateTokens } from '../../../../utils/activation.utils'
 import { RuleId } from '../../../RuleId'
-import { ActivationPhaseRule } from '../../../ActivationPhaseRule'
 import { isLand } from '../../descriptions/base/Land'
+import { Memory } from '../../../Memory'
 
-export class AttackRule extends ActivationPhaseRule {
+export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   private readonly cardInspector: FactionCardInspector
 
   constructor(game: MaterialGame,
@@ -43,7 +42,7 @@ export class AttackRule extends ActivationPhaseRule {
       moves.push(...this.getAttacks(attacker, opponents))
     }
 
-    const { activatedCards = [] } = this.getPlayerMemory<ActivationRuleMemory>()
+    const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
     if (activatedCards.some((a) => a.targets)) {
       moves.push(this.rules().customMove(CustomMoveType.SolveAttack))
     }
@@ -80,7 +79,7 @@ export class AttackRule extends ActivationPhaseRule {
 
   getAuthorizedTargets(attacker: Material, opponentCards: Material): number[] {
     const attackerIndex = attacker.getIndex()
-    const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
+    const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
 
     const hasAlreadyAttacked = activatedCards.length && activatedCards.some((a) => a.targets)
     return opponentCards.getIndexes().filter((o) => {
@@ -103,7 +102,7 @@ export class AttackRule extends ActivationPhaseRule {
 
   canAttack = (cardIndex: number) => {
     if (!this.isActive(cardIndex)) return false
-    const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
+    const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
 
     // For cards that can attack, verify that it was not activated
     const activatedCardIndex = activatedCards.findIndex((card) => card.card === cardIndex)
@@ -134,7 +133,7 @@ export class AttackRule extends ActivationPhaseRule {
   attack(opponent: number): MaterialMove[] {
     const opponentMaterial = this.material(MaterialType.FactionCard).index(opponent)
     const opponentCardCharacteristics = getCharacteristics(opponent, this.game)
-    const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
+    const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
 
     const attacksOnThisOpponent = activatedCards.filter((a) => (a.targets ?? []).includes(opponent))
     let attackValue = 0
@@ -171,7 +170,7 @@ export class AttackRule extends ActivationPhaseRule {
       this.material(MaterialType.FactionToken).parent(opponentIndex).deleteItem(),
       this.material(MaterialType.FactionToken).parent(opponentIndex).createItem({
         // Must be the faction instead of the player
-        id: this.getGameMemory<GamePlayerMemory>(this.player)!.faction,
+        id: this.remind(Memory.Faction, this.player),
         location: { parent: opponentIndex, type: LocationType.FactionTokenSpace, player: this.player }
       })
 
@@ -216,7 +215,7 @@ export class AttackRule extends ActivationPhaseRule {
 
   solveAttack(): MaterialMove[] {
 
-    const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
+    const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
     let targets: number[] = []
     const moves: MaterialMove[] = []
     for (const activation of activatedCards) {
@@ -240,23 +239,18 @@ export class AttackRule extends ActivationPhaseRule {
       moves.unshift(...this.attack(target))
     }
 
-    this.memorize<ActivationRuleMemory>({ activatedCards: [] }, this.player)
+    this.memorize(Memory.ActivatedCards, [])
     return moves
   }
 
   memorizeCardPlayed(activation: ActivatedCard) {
-    const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
+    const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
     const activatedCard = activatedCards.find((activatedCard) => activatedCard.card === activation.card)
     if (!activatedCard) {
-      this.memorize<ActivationRuleMemory>({
-        activatedCards: [...activatedCards, activation]
-      }, this.player)
-
+      this.memorize<ActivatedCard[]>(Memory.ActivatedCards, activatedCards => [...activatedCards, activation])
     } else {
       const updatedActivation = { ...activatedCards, ...activation }
-      this.memorize<ActivationRuleMemory>({
-        activatedCards: [...activatedCards.filter((card) => card !== activatedCard), updatedActivation]
-      }, this.player)
+      this.memorize<ActivatedCard[]>(Memory.ActivatedCards, activatedCards => [...activatedCards.filter((card) => card !== activatedCard), updatedActivation])
     }
   }
 }

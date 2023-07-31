@@ -1,16 +1,13 @@
 import { MaterialGameSetup } from '@gamepark/rules-api'
 import { MaterialType } from './material/MaterialType'
 import { LocationType } from './material/LocationType'
-import { ArackhanWarsOptions, PlayerId, PlayerOptions } from './ArackhanWarsOptions'
+import { ArackhanWarsOptions, PlayerId } from './ArackhanWarsOptions'
 import { RuleId } from './rules/RuleId'
 import { locationsStrategies } from './material/LocationStrategies'
 import shuffle from 'lodash/shuffle'
 import { Faction, playerFactions } from './Faction'
 import { PreBuildDecks } from './rules/cards/PreBuildDecks'
-
-export type GamePlayerMemory = {
-  faction: Faction
-}
+import { Memory } from './rules/Memory'
 
 export const START_HAND = 7
 
@@ -30,9 +27,9 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
 
   setupFactions(options: ArackhanWarsOptions) {
     if (Array.isArray(options.players)) {
-      options.players.forEach((player, id) => {
+      options.players.forEach((player, index) => {
         const faction = player.faction
-        this.memorizeOnGame({ faction }, id + 1)
+        this.memorize(Memory.Faction, faction, index + 1)
       })
     } else {
       const numberOfPlayers = options.players ?? 2
@@ -40,7 +37,7 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
       return Array.from(Array(numberOfPlayers).keys()).forEach((id) => {
         const playerId = id + 1
         const faction = factions[playerId]
-        this.memorizeOnGame({ faction }, playerId)
+        this.memorize(Memory.Faction, faction, playerId)
       })
     }
   }
@@ -53,7 +50,7 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
   }
 
   getFaction(playerId: number) {
-    return (this.game.playersMemory![playerId] as PlayerOptions).faction
+    return this.getMemory(playerId).remind<Faction>(Memory.Faction)
   }
 
   setupPlayer(playerId: PlayerId) {

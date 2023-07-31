@@ -55,7 +55,7 @@ import { Firestorm } from '../rules/cards/descriptions/blight/Firestorm'
 import { TheFear } from '../rules/cards/descriptions/blight/TheFear'
 import { ForcedExile } from '../rules/cards/descriptions/blight/ForcedExile'
 import { FactionCardCharacteristics } from '../rules/cards/descriptions/base/FactionCardCharacteristics'
-import { MaterialGame } from '../../../../workshop/packages/rules-api'
+import { MaterialGame } from '@gamepark/rules-api'
 import { MaterialType } from './MaterialType'
 import { getTurnEffects, TurnEffectType } from '../rules/cards/rules/action/TurnEffect'
 

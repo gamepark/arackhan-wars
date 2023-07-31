@@ -5,10 +5,7 @@ import { CustomMoveType } from '../material/CustomMoveType'
 import { RuleId } from './RuleId'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { START_HAND } from '../ArackhanWarsSetup'
-
-type StartPlayerMemory = {
-  startPlayer: number
-}
+import { Memory } from './Memory'
 
 export class MulliganRule extends SimultaneousRule<PlayerId, MaterialType, LocationType> {
 
@@ -72,6 +69,6 @@ export class MulliganRule extends SimultaneousRule<PlayerId, MaterialType, Locat
   }
 
   getMovesAfterPlayersDone() {
-    return [this.rules().startPlayerTurn(RuleId.PlacementRule, this.getMemory<StartPlayerMemory>().startPlayer)]
+    return [this.rules().startPlayerTurn(RuleId.PlacementRule, this.remind(Memory.StartPlayer))]
   }
 }

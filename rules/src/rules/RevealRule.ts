@@ -4,10 +4,10 @@ import { ItemMove, ItemMoveType, MaterialMove, MaterialRulesPart, MoveKind, Rule
 import { RuleId } from './RuleId'
 import { getCharacteristics } from '../material/FactionCard'
 import { PlayerId } from '../ArackhanWarsOptions'
-import { GamePlayerMemory } from '../ArackhanWarsSetup'
 import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
 import { isSpell } from './cards/descriptions/base/Spell'
 import { FactionCardInspector } from './cards/rules/helper/FactionCardInspector'
+import { Memory } from './Memory'
 
 export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
 
@@ -33,7 +33,7 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
         this.material(MaterialType.FactionToken)
           .player(revealedCard.location.player)
           .createItem({
-            id: this.getGameMemory<GamePlayerMemory>(revealedCard.location.player)!.faction,
+            id: this.remind(Memory.Faction, revealedCard.location.player),
             location: { parent: move.itemIndex, type: LocationType.FactionTokenSpace, player: revealedCard.location.player }
           })
       ]

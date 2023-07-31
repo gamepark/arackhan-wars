@@ -1,19 +1,20 @@
-import { MaterialGame, MaterialMove, MoveItem } from '@gamepark/rules-api'
+import { MaterialGame, MaterialMove, MoveItem, PlayerTurnRule } from '@gamepark/rules-api'
 import { isMovementAttribute } from '../attribute/MovementAttribute'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
 import { getCharacteristics } from '../../../../material/FactionCard'
 import { isSpell } from '../../descriptions/base/Spell'
 import { MaterialType } from '../../../../material/MaterialType'
-import { ActivatedCard, ActivationRuleMemory } from '../../../types'
+import { ActivatedCard } from '../../../types'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { LocationType } from '../../../../material/LocationType'
 import equal from 'fast-deep-equal'
 import { getAdjacentCards } from '../../../../utils/move.utils'
 import { RuleId } from '../../../RuleId'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
-import { ActivationPhaseRule } from '../../../ActivationPhaseRule'
+import { PlayerId } from '../../../../ArackhanWarsOptions'
+import { Memory } from '../../../Memory'
 
-export class MoveRules extends ActivationPhaseRule {
+export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   private readonly cardInspector: FactionCardInspector
 
   constructor(game: MaterialGame,
@@ -51,7 +52,7 @@ export class MoveRules extends ActivationPhaseRule {
   canMove = (cardIndex: number) => {
     if (!this.isActive(cardIndex)) return false
 
-    const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
+    const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
 
     // 1. must not be in the memory
     return !activatedCards.find((card) => card.card === cardIndex)
@@ -114,18 +115,13 @@ export class MoveRules extends ActivationPhaseRule {
   }
 
   memorizeCardPlayed(activation: ActivatedCard) {
-    const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(this.player)
+    const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
     const activatedCard = activatedCards.find((activatedCard) => activatedCard.card === activation.card)
     if (!activatedCard) {
-      this.memorize<ActivationRuleMemory>({
-        activatedCards: [...activatedCards, activation]
-      }, this.player)
-
+      this.memorize<ActivatedCard[]>(Memory.ActivatedCards, activatedCards => [...activatedCards, activation])
     } else {
       const updatedActivation = { ...activatedCards, ...activation }
-      this.memorize<ActivationRuleMemory>({
-        activatedCards: [...activatedCards.filter((card) => card !== activatedCard), updatedActivation]
-      }, this.player)
+      this.memorize<ActivatedCard[]>(Memory.ActivatedCards, activatedCards => [...activatedCards.filter((card) => card !== activatedCard), updatedActivation])
     }
   }
 }

@@ -1,4 +1,4 @@
-import { MaterialGame, MaterialMove } from '@gamepark/rules-api'
+import { MaterialGame, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
 import { getCharacteristics } from '../../../../material/FactionCard'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
@@ -7,9 +7,10 @@ import { RuleId } from '../../../RuleId'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { isSpell } from '../../descriptions/base/Spell'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
-import { ActivationPhaseRule } from '../../../ActivationPhaseRule'
+import { PlayerId } from '../../../../ArackhanWarsOptions'
+import { LocationType } from '../../../../material/LocationType'
 
-export class ActionRule extends ActivationPhaseRule {
+export class ActionRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   private readonly cardInspector: FactionCardInspector
 
   constructor(game: MaterialGame,

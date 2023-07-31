@@ -4,7 +4,7 @@ import { PlayMoveButton, RulesDialog, ThemeButton, useGame, useLegalMoves, usePl
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
-import { MaterialGame, StartRule } from '@gamepark/rules-api'
+import { CustomMove, MaterialGame } from '@gamepark/rules-api'
 import { useState } from 'react'
 import { css } from '@emotion/react'
 
@@ -12,7 +12,7 @@ export const ChooseStartPlayerHeader = () => {
   const { t } = useTranslation()
   const game = useGame<MaterialGame<PlayerId, MaterialType, LocationType>>()!
   const player = usePlayerId()
-  const legalMoves = useLegalMoves<StartRule>()
+  const legalMoves = useLegalMoves<CustomMove>()
   const playerName = usePlayerName(game.rule!.player!)
   const [dialogOpen, setDialogOpen] = useState(legalMoves.length > 0)
   if (!legalMoves.length) {
@@ -25,12 +25,12 @@ export const ChooseStartPlayerHeader = () => {
         <div css={rulesCss}>
           <h2><Trans defaults="header.start.choice"><span/></Trans></h2>
           <p>
-            <PlayMoveButton move={legalMoves.find(move => isChoosePlayer(move, player))}>
+            <PlayMoveButton move={legalMoves.find(move => move.data === player)}>
               {t('rules.start.choose.me')}
             </PlayMoveButton>
           </p>
-          {legalMoves.filter(move => !isChoosePlayer(move, player)).map(move =>
-            <p key={move.memory!.startPlayer}><ChoosePlayerButton move={move}/></p>
+          {legalMoves.filter(move => move.data !== player).map(move =>
+            <p key={move.data}><ChoosePlayerButton move={move}/></p>
           )}
         </div>
       </RulesDialog>
@@ -38,9 +38,9 @@ export const ChooseStartPlayerHeader = () => {
   )
 }
 
-const ChoosePlayerButton = ({ move }: { move: StartRule }) => {
+const ChoosePlayerButton = ({ move }: { move: CustomMove }) => {
   const { t } = useTranslation()
-  const playerName = usePlayerName(move.memory!.startPlayer)
+  const playerName = usePlayerName(move.data)
   return <PlayMoveButton move={move}>{t('rules.start.choose.player', { player: playerName })}</PlayMoveButton>
 }
 
@@ -57,7 +57,3 @@ const rulesCss = css`
     white-space: break-spaces;
   }
 `
-
-const isChoosePlayer = (move: StartRule, player: number) => {
-  return move.memory?.startPlayer === player
-}

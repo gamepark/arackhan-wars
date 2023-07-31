@@ -1,6 +1,6 @@
 import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
-import { CustomMove, isCustomMoveType, isMoveItemType, ItemMove, MaterialMove } from '@gamepark/rules-api'
+import { CustomMove, isCustomMoveType, isMoveItemType, isStartPlayerTurn, ItemMove, MaterialMove, PlayerTurnRule, RuleMove } from '@gamepark/rules-api'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { RuleId } from './RuleId'
@@ -12,9 +12,17 @@ import { discardSpells } from '../utils/discard.utils'
 import { deactivateTokens } from '../utils/activation.utils'
 import { FactionCardInspector } from './cards/rules/helper/FactionCardInspector'
 import { ActionRule } from './cards/rules/base/ActionRule'
-import { ActivationPhaseRule } from './ActivationPhaseRule'
+import { Memory } from './Memory'
 
-export class ActivationRule extends ActivationPhaseRule {
+export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
+
+  onRuleStart<RuleId extends number>(move: RuleMove<PlayerId, RuleId>) {
+    if (isStartPlayerTurn(move)) {
+      this.memorize(Memory.ActivatedCards, [])
+      this.memorize(Memory.TurnEffects, [])
+    }
+    return []
+  }
 
   getAutomaticMoves() {
     const remainingMoves = this.getPlayerMoves()
@@ -25,7 +33,7 @@ export class ActivationRule extends ActivationPhaseRule {
   getPlayerMoves(): MaterialMove[] {
     console.time()
     const cardInspector = new FactionCardInspector(this.game)
-    //const { activatedCards = [] } = this.getPlayerMemory<ActivationRuleMemory>()
+    //const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
 
     const moves: MaterialMove[] = []
     moves.push(...new AttackRule(this.game, cardInspector).getPlayerMoves())

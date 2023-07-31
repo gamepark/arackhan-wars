@@ -3,14 +3,15 @@ import { Material, MaterialGame } from '@gamepark/rules-api'
 import { AttackEffect } from '../../descriptions/base/AttackEffect'
 import { computeAttack } from '../../../../utils/attack.utils'
 import { MaterialType } from '../../../../material/MaterialType'
-import { ActivatedCard, ActivationRuleMemory } from '../../../types'
+import { ActivatedCard } from '../../../types'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
 import { discardCard } from '../../../../utils/discard.utils'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
+import { Memory } from '../../../Memory'
 
 class DestroyWhenAttackFailEffect extends AttackEffect {
   getAttackConsequences(attacker: Material) {
-    const { activatedCards = [] } = this.getMemory<ActivationRuleMemory>(attacker.getItem()!.location.player)
+    const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
     const activatedCard = activatedCards.find((a: ActivatedCard) => a.card === attacker.getIndex())!
     if (!activatedCard.targets) return []
 

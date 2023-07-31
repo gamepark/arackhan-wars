@@ -12,6 +12,7 @@ import { FactionTokenRules } from './FactionTokenRules'
 import { MaterialContext, RoundTokenDescription } from '@gamepark/react-game'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialItem } from '@gamepark/rules-api'
+import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 
 export class FactionTokenDescription extends RoundTokenDescription {
   diameter = 1.4
@@ -32,7 +33,7 @@ export class FactionTokenDescription extends RoundTokenDescription {
 
   getStaticItems = ({ game }: MaterialContext) => {
     return game.players.map((player) => ({
-      id: game.playersMemory![player]!.faction,
+      id: game.memory[Memory.Faction][player],
       quantity: 34,
       location: {
         type: LocationType.PlayerTokenStock,
