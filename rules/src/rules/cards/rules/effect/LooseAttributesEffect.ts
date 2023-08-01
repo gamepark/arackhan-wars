@@ -3,7 +3,7 @@ import { MaterialGame } from '@gamepark/rules-api'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 
-class LooseAttributesEffect extends PassiveEffect {
+export class LooseAttributesEffect extends PassiveEffect {
 
   constructor(game: MaterialGame, readonly attributes?: CardAttributeType[]) {
     super(game)

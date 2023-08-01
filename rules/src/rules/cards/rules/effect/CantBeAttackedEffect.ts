@@ -3,7 +3,7 @@ import { MaterialGame } from '@gamepark/rules-api'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 import { AttackEffect } from '../../descriptions/base/AttackEffect'
 
-class CantBeAttackedEffect extends AttackEffect {
+export class CantBeAttackedEffect extends AttackEffect {
 
   constructor(game: MaterialGame) {
     super(game)

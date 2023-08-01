@@ -6,7 +6,7 @@ import { AttackAttributeRule } from './AttackAttribute'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
 
-class RangeAttackAttributeRule extends AttackAttributeRule {
+export class RangeAttackAttributeRule extends AttackAttributeRule {
 
   constructor(game: MaterialGame, readonly strength: number) {
     super(game)

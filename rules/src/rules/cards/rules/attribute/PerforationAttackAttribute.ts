@@ -6,7 +6,7 @@ import { CustomMoveType } from '../../../../material/CustomMoveType'
 import { getCharacteristics } from '../../../../material/FactionCard'
 import uniq from 'lodash/uniq'
 
-class PerforationAttackAttribute extends AttackAttributeRule {
+export class PerforationAttackAttribute extends AttackAttributeRule {
 
   constructor(game: MaterialGame) {
     super(game)

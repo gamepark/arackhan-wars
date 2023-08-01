@@ -9,7 +9,7 @@ import { discardCard } from '../../../../utils/discard.utils'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 import { Memory } from '../../../Memory'
 
-class DestroyWhenAttackFailEffect extends AttackEffect {
+export class DestroyWhenAttackFailEffect extends AttackEffect {
   getAttackConsequences(attacker: Material) {
     const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
     const activatedCard = activatedCards.find((a: ActivatedCard) => a.card === attacker.getIndex())!

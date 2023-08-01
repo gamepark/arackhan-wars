@@ -4,7 +4,7 @@ import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.uti
 import { MaterialType } from '../../../../material/MaterialType'
 import { activateTokens } from '../../../../utils/activation.utils'
 
-class ReactivateEffect extends PassiveEffectWithConsequences {
+export class ReactivateEffect extends PassiveEffectWithConsequences {
 
   constructor(game: MaterialGame) {
     super(game)

@@ -2,7 +2,7 @@ import { Effect, PassiveEffect } from '../../descriptions/base/Effect'
 import { MaterialGame } from '@gamepark/rules-api'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 
-class LooseSkillsEffect extends PassiveEffect {
+export class LooseSkillsEffect extends PassiveEffect {
   looseSkill = true
 
   constructor(game: MaterialGame) {
