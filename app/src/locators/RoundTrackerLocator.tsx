@@ -9,9 +9,6 @@ export class RoundTrackerLocator extends ItemLocator<PlayerId, MaterialType, Loc
   parentItemType = MaterialType.RoundTracker
 
   getPositionOnParent(location: Location): XYCoordinates {
-    const round = location.x!
-
-    const additionalX = ((round) * 9)
-    return { x: 6.85 + additionalX, y: 50 }
+    return { x: 6.85 + (location.x! - 1) * 10.78, y: 50 }
   }
 }
