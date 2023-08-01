@@ -1,6 +1,16 @@
 import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
-import { CustomMove, isCustomMoveType, isMoveItemType, isStartPlayerTurn, ItemMove, MaterialMove, PlayerTurnRule, RuleMove } from '@gamepark/rules-api'
+import {
+  CustomMove,
+  isCustomMoveType,
+  isMoveItemType,
+  isStartPlayerTurn,
+  isStartRule,
+  ItemMove,
+  MaterialMove,
+  PlayerTurnRule,
+  RuleMove
+} from '@gamepark/rules-api'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { RuleId } from './RuleId'
@@ -74,8 +84,10 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     return []
   }
 
-  onRuleEnd(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
-    this.memorize(Memory.StartPlayer, this.player)
+  onRuleEnd(move: RuleMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
+    if (isStartRule(move) && move.id === RuleId.EndPhaseRule) {
+      this.memorize(Memory.StartPlayer, this.player)
+    }
     // Apply end turn effect on card
     return discardSpells(this.game,
       this
