@@ -1,6 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next'
 import { PlayMoveButton, useGame, useLegalMoves, usePlayerName } from '@gamepark/react-game'
-import { isStartPlayerTurn, MaterialGame } from '@gamepark/rules-api'
+import { isCustomMoveType, MaterialGame } from '@gamepark/rules-api'
+import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 
 export const InitiativeHeader = () => {
   const { t } = useTranslation()
@@ -11,6 +12,6 @@ export const InitiativeHeader = () => {
   if (!legalMoves.length) {
     return <>{t('header.initiative', { player: playerName })}</>
   } else {
-    return <Trans defaults="header.initiative.me"><PlayMoveButton move={legalMoves.find(isStartPlayerTurn)}/></Trans>
+    return <Trans defaults="header.initiative.me"><PlayMoveButton move={legalMoves.find(isCustomMoveType(CustomMoveType.Pass))}/></Trans>
   }
 }

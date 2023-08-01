@@ -51,17 +51,17 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
         moves.push(this.rules().customMove(CustomMoveType.CardAction, { card: index }))
       }**/
 
-    moves.push(this.endTurnMove())
+    moves.push(this.rules().customMove(CustomMoveType.Pass))
     console.timeEnd()
     return moves
   }
 
-  endTurnMove = (): MaterialMove => {
-    if (this.player == this.game.players[1]) {
-      return this.rules().startPlayerTurn(RuleId.EndPhaseRule, this.nextPlayer)
+  get nextRuleMove(): MaterialMove {
+    if (this.player === this.remind(Memory.StartPlayer)) {
+      return this.rules().startPlayerTurn(RuleId.ActivationRule, this.nextPlayer)
+    } else {
+      return this.rules().startRule(RuleId.EndPhaseRule)
     }
-
-    return this.rules().startPlayerTurn(RuleId.ActivationRule, this.nextPlayer)
   }
 
   beforeItemMove(move: ItemMove): MaterialMove[] {
@@ -74,8 +74,8 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     return []
   }
 
-
   onRuleEnd(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
+    this.memorize(Memory.StartPlayer, this.player)
     // Apply end turn effect on card
     return discardSpells(this.game,
       this
@@ -87,8 +87,12 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
   }
 
   onCustomMove(move: CustomMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
-    if (move.type === CustomMoveType.Attack || move.type === CustomMoveType.SolveAttack) {
-      return new AttackRule(this.game).onCustomMove(move)
+    switch (move.type) {
+      case CustomMoveType.Attack:
+      case CustomMoveType.SolveAttack:
+        return new AttackRule(this.game).onCustomMove(move)
+      case CustomMoveType.Pass:
+        return [this.nextRuleMove]
     }
 
     /*if (move.type === CustomMoveType.CardAction) {

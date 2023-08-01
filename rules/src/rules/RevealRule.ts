@@ -14,13 +14,12 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
   getAutomaticMoves(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     const revealCards = this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
-      .filter((item) => !!item.rotation?.y)
+      .filter(item => !!item.rotation?.y)
       .moveItems({ rotation: {} })
 
     return [
       ...revealCards,
-      // TODO: Go the the next player that has initiative cards on board, if any go to the ActivationRule
-      this.rules().startPlayerTurn(RuleId.InitiativeActivationRule, this.game.players[0])
+      this.rules().startPlayerTurn(RuleId.InitiativeActivationRule, this.remind(Memory.StartPlayer))
     ]
   }
 
