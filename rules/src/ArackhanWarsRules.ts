@@ -1,12 +1,13 @@
 import { MaterialType } from './material/MaterialType'
 import { LocationType } from './material/LocationType'
 import {
-  Competitive,
+  CompetitiveScore,
   HidingStrategy,
   MaterialGame,
   MaterialItem,
   MaterialMove,
   MaterialRulesPartCreator,
+  rankByScore,
   SecretMaterialRules,
   TimeLimit
 } from '@gamepark/rules-api'
@@ -25,38 +26,54 @@ import { HorseOfAvalonActionRule } from './rules/cards/rules/action/HorseOfAvalo
 import { TeleportationActionRule } from './rules/cards/rules/action/TeleportationActionRule'
 import { ChooseStartPlayerRule } from './rules/ChooseStartPlayerRule'
 import sumBy from 'lodash/sumBy'
-import { FactionCardsCharacteristics } from './material/FactionCard'
+import { FactionCardsCharacteristics, getCharacteristics } from './material/FactionCard'
 import { MimicryActionRule } from './rules/cards/rules/action/MimicryActionRule'
+import { isCreature } from './rules/cards/descriptions/base/Creature'
 
 
 /**
  * This class implements the rules of the board game.
  * It must follow Game Park "Rules" API so that the Game Park server can enforce the rules.
  */
-export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialType, LocationType> implements Competitive<MaterialGame<PlayerId, MaterialType, LocationType>, MaterialMove<PlayerId, MaterialType, LocationType>, PlayerId>,
-  TimeLimit<MaterialGame<PlayerId, MaterialType, LocationType>, MaterialMove<PlayerId, MaterialType, LocationType>, PlayerId> {
+export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialType, LocationType>
+  implements CompetitiveScore<MaterialGame<PlayerId, MaterialType, LocationType>, MaterialMove<PlayerId, MaterialType, LocationType>, PlayerId>,
+    TimeLimit<MaterialGame<PlayerId, MaterialType, LocationType>, MaterialMove<PlayerId, MaterialType, LocationType>, PlayerId> {
   rules = rules
   locationsStrategies = locationsStrategies
   hidingStrategies = hidingStrategies
 
   giveTime(): number {
-    return 30
+    return 60
   }
 
   rankPlayers(playerA: PlayerId, playerB: PlayerId): number {
-    const scoreA = this.getScore(playerA)
-    const scoreB = this.getScore(playerB)
-    return scoreB - scoreA
+    return rankByScore(playerA, playerB, this.getScore.bind(this))
   }
 
-  getScore(playerId: PlayerId): number {
-    const cardsOnBattlefield = this
-      .material(MaterialType.FactionCard)
-      .location(LocationType.Battlefield)
-      .player(playerId)
-      .getItems()
-
-    return sumBy(cardsOnBattlefield, card => FactionCardsCharacteristics[card.id.front].value)
+  getScore(playerId: PlayerId, tieBreaker = 0) {
+    switch (tieBreaker) {
+      case 0:
+        const cardsOnBattlefield = this
+          .material(MaterialType.FactionCard)
+          .location(LocationType.Battlefield)
+          .player(playerId)
+          .getItems()
+        return sumBy(cardsOnBattlefield, card => FactionCardsCharacteristics[card.id.front].value)
+      case 1:
+        return this
+          .material(MaterialType.FactionCard)
+          .location(LocationType.Battlefield)
+          .player(playerId)
+          .length
+      case 2:
+        return -this
+          .material(MaterialType.FactionCard)
+          .location(LocationType.PlayerDiscard)
+          .player(playerId)
+          .filter((_, index) => isCreature(getCharacteristics(index, this.game)))
+          .length
+    }
+    return
   }
 }
 
