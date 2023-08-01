@@ -13,14 +13,9 @@ export class AstralPlaneLocator extends ItemLocator<PlayerId, MaterialType, Loca
 
 
   getPositionOnParent(location: Location, context: MaterialContext): XYCoordinates {
-    const width = factionCardDescription.width
-    const index = this.getRelativePlayerIndex(context, location.player!)
-    if (index === 0) {
-      return { x: 68.3 + ((location.x!) * (width + 5.3)), y: 90 }
-    }
-
-    return { x: 31.55 - ((location.x!) * (width + 5.3)), y: 9.85 }
-
+    const bottomPlayerId = context.player ?? 1
+    const deltaX = location.x! * (factionCardDescription.width + 5.3)
+    return location.player === bottomPlayerId ? { x: 68.3 + deltaX, y: 90 } : { x: 31.55 - deltaX, y: 9.85 }
   }
 
   isHidden(item: MaterialItem): boolean {

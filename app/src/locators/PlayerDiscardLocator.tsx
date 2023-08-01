@@ -11,12 +11,7 @@ export class PlayerDiscardLocator extends DeckLocator<PlayerId, MaterialType, Lo
   parentItemType = MaterialType.PlayMat
 
   getPositionOnParent(location: Location, context: MaterialContext): XYCoordinates {
-    const index = this.getRelativePlayerIndex(context, location.player!)
-
-    if (index === 0) {
-      return { x: 8.4, y: 90 }
-    }
-
-    return { x: 91.4, y: 9.85 }
+    const bottomPlayerId = context.player ?? 1
+    return location.player === bottomPlayerId ? { x: 8.4, y: 90 } : { x: 91.4, y: 9.85 }
   }
 }
