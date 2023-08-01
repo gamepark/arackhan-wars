@@ -3,6 +3,8 @@ import { Effect } from './Effect'
 
 export abstract class Land extends FactionCardCharacteristics {
   kind: FactionCardKind = FactionCardKind.Land
+  legendary = true
+
   abstract defense: number
 
   benefit?: Effect

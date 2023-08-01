@@ -36,12 +36,12 @@ class RangeAttackAttributeRule extends AttackAttributeRule {
   }
 }
 
-export const rangedAttack = (strength: number) => new class extends Attribute<RangeAttackAttributeRule> {
+export const rangedAttack = (distance: number) => new class extends Attribute<RangeAttackAttributeRule> {
   kind = AttributeKind.Attack
   type = CardAttributeType.RangedAttack
 
   getAttributeRule(game: MaterialGame) {
-    return new RangeAttackAttributeRule(game, strength)
+    return new RangeAttackAttributeRule(game, distance)
   }
 
 }

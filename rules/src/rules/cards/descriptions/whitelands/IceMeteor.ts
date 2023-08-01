@@ -6,8 +6,7 @@ export class IceMeteor extends Spell {
   faction = Faction.Whitelands
   value = 1
 
-  attack = 2
-  defense = 2
+  attack = 1
 
   attribute = rangedAttack(3)
 }

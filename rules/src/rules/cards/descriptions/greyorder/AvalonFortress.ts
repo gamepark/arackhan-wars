@@ -5,7 +5,6 @@ import { Faction } from '../../../../Faction'
 
 export class AvalonFortress extends Land {
   faction = Faction.GreyOrder
-  legendary = true
   value = 10
 
   defense = 4

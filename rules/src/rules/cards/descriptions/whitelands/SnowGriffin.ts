@@ -8,6 +8,7 @@ import { flight } from '../../rules/attribute'
 export class SnowGriffin extends Creature {
   faction = Faction.Whitelands
   value = 7
+  deckBuildingValue = 11
 
   attack = 2
   defense = 1

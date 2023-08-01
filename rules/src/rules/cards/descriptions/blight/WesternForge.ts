@@ -5,7 +5,6 @@ import { Land } from '../base/Land'
 
 export class WesternForge extends Land {
   faction = Faction.Blight
-  legendary = true
   value = 10
 
   defense = 4

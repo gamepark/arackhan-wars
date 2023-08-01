@@ -6,6 +6,7 @@ import { Family } from '../base/Family'
 export class MountedBanshee extends Creature {
   faction = Faction.Nakka
   value = 10
+  deckBuildingValue = 15
 
   family = Family.Sentinel
   attack = 2

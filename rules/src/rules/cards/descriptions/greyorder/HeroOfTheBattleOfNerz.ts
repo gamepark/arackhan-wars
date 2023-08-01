@@ -6,6 +6,7 @@ import { Faction } from '../../../../Faction'
 export class HeroOfTheBattleOfNerz extends Creature {
   faction = Faction.GreyOrder
   value = 10
+  deckBuildingValue = 12
 
   attack = 2
   defense = 3

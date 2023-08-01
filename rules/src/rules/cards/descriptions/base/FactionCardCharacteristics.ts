@@ -34,6 +34,7 @@ export abstract class FactionCardCharacteristics {
   abstract faction: Faction
   abstract kind: FactionCardKind
   abstract value: number
+  deckBuildingValue?: number
   protected limit?: number
   legendary = false
   action?: RuleId
@@ -41,7 +42,7 @@ export abstract class FactionCardCharacteristics {
   protected attribute?: Attribute
   protected attributes: Attribute[] = []
 
-  getAttributes(): Attribute[] {
+  getAttributes() {
     return this.attribute ? [this.attribute] : this.attributes
   }
 
@@ -59,7 +60,11 @@ export abstract class FactionCardCharacteristics {
 
   private hasAttribute = (type: CardAttributeType) => this.getAttributes().some(attribute => attribute.type === type)
 
-  getLimit(): number {
+  getLimit() {
     return this.legendary ? 1 : this.limit ?? Infinity
+  }
+
+  getDeckBuildingValue() {
+    return this.deckBuildingValue ?? this.value
   }
 }

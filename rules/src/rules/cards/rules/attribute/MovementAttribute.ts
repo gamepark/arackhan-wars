@@ -60,12 +60,12 @@ export class MovementAttributeRule extends AttributeRule {
   }
 }
 
-export const movement = (strength: number) => new class extends Attribute<MovementAttributeRule> {
+export const movement = (distance: number) => new class extends Attribute<MovementAttributeRule> {
   kind = AttributeKind.Move
   type = CardAttributeType.Movement
 
   getAttributeRule(game: MaterialGame) {
-    return new MovementAttributeRule(game, strength)
+    return new MovementAttributeRule(game, distance)
   }
 
 }

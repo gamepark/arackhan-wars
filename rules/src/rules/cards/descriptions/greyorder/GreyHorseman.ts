@@ -5,6 +5,7 @@ import { movement } from '../../rules/attribute'
 export class GreyHorseman extends Creature {
   faction = Faction.GreyOrder
   value = 7
+  deckBuildingValue = 9
 
   attack = 2
   defense = 2

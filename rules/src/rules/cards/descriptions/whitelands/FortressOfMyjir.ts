@@ -5,7 +5,6 @@ import { Faction } from '../../../../Faction'
 
 export class FortressOfMyjir extends Land {
   faction = Faction.Whitelands
-  legendary = true
   value = 10
 
   defense = 4

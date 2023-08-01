@@ -6,6 +6,7 @@ export class TheSeneschal extends Creature {
   faction = Faction.GreyOrder
   legendary = true
   value = 14
+  deckBuildingValue = 16
 
   attack = 4
   defense = 2

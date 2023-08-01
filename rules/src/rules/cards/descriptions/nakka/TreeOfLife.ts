@@ -6,7 +6,6 @@ import { Faction } from '../../../../Faction'
 
 export class TreeOfLife extends Land {
   faction = Faction.Nakka
-  legendary = true
   value = 12
 
   defense = 4

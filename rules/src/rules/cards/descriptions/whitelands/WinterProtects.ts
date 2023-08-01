@@ -5,7 +5,7 @@ import { Faction } from '../../../../Faction'
 
 export class WinterProtects extends Spell {
   faction = Faction.Whitelands
-  value = 4
+  value = 3
 
   effect = valueModifier([adjacent, allied, or(creature, land)], { defense: +2 })
 }

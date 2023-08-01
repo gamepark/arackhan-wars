@@ -7,6 +7,7 @@ export class Gabriel extends Creature {
   faction = Faction.Whitelands
   legendary = true
   value = 10
+  deckBuildingValue = 13
 
   family = Family.IceGuard
   attack = 3

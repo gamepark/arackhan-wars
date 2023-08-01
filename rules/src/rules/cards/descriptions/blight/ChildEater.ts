@@ -7,6 +7,7 @@ import { himself } from '../utils/applicable-filter.utils'
 export class ChildEater extends Creature {
   faction = Faction.Blight
   value = 13
+  deckBuildingValue = 15
 
   attack = 4
   defense = 2
