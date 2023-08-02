@@ -7,7 +7,7 @@ import { Faction, playerFactions } from './Faction'
  */
 export type PlayerId = number
 export type  PlayerOptions = {
-  faction: Faction
+  faction?: Faction
 }
 
 /**

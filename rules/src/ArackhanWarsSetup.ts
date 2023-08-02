@@ -4,7 +4,6 @@ import { LocationType } from './material/LocationType'
 import { ArackhanWarsOptions, PlayerId } from './ArackhanWarsOptions'
 import { RuleId } from './rules/RuleId'
 import { locationsStrategies } from './material/LocationStrategies'
-import shuffle from 'lodash/shuffle'
 import { Faction, playerFactions } from './Faction'
 import { PreBuildDecks } from './rules/cards/PreBuildDecks'
 import { Memory } from './rules/Memory'
@@ -26,20 +25,10 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
   }
 
   setupFactions(options: ArackhanWarsOptions) {
-    if (Array.isArray(options.players)) {
-      options.players.forEach((player, index) => {
-        const faction = player.faction
-        this.memorize(Memory.Faction, faction, index + 1)
-      })
-    } else {
-      const numberOfPlayers = options.players ?? 2
-      const factions = shuffle(playerFactions)
-      return Array.from(Array(numberOfPlayers).keys()).forEach((id) => {
-        const playerId = id + 1
-        const faction = factions[playerId]
-        this.memorize(Memory.Faction, faction, playerId)
-      })
-    }
+    options.players.forEach((player, index) => {
+      const faction = player.faction ?? playerFactions[Math.floor(Math.random() * playerFactions.length)]
+      this.memorize(Memory.Faction, faction, index + 1)
+    })
   }
 
   setupPlayers() {
