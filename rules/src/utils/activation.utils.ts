@@ -13,3 +13,5 @@ export const activateTokens = (tokens: Material) => {
   return tokens.moveItems({})
 }
 
+export const isFlipped = (token: Material) => token.getItem()?.rotation?.y === 1
+

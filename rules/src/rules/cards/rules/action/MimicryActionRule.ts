@@ -8,6 +8,8 @@ import { TurnEffect } from './TurnEffect'
 import { isCreature } from '../../descriptions/base/Creature'
 import { Memory } from '../../../Memory'
 import { EffectType } from '../../descriptions/base/Effect'
+import { isFlipped } from '../../../../utils/activation.utils'
+import { getCardRule } from '../base/CardRule'
 
 export class MimicryActionRule extends CardActionRule {
 
@@ -30,6 +32,7 @@ export class MimicryActionRule extends CardActionRule {
   }
 
   onCustomMove(move: CustomMove): MaterialMove[] {
+    const moves: MaterialMove[] = []
     if (move.type === CustomMoveType.ChooseCard) {
       const target = this.target
       if (target === undefined) {
@@ -40,9 +43,13 @@ export class MimicryActionRule extends CardActionRule {
         this.memorize<TurnEffect[]>(Memory.TurnEffects, turnEffects =>
           [...turnEffects, { targets: [target], effect: { type: EffectType.Mimic, target: mimicTarget } }]
         )
-        return super.afterCardAction()
+        const targetToken = getCardRule(this.game, target).token
+        if (isFlipped(targetToken)) {
+          moves.push(targetToken.moveItem({ rotation: {} }))
+        }
+        moves.push(...super.afterCardAction())
       }
     }
-    return []
+    return moves
   }
 }

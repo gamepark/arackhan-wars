@@ -10,6 +10,7 @@ import { Ability } from '../../descriptions/base/Ability'
 import { FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
 import { TurnEffect } from '../action/TurnEffect'
 import { Memory } from '../../../Memory'
+import { isFlipped } from '../../../../utils/activation.utils'
 
 export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
   private effectsCache: Effect[] | undefined = undefined
@@ -69,12 +70,12 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
     return this.effectsCache
   }
 
-  private get hasTokenFlipped() {
-    return this.material(MaterialType.FactionToken).parent(this.index).getItem()?.rotation?.y === 1
+  get token() {
+    return this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(this.index)
   }
 
   get isActive() {
-    return !this.hasTokenFlipped && !this.effects.some(effect => effect.type === EffectType.Deactivated)
+    return !isFlipped(this.token) && !this.effects.some(effect => effect.type === EffectType.Deactivated)
   }
 }
 
