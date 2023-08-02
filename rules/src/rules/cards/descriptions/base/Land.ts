@@ -14,7 +14,7 @@ export abstract class Land extends FactionCardCharacteristics {
     return this.benefit ? [this.benefit] : this.benefits
   }
 
-  getPassiveEffects(): Ability[] {
+  getAbilities(): Ability[] {
     return this.getBenefits()
   }
 }

@@ -46,7 +46,7 @@ export abstract class FactionCardCharacteristics {
     return this.attribute ? [this.attribute] : this.attributes
   }
 
-  abstract getPassiveEffects(): Ability[]
+  abstract getAbilities(): Ability[]
 
   hasInitiative = () => this.hasAttribute(CardAttributeType.Initiative)
   hasOmnistrike = () => this.hasAttribute(CardAttributeType.Omnistrike)

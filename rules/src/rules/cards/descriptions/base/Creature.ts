@@ -22,7 +22,7 @@ export abstract class Creature extends FactionCardCharacteristics {
     return this.weakness ? [this.weakness] : this.weaknesses
   }
 
-  getPassiveEffects(isSkillDisabled?: boolean): Ability[] {
+  getAbilities(isSkillDisabled?: boolean): Ability[] {
     if (isSkillDisabled) return this.getWeaknesses()
     return [
       ...this.getSkills(),

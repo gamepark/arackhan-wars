@@ -13,7 +13,7 @@ export abstract class Spell extends FactionCardCharacteristics {
     return this.effect ? [this.effect] : this.effects
   }
 
-  getPassiveEffects(): Ability[] {
+  getAbilities(): Ability[] {
     return this.getEffects()
   }
 

@@ -19,7 +19,7 @@ class SwarmAttackAttribute extends AttackAttributeRule {
     return []
   }
 
-  getPassiveEffect(source: Material, target: Material): EffectRule | undefined {
+  getEffectRule(source: Material, target: Material): EffectRule | undefined {
     const sourceCard = source.getItem()!
     const sourceCharacteristics = getCharacteristics(source.getIndex(), this.game)
     const sourceFamily = isCreature(sourceCharacteristics) ? sourceCharacteristics.family : undefined

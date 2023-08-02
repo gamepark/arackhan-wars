@@ -16,5 +16,5 @@ export abstract class Attribute<T extends AttributeRule = any> {
 
 
 export class AttributeRule extends MaterialRulesPart {
-  getPassiveEffect?(source: Material, target: Material): EffectRule | undefined
+  getEffectRule?(source: Material, target: Material): EffectRule | undefined
 }
