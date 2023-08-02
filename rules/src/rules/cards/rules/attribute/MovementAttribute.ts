@@ -4,7 +4,7 @@ import { battlefieldSpaceCoordinates } from '../../../../material/spaces'
 import { LocationType } from '../../../../material/LocationType'
 import { getDistance, isAdjacentToFactionCard } from '../../../../utils/adjacent.utils'
 import { MaterialType } from '../../../../material/MaterialType'
-import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
+import { CardAttribute, CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
 import equal from 'fast-deep-equal'
 import { getCardRule } from '../base/CardRule'
@@ -64,6 +64,8 @@ export const movement = (distance: number) => new class extends Attribute<Moveme
   kind = AttributeKind.Move
   type = CardAttributeType.Movement
 
+  cardAttribute: CardAttribute = { type: CardAttributeType.Movement, strength: distance }
+
   getAttributeRule(game: MaterialGame) {
     return new MovementAttributeRule(game, distance)
   }
@@ -73,6 +75,8 @@ export const movement = (distance: number) => new class extends Attribute<Moveme
 export const flight = new class extends Attribute<MovementAttributeRule> {
   kind = AttributeKind.Move
   type = CardAttributeType.Flight
+
+  cardAttribute: CardAttribute = { type: CardAttributeType.Flight }
 
   getAttributeRule(game: MaterialGame) {
     return new MovementAttributeRule(game)

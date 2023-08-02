@@ -1,6 +1,6 @@
 import { Material, MaterialGame } from '@gamepark/rules-api'
 import { Attribute, AttributeKind } from './Attribute'
-import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
+import { CardAttribute, CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { AttackAttributeRule } from './AttackAttribute'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
 import { getAdjacentCards } from '../../../../utils/move.utils'
@@ -39,6 +39,8 @@ export class OmnistrikeAttribute extends AttackAttributeRule {
 export const omnistrike = new class extends Attribute<OmnistrikeAttribute> {
   kind = AttributeKind.Attack
   type = CardAttributeType.Omnistrike
+
+  cardAttribute: CardAttribute = { type: CardAttributeType.Omnistrike }
 
   getAttributeRule(game: MaterialGame) {
     return new OmnistrikeAttribute(game)

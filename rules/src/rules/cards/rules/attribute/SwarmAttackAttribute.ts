@@ -1,6 +1,6 @@
 import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { Attribute, AttributeKind } from './Attribute'
-import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
+import { CardAttribute, CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { AttackAttributeRule } from './AttackAttribute'
 import { MaterialType } from '../../../../material/MaterialType'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
@@ -45,6 +45,8 @@ class SwarmAttackAttribute extends AttackAttributeRule {
 export const swarm = new class extends Attribute<SwarmAttackAttribute> {
   kind = AttributeKind.Attack
   type = CardAttributeType.Swarm
+
+  cardAttribute: CardAttribute = { type: CardAttributeType.Swarm }
 
   getAttributeRule(game: MaterialGame) {
     return new SwarmAttackAttribute(game)

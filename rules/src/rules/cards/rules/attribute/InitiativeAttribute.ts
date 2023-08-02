@@ -12,6 +12,8 @@ export class InitiativeAttributeRule extends AttributeRule {
 export const initiative = new class extends Attribute<InitiativeAttributeRule> {
   type = CardAttributeType.Initiative
 
+  cardAttribute = { type: CardAttributeType.Initiative }
+
   getAttributeRule(game: MaterialGame) {
     return new InitiativeAttributeRule(game)
   }

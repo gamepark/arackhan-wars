@@ -1,6 +1,6 @@
 import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { Attribute, AttributeKind } from './Attribute'
-import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
+import { CardAttribute, CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { AttackAttributeRule } from './AttackAttribute'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
 import uniq from 'lodash/uniq'
@@ -88,6 +88,8 @@ export class PerforationAttackAttribute extends AttackAttributeRule {
 export const perforation = new class extends Attribute<PerforationAttackAttribute> {
   kind = AttributeKind.Attack
   type = CardAttributeType.Perforation
+
+  cardAttribute: CardAttribute = { type: CardAttributeType.Perforation }
 
   getAttributeRule(game: MaterialGame) {
     return new PerforationAttackAttribute(game)
