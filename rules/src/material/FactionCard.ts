@@ -55,9 +55,6 @@ import { Firestorm } from '../rules/cards/descriptions/blight/Firestorm'
 import { TheFear } from '../rules/cards/descriptions/blight/TheFear'
 import { ForcedExile } from '../rules/cards/descriptions/blight/ForcedExile'
 import { FactionCardCharacteristics } from '../rules/cards/descriptions/base/FactionCardCharacteristics'
-import { MaterialGame } from '@gamepark/rules-api'
-import { MaterialType } from './MaterialType'
-import { getTurnEffects, TurnEffectType } from '../rules/cards/rules/action/TurnEffect'
 
 export enum FactionCard {
   NihilistPenguin = 1,
@@ -116,14 +113,6 @@ export enum FactionCard {
   Firestorm,
   TheFear,
   ForcedExile
-}
-
-export const getCharacteristics = (cardIndex: number, game: MaterialGame) => {
-  const turnEffects = getTurnEffects(game)
-  const mimicry = turnEffects.find(effect => effect.type === TurnEffectType.Mimicry && effect.target === cardIndex)
-  if (mimicry) cardIndex = mimicry.copied
-  const factionCard = game.items[MaterialType.FactionCard]![cardIndex].id.front as FactionCard
-  return FactionCardsCharacteristics[factionCard]
 }
 
 export const FactionCardsCharacteristics: Record<FactionCard, FactionCardCharacteristics> = {

@@ -3,8 +3,8 @@ import { Attribute, AttributeKind } from './Attribute'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { AttackAttributeRule } from './AttackAttribute'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
-import { getCharacteristics } from '../../../../material/FactionCard'
 import { getAdjacentCards } from '../../../../utils/move.utils'
+import { getCardRule } from '../base/CardRule'
 
 
 export class OmnistrikeAttribute extends AttackAttributeRule {
@@ -31,7 +31,7 @@ export class OmnistrikeAttribute extends AttackAttributeRule {
   }
 
   isBlocked(attacker: Material): boolean {
-    const attackerCardDescription = getCharacteristics(attacker.getIndex(), this.game)
+    const attackerCardDescription = getCardRule(this.game, attacker.getIndex()).characteristics
     return attackerCardDescription.hasPerforation()
   }
 }

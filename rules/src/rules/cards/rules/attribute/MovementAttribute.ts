@@ -4,10 +4,10 @@ import { battlefieldSpaceCoordinates } from '../../../../material/spaces'
 import { LocationType } from '../../../../material/LocationType'
 import { getDistance, isAdjacentToFactionCard } from '../../../../utils/adjacent.utils'
 import { MaterialType } from '../../../../material/MaterialType'
-import { getCharacteristics } from '../../../../material/FactionCard'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
 import equal from 'fast-deep-equal'
+import { getCardRule } from '../base/CardRule'
 
 
 export class MovementAttributeRule extends AttributeRule {
@@ -36,7 +36,7 @@ export class MovementAttributeRule extends AttributeRule {
 
     const battlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
     const card = source.getItem()!
-    const characteristics = getCharacteristics(source.getIndex(), this.game)
+    const characteristics = getCardRule(this.game, source.getIndex()).characteristics
 
     if (!characteristics.canMove() && !characteristics.canFly()) return false
     if (characteristics.canFly() && cardInspector.hasLostAttributes(source.getIndex(), CardAttributeType.Flight)) return false
@@ -53,7 +53,7 @@ export class MovementAttributeRule extends AttributeRule {
     // It must not be the card itself
     if (itemOnSpace.getIndex() === source.getIndex()) return false
 
-    const cardOnSpace = getCharacteristics(itemOnSpace.getIndex(), this.game)
+    const cardOnSpace = getCardRule(this.game, itemOnSpace.getIndex()).characteristics
 
     // It can be swapped if both card has movement or flight
     return itemOnSpace.getItems()[0].location.player === card.location.player && (cardOnSpace.hasMovement() || cardOnSpace.canFly())

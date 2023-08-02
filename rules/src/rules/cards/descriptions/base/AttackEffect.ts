@@ -1,7 +1,7 @@
 import { EffectRule } from './Ability'
 import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { isSpell } from './Spell'
-import { getCharacteristics } from '../../../../material/FactionCard'
+import { getCardRule } from '../../rules/base/CardRule'
 
 export class AttackEffect extends EffectRule {
   /**
@@ -18,7 +18,7 @@ export class AttackEffect extends EffectRule {
    * Used for the attacker
    */
   canAttack(_attacker: number, opponent: number, _otherAttackers: number[] = [], game: MaterialGame): boolean {
-    return !isSpell(getCharacteristics(opponent, game))
+    return !isSpell(getCardRule(game, opponent).characteristics)
   }
 
   /**

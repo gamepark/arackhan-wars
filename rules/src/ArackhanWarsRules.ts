@@ -26,9 +26,10 @@ import { HorseOfAvalonActionRule } from './rules/cards/rules/action/HorseOfAvalo
 import { TeleportationActionRule } from './rules/cards/rules/action/TeleportationActionRule'
 import { ChooseStartPlayerRule } from './rules/ChooseStartPlayerRule'
 import sumBy from 'lodash/sumBy'
-import { FactionCardsCharacteristics, getCharacteristics } from './material/FactionCard'
+import { FactionCardsCharacteristics } from './material/FactionCard'
 import { MimicryActionRule } from './rules/cards/rules/action/MimicryActionRule'
 import { isCreature } from './rules/cards/descriptions/base/Creature'
+import { getCardRule } from './rules/cards/rules/base/CardRule'
 
 
 /**
@@ -70,7 +71,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
           .material(MaterialType.FactionCard)
           .location(LocationType.PlayerDiscard)
           .player(playerId)
-          .filter((_, index) => isCreature(getCharacteristics(index, this.game)))
+          .filter((_, index) => isCreature(getCardRule(this.game, index).characteristics))
           .length
     }
     return

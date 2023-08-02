@@ -3,8 +3,8 @@ import { Attribute, AttributeKind } from './Attribute'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { AttackAttributeRule } from './AttackAttribute'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
-import { getCharacteristics } from '../../../../material/FactionCard'
 import uniq from 'lodash/uniq'
+import { getCardRule } from '../base/CardRule'
 
 export class PerforationAttackAttribute extends AttackAttributeRule {
 
@@ -59,7 +59,7 @@ export class PerforationAttackAttribute extends AttackAttributeRule {
     const attackerCard = attacker.getItem()!
     const opponentCard = opponent.getItem()!
 
-    const attackerCardDescription = getCharacteristics(attacker.getIndex(), this.game)
+    const attackerCardDescription = getCardRule(this.game, attacker.getIndex()).characteristics
 
     if (attackerCardDescription.hasOmnistrike()) {
       const northOpponents = this.getOpponentsInDirection(attacker, opponentsCards, { y: -1 })

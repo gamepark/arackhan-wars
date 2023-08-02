@@ -2,12 +2,13 @@ import { Material, MaterialGame, MaterialItem, MaterialRulesPart } from '@gamepa
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
-import { FactionCard, getCharacteristics } from '../../../../material/FactionCard'
+import { FactionCard, FactionCardsCharacteristics } from '../../../../material/FactionCard'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { isCreature } from '../../descriptions/base/Creature'
 import { Effect, EffectType, isLoseSkills } from '../../descriptions/base/Effect'
 import { Ability } from '../../descriptions/base/Ability'
 import { FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
+import { getTurnEffects, TurnEffectType } from '../action/TurnEffect'
 
 export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
   private effectsCache: Effect[] | undefined = undefined
@@ -29,7 +30,12 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get characteristics(): FactionCardCharacteristics {
-    return getCharacteristics(this.index, this.game)
+    let cardIndex = this.index
+    const turnEffects = getTurnEffects(this.game)
+    const mimicry = turnEffects.find(effect => effect.type === TurnEffectType.Mimicry && effect.target === cardIndex)
+    if (mimicry) cardIndex = mimicry.copied
+    const factionCard = this.game.items[MaterialType.FactionCard]![cardIndex].id.front as FactionCard
+    return FactionCardsCharacteristics[factionCard]
   }
 
   private get loseSkills() {

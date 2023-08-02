@@ -2,13 +2,13 @@ import { Ability } from '../../descriptions/base/Ability'
 import { MaterialGame } from '@gamepark/rules-api'
 import { AttackEffect } from '../../descriptions/base/AttackEffect'
 import { himself } from '../../descriptions/utils/applicable-filter.utils'
-import { getCharacteristics } from '../../../../material/FactionCard'
+import { getCardRule } from '../base/CardRule'
 
 
 export class DrunkKnightWeaknessEffect extends AttackEffect {
 
   canAttack(_attacker: number, opponent: number, _otherAttackers: number[] = [], game: MaterialGame) {
-    const otherCard = getCharacteristics(opponent, game)
+    const otherCard = getCardRule(game, opponent).characteristics
     return otherCard.value % 2 === 0 && super.canAttack(_attacker, opponent, _otherAttackers, game)
   }
 }

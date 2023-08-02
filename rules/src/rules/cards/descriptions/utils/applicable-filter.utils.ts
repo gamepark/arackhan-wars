@@ -1,9 +1,10 @@
 import { Material, MaterialGame } from '@gamepark/rules-api'
 import { areAdjacent } from '../../../../utils/adjacent.utils'
-import { FactionCardsCharacteristics, getCharacteristics } from '../../../../material/FactionCard'
+import { FactionCardsCharacteristics } from '../../../../material/FactionCard'
 import { isCreature } from '../base/Creature'
 import { isLand } from '../base/Land'
 import { Family } from '../base/Family'
+import { getCardRule } from '../../rules/base/CardRule'
 
 
 export type ApplicableFilter = (source: Material, target: Material, game: MaterialGame) => boolean
@@ -14,7 +15,7 @@ export const adjacent = (source: Material, target: Material) => areAdjacent(sour
 export const enemy = (source: Material, target: Material) => source.getItem()!.location.player !== target.getItem()!.location.player
 export const allied = (source: Material, target: Material) => !enemy(source, target)
 export const family = (family: Family) => (_source: Material, target: Material, game: MaterialGame) => {
-  const details = getCharacteristics(target.getIndex(), game)
+  const details = getCardRule(game, target.getIndex()).characteristics
   return isCreature(details) && details.family === family
 }
 

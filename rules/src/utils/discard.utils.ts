@@ -1,15 +1,15 @@
 import { DiscardTiming } from '../rules/cards/descriptions/base/FactionCardCharacteristics'
-import { getCharacteristics } from '../material/FactionCard'
 import { isSpell } from '../rules/cards/descriptions/base/Spell'
 import { LocationType } from '../material/LocationType'
 import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
+import { getCardRule } from '../rules/cards/rules/base/CardRule'
 
 export const discardSpells = (game: MaterialGame, cards: Material, discardTiming?: DiscardTiming): MaterialMove[] => {
   return cards
     .getIndexes()
     .flatMap((index: number) => {
       const cardMaterial = cards.index(index)
-      const description = getCharacteristics(index, game)
+      const description = getCardRule(game, index).characteristics
       if (isSpell(description) && description.discardTiming === discardTiming) {
         return discardCard(cardMaterial)
       }

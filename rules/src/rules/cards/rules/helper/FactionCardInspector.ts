@@ -10,11 +10,11 @@ import sumBy from 'lodash/sumBy'
 import { isAttackEffect } from '../../descriptions/base/AttackEffect'
 import { Material, MaterialGame, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
-import { getCharacteristics } from '../../../../material/FactionCard'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { isAttackAttribute } from '../attribute/AttackAttribute'
 import sum from 'lodash/sum'
 import { Attribute } from '../attribute/Attribute'
+import { getCardRule } from '../base/CardRule'
 
 export class FactionCardInspector extends MaterialRulesPart {
   readonly cardsEffects: Record<number, EffectRule[]> = {}
@@ -32,7 +32,7 @@ export class FactionCardInspector extends MaterialRulesPart {
 
     for (const cardIndex of battlefieldIndexes) {
       const originalCard = this.material(MaterialType.FactionCard).index(cardIndex)
-      const characteristics = getCharacteristics(cardIndex, this.game)
+      const characteristics = getCardRule(this.game, cardIndex).characteristics
       const abilities = this.getAbilities(characteristics, this.hasLostSkill(cardIndex, modifications))
 
 
@@ -76,7 +76,7 @@ export class FactionCardInspector extends MaterialRulesPart {
     const battlefieldIndexes = this.battlefield.getIndexes()
     for (const cardIndex of battlefieldIndexes) {
       const cardMaterial = this.material(MaterialType.FactionCard).index(cardIndex)
-      const characteristics = getCharacteristics(cardIndex, this.game)
+      const characteristics = getCardRule(this.game, cardIndex).characteristics
 
       for (const otherCardIndex of battlefieldIndexes) {
         if (otherCardIndex === cardIndex) continue
@@ -120,7 +120,7 @@ export class FactionCardInspector extends MaterialRulesPart {
   }
 
   getAttack(cardIndex: number): number {
-    const characteristics = getCharacteristics(cardIndex, this.game)
+    const characteristics = getCardRule(this.game, cardIndex).characteristics
     if (!isSpell(characteristics) && !isCreature(characteristics)) return 0
     const baseAttack = characteristics.attack ?? 0
 
@@ -130,7 +130,7 @@ export class FactionCardInspector extends MaterialRulesPart {
   }
 
   getDefense(cardIndex: number): number {
-    const cardDescription = getCharacteristics(cardIndex, this.game)
+    const cardDescription = getCardRule(this.game, cardIndex).characteristics
     if (!isLand(cardDescription) && !isCreature(cardDescription)) return 0
     const baseDefense = cardDescription.defense ?? 0
     if (!(cardIndex in this.cardsEffects)) return baseDefense
@@ -159,7 +159,7 @@ export class FactionCardInspector extends MaterialRulesPart {
 
   getAttackForOpponent(attacker: Material, opponent: Material, baseAttack: number) {
     const attackerIndex = attacker.getIndex()
-    const characteristics = getCharacteristics(attackerIndex, this.game)
+    const characteristics = getCardRule(this.game, attackerIndex).characteristics
     characteristics.getAttributes()
       .filter(isAttackAttribute)
       .filter((a) => !this.hasLostAttributes(attackerIndex, a.type))

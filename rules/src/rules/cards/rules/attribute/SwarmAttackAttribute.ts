@@ -3,11 +3,11 @@ import { Attribute, AttributeKind } from './Attribute'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { AttackAttributeRule } from './AttackAttribute'
 import { MaterialType } from '../../../../material/MaterialType'
-import { getCharacteristics } from '../../../../material/FactionCard'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { ValueModifierEffect } from '../effect/ValueModifierEffect'
 import { EffectRule } from '../../descriptions/base/Ability'
 import { isCreature } from '../../descriptions/base/Creature'
+import { getCardRule } from '../base/CardRule'
 
 class SwarmAttackAttribute extends AttackAttributeRule {
 
@@ -21,16 +21,16 @@ class SwarmAttackAttribute extends AttackAttributeRule {
 
   getEffectRule(source: Material, target: Material): EffectRule | undefined {
     const sourceCard = source.getItem()!
-    const sourceCharacteristics = getCharacteristics(source.getIndex(), this.game)
+    const sourceCharacteristics = getCardRule(this.game, source.getIndex()).characteristics
     const sourceFamily = isCreature(sourceCharacteristics) ? sourceCharacteristics.family : undefined
-    const targetCharacteristics = getCharacteristics(target.getIndex(), this.game)
+    const targetCharacteristics = getCardRule(this.game, target.getIndex()).characteristics
     const targetFamily = isCreature(targetCharacteristics) ? targetCharacteristics.family : undefined
 
     const cardsWithSameFamily = this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
       .player(sourceCard.location.player)
       .filter((_, index) => {
-        const details = getCharacteristics(index, this.game)
+        const details = getCardRule(this.game, index).characteristics
         return isCreature(details) && details.family === sourceFamily
       })
       .length

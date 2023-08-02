@@ -2,7 +2,6 @@ import { CustomMove, Material, MaterialGame, MaterialMove, PlayerTurnRule } from
 import { CardAttributeType, DiscardTiming, FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
-import { getCharacteristics } from '../../../../material/FactionCard'
 import { ActivatedCard } from '../../../types'
 import { isAttackAttribute } from '../attribute/AttackAttribute'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
@@ -57,7 +56,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
     const cardMaterial = this.material(MaterialType.FactionCard).index(attacker)
     // filter the list of opponent in order to check if card can participate to group attack
     const filteredOpponents = this.getAuthorizedTargets(cardMaterial, opponentsCards)
-    const characteristics = getCharacteristics(attacker, this.game)
+    const characteristics = getCardRule(this.game, attacker).characteristics
     if (!characteristics.canAttack()) return []
 
     const attributeAttacks = characteristics.getAttributes()
@@ -94,7 +93,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       return activatedCards.some((a) => {
         if (!(a.targets ?? []).includes(o)) return false
         const cardMaterial = this.material(MaterialType.FactionCard).index(a.card)
-        const characteristics = getCharacteristics(a.card, this.game)
+        const characteristics = getCardRule(this.game, a.card).characteristics
         if (characteristics.hasRangeAttack()) return true
         return areAdjacent(attacker, opponentMaterial) && areAdjacent(cardMaterial, opponentMaterial)
       })
@@ -116,15 +115,16 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
   }
 
   isActive(cardIndex: number): boolean {
-    const cardDescription = getCharacteristics(cardIndex, this.game)
+    const cardRule = getCardRule(this.game, cardIndex)
+    const characteristics = cardRule.characteristics
     const isInitiativeRule = this.game.rule!.id === RuleId.InitiativeActivationRule
-    if (isInitiativeRule && (!cardDescription.hasInitiative() || this.cardInspector.hasLostAttributes(cardIndex, CardAttributeType.Initiative))) return false
-    return getCardRule(this.game, cardIndex).isActive
+    if (isInitiativeRule && (!characteristics.hasInitiative() || this.cardInspector.hasLostAttributes(cardIndex, CardAttributeType.Initiative))) return false
+    return cardRule.isActive
   }
 
   attack(opponent: number): MaterialMove[] {
     const opponentMaterial = this.material(MaterialType.FactionCard).index(opponent)
-    const opponentCardCharacteristics = getCharacteristics(opponent, this.game)
+    const opponentCardCharacteristics = getCardRule(this.game, opponent).characteristics
     const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
 
     const attacksOnThisOpponent = activatedCards.filter((a) => (a.targets ?? []).includes(opponent))
@@ -185,7 +185,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       const opponents = battlefieldCards.player((player) => player !== this.player)
       const filteredOpponents = this.getAuthorizedTargets(cardMaterial, opponents)
 
-      const characteristics = getCharacteristics(move.data.card, this.game)
+      const characteristics = getCardRule(this.game, move.data.card).characteristics
       const attributeTargets = characteristics.getAttributes().filter(isAttackAttribute)
         .filter((a) => !this.cardInspector.hasLostAttributes(move.data.card, a.type))
         .flatMap((attribute) => attribute.getAttributeRule(this.game).getTargets(cardMaterial, opponentMaterial, opponents.indexes(filteredOpponents)))

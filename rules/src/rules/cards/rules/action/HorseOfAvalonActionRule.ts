@@ -1,10 +1,10 @@
 import { isMoveItem, ItemMove, Location, MaterialMove } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
-import { getCharacteristics } from '../../../../material/FactionCard'
 import { CardActionRule } from './CardActionRule'
 import { isCreature } from '../../descriptions/base/Creature'
 import { Memory } from '../../../Memory'
+import { getCardRule } from '../base/CardRule'
 
 
 export class HorseOfAvalonActionRule extends CardActionRule {
@@ -16,7 +16,7 @@ export class HorseOfAvalonActionRule extends CardActionRule {
       .material(MaterialType.FactionCard)
       .location(LocationType.Hand)
       .player(this.player)
-      .filter((_, index) => isCreature(getCharacteristics(index, this.game)))
+      .filter((_, index) => isCreature(getCardRule(this.game, index).characteristics))
       .moveItems({ location })
   }
 

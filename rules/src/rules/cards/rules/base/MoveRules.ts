@@ -1,7 +1,6 @@
 import { MaterialGame, MaterialMove, MoveItem, PlayerTurnRule } from '@gamepark/rules-api'
 import { isMovementAttribute } from '../attribute/MovementAttribute'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
-import { getCharacteristics } from '../../../../material/FactionCard'
 import { MaterialType } from '../../../../material/MaterialType'
 import { ActivatedCard } from '../../../types'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
@@ -40,7 +39,7 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
   getMoves(cardIndex: number): MaterialMove[] {
     if (!this.canMove(cardIndex)) return []
     const cardMaterial = this.material(MaterialType.FactionCard).index(cardIndex)
-    const cardDescription = getCharacteristics(cardIndex, this.game)
+    const cardDescription = getCardRule(this.game, cardIndex).characteristics
 
     return cardDescription
       .getAttributes()
@@ -58,10 +57,11 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
   }
 
   isActive(cardIndex: number): boolean {
-    const characteristics = getCharacteristics(cardIndex, this.game)
+    const cardRule = getCardRule(this.game, cardIndex)
+    const characteristics = cardRule.characteristics
     const isInitiativeRule = this.game.rule!.id === RuleId.InitiativeActivationRule
     if (isInitiativeRule && (!characteristics.hasInitiative() || this.cardInspector.hasLostAttributes(cardIndex, CardAttributeType.Initiative))) return false
-    return getCardRule(this.game, cardIndex).isActive
+    return cardRule.isActive
   }
 
   beforeItemMove(move: MoveItem): MaterialMove[] {
