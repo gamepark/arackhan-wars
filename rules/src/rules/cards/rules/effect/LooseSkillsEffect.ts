@@ -1,8 +1,8 @@
-import { Effect, PassiveEffect } from '../../descriptions/base/Effect'
+import { Effect, EffectRule } from '../../descriptions/base/Effect'
 import { MaterialGame } from '@gamepark/rules-api'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 
-export class LooseSkillsEffect extends PassiveEffect {
+export class LooseSkillsEffect extends EffectRule {
   looseSkill = true
 
   constructor(game: MaterialGame) {
@@ -22,4 +22,4 @@ export const looseSkills = (filters: ApplicableFilter[]) => new class extends Ef
 
 }
 
-export const isLooseSkillEffect = (effect: PassiveEffect): effect is LooseSkillsEffect => typeof (effect as any).looseSkill === 'boolean'
+export const isLooseSkillEffect = (effect: EffectRule): effect is LooseSkillsEffect => typeof (effect as any).looseSkill === 'boolean'

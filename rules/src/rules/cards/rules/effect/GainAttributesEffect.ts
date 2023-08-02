@@ -1,9 +1,9 @@
-import { Effect, PassiveEffect } from '../../descriptions/base/Effect'
+import { Effect, EffectRule } from '../../descriptions/base/Effect'
 import { MaterialGame } from '@gamepark/rules-api'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 
-export class GainAttributesEffect extends PassiveEffect {
+export class GainAttributesEffect extends EffectRule {
 
   constructor(game: MaterialGame, readonly attributes: CardAttributeType[]) {
     super(game)

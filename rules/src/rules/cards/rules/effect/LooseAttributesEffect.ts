@@ -1,9 +1,9 @@
-import { Effect, PassiveEffect } from '../../descriptions/base/Effect'
+import { Effect, EffectRule } from '../../descriptions/base/Effect'
 import { MaterialGame } from '@gamepark/rules-api'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 
-export class LooseAttributesEffect extends PassiveEffect {
+export class LooseAttributesEffect extends EffectRule {
 
   constructor(game: MaterialGame, readonly attributes?: CardAttributeType[]) {
     super(game)
@@ -27,5 +27,5 @@ export const looseAttributes = (filters: ApplicableFilter[], attributes?: CardAt
 
 }
 
-export const isLooseAttributesEffect = (effect: PassiveEffect): effect is LooseAttributesEffect => typeof (effect as any).hasLostAttribute === 'function'
+export const isLooseAttributesEffect = (effect: EffectRule): effect is LooseAttributesEffect => typeof (effect as any).hasLostAttribute === 'function'
 

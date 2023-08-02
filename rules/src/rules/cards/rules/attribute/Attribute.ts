@@ -1,6 +1,6 @@
 import { Material, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
-import { PassiveEffect } from '../../descriptions/base/Effect'
+import { EffectRule } from '../../descriptions/base/Effect'
 
 export enum AttributeKind {
   Attack,
@@ -16,5 +16,5 @@ export abstract class Attribute<T extends AttributeRule = any> {
 
 
 export class AttributeRule extends MaterialRulesPart {
-  getPassiveEffect?(source: Material, target: Material): PassiveEffect | undefined
+  getPassiveEffect?(source: Material, target: Material): EffectRule | undefined
 }

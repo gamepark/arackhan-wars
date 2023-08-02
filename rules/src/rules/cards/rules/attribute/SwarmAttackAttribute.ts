@@ -6,7 +6,7 @@ import { MaterialType } from '../../../../material/MaterialType'
 import { getCharacteristics } from '../../../../material/FactionCard'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { ValueModifierEffect } from '../effect/ValueModifierEffect'
-import { PassiveEffect } from '../../descriptions/base/Effect'
+import { EffectRule } from '../../descriptions/base/Effect'
 import { isCreature } from '../../descriptions/base/Creature'
 
 class SwarmAttackAttribute extends AttackAttributeRule {
@@ -19,7 +19,7 @@ class SwarmAttackAttribute extends AttackAttributeRule {
     return []
   }
 
-  getPassiveEffect(source: Material, target: Material): PassiveEffect | undefined {
+  getPassiveEffect(source: Material, target: Material): EffectRule | undefined {
     const sourceCard = source.getItem()!
     const sourceCharacteristics = getCharacteristics(source.getIndex(), this.game)
     const sourceFamily = isCreature(sourceCharacteristics) ? sourceCharacteristics.family : undefined

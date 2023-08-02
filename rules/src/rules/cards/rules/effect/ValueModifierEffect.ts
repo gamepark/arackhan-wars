@@ -1,4 +1,4 @@
-import { Effect, PassiveEffect } from '../../descriptions/base/Effect'
+import { Effect, EffectRule } from '../../descriptions/base/Effect'
 import { MaterialGame } from '@gamepark/rules-api'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 import { AttackEffect } from '../../descriptions/base/AttackEffect'
@@ -32,4 +32,4 @@ export const valueModifier = (filters: ApplicableFilter[], values: CardValues): 
   }
 }
 
-export const isValueModifierEffect = (effect: PassiveEffect): effect is ValueModifierEffect => typeof (effect as any).getBonus === 'function'
+export const isValueModifierEffect = (effect: EffectRule): effect is ValueModifierEffect => typeof (effect as any).getBonus === 'function'

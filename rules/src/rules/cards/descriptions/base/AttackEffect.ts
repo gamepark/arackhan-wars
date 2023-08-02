@@ -1,9 +1,9 @@
-import { PassiveEffect } from './Effect'
+import { EffectRule } from './Effect'
 import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { isSpell } from './Spell'
 import { getCharacteristics } from '../../../../material/FactionCard'
 
-export class AttackEffect extends PassiveEffect {
+export class AttackEffect extends EffectRule {
   /**
    * Used in legal moves to know if the player can declare an attack on the opponent
    * Used for the opponent
@@ -37,4 +37,4 @@ export class AttackEffect extends PassiveEffect {
   }
 }
 
-export const isAttackEffect = (effect: PassiveEffect): effect is AttackEffect => typeof (effect as any).canBeAttacked === 'function'
+export const isAttackEffect = (effect: EffectRule): effect is AttackEffect => typeof (effect as any).canBeAttacked === 'function'

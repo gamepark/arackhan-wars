@@ -12,14 +12,14 @@ export abstract class Effect {
     return this.filters.every((filter) => filter(source, target, game))
   }
 
-  abstract getEffectRule(_game: MaterialGame): PassiveEffect
+  abstract getEffectRule(_game: MaterialGame): EffectRule
 }
 
-export class PassiveEffect extends MaterialRulesPart {
+export class EffectRule extends MaterialRulesPart {
 // Maybe do another class ?
 }
 
-export class PassiveEffectWithConsequences extends PassiveEffect {
+export class PassiveEffectWithConsequences extends EffectRule {
   onCasterMoveTo(_caster: Material, _target: Material): MaterialMove[] {
     return []
   }
@@ -29,5 +29,5 @@ export class PassiveEffectWithConsequences extends PassiveEffect {
   }
 }
 
-export const isWithConsequences = (effect: PassiveEffect): effect is PassiveEffectWithConsequences => typeof (effect as any).onReveal === 'function'
+export const isWithConsequences = (effect: EffectRule): effect is PassiveEffectWithConsequences => typeof (effect as any).onReveal === 'function'
 

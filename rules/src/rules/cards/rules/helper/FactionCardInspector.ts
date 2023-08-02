@@ -1,4 +1,4 @@
-import { Effect, isWithConsequences, PassiveEffect } from '../../descriptions/base/Effect'
+import { Effect, isWithConsequences, EffectRule } from '../../descriptions/base/Effect'
 import { isLooseSkillEffect } from '../effect/LooseSkillsEffect'
 import { CardAttributeType, FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
 import { isLooseAttributesEffect } from '../effect/LooseAttributesEffect'
@@ -17,7 +17,7 @@ import sum from 'lodash/sum'
 import { Attribute } from '../attribute/Attribute'
 
 export class FactionCardInspector extends MaterialRulesPart {
-  readonly passiveEffects: Record<number, PassiveEffect[]> = {}
+  readonly passiveEffects: Record<number, EffectRule[]> = {}
   readonly battlefield: Material
 
   constructor(game: MaterialGame) {
@@ -26,8 +26,8 @@ export class FactionCardInspector extends MaterialRulesPart {
     this.passiveEffects = this.computeCardPassiveEffects()
   }
 
-  computeCardPassiveEffects(): Record<number, PassiveEffect[]> {
-    const modifications: Record<number, PassiveEffect[]> = this.computeBlockedEffects()
+  computeCardPassiveEffects(): Record<number, EffectRule[]> {
+    const modifications: Record<number, EffectRule[]> = this.computeBlockedEffects()
     const battlefieldIndexes = this.battlefield.getIndexes()
 
     for (const cardIndex of battlefieldIndexes) {
@@ -49,7 +49,7 @@ export class FactionCardInspector extends MaterialRulesPart {
     return modifications
   }
 
-  private applyAttributes(attributes: Attribute[], cardMaterial: Material, otherCardMaterial: Material, modifications: Record<number, PassiveEffect[]>, otherCardIndex: number) {
+  private applyAttributes(attributes: Attribute[], cardMaterial: Material, otherCardMaterial: Material, modifications: Record<number, EffectRule[]>, otherCardIndex: number) {
     const attackBonuses = attributes
       .filter((a) => !this.hasLostAttributes(cardMaterial.getIndex(), a.type))
       .flatMap((a) => a.getAttributeRule(this.game).getPassiveEffects?.(cardMaterial, otherCardMaterial) ?? [])
@@ -60,7 +60,7 @@ export class FactionCardInspector extends MaterialRulesPart {
     }
   }
 
-  private applyPassiveEffect(effects: Effect[], cardMaterial: Material, otherCardMaterial: Material, modifications: Record<number, PassiveEffect[]>, otherCardIndex: number) {
+  private applyPassiveEffect(effects: Effect[], cardMaterial: Material, otherCardMaterial: Material, modifications: Record<number, EffectRule[]>, otherCardIndex: number) {
     const passiveEffects = effects
       .filter((e) => e.isApplicable(this.game, cardMaterial, otherCardMaterial))
       .map((e) => e.getEffectRule(this.game))
@@ -71,8 +71,8 @@ export class FactionCardInspector extends MaterialRulesPart {
     }
   }
 
-  computeBlockedEffects(): Record<number, PassiveEffect[]> {
-    const modifications: Record<number, PassiveEffect[]> = {}
+  computeBlockedEffects(): Record<number, EffectRule[]> {
+    const modifications: Record<number, EffectRule[]> = {}
     const battlefieldIndexes = this.battlefield.getIndexes()
     for (const cardIndex of battlefieldIndexes) {
       const cardMaterial = this.material(MaterialType.FactionCard).index(cardIndex)
@@ -105,14 +105,14 @@ export class FactionCardInspector extends MaterialRulesPart {
 
   }
 
-  hasLostSkill(cardIndex: number, modifications?: Record<number, PassiveEffect[]>): boolean {
+  hasLostSkill(cardIndex: number, modifications?: Record<number, EffectRule[]>): boolean {
     const passiveEffects = modifications ?? this.passiveEffects
 
     if (!(cardIndex in passiveEffects)) return false
     return passiveEffects[cardIndex].some((e) => isLooseSkillEffect(e))
   }
 
-  hasLostAttributes(cardIndex: number, attribute: CardAttributeType, modifications?: Record<number, PassiveEffect[]>): boolean {
+  hasLostAttributes(cardIndex: number, attribute: CardAttributeType, modifications?: Record<number, EffectRule[]>): boolean {
     const passiveEffects = modifications ?? this.passiveEffects
 
     if (!(cardIndex in passiveEffects)) return false
