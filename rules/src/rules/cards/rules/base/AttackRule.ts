@@ -1,5 +1,5 @@
 import { CustomMove, Material, MaterialGame, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { CardAttributeType, DiscardTiming, FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
+import { DiscardTiming, FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
 import { ActivatedCard } from '../../../types'
@@ -14,7 +14,6 @@ import { isSpell } from '../../descriptions/base/Spell'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import uniq from 'lodash/uniq'
 import { deactivateTokens } from '../../../../utils/activation.utils'
-import { RuleId } from '../../../RuleId'
 import { isLand } from '../../descriptions/base/Land'
 import { Memory } from '../../../Memory'
 import { getCardRule } from './CardRule'
@@ -101,7 +100,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
   }
 
   canAttack = (cardIndex: number) => {
-    if (!this.isActive(cardIndex)) return false
+    if (!getCardRule(this.game, cardIndex).canBeActivated) return false
     const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
 
     // For cards that can attack, verify that it was not activated
@@ -112,14 +111,6 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
 
     const activatedCard = activatedCards[activatedCardIndex]
     return activatedCard.targets === undefined && activatedCard.omnistrike === undefined
-  }
-
-  isActive(cardIndex: number): boolean {
-    const cardRule = getCardRule(this.game, cardIndex)
-    const characteristics = cardRule.characteristics
-    const isInitiativeRule = this.game.rule!.id === RuleId.InitiativeActivationRule
-    if (isInitiativeRule && (!characteristics.hasInitiative() || this.cardInspector.hasLostAttributes(cardIndex, CardAttributeType.Initiative))) return false
-    return cardRule.isActive
   }
 
   attack(opponent: number): MaterialMove[] {

@@ -6,8 +6,6 @@ import { ActivatedCard } from '../../../types'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { LocationType } from '../../../../material/LocationType'
 import equal from 'fast-deep-equal'
-import { RuleId } from '../../../RuleId'
-import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { Memory } from '../../../Memory'
 import { getCardRule } from './CardRule'
@@ -48,20 +46,12 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
   }
 
   canMove = (cardIndex: number) => {
-    if (!this.isActive(cardIndex)) return false
+    if (!getCardRule(this.game, cardIndex).canBeActivated) return false
 
     const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
 
     // 1. must not be in the memory
     return !activatedCards.find((card) => card.card === cardIndex)
-  }
-
-  isActive(cardIndex: number): boolean {
-    const cardRule = getCardRule(this.game, cardIndex)
-    const characteristics = cardRule.characteristics
-    const isInitiativeRule = this.game.rule!.id === RuleId.InitiativeActivationRule
-    if (isInitiativeRule && (!characteristics.hasInitiative() || this.cardInspector.hasLostAttributes(cardIndex, CardAttributeType.Initiative))) return false
-    return cardRule.isActive
   }
 
   beforeItemMove(move: MoveItem): MaterialMove[] {

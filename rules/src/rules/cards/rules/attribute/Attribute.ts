@@ -1,5 +1,5 @@
 import { Material, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
-import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
+import { CardAttribute, CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { EffectRule } from '../../descriptions/base/Ability'
 
 export enum AttributeKind {
@@ -10,6 +10,8 @@ export enum AttributeKind {
 export abstract class Attribute<T extends AttributeRule = any> {
   kind?: AttributeKind
   abstract type: CardAttributeType
+
+  abstract get cardAttribute(): CardAttribute
 
   abstract getAttributeRule(_game: MaterialGame): T
 }

@@ -5,12 +5,13 @@ import { LocationType } from '../../../../material/LocationType'
 import { FactionCard, FactionCardsCharacteristics } from '../../../../material/FactionCard'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { isCreature } from '../../descriptions/base/Creature'
-import { Effect, EffectType, isLoseSkills, isMimic } from '../../descriptions/base/Effect'
+import { Effect, EffectType, GainAttributes, isGainAttributes, isLoseSkills, isMimic } from '../../descriptions/base/Effect'
 import { Ability } from '../../descriptions/base/Ability'
-import { FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
+import { CardAttribute, CardAttributeType, FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
 import { TurnEffect } from '../action/TurnEffect'
 import { Memory } from '../../../Memory'
 import { isFlipped } from '../../../../utils/activation.utils'
+import { RuleId } from '../../../RuleId'
 
 export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
   private effectsCache: Effect[] | undefined = undefined
@@ -70,12 +71,35 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
     return this.effectsCache
   }
 
+  get attributes(): CardAttribute[] {
+    if (this.effects.some(effect => effect.type === EffectType.LoseAttributes && !effect.attributes)) {
+      return []
+    }
+    return this.characteristics.getAttributes()
+      .map(attribute => attribute.cardAttribute) // TODO: simplify characteristics to remove this line
+      .concat(...this.effects.filter(isGainAttributes)
+        .flatMap((effect: GainAttributes) =>
+          effect.attributes.map(type => ({ type })) // TODO: fix GainAttributes.attributes
+        )
+      ).filter(attribute => !this.effects.some(effect =>
+        effect.type === EffectType.LoseAttributes && effect.attributes?.some(type => attribute.type === type)) // TODO: fix LoseAttributes.attributes
+      )
+  }
+
   get token() {
     return this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(this.index)
   }
 
   get isActive() {
     return !isFlipped(this.token) && !this.effects.some(effect => effect.type === EffectType.Deactivated)
+  }
+
+  get hasInitiative() {
+    return this.attributes.some(attribute => attribute.type === CardAttributeType.Initiative)
+  }
+
+  get canBeActivated() {
+    return this.isActive && (this.game.rule?.id !== RuleId.InitiativeActivationRule || this.hasInitiative)
   }
 }
 

@@ -54,7 +54,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     moves.push(...new MoveRules(this.game, cardInspector).getPlayerMoves())
     //}
 
-    moves.push(...new ActionRule(this.game, cardInspector).getPlayerMoves())
+    moves.push(...new ActionRule(this.game).getPlayerMoves())
 
 
     /**if (rule.actionRule().length) {

@@ -12,6 +12,10 @@ export type GainAttributes = {
   attributes: CardAttributeType[] // TODO: should be type "Attribute"
 }
 
+export function isGainAttributes(effect: Effect): effect is GainAttributes {
+  return effect.type === EffectType.GainAttributes
+}
+
 export type LoseAttributes = {
   type: EffectType.LoseAttributes
   attributes?: CardAttributeType[] // TODO: should be type "Attribute"
