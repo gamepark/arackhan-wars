@@ -1,19 +1,7 @@
-import { Ability, PassiveEffectWithConsequences } from '../../descriptions/base/Ability'
-import { Material, MaterialGame } from '@gamepark/rules-api'
+import { Ability, EffectRule } from '../../descriptions/base/Ability'
+import { MaterialGame } from '@gamepark/rules-api'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
-import { activateTokens } from '../../../../utils/activation.utils'
-import { MaterialType } from '../../../../material/MaterialType'
-
-export class DeactivateEffect extends PassiveEffectWithConsequences {
-
-  constructor(game: MaterialGame) {
-    super(game)
-  }
-
-  onCasterMoveTo(_source: Material, target: Material) {
-    return activateTokens(this.material(MaterialType.FactionToken).parent(target.getIndex()))
-  }
-}
+import { Deactivated, EffectType } from '../../descriptions/base/Effect'
 
 export const deactivate = (filters: ApplicableFilter[]) => new class extends Ability {
 
@@ -21,8 +9,10 @@ export const deactivate = (filters: ApplicableFilter[]) => new class extends Abi
     super(filters)
   }
 
+  effect: Deactivated = { type: EffectType.Deactivated }
+
   getEffectRule(game: MaterialGame) {
-    return new DeactivateEffect(game)
+    return new EffectRule(game) // TODO: remove or make optional
   }
 
 }

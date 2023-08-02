@@ -1,4 +1,4 @@
-import { Ability, isWithConsequences, EffectRule } from '../../descriptions/base/Ability'
+import { Ability, EffectRule } from '../../descriptions/base/Ability'
 import { isLooseSkillEffect } from '../effect/LooseSkillsEffect'
 import { CardAttributeType, FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
 import { isLooseAttributesEffect } from '../effect/LooseAttributesEffect'
@@ -155,32 +155,6 @@ export class FactionCardInspector extends MaterialRulesPart {
     if (!(targetIndex in this.cardsEffects)) return true
     // TODO: other attackers ?
     return !this.cardsEffects[targetIndex].filter(isAttackEffect).some((a) => !a.canBeAttacked(attackerIndex, targetIndex, [], this.game))
-  }
-
-  onCasterMoveTo(casterIndex: number, targetIndex: number): MaterialMove[] {
-    if (!(targetIndex in this.cardsEffects)) return []
-    this.cardsEffects[targetIndex]
-      .flatMap((effect) => {
-        if (!isWithConsequences(effect)) return []
-        const caster = this.material(MaterialType.FactionCard).index(casterIndex)!
-        const target = this.material(MaterialType.FactionCard).index(targetIndex)!
-        return effect.onCasterMoveTo(caster, target)
-      })
-
-    return []
-  }
-
-  onCasterMoveAway(casterIndex: number, targetIndex: number): MaterialMove[] {
-    if (!(targetIndex in this.cardsEffects)) return []
-    this.cardsEffects[targetIndex]
-      .flatMap((effect) => {
-        if (!isWithConsequences(effect)) return []
-        const caster = this.material(MaterialType.FactionCard).index(casterIndex)!
-        const target = this.material(MaterialType.FactionCard).index(targetIndex)!
-        return effect.onCasterMoveAway(caster, target)
-      })
-
-    return []
   }
 
   getAttackForOpponent(attacker: Material, opponent: Material, baseAttack: number) {

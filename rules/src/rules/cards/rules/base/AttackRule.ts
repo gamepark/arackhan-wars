@@ -18,6 +18,7 @@ import { deactivateTokens } from '../../../../utils/activation.utils'
 import { RuleId } from '../../../RuleId'
 import { isLand } from '../../descriptions/base/Land'
 import { Memory } from '../../../Memory'
+import { getCardRule } from './CardRule'
 
 export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   private readonly cardInspector: FactionCardInspector
@@ -115,19 +116,10 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
   }
 
   isActive(cardIndex: number): boolean {
-    // Spell is always considered activable
     const cardDescription = getCharacteristics(cardIndex, this.game)
-
     const isInitiativeRule = this.game.rule!.id === RuleId.InitiativeActivationRule
     if (isInitiativeRule && (!cardDescription.hasInitiative() || this.cardInspector.hasLostAttributes(cardIndex, CardAttributeType.Initiative))) return false
-    if (isSpell(cardDescription)) return true
-
-    // Other cards are activable if there is a non returned token on it
-    return !!this
-      .material(MaterialType.FactionToken)
-      .parent(cardIndex)
-      .rotation((rotation) => !rotation?.y)
-      .length
+    return getCardRule(this.game, cardIndex).isActive
   }
 
   attack(opponent: number): MaterialMove[] {

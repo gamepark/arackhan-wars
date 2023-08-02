@@ -1,12 +1,11 @@
 import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
-import { ItemMove, ItemMoveType, MaterialMove, MaterialRulesPart, MoveKind, RuleMove } from '@gamepark/rules-api'
+import { ItemMove, ItemMoveType, MaterialMove, MaterialRulesPart, MoveKind } from '@gamepark/rules-api'
 import { RuleId } from './RuleId'
 import { getCharacteristics } from '../material/FactionCard'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
 import { isSpell } from './cards/descriptions/base/Spell'
-import { FactionCardInspector } from './cards/rules/helper/FactionCardInspector'
 import { Memory } from './Memory'
 
 export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
@@ -39,23 +38,5 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
     }
 
     return []
-  }
-
-  onRuleEnd(_move: RuleMove): MaterialMove[] {
-    const battlefield = this.material(MaterialType.FactionCard)
-      .location(onBattlefieldAndAstralPlane)
-
-    const indexes = battlefield.getIndexes()
-    const moves = []
-    const cardInspector = new FactionCardInspector(this.game)
-    // Not optimal, but run once
-    for (const source of indexes) {
-      for (const target of indexes) {
-        moves.push(...cardInspector.onCasterMoveTo(source, target))
-      }
-
-    }
-
-    return moves
   }
 }

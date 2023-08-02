@@ -5,10 +5,10 @@ import { FactionCardInspector } from '../helper/FactionCardInspector'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { RuleId } from '../../../RuleId'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
-import { isSpell } from '../../descriptions/base/Spell'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { LocationType } from '../../../../material/LocationType'
+import { getCardRule } from './CardRule'
 
 export class ActionRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   private readonly cardInspector: FactionCardInspector
@@ -38,18 +38,9 @@ export class ActionRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
   }
 
   isActive(cardIndex: number): boolean {
-    // Spell is always considered activable
     const characteristics = getCharacteristics(cardIndex, this.game)
-
     const isInitiativeRule = this.game.rule!.id === RuleId.InitiativeActivationRule
     if (isInitiativeRule && (!characteristics.hasInitiative() || this.cardInspector.hasLostAttributes(cardIndex, CardAttributeType.Initiative))) return false
-    if (isSpell(characteristics)) return true
-
-    // Other cards are activable if there is a non returned token on it
-    return !!this
-      .material(MaterialType.FactionToken)
-      .parent(cardIndex)
-      .rotation((rotation) => !rotation?.y)
-      .length
+    return getCardRule(this.game, cardIndex).isActive
   }
 }

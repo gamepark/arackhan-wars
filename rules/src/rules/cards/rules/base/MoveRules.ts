@@ -2,17 +2,16 @@ import { MaterialGame, MaterialMove, MoveItem, PlayerTurnRule } from '@gamepark/
 import { isMovementAttribute } from '../attribute/MovementAttribute'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
 import { getCharacteristics } from '../../../../material/FactionCard'
-import { isSpell } from '../../descriptions/base/Spell'
 import { MaterialType } from '../../../../material/MaterialType'
 import { ActivatedCard } from '../../../types'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { LocationType } from '../../../../material/LocationType'
 import equal from 'fast-deep-equal'
-import { getAdjacentCards } from '../../../../utils/move.utils'
 import { RuleId } from '../../../RuleId'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { Memory } from '../../../Memory'
+import { getCardRule } from './CardRule'
 
 export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   private readonly cardInspector: FactionCardInspector
@@ -59,20 +58,10 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
   }
 
   isActive(cardIndex: number): boolean {
-
-    // Spell is always considered non activable
     const characteristics = getCharacteristics(cardIndex, this.game)
-
     const isInitiativeRule = this.game.rule!.id === RuleId.InitiativeActivationRule
     if (isInitiativeRule && (!characteristics.hasInitiative() || this.cardInspector.hasLostAttributes(cardIndex, CardAttributeType.Initiative))) return false
-    if (isSpell(characteristics)) return false
-
-    // Other cards are activable if there is a non returned token on it
-    return !!this
-      .material(MaterialType.FactionToken)
-      .parent(cardIndex)
-      .rotation((rotation) => !rotation?.y)
-      .length
+    return getCardRule(this.game, cardIndex).isActive
   }
 
   beforeItemMove(move: MoveItem): MaterialMove[] {
@@ -99,19 +88,12 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
 
     const card = this.material(MaterialType.FactionCard).index(move.itemIndex)
     if (equal(move.position.location, card.getItem()!.location)) return []
-    const battlefieldCards = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-    // TODO: in case of a > 2 player game with same faction, it is possible to have 2 "The fear" around the card (in this cas, it must remains deactivated
-    moves.push(...getAdjacentCards(card, battlefieldCards).flatMap((targetIndex) => this.cardInspector.onCasterMoveAway(move.itemIndex, targetIndex)))
-
     return moves
   }
 
   afterItemMove(move: MoveItem): MaterialMove[] {
     this.memorizeCardPlayed({ card: move.itemIndex })
-
-    const card = this.material(MaterialType.FactionCard).index(move.itemIndex)
-    const battlefieldCards = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-    return getAdjacentCards(card, battlefieldCards).flatMap((targetIndex) => this.cardInspector.onCasterMoveTo(move.itemIndex, targetIndex))
+    return []
   }
 
   memorizeCardPlayed(activation: ActivatedCard) {
