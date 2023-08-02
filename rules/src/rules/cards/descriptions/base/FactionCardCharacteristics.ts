@@ -1,5 +1,5 @@
 import { Faction } from '../../../../Faction'
-import { Effect } from './Effect'
+import { Ability } from './Ability'
 import { Attribute } from '../../rules/attribute/Attribute'
 import { RuleId } from '../../../RuleId'
 
@@ -46,7 +46,7 @@ export abstract class FactionCardCharacteristics {
     return this.attribute ? [this.attribute] : this.attributes
   }
 
-  abstract getPassiveEffects(): Effect[]
+  abstract getPassiveEffects(): Ability[]
 
   hasInitiative = () => this.hasAttribute(CardAttributeType.Initiative)
   hasOmnistrike = () => this.hasAttribute(CardAttributeType.Omnistrike)

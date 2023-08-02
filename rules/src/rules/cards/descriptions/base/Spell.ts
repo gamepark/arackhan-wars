@@ -1,19 +1,19 @@
 import { DiscardTiming, FactionCardCharacteristics, FactionCardKind } from './FactionCardCharacteristics'
-import { Effect } from './Effect'
+import { Ability } from './Ability'
 
 export abstract class Spell extends FactionCardCharacteristics {
   kind: FactionCardKind = FactionCardKind.Spell
   attack?: number
   astral: boolean = false
 
-  effect?: Effect
-  effects: Effect[] = []
+  effect?: Ability
+  effects: Ability[] = []
 
-  getEffects(): Effect[] {
+  getEffects(): Ability[] {
     return this.effect ? [this.effect] : this.effects
   }
 
-  getPassiveEffects(): Effect[] {
+  getPassiveEffects(): Ability[] {
     return this.getEffects()
   }
 

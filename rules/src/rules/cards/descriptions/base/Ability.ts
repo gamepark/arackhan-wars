@@ -1,7 +1,7 @@
 import { Material, MaterialGame, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
 import { ApplicableFilter } from '../utils/applicable-filter.utils'
 
-export abstract class Effect {
+export abstract class Ability {
 
   constructor(readonly filters: ApplicableFilter[] = []) {
   }

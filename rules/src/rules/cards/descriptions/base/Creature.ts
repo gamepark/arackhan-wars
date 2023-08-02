@@ -1,5 +1,5 @@
 import { FactionCardCharacteristics, FactionCardKind } from './FactionCardCharacteristics'
-import { Effect } from './Effect'
+import { Ability } from './Ability'
 import { Family } from './Family'
 
 export abstract class Creature extends FactionCardCharacteristics {
@@ -9,20 +9,20 @@ export abstract class Creature extends FactionCardCharacteristics {
   abstract attack: number
   abstract defense: number
 
-  skill?: Effect
-  skills: Effect[] = []
-  weakness?: Effect
-  weaknesses: Effect[] = []
+  skill?: Ability
+  skills: Ability[] = []
+  weakness?: Ability
+  weaknesses: Ability[] = []
 
-  getSkills(): Effect[] {
+  getSkills(): Ability[] {
     return this.skill ? [this.skill] : this.skills
   }
 
-  getWeaknesses(): Effect[] {
+  getWeaknesses(): Ability[] {
     return this.weakness ? [this.weakness] : this.weaknesses
   }
 
-  getPassiveEffects(isSkillDisabled?: boolean): Effect[] {
+  getPassiveEffects(isSkillDisabled?: boolean): Ability[] {
     if (isSkillDisabled) return this.getWeaknesses()
     return [
       ...this.getSkills(),

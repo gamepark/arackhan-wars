@@ -1,4 +1,4 @@
-import { Effect, isWithConsequences, EffectRule } from '../../descriptions/base/Effect'
+import { Ability, isWithConsequences, EffectRule } from '../../descriptions/base/Ability'
 import { isLooseSkillEffect } from '../effect/LooseSkillsEffect'
 import { CardAttributeType, FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
 import { isLooseAttributesEffect } from '../effect/LooseAttributesEffect'
@@ -60,7 +60,7 @@ export class FactionCardInspector extends MaterialRulesPart {
     }
   }
 
-  private applyPassiveEffect(effects: Effect[], cardMaterial: Material, otherCardMaterial: Material, modifications: Record<number, EffectRule[]>, otherCardIndex: number) {
+  private applyPassiveEffect(effects: Ability[], cardMaterial: Material, otherCardMaterial: Material, modifications: Record<number, EffectRule[]>, otherCardIndex: number) {
     const passiveEffects = effects
       .filter((e) => e.isApplicable(this.game, cardMaterial, otherCardMaterial))
       .map((e) => e.getEffectRule(this.game))

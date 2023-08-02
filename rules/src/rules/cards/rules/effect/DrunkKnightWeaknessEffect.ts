@@ -1,4 +1,4 @@
-import { Effect } from '../../descriptions/base/Effect'
+import { Ability } from '../../descriptions/base/Ability'
 import { MaterialGame } from '@gamepark/rules-api'
 import { AttackEffect } from '../../descriptions/base/AttackEffect'
 import { himself } from '../../descriptions/utils/applicable-filter.utils'
@@ -13,7 +13,7 @@ export class DrunkKnightWeaknessEffect extends AttackEffect {
   }
 }
 
-export const drunkKnight: Effect = new class extends Effect {
+export const drunkKnight: Ability = new class extends Ability {
 
   constructor() {
     super([himself])

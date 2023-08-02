@@ -1,5 +1,5 @@
 import { AttackEffect } from '../../descriptions/base/AttackEffect'
-import { Effect, EffectRule } from '../../descriptions/base/Effect'
+import { Ability, EffectRule } from '../../descriptions/base/Ability'
 import { MaterialGame } from '@gamepark/rules-api'
 
 export class CantBeAttackedByGroup extends AttackEffect {
@@ -9,7 +9,7 @@ export class CantBeAttackedByGroup extends AttackEffect {
   }
 }
 
-export const onlyNotGroupedAttack = new class extends Effect {
+export const onlyNotGroupedAttack = new class extends Ability {
 
 
   getEffectRule(game: MaterialGame): EffectRule {

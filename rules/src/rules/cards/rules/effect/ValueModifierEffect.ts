@@ -1,4 +1,4 @@
-import { Effect, EffectRule } from '../../descriptions/base/Effect'
+import { Ability, EffectRule } from '../../descriptions/base/Ability'
 import { MaterialGame } from '@gamepark/rules-api'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 import { AttackEffect } from '../../descriptions/base/AttackEffect'
@@ -20,8 +20,8 @@ export class ValueModifierEffect extends AttackEffect {
   }
 }
 
-export const valueModifier = (filters: ApplicableFilter[], values: CardValues): Effect => {
-  return new class extends Effect {
+export const valueModifier = (filters: ApplicableFilter[], values: CardValues): Ability => {
+  return new class extends Ability {
     constructor() {
       super(filters)
     }

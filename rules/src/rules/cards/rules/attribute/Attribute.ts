@@ -1,6 +1,6 @@
 import { Material, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
-import { EffectRule } from '../../descriptions/base/Effect'
+import { EffectRule } from '../../descriptions/base/Ability'
 
 export enum AttributeKind {
   Attack,

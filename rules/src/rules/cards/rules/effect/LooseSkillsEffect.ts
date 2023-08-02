@@ -1,4 +1,4 @@
-import { Effect, EffectRule } from '../../descriptions/base/Effect'
+import { Ability, EffectRule } from '../../descriptions/base/Ability'
 import { MaterialGame } from '@gamepark/rules-api'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 
@@ -10,7 +10,7 @@ export class LooseSkillsEffect extends EffectRule {
   }
 }
 
-export const looseSkills = (filters: ApplicableFilter[]) => new class extends Effect {
+export const looseSkills = (filters: ApplicableFilter[]) => new class extends Ability {
 
   constructor() {
     super(filters)

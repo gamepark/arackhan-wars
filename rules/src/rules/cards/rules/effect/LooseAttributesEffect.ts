@@ -1,4 +1,4 @@
-import { Effect, EffectRule } from '../../descriptions/base/Effect'
+import { Ability, EffectRule } from '../../descriptions/base/Ability'
 import { MaterialGame } from '@gamepark/rules-api'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
@@ -15,7 +15,7 @@ export class LooseAttributesEffect extends EffectRule {
   }
 }
 
-export const looseAttributes = (filters: ApplicableFilter[], attributes?: CardAttributeType[]) => new class extends Effect {
+export const looseAttributes = (filters: ApplicableFilter[], attributes?: CardAttributeType[]) => new class extends Ability {
 
   constructor() {
     super(filters)

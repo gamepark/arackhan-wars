@@ -1,4 +1,4 @@
-import { Effect } from '../../descriptions/base/Effect'
+import { Ability } from '../../descriptions/base/Ability'
 import { MaterialGame } from '@gamepark/rules-api'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 import { AttackEffect } from '../../descriptions/base/AttackEffect'
@@ -14,7 +14,7 @@ export class CantBeAttackedEffect extends AttackEffect {
   }
 }
 
-export const cantBeAttacked = (filters: ApplicableFilter[]) => new class extends Effect {
+export const cantBeAttacked = (filters: ApplicableFilter[]) => new class extends Ability {
 
   constructor() {
     super(filters)

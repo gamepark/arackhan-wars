@@ -1,4 +1,4 @@
-import { EffectRule } from './Effect'
+import { EffectRule } from './Ability'
 import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { isSpell } from './Spell'
 import { getCharacteristics } from '../../../../material/FactionCard'

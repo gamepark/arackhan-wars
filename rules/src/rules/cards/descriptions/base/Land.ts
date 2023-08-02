@@ -1,5 +1,5 @@
 import { FactionCardCharacteristics, FactionCardKind } from './FactionCardCharacteristics'
-import { Effect } from './Effect'
+import { Ability } from './Ability'
 
 export abstract class Land extends FactionCardCharacteristics {
   kind: FactionCardKind = FactionCardKind.Land
@@ -7,14 +7,14 @@ export abstract class Land extends FactionCardCharacteristics {
 
   abstract defense: number
 
-  benefit?: Effect
-  benefits: Effect[] = []
+  benefit?: Ability
+  benefits: Ability[] = []
 
-  getBenefits(): Effect[] {
+  getBenefits(): Ability[] {
     return this.benefit ? [this.benefit] : this.benefits
   }
 
-  getPassiveEffects(): Effect[] {
+  getPassiveEffects(): Ability[] {
     return this.getBenefits()
   }
 }

@@ -6,7 +6,7 @@ import { MaterialType } from '../../../../material/MaterialType'
 import { getCharacteristics } from '../../../../material/FactionCard'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { ValueModifierEffect } from '../effect/ValueModifierEffect'
-import { EffectRule } from '../../descriptions/base/Effect'
+import { EffectRule } from '../../descriptions/base/Ability'
 import { isCreature } from '../../descriptions/base/Creature'
 
 class SwarmAttackAttribute extends AttackAttributeRule {

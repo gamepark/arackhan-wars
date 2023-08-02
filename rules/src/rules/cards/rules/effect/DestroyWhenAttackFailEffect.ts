@@ -1,4 +1,4 @@
-import { Effect } from '../../descriptions/base/Effect'
+import { Ability } from '../../descriptions/base/Ability'
 import { Material, MaterialGame } from '@gamepark/rules-api'
 import { AttackEffect } from '../../descriptions/base/AttackEffect'
 import { computeAttack } from '../../../../utils/attack.utils'
@@ -29,7 +29,7 @@ export class DestroyWhenAttackFailEffect extends AttackEffect {
   }
 }
 
-export const destroyIfAttackFail = (filter: ApplicableFilter[]) => new class extends Effect {
+export const destroyIfAttackFail = (filter: ApplicableFilter[]) => new class extends Ability {
   constructor() {
     super(filter)
   }

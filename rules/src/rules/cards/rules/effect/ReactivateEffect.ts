@@ -1,4 +1,4 @@
-import { Effect, PassiveEffectWithConsequences } from '../../descriptions/base/Effect'
+import { Ability, PassiveEffectWithConsequences } from '../../descriptions/base/Ability'
 import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 import { MaterialType } from '../../../../material/MaterialType'
@@ -15,7 +15,7 @@ export class ReactivateEffect extends PassiveEffectWithConsequences {
   }
 }
 
-export const reactivate = (filters: ApplicableFilter[]) => new class extends Effect {
+export const reactivate = (filters: ApplicableFilter[]) => new class extends Ability {
 
   constructor() {
     super(filters)
