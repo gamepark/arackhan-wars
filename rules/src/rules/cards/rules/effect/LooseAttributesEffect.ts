@@ -2,6 +2,7 @@ import { Ability, EffectRule } from '../../descriptions/base/Ability'
 import { MaterialGame } from '@gamepark/rules-api'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
+import { EffectType, LoseAttributes } from '../../descriptions/base/Effect'
 
 export class LooseAttributesEffect extends EffectRule {
 
@@ -20,6 +21,8 @@ export const looseAttributes = (filters: ApplicableFilter[], attributes?: CardAt
   constructor() {
     super(filters)
   }
+
+  effect: LoseAttributes = { type: EffectType.LoseAttributes, attributes }
 
   getEffectRule(game: MaterialGame) {
     return new LooseAttributesEffect(game, attributes)

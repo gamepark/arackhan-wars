@@ -2,6 +2,7 @@ import { Ability, EffectRule } from '../../descriptions/base/Ability'
 import { MaterialGame } from '@gamepark/rules-api'
 import { CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
+import { EffectType, GainAttributes } from '../../descriptions/base/Effect'
 
 export class GainAttributesEffect extends EffectRule {
 
@@ -19,6 +20,8 @@ export const gainAttributes = (filters: ApplicableFilter[], attributes: CardAttr
   constructor() {
     super(filters)
   }
+
+  effect: GainAttributes = { type: EffectType.GainAttributes, attributes }
 
   getEffectRule(game: MaterialGame) {
     return new GainAttributesEffect(game, attributes)
