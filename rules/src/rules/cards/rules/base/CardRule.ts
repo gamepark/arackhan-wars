@@ -5,10 +5,11 @@ import { LocationType } from '../../../../material/LocationType'
 import { FactionCard, FactionCardsCharacteristics } from '../../../../material/FactionCard'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { isCreature } from '../../descriptions/base/Creature'
-import { Effect, EffectType, isLoseSkills } from '../../descriptions/base/Effect'
+import { Effect, EffectType, isLoseSkills, isMimic } from '../../descriptions/base/Effect'
 import { Ability } from '../../descriptions/base/Ability'
 import { FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
-import { getTurnEffects, TurnEffectType } from '../action/TurnEffect'
+import { TurnEffect } from '../action/TurnEffect'
+import { Memory } from '../../../Memory'
 
 export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
   private effectsCache: Effect[] | undefined = undefined
@@ -30,12 +31,8 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get characteristics(): FactionCardCharacteristics {
-    let cardIndex = this.index
-    const turnEffects = getTurnEffects(this.game)
-    const mimicry = turnEffects.find(effect => effect.type === TurnEffectType.Mimicry && effect.target === cardIndex)
-    if (mimicry) cardIndex = mimicry.copied
-    const factionCard = this.game.items[MaterialType.FactionCard]![cardIndex].id.front as FactionCard
-    return FactionCardsCharacteristics[factionCard]
+    const mimic = this.effects.find(isMimic)
+    return FactionCardsCharacteristics[mimic?.target ?? this.card]
   }
 
   private get loseSkills() {
@@ -64,6 +61,9 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
       this.effectsCache = this.battleFieldCardsRules.flatMap(rule => rule.abilities
         .filter(ability => ability.isApplicable(this.game, rule.cardMaterial, this.cardMaterial))
         .flatMap(ability => ability.getEffects())
+        .concat(...this.remind<TurnEffect[]>(Memory.TurnEffects)
+          .filter(turnEffect => turnEffect.targets.includes(this.index))
+          .map(turnEffect => turnEffect.effect))
       )
     }
     return this.effectsCache

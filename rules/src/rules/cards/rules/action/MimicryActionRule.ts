@@ -1,12 +1,13 @@
 import { CustomMove, MaterialMove } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
-import { FactionCardsCharacteristics } from '../../../../material/FactionCard'
+import { FactionCard, FactionCardsCharacteristics } from '../../../../material/FactionCard'
 import { CardActionRule } from './CardActionRule'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
-import { TurnEffect, TurnEffectType } from './TurnEffect'
+import { TurnEffect } from './TurnEffect'
 import { isCreature } from '../../descriptions/base/Creature'
 import { Memory } from '../../../Memory'
+import { EffectType } from '../../descriptions/base/Effect'
 
 export class MimicryActionRule extends CardActionRule {
 
@@ -35,8 +36,9 @@ export class MimicryActionRule extends CardActionRule {
         this.memorize(Memory.Card, move.data)
       } else {
         this.forget(Memory.Card)
+        const mimicTarget = this.material(MaterialType.FactionCard).getItem(move.data)?.id.front as FactionCard
         this.memorize<TurnEffect[]>(Memory.TurnEffects, turnEffects =>
-          [...turnEffects, { type: TurnEffectType.Mimicry, target, copied: move.data }]
+          [...turnEffects, { targets: [target], effect: { type: EffectType.Mimic, target: mimicTarget } }]
         )
         return super.afterCardAction()
       }
