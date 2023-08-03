@@ -33,7 +33,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get characteristics(): FactionCardCharacteristics {
-    const mimic = this.effects.find(isMimic)
+    const mimic = this.turnEffects.find(isMimic)
     return FactionCardsCharacteristics[mimic?.target ?? this.card]
   }
 
@@ -63,12 +63,16 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
       this.effectsCache = this.battleFieldCardsRules.flatMap(rule => rule.abilities
         .filter(ability => ability.isApplicable(this.game, rule.cardMaterial, this.cardMaterial))
         .flatMap(ability => ability.getEffects())
-        .concat(...this.remind<TurnEffect[]>(Memory.TurnEffects)
-          .filter(turnEffect => turnEffect.targets.includes(this.index))
-          .map(turnEffect => turnEffect.effect))
+        .concat(...this.turnEffects)
       )
     }
     return this.effectsCache
+  }
+
+  private get turnEffects(): Effect[] {
+    return this.remind<TurnEffect[]>(Memory.TurnEffects)
+      ?.filter(turnEffect => turnEffect.targets.includes(this.index))
+      .map(turnEffect => turnEffect.effect) ?? []
   }
 
   get attributes(): CardAttribute[] {
