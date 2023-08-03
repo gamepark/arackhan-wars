@@ -23,6 +23,7 @@ import { deactivateTokens } from '../utils/activation.utils'
 import { FactionCardInspector } from './cards/rules/helper/FactionCardInspector'
 import { ActionRule } from './cards/rules/base/ActionRule'
 import { Memory } from './Memory'
+import { getCardRule } from './cards/rules/base/CardRule'
 
 export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
 
@@ -110,17 +111,11 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
       case CustomMoveType.SolveAttack:
         return new AttackRule(this.game).onCustomMove(move)
       case CustomMoveType.PerformAction:
-        this.memorize(Memory.ActionCard, move.data.card)
-        return [this.rules().startRule(move.data.action)]
+        this.memorize(Memory.ActionCard, move.data)
+        return [this.rules().startRule(getCardRule(this.game, move.data).characteristics.action!)]
       case CustomMoveType.Pass:
         return [this.nextRuleMove]
     }
-
-    /*if (move.type === CustomMoveType.CardAction) {
-      const rule = getFactionCardRule(this.game, move.data.card)
-      return rule.actionRule()
-    }*/
-
     return []
   }
 

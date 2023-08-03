@@ -17,7 +17,7 @@ export class ActionRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       const cardRule = getCardRule(this.game, cardIndex)
       const action = cardRule.characteristics.action
       if (action && cardRule.canBeActivated) {
-        moves.push(this.rules().customMove(CustomMoveType.PerformAction, { card: cardIndex, action }))
+        moves.push(this.rules().customMove(CustomMoveType.PerformAction, cardIndex))
       }
     }
 
