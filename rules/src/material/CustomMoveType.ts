@@ -3,7 +3,7 @@ export enum CustomMoveType {
   Mulligan,
   Attack,
   SolveAttack,
-  CardAction,
+  PerformAction,
   ChooseCard,
   Pass
 }
