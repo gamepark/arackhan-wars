@@ -7,6 +7,7 @@ import { locationsStrategies } from './material/LocationStrategies'
 import { Faction, playerFactions } from './Faction'
 import { PreBuildDecks } from './rules/cards/PreBuildDecks'
 import { Memory } from './rules/Memory'
+import { TokenFaction } from './material/TokenFaction'
 
 export const START_HAND = 7
 
@@ -18,51 +19,47 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
   locationsStrategies = locationsStrategies
 
   setupMaterial(options: ArackhanWarsOptions) {
-    this.setupFactions(options)
-    this.setupPlayers()
+    this.setupPlayers(options)
     this.placeRoundTracker()
     this.start()
   }
 
-  setupFactions(options: ArackhanWarsOptions) {
-    options.players.forEach((player, index) => {
-      const faction = player.faction ?? playerFactions[Math.floor(Math.random() * playerFactions.length)]
-      this.memorize(Memory.Faction, faction, index + 1)
-    })
-  }
-
-  setupPlayers() {
-    this.game.players.forEach((playerId) => {
-        this.setupPlayer(playerId)
+  setupPlayers(options: ArackhanWarsOptions) {
+    const availableFactions = [...playerFactions]
+    for (let index = 0; index < options.players.length; index++) {
+      const player = options.players[index]
+      const playerId = index + 1
+      const faction = player.faction ?? availableFactions[Math.floor(Math.random() * availableFactions.length)]
+      if (availableFactions.includes(faction)) {
+        this.memorize(Memory.Token, faction, playerId)
+        availableFactions.splice(availableFactions.indexOf(faction), 1)
+      } else {
+        this.memorize(Memory.Token, TokenFaction.Neutral, playerId)
       }
-    )
+      this.setupPlayer(playerId, faction)
+    }
   }
 
-  getFaction(playerId: number) {
-    return this.getMemory(playerId).remind<Faction>(Memory.Faction)
-  }
-
-  setupPlayer(playerId: PlayerId) {
-    const faction = this.getFaction(playerId)
+  setupPlayer(player: number, faction: Faction) {
     this.material(MaterialType.FactionCard)
       .createItems(
         Object.entries(PreBuildDecks[faction])
           .flatMap(([id, quantity]) =>
             Array.from(Array(quantity)).map(() => ({
-                id: { front: parseInt(id), back: faction }, location: { type: LocationType.PlayerDeck, player: playerId }
+                id: { front: parseInt(id), back: faction }, location: { type: LocationType.PlayerDeck, player }
               })
             )
           )
       )
 
-    this.material(MaterialType.FactionCard).player(playerId).shuffle()
+    this.material(MaterialType.FactionCard).player(player).shuffle()
 
     this.material(MaterialType.FactionCard)
       .location(LocationType.PlayerDeck)
-      .player(playerId)
+      .player(player)
       .sort(card => -card.location.x!)
       .limit(START_HAND)
-      .moveItems({ location: { type: LocationType.Hand, player: playerId } })
+      .moveItems({ location: { type: LocationType.Hand, player: player } })
   }
 
   placeRoundTracker() {

@@ -153,7 +153,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       this.material(MaterialType.FactionToken).parent(opponentIndex).deleteItem(),
       this.material(MaterialType.FactionToken).parent(opponentIndex).createItem({
         // Must be the faction instead of the player
-        id: this.remind(Memory.Faction, this.player),
+        id: this.remind(Memory.Token, this.player),
         location: { parent: opponentIndex, type: LocationType.FactionTokenSpace, player: this.player }
       })
 

@@ -31,7 +31,7 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
         this.material(MaterialType.FactionToken)
           .player(revealedCard.location.player)
           .createItem({
-            id: this.remind(Memory.Faction, revealedCard.location.player),
+            id: this.remind(Memory.Token, revealedCard.location.player),
             location: { parent: move.itemIndex, type: LocationType.FactionTokenSpace, player: revealedCard.location.player }
           })
       ]

@@ -27,7 +27,7 @@ export class HorseOfAvalonActionRule extends CardActionRule {
         .player(this.player)
         .createItem({
           // Must be the faction instead of the player
-          id: this.remind(Memory.Faction, this.player),
+          id: this.remind(Memory.Token, this.player),
           location: { parent: move.itemIndex, type: LocationType.FactionTokenSpace, player: this.player }
         }),
       ...super.afterCardAction()
