@@ -3,7 +3,7 @@ import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
 import { Material, MaterialItem, XYCoordinates } from '@gamepark/rules-api'
 import { battlefieldSpaceCoordinates } from '../material/spaces'
-import { areAdjacent, isAdjacentToFactionCard } from './adjacent.utils'
+import { areAdjacentCards, isAdjacentToFactionCard } from './adjacent.utils'
 
 export const moveToBattlefieldSpace = (cards: Material<PlayerId, MaterialType, LocationType>, space: XYCoordinates, player: PlayerId) => {
   return cards
@@ -29,5 +29,5 @@ export const getAvailableCardPlacement = (cardsOnBattlefield: MaterialItem[], pl
 export const getAdjacentCards = (card: Material, otherCards: Material) => {
   return otherCards
     .getIndexes()
-    .filter((otherCardIndex) => areAdjacent(otherCards.index(otherCardIndex), card))
+    .filter((otherCardIndex) => areAdjacentCards(otherCards.index(otherCardIndex), card))
 }

@@ -6,7 +6,7 @@ import { ActivatedCard } from '../../../types'
 import { isAttackAttribute } from '../attribute/AttackAttribute'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
 import { discardCard, discardSpells } from '../../../../utils/discard.utils'
-import { areAdjacent } from '../../../../utils/adjacent.utils'
+import { areAdjacentCards } from '../../../../utils/adjacent.utils'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
 import { computeAttack } from '../../../../utils/attack.utils'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
@@ -69,7 +69,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
 
     const moves = []
     for (const cardIndex of filteredOpponents) {
-      if (!areAdjacent(cardMaterial, opponentsCards.index(cardIndex))) continue
+      if (!areAdjacentCards(cardMaterial, opponentsCards.index(cardIndex))) continue
       moves.push(this.rules().customMove(CustomMoveType.Attack, { card: attacker, target: cardIndex }))
     }
 
@@ -94,7 +94,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
         const cardMaterial = this.material(MaterialType.FactionCard).index(a.card)
         const characteristics = getCardRule(this.game, a.card).characteristics
         if (characteristics.hasRangeAttack()) return true
-        return areAdjacent(attacker, opponentMaterial) && areAdjacent(cardMaterial, opponentMaterial)
+        return areAdjacentCards(attacker, opponentMaterial) && areAdjacentCards(cardMaterial, opponentMaterial)
       })
     })
   }

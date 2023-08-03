@@ -1,15 +1,14 @@
 import { LocationType } from '../material/LocationType'
-import { Material, MaterialItem, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { MaterialItem, MaterialMove, PlayerTurnRule, XYCoordinates } from '@gamepark/rules-api'
 import { MaterialType } from '../material/MaterialType'
-import { startingCoordinates } from '../material/spaces'
+import { battlefieldSpaceCoordinates, startingCoordinates } from '../material/spaces'
 import { RuleId } from './RuleId'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
-import { getAvailableCardPlacement, moveToBattlefieldSpace } from '../utils/move.utils'
 import { isSpell } from './cards/descriptions/base/Spell'
 import { FactionCardsCharacteristics } from '../material/FactionCard'
-
-const PLACED_CARD_PER_TURN = 2
+import { areAdjacent } from '../utils/adjacent.utils'
+import { Memory } from './Memory'
 
 export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   getPlayerMoves(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
@@ -18,24 +17,21 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
     const factionCards = this.material(MaterialType.FactionCard)
     const playerHand = factionCards.location(LocationType.Hand).player(this.player)
     const astralCards = playerHand.filter(this.isAstral)
-    const otherCards = playerHand.filter((item) => !this.isAstral(item))
+    const otherCards = playerHand.filter(item => !this.isAstral(item))
 
-    moves.push(...this.moveToAstralPlane(astralCards))
-
-    const cardsOnBattlefield = factionCards.location(LocationType.Battlefield).getItems()
-    if (cardsOnBattlefield.every(card => card.rotation && card.location.player === this.player)) {
-      moves.push(
-        ...startingCoordinates
-          .filter(space => !cardsOnBattlefield.some((card) => card.location.x === space.x && card.location.y === space.y))
-          .flatMap(space => moveToBattlefieldSpace(otherCards, space, this.player))
-      )
-
-      return moves
+    for (let x = 0; x < 2; x++) {
+      moves.push(...astralCards.moveItems({
+        location: { type: LocationType.AstralPlane, x, player: this.player },
+        rotation: { y: 1 }
+      }))
     }
 
-    moves.push(
-      ...getAvailableCardPlacement(cardsOnBattlefield, otherCards, this.player)
-    )
+    for (const space of this.battlefieldLegalSpaces) {
+      moves.push(...otherCards.moveItems({
+        location: { type: LocationType.Battlefield, ...space, player: this.player },
+        rotation: { y: 1 }
+      }))
+    }
 
     return moves
   }
@@ -45,40 +41,33 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
     return isSpell(card) && card.astral
   }
 
-  moveToAstralPlane(cards: Material<PlayerId, MaterialType, LocationType>) {
-    return [
-      ...cards.moveItems({
-          location: {
-            type: LocationType.AstralPlane,
-            x: 0,
-            player: this.player
-          },
-          rotation: { y: 1 }
-        }
-      ),
-      ...cards.moveItems({
-          location: {
-            type: LocationType.AstralPlane,
-            x: 1,
-            player: this.player
-          },
-          rotation: { y: 1 }
-        }
-      )]
+  get battlefieldLegalSpaces() {
+    const battlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
+    const battlefieldCards = battlefield.getItems()
+    const battlefieldBeforeMyPlacement = battlefield.filter(card => !card.rotation || card.location.player !== this.player)
+    if (battlefieldBeforeMyPlacement.length === 0) {
+      return startingCoordinates.filter(space => !battlefieldCards.some(card => card.location.x === space.x && card.location.y === space.y))
+    } else {
+      return battlefieldSpaceCoordinates
+        .filter(space =>
+          !battlefieldCards.some(card => card.location.x === space.x && card.location.y === space.y)
+          && battlefieldCards.some(card => areAdjacent(card.location as XYCoordinates, space))
+        )
+    }
   }
 
   getAutomaticMoves() {
-    const hiddenCardsOnBattlefield = this.material(MaterialType.FactionCard)
+    const placedCards = this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
-      .rotation((rotation) => !!rotation?.y)
+      .player(this.player)
+      .rotation(rotation => rotation?.y === 1)
 
-    if (hiddenCardsOnBattlefield.length === (this.game.players.length * PLACED_CARD_PER_TURN)) {
-      return [this.rules().startRule(RuleId.RevealRule)]
-    }
-
-    const playerHiddenCards = hiddenCardsOnBattlefield.player(this.player)
-    if (playerHiddenCards.length === 2) {
-      return [this.rules().startPlayerTurn(RuleId.PlacementRule, this.nextPlayer)]
+    if (placedCards.length === 2) {
+      if (this.nextPlayer !== this.remind(Memory.StartPlayer)) {
+        return [this.rules().startPlayerTurn(RuleId.PlacementRule, this.nextPlayer)]
+      } else {
+        return [this.rules().startRule(RuleId.RevealRule)]
+      }
     }
 
     return []

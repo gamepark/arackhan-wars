@@ -7,7 +7,7 @@ import { css } from '@emotion/react'
 import { factionCardDescription } from '../material/FactionCardDescription'
 import { isCustomMoveType, isMoveItemType, Location, MaterialMove } from '@gamepark/rules-api'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
-import { areAdjacent } from '@gamepark/arackhan-wars/utils/adjacent.utils'
+import { areAdjacentCards } from '@gamepark/arackhan-wars/utils/adjacent.utils'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { isLocationSubset } from '@gamepark/react-game/dist/components/material/utils/IsLocationSubset'
 
@@ -32,7 +32,7 @@ export class FactionCardLocationDescription extends LocationDescription<PlayerId
         const rules = new ArackhanWarsRules(context.game)
         const parentCard = rules.material(MaterialType.FactionCard).index(location.parent!)
         const movedCard = rules.material(MaterialType.FactionCard).index(move.data.card)
-        return areAdjacent(parentCard, movedCard)
+        return areAdjacentCards(parentCard, movedCard)
       }
 
       return location.parent === move.data.target
