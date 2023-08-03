@@ -113,7 +113,6 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
       case CustomMoveType.PerformAction:
         this.memorize(Memory.PreviousRule, this.game.rule!.id)
         this.memorize(Memory.ActionCard, move.data)
-        console.log(getCardRule(this.game, move.data).characteristics.action)
         return [this.rules().startRule(getCardRule(this.game, move.data).characteristics.action!)]
       case CustomMoveType.Pass:
         return [this.nextRuleMove]

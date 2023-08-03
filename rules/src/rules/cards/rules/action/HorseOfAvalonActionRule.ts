@@ -18,7 +18,7 @@ export class HorseOfAvalonActionRule extends CardActionRule {
     return this.material(MaterialType.FactionCard)
       .location(LocationType.Hand)
       .player(this.player)
-      .filter((_, index) => isCreature(FactionCardsCharacteristics[index]))
+      .filter(item => isCreature(FactionCardsCharacteristics[item.id.front]))
       .moveItems({ location })
   }
 
