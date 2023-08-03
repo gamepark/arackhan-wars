@@ -22,7 +22,7 @@ export abstract class CardActionRule extends PlayerTurnRule<PlayerId, MaterialTy
     this.forget(Memory.ActionCard)
     return [
       ...discardCard(this.material(MaterialType.FactionCard).index(card)),
-      this.rules().startPlayerTurn(previousRule, this.player)
+      this.rules().startRule(previousRule)
     ]
   }
 }
