@@ -8,8 +8,10 @@ export const FactionCardRules = (props: MaterialRulesProps) => {
   const { itemIndex, closeDialog } = props
   const { t } = useTranslation()
   const performAction = useLegalMove(move => isCustomMove(move) && move.type === CustomMoveType.PerformAction && move.data === itemIndex)
+  const chooseCard = useLegalMove(move => isCustomMove(move) && move.type === CustomMoveType.ChooseCard && move.data === itemIndex)
   return <>
     <hr/>
     {performAction && <PlayMoveButton move={performAction} onPlay={closeDialog}>{t('card.action.perform')}</PlayMoveButton>}
+    {chooseCard && <PlayMoveButton move={chooseCard} onPlay={closeDialog}>{t('card.choose')}</PlayMoveButton>}
   </>
 }
