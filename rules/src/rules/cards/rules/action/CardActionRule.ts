@@ -1,28 +1,31 @@
-import { RuleMove } from '@gamepark/rules-api/dist/material/moves/rules/RuleMove'
-import { RuleStep } from '@gamepark/rules-api/dist/material/rules/RuleStep'
 import { MaterialMove } from '@gamepark/rules-api/dist/material/moves/MaterialMove'
-import { discardCard } from '../../../../utils/discard.utils'
 import { MaterialType } from '../../../../material/MaterialType'
 import { PlayerTurnRule } from '@gamepark/rules-api'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { LocationType } from '../../../../material/LocationType'
 import { Memory } from '../../../Memory'
-import { RuleId } from '../../../RuleId'
 
 export abstract class CardActionRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
-  onRuleStart(_move: RuleMove, previousRule?: RuleStep): MaterialMove[] {
-    this.memorize(Memory.PreviousRule, previousRule!.id)
-    return []
+  get actionCard() {
+    return this.material(MaterialType.FactionCard).getItem(this.remind(Memory.ActionCard))!
   }
 
   afterCardAction(): MaterialMove[] {
-    const previousRule = this.remind<RuleId>(Memory.PreviousRule)
-    const card = this.remind(Memory.ActionCard)
+    const moves: MaterialMove[] = []
+    if (this.actionCard.location.type !== LocationType.PlayerDiscard) {
+      moves.push(this.discardActionCard())
+    }
+    moves.push(this.rules().startRule(this.remind(Memory.PreviousRule)))
     this.forget(Memory.PreviousRule)
     this.forget(Memory.ActionCard)
-    return [
-      ...discardCard(this.material(MaterialType.FactionCard).index(card)),
-      this.rules().startRule(previousRule)
-    ]
+    return moves
   }
+
+  discardActionCard() {
+    return this.material(MaterialType.FactionCard).index(this.remind(Memory.ActionCard)).moveItem({
+      location: { type: LocationType.PlayerDiscard, player: this.player }
+    })
+  }
+
+
 }

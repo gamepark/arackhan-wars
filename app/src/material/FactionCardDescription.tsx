@@ -159,7 +159,7 @@ export class FactionCardDescription extends CardDescription {
           return move.data === context.index
       }
     }
-    return false
+    return this.canDrag(move, context)
   }
 
   rules = FactionCardRules
