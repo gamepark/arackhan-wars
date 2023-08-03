@@ -17,9 +17,9 @@ export abstract class CardActionRule extends PlayerTurnRule<PlayerId, MaterialTy
 
   afterCardAction(): MaterialMove[] {
     const previousRule = this.remind<RuleId>(Memory.PreviousRule)
-    const card = this.remind(Memory.Card)
+    const card = this.remind(Memory.ActionCard)
     this.forget(Memory.PreviousRule)
-    this.forget(Memory.Card)
+    this.forget(Memory.ActionCard)
     return [
       ...discardCard(this.material(MaterialType.FactionCard).index(card)),
       this.rules().startPlayerTurn(previousRule, this.player)

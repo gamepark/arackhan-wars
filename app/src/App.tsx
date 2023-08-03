@@ -11,6 +11,7 @@ import { PlacementHeader } from './headers/PlacementHeader'
 import { ChooseStartPlayerHeader } from './headers/ChooseStartPlayerHeader'
 import { InitiativeHeader } from './headers/InitiativeHeader'
 import { ActivationHeader } from './headers/ActivationHeader'
+import { MimicryActionHeader } from './headers/actions/MimicryActionHeader'
 
 export default function App() {
   const game = useGame<MaterialGame>()
@@ -46,5 +47,5 @@ const RulesHeaders: Record<RuleId, () => ReactJSXElement> = {
   [RuleId.ForcedExileActionRule]: () => <p></p>,
   [RuleId.HorseOfAvalonActionRule]: () => <p></p>,
   [RuleId.TeleportationActionRule]: () => <p></p>,
-  [RuleId.MimicryActionRule]: () => <p></p>
+  [RuleId.MimicryActionRule]: MimicryActionHeader
 }

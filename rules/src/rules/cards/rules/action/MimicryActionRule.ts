@@ -28,7 +28,7 @@ export class MimicryActionRule extends CardActionRule {
   }
 
   get target() {
-    return this.remind<number | undefined>(Memory.Card)
+    return this.remind<number | undefined>(Memory.TargetCard)
   }
 
   onCustomMove(move: CustomMove): MaterialMove[] {
@@ -36,9 +36,9 @@ export class MimicryActionRule extends CardActionRule {
     if (move.type === CustomMoveType.ChooseCard) {
       const target = this.target
       if (target === undefined) {
-        this.memorize(Memory.Card, move.data)
+        this.memorize(Memory.TargetCard, move.data)
       } else {
-        this.forget(Memory.Card)
+        this.forget(Memory.TargetCard)
         const mimicTarget = this.material(MaterialType.FactionCard).getItem(move.data)?.id.front as FactionCard
         this.memorize<TurnEffect[]>(Memory.TurnEffects, turnEffects =>
           [...turnEffects, { targets: [target], effect: { type: EffectType.Mimic, target: mimicTarget } }]

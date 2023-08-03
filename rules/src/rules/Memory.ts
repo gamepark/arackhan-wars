@@ -1,3 +1,3 @@
 export enum Memory {
-  Token, StartPlayer, ActivatedCards, PreviousRule, Card, Location, TurnEffects
+  Token, StartPlayer, ActivatedCards, ActionCard, PreviousRule, TargetCard, Location, TurnEffects
 }
