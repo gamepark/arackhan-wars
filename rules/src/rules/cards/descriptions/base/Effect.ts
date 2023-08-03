@@ -4,7 +4,7 @@ import { CardAttributeType, FactionCardKind } from './FactionCardCharacteristics
 export type Effect = AddAttack | AddDefense
   | GainAttributes | LoseAttributes | LoseSkills
   | CannotAttack | CannotBeAttacked
-  | Deactivated | Mimic
+  | Deactivated | Mimic | Trigger
 
 export enum EffectType {
   AddAttack, AddDefense,
@@ -12,7 +12,8 @@ export enum EffectType {
   LoseSkills,
   CannotAttack, CannotBeAttacked,
   Deactivated,
-  Mimic
+  Mimic,
+  Trigger
 }
 
 export type AddAttack = {
@@ -73,4 +74,18 @@ export type Mimic = {
 
 export function isMimic(effect: Effect): effect is Mimic {
   return effect.type === EffectType.Mimic
+}
+
+export type Trigger = {
+  type: EffectType.Trigger
+  condition: TriggerCondition
+  action: TriggerAction
+}
+
+export enum TriggerCondition {
+  FailAttack
+}
+
+export enum TriggerAction {
+  SelfDestroy
 }

@@ -8,6 +8,7 @@ import { FactionCardInspector } from '../helper/FactionCardInspector'
 import { discardCard } from '../../../../utils/discard.utils'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 import { Memory } from '../../../Memory'
+import { EffectType, Trigger, TriggerAction, TriggerCondition } from '../../descriptions/base/Effect'
 
 export class DestroyWhenAttackFailEffect extends AttackEffect {
   getAttackConsequences(attacker: Material) {
@@ -33,6 +34,8 @@ export const destroyIfAttackFail = (filter: ApplicableFilter[]) => new class ext
   constructor() {
     super(filter)
   }
+
+  effect: Trigger = { type: EffectType.Trigger, condition: TriggerCondition.FailAttack, action: TriggerAction.SelfDestroy }
 
   getEffectRule(game: MaterialGame) {
     return new DestroyWhenAttackFailEffect(game)
