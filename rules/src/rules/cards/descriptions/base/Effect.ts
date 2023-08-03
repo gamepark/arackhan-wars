@@ -1,12 +1,16 @@
 import { FactionCard } from '../../../../material/FactionCard'
-import { CardAttributeType } from './FactionCardCharacteristics'
+import { CardAttributeType, FactionCardKind } from './FactionCardCharacteristics'
 
-export type Effect = AddAttack | AddDefense | GainAttributes | LoseAttributes | LoseSkills | Deactivated | Mimic
+export type Effect = AddAttack | AddDefense
+  | GainAttributes | LoseAttributes | LoseSkills
+  | CannotAttack | CannotBeAttacked
+  | Deactivated | Mimic
 
 export enum EffectType {
   AddAttack, AddDefense,
   GainAttributes, LoseAttributes,
   LoseSkills,
+  CannotAttack, CannotBeAttacked,
   Deactivated,
   Mimic
 }
@@ -41,6 +45,21 @@ export type LoseSkills = {
 
 export function isLoseSkills(effect: Effect): effect is LoseSkills {
   return effect.type === EffectType.LoseSkills
+}
+
+export type CannotAttack = {
+  type: EffectType.CannotAttack
+  except?: AttackLimitation
+}
+
+export type CannotBeAttacked = {
+  type: EffectType.CannotBeAttacked
+  by?: FactionCardKind
+  except?: AttackLimitation
+}
+
+export enum AttackLimitation {
+  Group, Alone, EvenValue
 }
 
 export type Deactivated = {

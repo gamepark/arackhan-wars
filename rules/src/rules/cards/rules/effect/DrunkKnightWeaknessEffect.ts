@@ -3,6 +3,7 @@ import { MaterialGame } from '@gamepark/rules-api'
 import { AttackEffect } from '../../descriptions/base/AttackEffect'
 import { himself } from '../../descriptions/utils/applicable-filter.utils'
 import { getCardRule } from '../base/CardRule'
+import { AttackLimitation, CannotAttack, EffectType } from '../../descriptions/base/Effect'
 
 
 export class DrunkKnightWeaknessEffect extends AttackEffect {
@@ -17,8 +18,9 @@ export const drunkKnight: Ability = new class extends Ability {
 
   constructor() {
     super([himself])
-
   }
+
+  effect: CannotAttack = { type: EffectType.CannotAttack, except: AttackLimitation.EvenValue }
 
   getEffectRule(game: MaterialGame) {
     return new DrunkKnightWeaknessEffect(game)
