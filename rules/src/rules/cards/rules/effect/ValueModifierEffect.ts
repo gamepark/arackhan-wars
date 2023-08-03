@@ -2,6 +2,7 @@ import { Ability, EffectRule } from '../../descriptions/base/Ability'
 import { MaterialGame } from '@gamepark/rules-api'
 import { ApplicableFilter } from '../../descriptions/utils/applicable-filter.utils'
 import { AttackEffect } from '../../descriptions/base/AttackEffect'
+import { Effect, EffectType } from '../../descriptions/base/Effect'
 
 
 export type CardValues = { attack?: number, defense?: number }
@@ -21,10 +22,15 @@ export class ValueModifierEffect extends AttackEffect {
 }
 
 export const valueModifier = (filters: ApplicableFilter[], values: CardValues): Ability => {
+  const effects: Effect[] = []
+  if (values.attack) effects.push({ type: EffectType.AddAttack, value: values.attack })
+  if (values.defense) effects.push({ type: EffectType.AddDefense, value: values.defense })
   return new class extends Ability {
     constructor() {
       super(filters)
     }
+
+    effects = effects
 
     getEffectRule(game: MaterialGame) {
       return new ValueModifierEffect(game, values)

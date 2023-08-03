@@ -1,10 +1,24 @@
 import { FactionCard } from '../../../../material/FactionCard'
 import { CardAttributeType } from './FactionCardCharacteristics'
 
-export type Effect = GainAttributes | LoseAttributes | LoseSkills | Deactivated | Mimic
+export type Effect = AddAttack | AddDefense | GainAttributes | LoseAttributes | LoseSkills | Deactivated | Mimic
 
 export enum EffectType {
-  GainAttributes, LoseAttributes, LoseSkills, Deactivated, Mimic
+  AddAttack, AddDefense,
+  GainAttributes, LoseAttributes,
+  LoseSkills,
+  Deactivated,
+  Mimic
+}
+
+export type AddAttack = {
+  type: EffectType.AddAttack
+  value: number
+}
+
+export type AddDefense = {
+  type: EffectType.AddDefense
+  value: number
 }
 
 export type GainAttributes = {
