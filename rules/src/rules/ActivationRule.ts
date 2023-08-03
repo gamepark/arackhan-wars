@@ -87,8 +87,14 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
   onRuleEnd(move: RuleMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     if (isStartRule(move) && move.id === RuleId.EndPhaseRule) {
       this.memorize(Memory.StartPlayer, this.player)
+      return this.onEndOfTurn()
+    } else if (isStartPlayerTurn(move) && move.id === RuleId.ActivationRule) {
+      return this.onEndOfTurn()
     }
-    // Apply end turn effect on card
+    return []
+  }
+
+  onEndOfTurn(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     return discardSpells(this.game,
       this
         .material(MaterialType.FactionCard)
@@ -103,6 +109,9 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
       case CustomMoveType.Attack:
       case CustomMoveType.SolveAttack:
         return new AttackRule(this.game).onCustomMove(move)
+      case CustomMoveType.PerformAction:
+        this.memorize(Memory.Card, move.data.card)
+        return [this.rules().startRule(move.data.action)]
       case CustomMoveType.Pass:
         return [this.nextRuleMove]
     }

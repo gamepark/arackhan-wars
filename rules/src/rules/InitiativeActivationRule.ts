@@ -12,8 +12,4 @@ export class InitiativeActivationRule extends ActivationRule {
       return this.rules().startPlayerTurn(RuleId.ActivationRule, this.nextPlayer)
     }
   }
-
-  onRuleEnd(): MaterialMove[] {
-    return []
-  }
 }
