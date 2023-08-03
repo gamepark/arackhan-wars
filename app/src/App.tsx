@@ -12,6 +12,7 @@ import { ChooseStartPlayerHeader } from './headers/ChooseStartPlayerHeader'
 import { InitiativeHeader } from './headers/InitiativeHeader'
 import { ActivationHeader } from './headers/ActivationHeader'
 import { MimicryActionHeader } from './headers/actions/MimicryActionHeader'
+import { HorseOfAvalonActionHeader } from './headers/actions/HorseOfAvalonActionHeader'
 
 export default function App() {
   const game = useGame<MaterialGame>()
@@ -45,7 +46,7 @@ const RulesHeaders: Record<RuleId, () => ReactJSXElement> = {
   [RuleId.ActivationRule]: ActivationHeader,
   [RuleId.EndPhaseRule]: () => <p></p>,
   [RuleId.ForcedExileActionRule]: () => <p></p>,
-  [RuleId.HorseOfAvalonActionRule]: () => <p></p>,
+  [RuleId.HorseOfAvalonActionRule]: HorseOfAvalonActionHeader,
   [RuleId.TeleportationActionRule]: () => <p></p>,
   [RuleId.MimicryActionRule]: MimicryActionHeader
 }
