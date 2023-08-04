@@ -54,7 +54,7 @@ export class PerforationAttackAttribute extends AttackAttributeRule {
     return opponents
   }
 
-  getTargets(attacker: Material, opponent: Material, opponentsCards: Material): number[] {
+  getConsecutiveTargets(attacker: Material, opponent: Material, opponentsCards: Material): number[] {
     if (!opponent.length) return []
     const attackerCard = attacker.getItem()!
     const opponentCard = opponent.getItem()!

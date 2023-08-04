@@ -42,16 +42,11 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
   }
 
   getPlayerMoves(): MaterialMove[] {
-    console.time()
     const cardInspector = new FactionCardInspector(this.game)
     //const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
 
     const moves: MaterialMove[] = []
     moves.push(...new AttackRule(this.game, cardInspector).getPlayerMoves())
-
-    // TODO: in practice, move can be done only if the card can attack after being moves
-    // TODO: into MoveRules, check if after movement, the card can attack in grouped attack
-    //if (!activatedCards.some((a) => a.targets)) {
     moves.push(...new MoveRules(this.game, cardInspector).getPlayerMoves())
     //}
 

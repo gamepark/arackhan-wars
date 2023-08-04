@@ -16,6 +16,14 @@ export abstract class AttackAttributeRule extends AttributeRule {
       target.getIndex()
     ]
   }
+
+  isValidTarget(source: Material, target: Material, opponentsCards: Material): boolean {
+    return !!this.getTargets(source, target, opponentsCards).length
+  }
+
+  getConsecutiveTargets(attacker: Material, opponent: Material, opponentsCards: Material): number[] {
+    return this.getTargets(attacker, opponent, opponentsCards)
+  }
 }
 
 export const isAttackAttribute = (attribute: Attribute): attribute is Attribute<AttackAttributeRule> => attribute.kind === AttributeKind.Attack

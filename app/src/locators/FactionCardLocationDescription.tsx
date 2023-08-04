@@ -26,7 +26,6 @@ export class FactionCardLocationDescription extends LocationDescription<PlayerId
 
   canDrop(move: MaterialMove, location: Location, context: MaterialContext) {
     if (isCustomMoveType(CustomMoveType.Attack)(move)) {
-      //console.log(move)
 
       if (move.data.target === undefined) {
         const rules = new ArackhanWarsRules(context.game)

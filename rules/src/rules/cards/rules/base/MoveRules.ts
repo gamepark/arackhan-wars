@@ -1,4 +1,4 @@
-import { MaterialGame, MaterialMove, MoveItem, PlayerTurnRule } from '@gamepark/rules-api'
+import { isMoveItem, MaterialGame, MaterialMove, MoveItem, PlayerTurnRule } from '@gamepark/rules-api'
 import { isMovementAttribute } from '../attribute/MovementAttribute'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
 import { MaterialType } from '../../../../material/MaterialType'
@@ -9,6 +9,8 @@ import equal from 'fast-deep-equal'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { Memory } from '../../../Memory'
 import { getCardRule } from './CardRule'
+import { ArackhanWarsRules } from '../../../../ArackhanWarsRules';
+import { AttackRule } from './AttackRule';
 
 export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   private readonly cardInspector: FactionCardInspector
@@ -37,20 +39,34 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
   getMoves(cardIndex: number): MaterialMove[] {
     if (!this.canMove(cardIndex)) return []
     const cardMaterial = this.material(MaterialType.FactionCard).index(cardIndex)
-    const cardDescription = getCardRule(this.game, cardIndex).characteristics
+    const characteristics = getCardRule(this.game, cardIndex).characteristics
 
-    return cardDescription
+    return characteristics
       .getAttributes()
       .filter(isMovementAttribute)
       .flatMap((attribute) => attribute.getAttributeRule(this.game).getLegalMovements(cardMaterial, this.cardInspector))
+      .filter((move) => this.checkAttackAfterMove(move))
+  }
+
+  checkAttackAfterMove(move: MaterialMove): boolean {
+    if (!isMoveItem(move)) return false
+
+    const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
+    if (activatedCards.length) {
+      // Check that if after movement, the card can attack a target (attack compute is delegated by AttackRules)
+      const game = JSON.parse(JSON.stringify(this.game))
+      const rule = new ArackhanWarsRules(game)
+      rule.play(move)
+      return !!new AttackRule(game).getCardsToAttack(move.itemIndex).length
+    }
+
+    return true;
   }
 
   canMove = (cardIndex: number) => {
     if (!getCardRule(this.game, cardIndex).canBeActivated) return false
 
     const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
-
-    // 1. must not be in the memory
     return !activatedCards.find((card) => card.card === cardIndex)
   }
 
@@ -82,9 +98,10 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
   }
 
   afterItemMove(move: MoveItem): MaterialMove[] {
-    this.memorizeCardPlayed({ card: move.itemIndex })
+    const cardsToAttack = new AttackRule(this.game).getCardsToAttack(move.itemIndex)
+    this.memorizeCardPlayed(cardsToAttack.length? { card: move.itemIndex, mustAttack: cardsToAttack }: { card: move.itemIndex })
     return []
-  }
+ }
 
   memorizeCardPlayed(activation: ActivatedCard) {
     const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)

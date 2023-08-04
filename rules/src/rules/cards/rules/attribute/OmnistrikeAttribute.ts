@@ -23,10 +23,8 @@ export class OmnistrikeAttribute extends AttackAttributeRule {
     ]
   }
 
-  getTargets(attacker: Material, opponent: Material, opponentsCards: Material): number[] {
-    if (!opponent.length || this.isBlocked(attacker)) return []
-
-    console.log('Omnistrike', getAdjacentCards(attacker, opponentsCards))
+  getTargets(attacker: Material, _opponent: Material, opponentsCards: Material): number[] {
+    if (this.isBlocked(attacker)) return []
     return getAdjacentCards(attacker, opponentsCards)
   }
 
