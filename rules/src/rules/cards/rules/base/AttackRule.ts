@@ -1,22 +1,22 @@
-import { CustomMove, Material, MaterialGame, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { DiscardTiming, FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
-import { MaterialType } from '../../../../material/MaterialType'
-import { LocationType } from '../../../../material/LocationType'
-import { ActivatedCard } from '../../../types'
-import { isAttackAttribute } from '../attribute/AttackAttribute'
-import { FactionCardInspector } from '../helper/FactionCardInspector'
-import { discardCard, discardSpells } from '../../../../utils/discard.utils'
-import { areAdjacentCards } from '../../../../utils/adjacent.utils'
-import { CustomMoveType } from '../../../../material/CustomMoveType'
-import { computeAttack } from '../../../../utils/attack.utils'
-import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
-import { isSpell } from '../../descriptions/base/Spell'
-import { PlayerId } from '../../../../ArackhanWarsOptions'
-import uniq from 'lodash/uniq'
-import { deactivateTokens } from '../../../../utils/activation.utils'
-import { isLand } from '../../descriptions/base/Land'
-import { Memory } from '../../../Memory'
-import { getCardRule } from './CardRule'
+import { CustomMove, Material, MaterialGame, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api';
+import { DiscardTiming } from '../../descriptions/base/FactionCardCharacteristics';
+import { MaterialType } from '../../../../material/MaterialType';
+import { LocationType } from '../../../../material/LocationType';
+import { ActivatedCard } from '../../../types';
+import { isAttackAttribute } from '../attribute/AttackAttribute';
+import { FactionCardInspector } from '../helper/FactionCardInspector';
+import { discardCard, discardSpells } from '../../../../utils/discard.utils';
+import { areAdjacentCards } from '../../../../utils/adjacent.utils';
+import { CustomMoveType } from '../../../../material/CustomMoveType';
+import { computeAttack } from '../../../../utils/attack.utils';
+import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils';
+import { isSpell } from '../../descriptions/base/Spell';
+import { PlayerId } from '../../../../ArackhanWarsOptions';
+import uniq from 'lodash/uniq';
+import { deactivateTokens } from '../../../../utils/activation.utils';
+import { isLand } from '../../descriptions/base/Land';
+import { Memory } from '../../../Memory';
+import { getCardRule } from './CardRule';
 
 export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   private readonly cardInspector: FactionCardInspector
@@ -90,6 +90,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
     // filter the list of opponent in order to check if card can participate to group attack
     const filteredOpponents = this.getAuthorizedTargets(cardMaterial, opponentsCards)
     const characteristics = getCardRule(this.game, attacker).characteristics
+
     if (!characteristics.canAttack()) return []
 
     const attributeAttacks = characteristics.getAttributes()
@@ -114,20 +115,20 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
     const attackerIndex = attacker.getIndex()
     const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
 
-    const hasAlreadyAttacked = activatedCards.length && activatedCards.some((a) => a.targets)
     return opponentCards.getIndexes().filter((o) => {
+      const opponentCharacteristics = getCardRule(this.game, o).characteristics
       const opponentMaterial = this.material(MaterialType.FactionCard).index(o)
 
       if (isSpell(getCardRule(this.game, o).characteristics)
         || !this.cardInspector.canAttack(attackerIndex, o)) return false
 
-      if (!hasAlreadyAttacked) return true
+      if (!activatedCards.length) return true
 
       return activatedCards.some((a) => {
         if (!(a.targets ?? []).includes(o)) return false
         const cardMaterial = this.material(MaterialType.FactionCard).index(a.card)
         const characteristics = getCardRule(this.game, a.card).characteristics
-        if (characteristics.hasRangeAttack()) return true
+        if (characteristics.hasRangeAttack() || opponentCharacteristics.hasRangeAttack()) return true
         return areAdjacentCards(attacker, opponentMaterial) && areAdjacentCards(cardMaterial, opponentMaterial)
       })
     })
@@ -139,9 +140,8 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
 
     // For cards that can attack, verify that it was not activated
     const activatedCardIndex = activatedCards.findIndex((card) => card.card === cardIndex)
+
     if (activatedCardIndex === -1) return true
-    // If the card is not the last one in the array, can't attack
-    if (activatedCardIndex !== (activatedCards.length - 1)) return false
 
     const activatedCard = activatedCards[activatedCardIndex]
     return activatedCard.targets === undefined && activatedCard.omnistrike === undefined

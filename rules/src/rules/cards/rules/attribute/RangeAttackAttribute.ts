@@ -14,7 +14,7 @@ export class RangeAttackAttributeRule extends AttackAttributeRule {
 
   getLegalAttacks(attacker: Material, opponentsCards: Material, cardInspector: FactionCardInspector): MaterialMove[] {
     return opponentsCards.getIndexes()
-      .filter((index: number) => this.canAttack(attacker, opponentsCards.index(index)!, cardInspector))
+      .filter((index: number) => this.canAttack(attacker, opponentsCards.index(index), cardInspector))
       .map((index: number) => this.rules().customMove(CustomMoveType.Attack, {
         card: attacker.getIndex(),
         target: index
@@ -29,10 +29,6 @@ export class RangeAttackAttributeRule extends AttackAttributeRule {
       { x: attackerCard.location.x!, y: attackerCard.location.y! },
       { x: opponentCard.location.x!, y: opponentCard.location.y! }
     ) <= this.strength
-  }
-
-  canAttackInGroup(): boolean {
-    return true
   }
 }
 
