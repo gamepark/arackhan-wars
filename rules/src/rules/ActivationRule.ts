@@ -46,7 +46,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
 
     const moves: MaterialMove[] = []
     moves.push(...new AttackRule(this.game, cardInspector).getPlayerMoves())
-    moves.push(...new MoveRules(this.game, cardInspector).getPlayerMoves())
+    moves.push(...new MoveRules(this.game).getPlayerMoves())
     //}
 
     moves.push(...new ActionRule(this.game).getPlayerMoves())
@@ -118,8 +118,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     if (!isMoveItemType(MaterialType.FactionCard)(move)) return []
 
     if (move.position.location?.type === LocationType.Battlefield) {
-      const cardInspector = new FactionCardInspector(this.game)
-      return new MoveRules(this.game, cardInspector).afterItemMove(move)
+      return new MoveRules(this.game).afterItemMove(move)
     }
 
     return []

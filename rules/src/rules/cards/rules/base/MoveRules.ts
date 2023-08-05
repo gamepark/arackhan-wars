@@ -1,6 +1,5 @@
-import { MaterialGame, MaterialMove, MoveItem, PlayerTurnRule } from '@gamepark/rules-api'
+import { MaterialMove, MoveItem, PlayerTurnRule } from '@gamepark/rules-api'
 import { isMovementAttribute } from '../attribute/MovementAttribute'
-import { FactionCardInspector } from '../helper/FactionCardInspector'
 import { MaterialType } from '../../../../material/MaterialType'
 import { ActivatedCard } from '../../../types'
 import { LocationType } from '../../../../material/LocationType'
@@ -10,14 +9,6 @@ import { Memory } from '../../../Memory'
 import { getCardRule } from './CardRule'
 
 export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
-  private readonly cardInspector: FactionCardInspector
-
-  constructor(game: MaterialGame,
-              cardInspector?: FactionCardInspector) {
-    super(game)
-    this.cardInspector = cardInspector ?? new FactionCardInspector(game)
-  }
-
   getPlayerMoves(): MaterialMove<number, number, number>[] {
     const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
     const cardsAbleToMove = this.material(MaterialType.FactionCard)
@@ -36,7 +27,7 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
     return characteristics
       .getAttributes()
       .filter(isMovementAttribute)
-      .flatMap((attribute) => attribute.getAttributeRule(this.game).getLegalMovements(cardMaterial, this.cardInspector))
+      .flatMap((attribute) => attribute.getAttributeRule(this.game).getLegalMovements(cardMaterial))
   }
 
   beforeItemMove(move: MoveItem): MaterialMove[] {

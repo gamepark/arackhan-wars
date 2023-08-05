@@ -5,7 +5,6 @@ import { LocationType } from '../../../../material/LocationType'
 import { getDistance, isAdjacentToFactionCard } from '../../../../utils/adjacent.utils'
 import { MaterialType } from '../../../../material/MaterialType'
 import { CardAttribute, CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
-import { FactionCardInspector } from '../helper/FactionCardInspector'
 import equal from 'fast-deep-equal'
 import { getCardRule } from '../base/CardRule'
 
@@ -15,9 +14,9 @@ export class MovementAttributeRule extends AttributeRule {
     super(game)
   }
 
-  getLegalMovements(source: Material, cardInspector: FactionCardInspector): MaterialMove[] {
+  getLegalMovements(source: Material): MaterialMove[] {
     return battlefieldSpaceCoordinates
-      .filter((space) => this.canMoveTo(source, space, cardInspector))
+      .filter((space) => this.canMoveTo(source, space))
       .map((space) => (
         source
           .moveItem({ location: { type: LocationType.Battlefield, x: space.x, y: space.y, player: source.getItem()?.location.player } }))
@@ -31,16 +30,11 @@ export class MovementAttributeRule extends AttributeRule {
     return getDistance(sourceCoordinates, space) <= this.movement
   }
 
-  canMoveTo(source: Material, space: XYCoordinates, cardInspector: FactionCardInspector) {
+  canMoveTo(source: Material, space: XYCoordinates) {
     if (!this.hasEnoughMovement(source, space)) return false
 
     const battlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
     const card = source.getItem()!
-    const characteristics = getCardRule(this.game, source.getIndex()).characteristics
-
-    if (!characteristics.canMove() && !characteristics.canFly()) return false
-    if (characteristics.canFly() && cardInspector.hasLostAttributes(source.getIndex(), CardAttributeType.Flight)) return false
-    if (characteristics.hasMovement() && cardInspector.hasLostAttributes(source.getIndex(), CardAttributeType.Movement)) return false
 
     // Check the adjacency rule
     const otherCardOnBattlefield = battlefield.filter((otherCard) => !equal(otherCard.location, card.location)).getItems()
