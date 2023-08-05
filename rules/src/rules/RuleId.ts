@@ -4,7 +4,6 @@ export enum RuleId {
   DrawRule,
   PlacementRule,
   RevealRule,
-  InitiativeActivationRule,
   ActivationRule,
   EndPhaseRule,
   ForcedExileActionRule,

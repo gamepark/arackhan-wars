@@ -61,14 +61,6 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     return moves
   }
 
-  get nextRuleMove(): MaterialMove {
-    if (this.player === this.remind(Memory.StartPlayer)) {
-      return this.rules().startPlayerTurn(RuleId.ActivationRule, this.nextPlayer)
-    } else {
-      return this.rules().startRule(RuleId.EndPhaseRule)
-    }
-  }
-
   beforeItemMove(move: ItemMove): MaterialMove[] {
     if (!isMoveItemType(MaterialType.FactionCard)(move)) return []
 
@@ -105,13 +97,24 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
       case CustomMoveType.SolveAttack:
         return new AttackRule(this.game).onCustomMove(move)
       case CustomMoveType.PerformAction:
-        this.memorize(Memory.PreviousRule, this.game.rule!.id)
         this.memorize(Memory.ActionCard, move.data)
         return [this.rules().startRule(getCardRule(this.game, move.data).characteristics.action!)]
       case CustomMoveType.Pass:
         return [this.nextRuleMove]
     }
     return []
+  }
+
+  get nextRuleMove(): MaterialMove {
+    const nextPlayer = this.nextPlayer
+    if (nextPlayer === this.remind(Memory.StartPlayer)) {
+      if (this.remind(Memory.IsInitiativeSequence)) {
+        this.forget(Memory.IsInitiativeSequence)
+      } else {
+        return this.rules().startRule(RuleId.EndPhaseRule)
+      }
+    }
+    return this.rules().startPlayerTurn(RuleId.ActivationRule, nextPlayer)
   }
 
   afterItemMove(move: ItemMove): MaterialMove[] {

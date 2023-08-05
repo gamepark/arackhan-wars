@@ -11,7 +11,6 @@ import { CardAttribute, CardAttributeType, FactionCardCharacteristics } from '..
 import { TurnEffect } from '../action/TurnEffect'
 import { Memory } from '../../../Memory'
 import { isFlipped } from '../../../../utils/activation.utils'
-import { RuleId } from '../../../RuleId'
 import { areAdjacentCards } from '../../../../utils/adjacent.utils'
 import { AttackLimitationRules } from '../../descriptions/base/AttackLimitation'
 import { isSpell } from '../../descriptions/base/Spell'
@@ -109,8 +108,12 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
     return this.attributes.some(attribute => attribute.type === CardAttributeType.Initiative)
   }
 
+  private get isInitiativeSequence() {
+    return this.remind(Memory.IsInitiativeSequence)
+  }
+
   get canBeActivated() {
-    return this.isActive && (this.game.rule?.id !== RuleId.InitiativeActivationRule || this.hasInitiative)
+    return this.isActive && (!this.isInitiativeSequence || this.hasInitiative)
   }
 
   get canAttack() {

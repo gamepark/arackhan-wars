@@ -16,7 +16,6 @@ import { MulliganRule } from './rules/MulliganRule'
 import { locationsStrategies } from './material/LocationStrategies'
 import { PlacementRule } from './rules/PlacementRule'
 import { RevealRule } from './rules/RevealRule'
-import { InitiativeActivationRule } from './rules/InitiativeActivationRule'
 import { PlayerId } from './ArackhanWarsOptions'
 import { ActivationRule } from './rules/ActivationRule'
 import { EndPhaseRules } from './rules/EndPhaseRules'
@@ -99,7 +98,6 @@ export const rules: Record<RuleId, MaterialRulesPartCreator<PlayerId, MaterialTy
   [RuleId.DrawRule]: DrawRules,
   [RuleId.PlacementRule]: PlacementRule,
   [RuleId.RevealRule]: RevealRule,
-  [RuleId.InitiativeActivationRule]: InitiativeActivationRule,
   [RuleId.ActivationRule]: ActivationRule,
   [RuleId.EndPhaseRule]: EndPhaseRules,
   [RuleId.ForcedExileActionRule]: ForcedExileActionRule,

@@ -16,9 +16,10 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
       .filter(item => !!item.rotation?.y)
       .moveItems({ rotation: {} })
 
+    this.memorize(Memory.IsInitiativeSequence, true)
     return [
       ...revealCards,
-      this.rules().startPlayerTurn(RuleId.InitiativeActivationRule, this.remind(Memory.StartPlayer))
+      this.rules().startPlayerTurn(RuleId.ActivationRule, this.remind(Memory.StartPlayer))
     ]
   }
 

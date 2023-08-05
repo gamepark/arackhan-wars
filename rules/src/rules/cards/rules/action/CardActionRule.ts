@@ -4,6 +4,7 @@ import { PlayerTurnRule } from '@gamepark/rules-api'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { LocationType } from '../../../../material/LocationType'
 import { Memory } from '../../../Memory'
+import { RuleId } from '../../../RuleId'
 
 export abstract class CardActionRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   get actionCard() {
@@ -15,8 +16,7 @@ export abstract class CardActionRule extends PlayerTurnRule<PlayerId, MaterialTy
     if (this.actionCard.location.type !== LocationType.PlayerDiscard) {
       moves.push(this.discardActionCard())
     }
-    moves.push(this.rules().startRule(this.remind(Memory.PreviousRule)))
-    this.forget(Memory.PreviousRule)
+    moves.push(this.rules().startRule(RuleId.ActivationRule))
     this.forget(Memory.ActionCard)
     return moves
   }

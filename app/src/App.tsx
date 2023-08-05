@@ -9,7 +9,6 @@ import { GameOverHeader } from './headers/GameOverHeader'
 import { MulliganHeader } from './headers/MulliganHeader'
 import { PlacementHeader } from './headers/PlacementHeader'
 import { ChooseStartPlayerHeader } from './headers/ChooseStartPlayerHeader'
-import { InitiativeHeader } from './headers/InitiativeHeader'
 import { ActivationHeader } from './headers/ActivationHeader'
 import { MimicryActionHeader } from './headers/actions/MimicryActionHeader'
 import { HorseOfAvalonActionHeader } from './headers/actions/HorseOfAvalonActionHeader'
@@ -42,7 +41,6 @@ const RulesHeaders: Record<RuleId, () => ReactJSXElement> = {
   [RuleId.DrawRule]: () => <p></p>,
   [RuleId.PlacementRule]: PlacementHeader,
   [RuleId.RevealRule]: () => <p></p>,
-  [RuleId.InitiativeActivationRule]: InitiativeHeader,
   [RuleId.ActivationRule]: ActivationHeader,
   [RuleId.EndPhaseRule]: () => <p></p>,
   [RuleId.ForcedExileActionRule]: () => <p></p>,
