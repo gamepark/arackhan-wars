@@ -1,5 +1,6 @@
 import { FactionCard } from '../../../../material/FactionCard'
-import { CardAttributeType, FactionCardKind } from './FactionCardCharacteristics'
+import { CardAttributeType } from './FactionCardCharacteristics'
+import { AttackLimitation } from './AttackLimitation'
 
 export type Effect = AddAttack | AddDefense
   | GainAttributes | LoseAttributes | LoseSkills
@@ -55,12 +56,7 @@ export type CannotAttack = {
 
 export type CannotBeAttacked = {
   type: EffectType.CannotBeAttacked
-  by?: FactionCardKind
   except?: AttackLimitation
-}
-
-export enum AttackLimitation {
-  Group, Alone, EvenValue
 }
 
 export type Deactivated = {

@@ -19,7 +19,6 @@ import { DiscardTiming } from './cards/descriptions/base/FactionCardCharacterist
 import { AttackRule } from './cards/rules/base/AttackRule'
 import { MoveRules } from './cards/rules/base/MoveRules'
 import { discardSpells } from '../utils/discard.utils'
-import { deactivateTokens } from '../utils/activation.utils'
 import { FactionCardInspector } from './cards/rules/helper/FactionCardInspector'
 import { ActionRule } from './cards/rules/base/ActionRule'
 import { Memory } from './Memory'
@@ -119,18 +118,8 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     if (!isMoveItemType(MaterialType.FactionCard)(move)) return []
 
     if (move.position.location?.type === LocationType.Battlefield) {
-
       const cardInspector = new FactionCardInspector(this.game)
-      const moves: MaterialMove[] = new MoveRules(this.game, cardInspector).afterItemMove(move)
-
-      // After a move, if there is no attack (TODO: or action) possible, deactivate token
-      const attackMoves = new AttackRule(this.game, cardInspector).getPlayerMoves()
-      if (!attackMoves.length) {
-        const token = this.material(MaterialType.FactionToken).parent(move.itemIndex)
-        moves.push(...deactivateTokens(token))
-      }
-
-      return moves
+      return new MoveRules(this.game, cardInspector).afterItemMove(move)
     }
 
     return []
