@@ -1,16 +1,13 @@
-import { isMoveItem, MaterialGame, MaterialMove, MoveItem, PlayerTurnRule } from '@gamepark/rules-api'
+import { MaterialGame, MaterialMove, MoveItem, PlayerTurnRule } from '@gamepark/rules-api'
 import { isMovementAttribute } from '../attribute/MovementAttribute'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
 import { MaterialType } from '../../../../material/MaterialType'
 import { ActivatedCard } from '../../../types'
-import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { LocationType } from '../../../../material/LocationType'
 import equal from 'fast-deep-equal'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { Memory } from '../../../Memory'
 import { getCardRule } from './CardRule'
-import { ArackhanWarsRules } from '../../../../ArackhanWarsRules';
-import { AttackRule } from './AttackRule';
 
 export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   private readonly cardInspector: FactionCardInspector
@@ -22,22 +19,17 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
   }
 
   getPlayerMoves(): MaterialMove<number, number, number>[] {
-    const battlefieldCards = this
-      .material(MaterialType.FactionCard)
-      .location(onBattlefieldAndAstralPlane)
+    const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
+    const cardsAbleToMove = this.material(MaterialType.FactionCard)
+      .location(LocationType.Battlefield)
+      .player(this.player)
+      .getIndexes()
+      .filter(index => getCardRule(this.game, index).canMove && !activatedCards.some(activatedCard => activatedCard.card === index))
 
-    const attackers = battlefieldCards.player(this.player)
-    const moves: MaterialMove[] = []
-    for (const attacker of attackers.getIndexes()) {
-      moves.push(...this.getMoves(attacker))
-    }
-
-    return moves
+    return cardsAbleToMove.flatMap(card => this.getMoves(card))
   }
 
-
   getMoves(cardIndex: number): MaterialMove[] {
-    if (!this.canMove(cardIndex)) return []
     const cardMaterial = this.material(MaterialType.FactionCard).index(cardIndex)
     const characteristics = getCardRule(this.game, cardIndex).characteristics
 
@@ -45,29 +37,6 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
       .getAttributes()
       .filter(isMovementAttribute)
       .flatMap((attribute) => attribute.getAttributeRule(this.game).getLegalMovements(cardMaterial, this.cardInspector))
-      .filter((move) => this.checkAttackAfterMove(move))
-  }
-
-  checkAttackAfterMove(move: MaterialMove): boolean {
-    if (!isMoveItem(move)) return false
-
-    const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
-    if (activatedCards.length) {
-      // Check that if after movement, the card can attack a target (attack compute is delegated by AttackRules)
-      const game = JSON.parse(JSON.stringify(this.game))
-      const rule = new ArackhanWarsRules(game)
-      rule.play(move)
-      return !!new AttackRule(game).getCardsToAttack(move.itemIndex).length
-    }
-
-    return true;
-  }
-
-  canMove = (cardIndex: number) => {
-    if (!getCardRule(this.game, cardIndex).canBeActivated) return false
-
-    const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
-    return !activatedCards.find((card) => card.card === cardIndex)
   }
 
   beforeItemMove(move: MoveItem): MaterialMove[] {
@@ -98,10 +67,9 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
   }
 
   afterItemMove(move: MoveItem): MaterialMove[] {
-    const cardsToAttack = new AttackRule(this.game).getCardsToAttack(move.itemIndex)
-    this.memorizeCardPlayed(cardsToAttack.length? { card: move.itemIndex, mustAttack: cardsToAttack }: { card: move.itemIndex })
+    this.memorizeCardPlayed({ card: move.itemIndex })
     return []
- }
+  }
 
   memorizeCardPlayed(activation: ActivatedCard) {
     const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)

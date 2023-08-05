@@ -122,7 +122,6 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   canAttackTarget(opponent: number) {
-    console.log(this.index, opponent, this.effects, getCardRule(this.game, opponent).effects)
     return this.isInRange(opponent)
       && !this.effects.some(effect => effect.type === EffectType.CannotAttack && this.isPreventingAttack(effect, opponent))
       && !getCardRule(this.game, opponent).effects.some(effect => effect.type === EffectType.CannotBeAttacked && this.isPreventingAttack(effect, opponent))
@@ -138,6 +137,10 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
       || this.attributes.some(attribute =>
         attribute.type === CardAttributeType.RangedAttack && getDistance(this.item.location, opponentRule.item.location) <= attribute.strength! // TODO: attribute.distance
       )
+  }
+
+  get canMove() {
+    return this.canBeActivated && this.attributes.some(attribute => attribute.type === CardAttributeType.Movement || attribute.type === CardAttributeType.Swarm)
   }
 }
 
