@@ -143,7 +143,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get canMove() {
-    return this.canBeActivated && this.attributes.some(attribute => attribute.type === CardAttributeType.Movement || attribute.type === CardAttributeType.Swarm)
+    return this.canBeActivated && this.attributes.some(attribute => attribute.type === CardAttributeType.Movement || attribute.type === CardAttributeType.Flight)
   }
 }
 
