@@ -3,7 +3,6 @@ import { isMovementAttribute } from '../attribute/MovementAttribute'
 import { MaterialType } from '../../../../material/MaterialType'
 import { ActivatedCard } from '../../../types'
 import { LocationType } from '../../../../material/LocationType'
-import equal from 'fast-deep-equal'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { Memory } from '../../../Memory'
 import { getCardRule } from './CardRule'
@@ -31,30 +30,18 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
   }
 
   beforeItemMove(move: MoveItem): MaterialMove[] {
-    const moves: MaterialMove[] = []
     if (move.position.location?.type === LocationType.Battlefield) {
-      const cardOnDestination = this
-        .material(MaterialType.FactionCard)
-        .location((location) => (
-          location.type == LocationType.Battlefield
-          && location.x === move.position.location?.x
-          && location.y === move.position.location?.y
-        ))
-
-      if (cardOnDestination.length) {
-        const sourceCard = this
-          .material(MaterialType.FactionCard)
-          .getItem(move.itemIndex)!
-
-        this.memorizeCardPlayed({ card: cardOnDestination.getIndex() })
-
-        moves.push(...cardOnDestination.moveItems({ location: { ...sourceCard.location } }))
+      const cardToSwap = this.material(MaterialType.FactionCard)
+        .location(location => location.type === LocationType.Battlefield
+          && location.x === move.position.location?.x && location.y === move.position.location?.y)
+        .filter((_, index) => index !== move.itemIndex)
+      if (cardToSwap.length) {
+        const swapLocation = this.material(MaterialType.FactionCard).getItem(move.itemIndex)!.location
+        this.memorizeCardPlayed({ card: cardToSwap.getIndex() })
+        return [cardToSwap.moveItem({ location: { ...swapLocation } })]
       }
     }
-
-    const card = this.material(MaterialType.FactionCard).index(move.itemIndex)
-    if (equal(move.position.location, card.getItem()!.location)) return []
-    return moves
+    return []
   }
 
   afterItemMove(move: MoveItem): MaterialMove[] {
