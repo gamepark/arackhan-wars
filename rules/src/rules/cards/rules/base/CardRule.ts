@@ -145,6 +145,10 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   get canMove() {
     return this.canBeActivated && this.attributes.some(attribute => attribute.type === CardAttributeType.Movement || attribute.type === CardAttributeType.Flight)
   }
+
+  get canPerformAction() {
+    return this.characteristics.action && this.canBeActivated
+  }
 }
 
 let cardsRulesCache: { game: MaterialGame<PlayerId, MaterialType, LocationType>, rules: Record<number, CardRule> } | undefined
