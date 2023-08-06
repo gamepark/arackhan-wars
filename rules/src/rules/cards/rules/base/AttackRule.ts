@@ -45,7 +45,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       }
     }
 
-    if (cardsAlreadyAttacked) {
+    if (cardsAlreadyAttacked || this.remind<number[]>(Memory.MovedCards).length) { // TODO: "Solve attacks" is not right when there are only moved cards
       moves.push(this.rules().customMove(CustomMoveType.SolveAttack))
     }
 
@@ -178,6 +178,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
 
   solveAttack(): MaterialMove[] {
 
+    const movedCards = this.remind<number[]>(Memory.MovedCards)
     const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
     let targets: number[] = []
     const moves: MaterialMove[] = []
@@ -186,6 +187,13 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       .material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
     const opponents = battlefieldCards.player((player) => player !== this.player)
+
+    for (const movedCard of movedCards) {
+      if (!activatedCards.some(activatedCard => activatedCard.card === movedCard)) {
+        const token = this.material(MaterialType.FactionToken).parent(movedCard)
+        moves.push(...deactivateTokens(token))
+      }
+    }
 
     for (const activation of activatedCards) {
       const cardMaterial = this.material(MaterialType.FactionCard).index(activation.card)
@@ -210,11 +218,13 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       }
     }
 
+
     for (const target of targets) {
       // Attacks must be added first, then all discard and deactivation moves
       moves.unshift(...this.attack(target))
     }
 
+    this.memorize(Memory.MovedCards, [])
     this.memorize(Memory.ActivatedCards, [])
     return moves
   }

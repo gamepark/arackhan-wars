@@ -22,11 +22,13 @@ import { discardSpells } from '../utils/discard.utils'
 import { ActionRule } from './cards/rules/base/ActionRule'
 import { Memory } from './Memory'
 import { getCardRule } from './cards/rules/base/CardRule'
+import { ActivatedCard } from './types'
 
 export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
 
   onRuleStart<RuleId extends number>(move: RuleMove<PlayerId, RuleId>) {
     if (isStartPlayerTurn(move)) {
+      this.memorize(Memory.MovedCards, [])
       this.memorize(Memory.ActivatedCards, [])
       this.memorize(Memory.TurnEffects, [])
     }
@@ -44,7 +46,10 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     moves.push(...new AttackRule(this.game).getPlayerMoves())
     moves.push(...new MoveRules(this.game).getPlayerMoves())
     moves.push(...new ActionRule(this.game).getPlayerMoves())
-    moves.push(this.rules().customMove(CustomMoveType.Pass))
+    // TODO: must solve attacks & moved cards before pass
+    if (!this.remind<ActivatedCard[]>(Memory.ActivatedCards).length && !this.remind<number[]>(Memory.MovedCards).length) {
+      moves.push(this.rules().customMove(CustomMoveType.Pass))
+    }
     return moves
   }
 
@@ -103,15 +108,5 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
       }
     }
     return this.rules().startPlayerTurn(RuleId.ActivationRule, nextPlayer)
-  }
-
-  afterItemMove(move: ItemMove): MaterialMove[] {
-    if (!isMoveItemType(MaterialType.FactionCard)(move)) return []
-
-    if (move.position.location?.type === LocationType.Battlefield) {
-      return new MoveRules(this.game).afterItemMove(move)
-    }
-
-    return []
   }
 }
