@@ -82,6 +82,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
   }
 
   onEndOfTurn(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
+    this.forget(Memory.TurnEffects)
     return discardSpells(this.game,
       this
         .material(MaterialType.FactionCard)
