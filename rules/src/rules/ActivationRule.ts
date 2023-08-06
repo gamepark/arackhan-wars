@@ -25,7 +25,7 @@ import { getCardRule } from './cards/rules/base/CardRule'
 
 export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
 
-  onRuleStart<RuleId extends number>(move: RuleMove<PlayerId, RuleId>) {
+  onRuleStart(move: RuleMove) {
     if (isStartPlayerTurn(move)) {
       this.memorize(Memory.MovedCards, [])
       this.memorize(Memory.Attacks, [])
@@ -40,7 +40,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     return [remainingMoves[0]]
   }
 
-  getPlayerMoves(): MaterialMove[] {
+  getPlayerMoves() {
     const moves: MaterialMove[] = []
     moves.push(...new AttackRule(this.game).getPlayerMoves())
     moves.push(...new MoveRules(this.game).getPlayerMoves())
@@ -52,7 +52,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     return moves
   }
 
-  beforeItemMove(move: ItemMove): MaterialMove[] {
+  beforeItemMove(move: ItemMove) {
     if (!isMoveItemType(MaterialType.FactionCard)(move)) return []
 
     if (move.position.location?.type === LocationType.Battlefield || move.position.location?.type === LocationType.PlayerDiscard) {
@@ -62,7 +62,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     return []
   }
 
-  onRuleEnd(move: RuleMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
+  onRuleEnd(move: RuleMove) {
     if (isStartRule(move) && move.id === RuleId.EndPhaseRule) {
       this.memorize(Memory.StartPlayer, this.player)
       return this.onEndOfTurn()
@@ -72,7 +72,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     return []
   }
 
-  onEndOfTurn(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
+  onEndOfTurn() {
     this.forget(Memory.TurnEffects)
     return discardSpells(this.game,
       this
@@ -83,7 +83,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     )
   }
 
-  onCustomMove(move: CustomMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
+  onCustomMove(move: CustomMove) {
     switch (move.type) {
       case CustomMoveType.Attack:
       case CustomMoveType.SolveAttack:
@@ -97,7 +97,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     return []
   }
 
-  get nextRuleMove(): MaterialMove {
+  get nextRuleMove() {
     const nextPlayer = this.nextPlayer
     if (nextPlayer === this.remind(Memory.StartPlayer)) {
       if (this.remind(Memory.IsInitiativeSequence)) {
