@@ -1,9 +1,9 @@
 import { FactionCardInspector } from '../rules/cards/rules/helper/FactionCardInspector'
-import { ActivatedCard } from '../rules/types'
 import { Material } from '@gamepark/rules-api'
+import { Attack } from '../rules/cards/rules/base/AttackRule'
 
 
-export const computeAttack = (attacker: Material, opponent: Material, cardInspector: FactionCardInspector, activatedCards: ActivatedCard[] = []) => {
+export const computeAttack = (attacker: Material, opponent: Material, cardInspector: FactionCardInspector, activatedCards: Attack[] = []) => {
   const attackerIndex = attacker.getIndex()
   const cardAttack = cardInspector.getAttack(attackerIndex)
 

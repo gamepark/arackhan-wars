@@ -3,8 +3,8 @@ import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
 import { Memory } from '../../../Memory'
-import { ActivatedCard } from '../../../types'
 import { getCardRule } from '../../rules/base/CardRule'
+import { Attack } from '../../rules/base/AttackRule'
 
 export enum AttackLimitation {
   NoLonelyCreature, NoGroupedCreatures, EvenValueDefender, NoCreature
@@ -22,8 +22,8 @@ export abstract class AttackLimitationRule extends MaterialRulesPart<PlayerId, M
 
 export class NoLonelyCreatureAttack extends AttackLimitationRule {
   isAttackValid(defender: number): boolean {
-    const attackers = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
-      .filter(activatedCard => activatedCard.targets?.includes(defender))
+    const attackers = this.remind<Attack[]>(Memory.Attacks)
+      .filter(attack => attack.targets.includes(defender))
       .map(activatedCard => activatedCard.card)
     return attackers.length > 1 || !getCardRule(this.game, attackers[0]).isCreature
   }
@@ -32,8 +32,8 @@ export class NoLonelyCreatureAttack extends AttackLimitationRule {
 export class NoGroupedCreaturesAttack extends AttackLimitationRule {
   preventAttack(attacker: number, defender: number): boolean {
     return getCardRule(this.game, attacker).isCreature
-      && this.remind<ActivatedCard[]>(Memory.ActivatedCards).some(activatedCard =>
-        activatedCard.targets?.includes(defender) || getCardRule(this.game, activatedCard.card).isCreature
+      && this.remind<Attack[]>(Memory.Attacks).some(attack =>
+        attack.targets.includes(defender) || getCardRule(this.game, attack.card).isCreature
       )
   }
 }
