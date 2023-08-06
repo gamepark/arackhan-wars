@@ -72,10 +72,10 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
   }
 
   onRuleEnd(move: RuleMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
-    if (this.game.rule?.id === RuleId.ActivationRule) {
-      if (isStartRule(move) && move.id === RuleId.EndPhaseRule) {
-        this.memorize(Memory.StartPlayer, this.player)
-      }
+    if (isStartRule(move) && move.id === RuleId.EndPhaseRule) {
+      this.memorize(Memory.StartPlayer, this.player)
+      return this.onEndOfTurn()
+    } else if (isStartPlayerTurn(move) && move.id === RuleId.ActivationRule) {
       return this.onEndOfTurn()
     }
     return []
