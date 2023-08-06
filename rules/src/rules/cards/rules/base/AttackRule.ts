@@ -21,10 +21,9 @@ import { getCardRule } from './CardRule'
 export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   private readonly cardInspector: FactionCardInspector
 
-  constructor(game: MaterialGame,
-              cardInspector?: FactionCardInspector) {
+  constructor(game: MaterialGame) {
     super(game)
-    this.cardInspector = cardInspector ?? new FactionCardInspector(game)
+    this.cardInspector = new FactionCardInspector(game)
   }
 
   getPlayerMoves(): MaterialMove[] {
@@ -72,38 +71,6 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
     return targets.length > 0 ? uniq(targets) : undefined
   }
 
-  getCardsToAttack(attacker: number): number[] {
-    if (!this.canAttack(attacker)) return []
-
-    const attackerMaterial = this.material(MaterialType.FactionCard).index(attacker)
-    const opponentsCards = this.material(MaterialType.FactionCard).location(LocationType.Battlefield).player((p) => p !== this.player)
-
-    const filteredOpponents = this.getAuthorizedTargets(attackerMaterial, opponentsCards)
-    const characteristics = getCardRule(this.game, attacker).characteristics
-    if (!characteristics.canAttack()) return []
-
-    const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
-    if (!activatedCards?.length) return []
-
-    const cards = []
-    for (const activation of activatedCards) {
-      for (const target of (activation.targets ?? [])) {
-        const opponentMaterial = this.material(MaterialType.FactionCard).index(target)
-
-        const isValidTarget = characteristics.getAttributes()
-          .filter(isAttackAttribute)
-          .filter((a) => !this.cardInspector.hasLostAttributes(attacker, a.type))
-          .some((attribute) => attribute.getAttributeRule(this.game).isValidTarget(attackerMaterial, opponentMaterial, opponentsCards.indexes(filteredOpponents)))
-
-        if (isValidTarget || areAdjacentCards(attackerMaterial, opponentMaterial)) {
-          cards.push(target)
-        }
-      }
-    }
-
-    return cards
-  }
-
   getAuthorizedTargets(attacker: Material, opponentCards: Material): number[] {
     const attackerIndex = attacker.getIndex()
     const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
@@ -125,19 +92,6 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
         return areAdjacentCards(attacker, opponentMaterial) && areAdjacentCards(cardMaterial, opponentMaterial)
       })
     })
-  }
-
-  canAttack = (cardIndex: number) => {
-    if (!getCardRule(this.game, cardIndex).canBeActivated) return false
-    const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
-
-    // For cards that can attack, verify that it was not activated
-    const activatedCardIndex = activatedCards.findIndex((card) => card.card === cardIndex)
-
-    if (activatedCardIndex === -1) return true
-
-    const activatedCard = activatedCards[activatedCardIndex]
-    return activatedCard.targets === undefined && activatedCard.omnistrike === undefined
   }
 
   attack(opponent: number): MaterialMove[] {

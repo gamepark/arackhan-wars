@@ -19,7 +19,6 @@ import { DiscardTiming } from './cards/descriptions/base/FactionCardCharacterist
 import { AttackRule } from './cards/rules/base/AttackRule'
 import { MoveRules } from './cards/rules/base/MoveRules'
 import { discardSpells } from '../utils/discard.utils'
-import { FactionCardInspector } from './cards/rules/helper/FactionCardInspector'
 import { ActionRule } from './cards/rules/base/ActionRule'
 import { Memory } from './Memory'
 import { getCardRule } from './cards/rules/base/CardRule'
@@ -41,23 +40,11 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
   }
 
   getPlayerMoves(): MaterialMove[] {
-    const cardInspector = new FactionCardInspector(this.game)
-    //const activatedCards = this.remind<ActivatedCard[]>(Memory.ActivatedCards)
-
     const moves: MaterialMove[] = []
-    moves.push(...new AttackRule(this.game, cardInspector).getPlayerMoves())
+    moves.push(...new AttackRule(this.game).getPlayerMoves())
     moves.push(...new MoveRules(this.game).getPlayerMoves())
-    //}
-
     moves.push(...new ActionRule(this.game).getPlayerMoves())
-
-
-    /**if (rule.actionRule().length) {
-        moves.push(this.rules().customMove(CustomMoveType.CardAction, { card: index }))
-      }**/
-
     moves.push(this.rules().customMove(CustomMoveType.Pass))
-    console.timeEnd()
     return moves
   }
 
