@@ -51,7 +51,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       }
     }
 
-    if (cardsAlreadyAttacked && !this.remind<number[]>(Memory.MovedCards).length) {
+    if (cardsAlreadyAttacked.length > 0 && !this.remind<number[]>(Memory.MovedCards).length) {
       moves.push(this.rules().customMove(CustomMoveType.SolveAttack))
     }
 
