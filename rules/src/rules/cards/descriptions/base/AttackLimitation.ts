@@ -15,17 +15,14 @@ export abstract class AttackLimitationRule extends MaterialRulesPart<PlayerId, M
     return false
   }
 
-  isAttackValid(_defender: number): boolean {
-    return true
+  isInvalidAttackGroup(_attackers: number[], _defender: number): boolean {
+    return false
   }
 }
 
 export class NoLonelyCreatureAttack extends AttackLimitationRule {
-  isAttackValid(defender: number): boolean {
-    const attackers = this.remind<Attack[]>(Memory.Attacks)
-      .filter(attack => attack.targets.includes(defender))
-      .map(activatedCard => activatedCard.card)
-    return attackers.length > 1 || !getCardRule(this.game, attackers[0]).isCreature
+  isInvalidAttackGroup(attackers: number[]): boolean {
+    return attackers.length === 1 && getCardRule(this.game, attackers[0]).isCreature
   }
 }
 
@@ -35,6 +32,10 @@ export class NoGroupedCreaturesAttack extends AttackLimitationRule {
       && this.remind<Attack[]>(Memory.Attacks).some(attack =>
         attack.targets.includes(defender) || getCardRule(this.game, attack.card).isCreature
       )
+  }
+
+  isInvalidAttackGroup(attackers: number[]): boolean {
+    return attackers.filter(attacker => getCardRule(this.game, attacker).isCreature).length > 1
   }
 }
 

@@ -1,4 +1,4 @@
-import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
+import { Material, MaterialGame } from '@gamepark/rules-api'
 import { Attribute, AttributeKind } from './Attribute'
 import { CardAttribute, CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { AttackAttributeRule } from './AttackAttribute'
@@ -13,10 +13,6 @@ class SwarmAttackAttribute extends AttackAttributeRule {
 
   constructor(game: MaterialGame) {
     super(game)
-  }
-
-  getLegalAttacks(): MaterialMove[] {
-    return []
   }
 
   getEffectRule(source: Material, target: Material): EffectRule | undefined {

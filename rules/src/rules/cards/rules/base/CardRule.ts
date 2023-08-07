@@ -4,7 +4,7 @@ import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
 import { FactionCard, FactionCardsCharacteristics } from '../../../../material/FactionCard'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
-import { isCreature } from '../../descriptions/base/Creature'
+import { Creature, isCreature } from '../../descriptions/base/Creature'
 import { CannotAttack, CannotBeAttacked, Effect, EffectType, GainAttributes, isGainAttributes, isLoseSkills, isMimic } from '../../descriptions/base/Effect'
 import { Ability } from '../../descriptions/base/Ability'
 import { CardAttribute, CardAttributeType, FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
@@ -12,8 +12,10 @@ import { TurnEffect } from '../action/TurnEffect'
 import { Memory } from '../../../Memory'
 import { isFlipped } from '../../../../utils/activation.utils'
 import { areAdjacentCards } from '../../../../utils/adjacent.utils'
-import { AttackLimitationRules } from '../../descriptions/base/AttackLimitation'
-import { isSpell } from '../../descriptions/base/Spell'
+import { AttackLimitationRule, AttackLimitationRules } from '../../descriptions/base/AttackLimitation'
+import { isSpell, Spell } from '../../descriptions/base/Spell'
+import sumBy from 'lodash/sumBy'
+import { Land } from '../../descriptions/base/Land'
 
 export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
   private effectsCache: Effect[] | undefined = undefined
@@ -148,6 +150,45 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
 
   get canPerformAction() {
     return this.characteristics.action && this.canBeActivated
+  }
+
+  getAttackValue(attackers: number[]): number {
+    if (attackers.length === 0) return 0
+    if (this.isInvalidAttackGroup(attackers)) {
+      // We recursively try all attack groups made of all attackers but one, and keep the best value
+      return Math.max(...attackers.map(excludedAttacker => this.getAttackValue(attackers.filter(attacker => attacker !== excludedAttacker))))
+    }
+    return sumBy(attackers, attacker => getCardRule(this.game, attacker).attack)
+  }
+
+  isInvalidAttackGroup(attackers: number[]) {
+    return this.effects.some(effect =>
+      effect.type === EffectType.CannotBeAttacked && this.isEffectInvalidAttackGroup(effect, attackers)
+    ) || attackers.some(attacker =>
+      getCardRule(this.game, attacker).effects.some(effect =>
+        effect.type === EffectType.CannotAttack && this.isEffectInvalidAttackGroup(effect, attackers)
+      )
+    )
+  }
+
+  private isEffectInvalidAttackGroup(effect: CannotAttack | CannotBeAttacked, attackers: number[]) {
+    return !effect.except || new AttackLimitationRule[effect.except](this.game).isInvalidAttackGroup(attackers, this.index)
+  }
+
+  get attack() {
+    const baseAttack = (this.characteristics as Creature | Spell).attack ?? 0
+    const effectsModifier = sumBy(this.effects, effect => effect.type === EffectType.AddAttack ? effect.value : 0)
+    return Math.max(0, baseAttack + effectsModifier)
+  }
+
+  get defense() {
+    const baseDefense = (this.characteristics as Creature | Land).defense ?? 0
+    const effectsModifier = sumBy(this.effects, effect => effect.type === EffectType.AddDefense ? effect.value : 0)
+    return Math.max(0, baseDefense + effectsModifier)
+  }
+
+  get hasPerforation() {
+    return this.attributes.some(attribute => attribute.type === CardAttributeType.Perforation)
   }
 }
 

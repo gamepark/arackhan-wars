@@ -1,18 +1,16 @@
 import { CustomMove, Material, MaterialGame, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { DiscardTiming } from '../../descriptions/base/FactionCardCharacteristics'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
 import { isAttackAttribute } from '../attribute/AttackAttribute'
 import { FactionCardInspector } from '../helper/FactionCardInspector'
-import { discardCard, discardSpells } from '../../../../utils/discard.utils'
+import { discardCard } from '../../../../utils/discard.utils'
 import { areAdjacentCards } from '../../../../utils/adjacent.utils'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
-import { computeAttack } from '../../../../utils/attack.utils'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { isSpell } from '../../descriptions/base/Spell'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import uniq from 'lodash/uniq'
-import { deactivateTokens } from '../../../../utils/activation.utils'
+import mapValues from 'lodash/mapValues'
 import { isLand } from '../../descriptions/base/Land'
 import { Memory } from '../../../Memory'
 import { getCardRule } from './CardRule'
@@ -99,38 +97,6 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
     })
   }
 
-  attack(opponent: number): MaterialMove[] {
-    const opponentMaterial = this.material(MaterialType.FactionCard).index(opponent)
-    const opponentCardCharacteristics = getCardRule(this.game, opponent).characteristics
-    const attacks = this.remind<Attack[]>(Memory.Attacks)
-
-    const attacksOnThisOpponent = attacks.filter(attack => attack.targets.includes(opponent))
-    let attackValue = 0
-    const moves = []
-    for (const attack of attacksOnThisOpponent) {
-      const attackerCard = this.material(MaterialType.FactionCard).index(attack.card)
-      attackValue += computeAttack(attackerCard, opponentMaterial, this.cardInspector, attacks)
-    }
-
-    const opponentDefense = this.cardInspector.getDefense(opponent)
-    if (opponentDefense >= attackValue) return []
-
-    if (isLand(opponentCardCharacteristics)) {
-      moves.push(...this.conquerLand(opponent))
-    } else {
-      const opponentCardToken = this.material(MaterialType.FactionToken).parent(opponent)
-      moves.push(...discardCard(opponentMaterial, opponentCardToken))
-    }
-
-
-    moves.push(
-      ...attacks.flatMap(attacks => this.cardInspector.afterAttack(attacks.card))
-    )
-
-
-    return moves
-  }
-
   conquerLand(opponentIndex: number): MaterialMove[] {
     const opponentCard = this.material(MaterialType.FactionCard).index(opponentIndex).getItem()!
     opponentCard.location.player = this.player
@@ -180,47 +146,89 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
   }
 
   solveAttack(): MaterialMove[] {
-
-    const attacks = this.remind<Attack[]>(Memory.Attacks)
-    let targets: number[] = []
     const moves: MaterialMove[] = []
+    const attacks = this.remind<Attack[]>(Memory.Attacks)
 
-    const battlefieldCards = this
-      .material(MaterialType.FactionCard)
-      .location(onBattlefieldAndAstralPlane)
-    const opponents = battlefieldCards.player((player) => player !== this.player)
+    moves.push(...this.material(MaterialType.FactionToken)
+      .parent(parent => attacks.some(attack => attack.card === parent))
+      .moveItems({ rotation: { y: 1 } }))
 
+    const attackValues = this.attackValues
+    const defeatedEnemies = Object.keys(attackValues).map(key => parseInt(key))
+      .filter(enemy => attackValues[enemy] > getCardRule(this.game, enemy).defense)
+    for (const defeatedEnemy of defeatedEnemies) {
+      moves.push(...this.onSuccessfulAttack(defeatedEnemy))
+    }
     for (const attack of attacks) {
-      const cardMaterial = this.material(MaterialType.FactionCard).index(attack.card)
-      const targetsMaterial = opponents.indexes(attack.targets)
-      const characteristics = getCardRule(this.game, attack.card).characteristics
-      const attributeTargets = characteristics.getAttributes().filter(isAttackAttribute)
-        .filter(attribute => !this.cardInspector.hasLostAttributes(attack.card, attribute.type))
-        .flatMap(attribute => attribute.getAttributeRule(this.game).getConsecutiveTargets(cardMaterial, targetsMaterial, opponents))
+      // TODO: trigger failed attack effects (child eater)
 
-      targets = uniq([...targets, ...(attributeTargets ?? [])])
-
-      const attackerMaterial = this.material(MaterialType.FactionCard).index(attack.card)
-      moves.push(
-        ...discardSpells(this.game, attackerMaterial, DiscardTiming.ActivationOrEndOfTurn)
-      )
-
-      const token = this.material(MaterialType.FactionToken).parent(attack.card)
-      if (token.length) {
-        moves.push(
-          ...deactivateTokens(token)
-        )
+      const cardRule = getCardRule(this.game, attack.card)
+      if (cardRule.hasPerforation) {
+        const cardLocation = cardRule.item.location
+        for (const target of attack.targets) {
+          if (defeatedEnemies.includes(target)) {
+            const enemyLocation = this.material(MaterialType.FactionCard).getItem(target)!.location
+            const delta = { x: enemyLocation.x! - cardLocation.x!, y: enemyLocation.y! - cardLocation.y! }
+            let attackValue = cardRule.attack - 1
+            let x = enemyLocation.x! + delta.x, y = enemyLocation.y! + delta.y
+            while (attackValue >= 0) {
+              const nextEnemy = this.material(MaterialType.FactionCard)
+                .location(location => location.type === LocationType.Battlefield && location.x === x && location.x === y)
+                .player(player => player !== player)
+                .filter((_, index) => !isSpell(getCardRule(this.game, index).characteristics) && !defeatedEnemies.includes(index))
+              if (nextEnemy.length) {
+                const enemyIndex = nextEnemy.getIndex()
+                const defense = getCardRule(this.game, enemyIndex).defense
+                if (attackValue > defense) {
+                  moves.push(...this.onSuccessfulAttack(enemyIndex))
+                  attackValue--
+                  x = x + delta.x
+                  y = y + delta.y
+                } else {
+                  // TODO: trigger failed attack effects (child eater)
+                  attackValue = -1
+                }
+              } else {
+                attackValue = -1
+              }
+            }
+          }
+        }
       }
     }
 
+    moves.push(...this.material(MaterialType.FactionCard)
+      .filter((_, index) => attacks.some(attack => attack.card === index) && isSpell(getCardRule(this.game, index).characteristics))
+      .moveItems({ location: { type: LocationType.PlayerDiscard, player: this.player } })
+    )
 
-    for (const target of targets) {
-      // Attacks must be added first, then all discard and deactivation moves
-      moves.unshift(...this.attack(target))
-    }
-
-    this.memorize(Memory.MovedCards, [])
     this.memorize(Memory.Attacks, [])
+
     return moves
+  }
+
+  /**
+   * @return values of all the attacks declared, excluding perforations
+   * When attacks cannot be grouped, only the best value is kept
+   */
+  get attackValues(): Record<number, number> {
+    const attackedBy: Record<number, number[]> = {}
+    const attacks = this.remind<Attack[]>(Memory.Attacks)
+    for (const attack of attacks) {
+      for (const target of attack.targets) {
+        if (!(target in attackedBy)) attackedBy[target] = []
+        attackedBy[target].push(attack.card)
+      }
+    }
+    return mapValues(attackedBy, (attackers, card) => getCardRule(this.game, parseInt(card)).getAttackValue(attackers))
+  }
+
+  onSuccessfulAttack(enemy: number) {
+    if (isLand(getCardRule(this.game, enemy).characteristics)) {
+      return this.conquerLand(enemy)
+    } else {
+      const opponentCardToken = this.material(MaterialType.FactionToken).parent(enemy)
+      return discardCard(this.material(MaterialType.FactionCard).index(enemy), opponentCardToken)
+    }
   }
 }

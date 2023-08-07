@@ -1,11 +1,8 @@
 import { Attribute, AttributeKind, AttributeRule } from './Attribute'
-import { Material, MaterialMove } from '@gamepark/rules-api'
-import { FactionCardInspector } from '../helper/FactionCardInspector'
+import { Material } from '@gamepark/rules-api'
 
 
 export abstract class AttackAttributeRule extends AttributeRule {
-  abstract getLegalAttacks(attacker: Material, opponentsCards: Material, cardInspector: FactionCardInspector): MaterialMove[]
-
   getAttackValue(attack: number, _attacker: Material, _opponent: Material): number {
     return attack
   }
@@ -15,14 +12,6 @@ export abstract class AttackAttributeRule extends AttributeRule {
     return [
       target.getIndex()
     ]
-  }
-
-  isValidTarget(source: Material, target: Material, opponentsCards: Material): boolean {
-    return !!this.getTargets(source, target, opponentsCards).length
-  }
-
-  getConsecutiveTargets(attacker: Material, opponent: Material, opponentsCards: Material): number[] {
-    return this.getTargets(attacker, opponent, opponentsCards)
   }
 }
 

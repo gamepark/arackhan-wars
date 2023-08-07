@@ -2,7 +2,6 @@ import { Material, MaterialGame } from '@gamepark/rules-api'
 import { Attribute, AttributeKind } from './Attribute'
 import { CardAttribute, CardAttributeType } from '../../descriptions/base/FactionCardCharacteristics'
 import { AttackAttributeRule } from './AttackAttribute'
-import { CustomMoveType } from '../../../../material/CustomMoveType'
 import { getAdjacentCards } from '../../../../utils/move.utils'
 import { getCardRule } from '../base/CardRule'
 
@@ -10,17 +9,6 @@ import { getCardRule } from '../base/CardRule'
 export class OmnistrikeAttribute extends AttackAttributeRule {
   constructor(game: MaterialGame) {
     super(game)
-  }
-
-  getLegalAttacks(attacker: Material, opponentsCards: Material) {
-    const opponents = getAdjacentCards(attacker, opponentsCards)
-
-    if (!opponents.length || this.isBlocked(attacker)) return []
-    return [
-      this.rules().customMove(CustomMoveType.Attack, {
-        card: attacker.getIndex()
-      })
-    ]
   }
 
   getTargets(attacker: Material, _opponent: Material, opponentsCards: Material): number[] {
