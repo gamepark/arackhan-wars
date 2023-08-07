@@ -13,7 +13,7 @@ export const NakkaPreBuildDeck: DeckListing = {
   [FactionCard.MountedBanshee]: 1,
   [FactionCard.WrathOfTheForest]: 1,
   [FactionCard.TreeOfLife]: 1,
-  [FactionCard.EarthQuake]: 1,
+  [FactionCard.Earthquake]: 1,
   [FactionCard.UnstableGrowth]: 1,
   [FactionCard.NaturalCamouflage]: 1,
   [FactionCard.Mimicry]: 1

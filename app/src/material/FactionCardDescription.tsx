@@ -96,7 +96,7 @@ export class FactionCardDescription extends CardDescription {
     [FactionCard.MountedBanshee]: MountedBanshee,
     [FactionCard.WrathOfTheForest]: WrathOfTheForest,
     [FactionCard.TreeOfLife]: ThreeOfLife,
-    [FactionCard.EarthQuake]: EarthQuake,
+    [FactionCard.Earthquake]: EarthQuake,
     [FactionCard.UnstableGrowth]: UnstableGrowth,
     [FactionCard.NaturalCamouflage]: NaturalCamouflage,
     [FactionCard.Mimicry]: Mimicry,
