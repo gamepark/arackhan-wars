@@ -1,16 +1,6 @@
 import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
-import {
-  CustomMove,
-  isCustomMoveType,
-  isMoveItemType,
-  isStartPlayerTurn,
-  isStartRule,
-  ItemMove,
-  MaterialMove,
-  PlayerTurnRule,
-  RuleMove
-} from '@gamepark/rules-api'
+import { CustomMove, isCustomMoveType, isStartPlayerTurn, isStartRule, ItemMove, MaterialMove, PlayerTurnRule, RuleMove } from '@gamepark/rules-api'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { RuleId } from './RuleId'
@@ -53,13 +43,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
   }
 
   beforeItemMove(move: ItemMove) {
-    if (!isMoveItemType(MaterialType.FactionCard)(move)) return []
-
-    if (move.position.location?.type === LocationType.Battlefield || move.position.location?.type === LocationType.PlayerDiscard) {
-      return new MoveRules(this.game).beforeItemMove(move)
-    }
-
-    return []
+    return new MoveRules(this.game).beforeItemMove(move)
   }
 
   onRuleEnd(move: RuleMove) {

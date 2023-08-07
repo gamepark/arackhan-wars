@@ -51,7 +51,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       }
     }
 
-    if (cardsAlreadyAttacked || this.remind<number[]>(Memory.MovedCards).length) { // TODO: "Solve attacks" is not right when there are only moved cards
+    if (cardsAlreadyAttacked && !this.remind<number[]>(Memory.MovedCards).length) {
       moves.push(this.rules().customMove(CustomMoveType.SolveAttack))
     }
 
@@ -59,6 +59,8 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
   }
 
   get potentialAttackers() {
+    const movedCards = this.remind<number[]>(Memory.MovedCards)
+    if (movedCards.length) return [movedCards[0]]
     const attacks = this.remind<Attack[]>(Memory.Attacks)
     return this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
@@ -166,6 +168,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
         .flatMap((attribute) => attribute.getAttributeRule(this.game).getTargets(cardMaterial, opponentMaterial, opponents.indexes(filteredOpponents)))
 
       const targets = attributeTargets.length ? uniq(attributeTargets) : [move.data.target]
+      this.memorize<number[]>(Memory.MovedCards, movedCard => movedCard.filter(card => card !== move.data.card))
       this.memorize<Attack[]>(Memory.Attacks, attacks => [...attacks, { card: move.data.card, targets }])
     }
 
@@ -178,7 +181,6 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
 
   solveAttack(): MaterialMove[] {
 
-    const movedCards = this.remind<number[]>(Memory.MovedCards)
     const attacks = this.remind<Attack[]>(Memory.Attacks)
     let targets: number[] = []
     const moves: MaterialMove[] = []
@@ -187,13 +189,6 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       .material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
     const opponents = battlefieldCards.player((player) => player !== this.player)
-
-    for (const movedCard of movedCards) {
-      if (!attacks.some(attack => attack.card === movedCard)) {
-        const token = this.material(MaterialType.FactionToken).parent(movedCard)
-        moves.push(...deactivateTokens(token))
-      }
-    }
 
     for (const attack of attacks) {
       const cardMaterial = this.material(MaterialType.FactionCard).index(attack.card)

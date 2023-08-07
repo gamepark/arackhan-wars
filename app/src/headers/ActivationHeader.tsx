@@ -1,9 +1,10 @@
 import { Trans, useTranslation } from 'react-i18next'
 import { PlayMoveButton, useLegalMoves, usePlayerName, useRules } from '@gamepark/react-game'
-import { isCustomMoveType } from '@gamepark/rules-api'
+import { isCustomMoveType, isMoveItemType } from '@gamepark/rules-api'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
+import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 
 export const ActivationHeader = () => {
   const { t } = useTranslation()
@@ -11,8 +12,21 @@ export const ActivationHeader = () => {
   const activePlayer = rules?.getActivePlayer()
   const playerName = usePlayerName(activePlayer)
   const legalMoves = useLegalMoves()
-  const isInitiativeSequence = rules?.remind(Memory.IsInitiativeSequence)
 
+  const movedCard = rules?.remind(Memory.MovedCards)?.[0]
+  if (movedCard !== undefined) {
+    const factionCard = rules!.material(MaterialType.FactionCard).getItem(movedCard)!.id.front
+    const deactivate = legalMoves.find(isMoveItemType(MaterialType.FactionToken))
+    if (!deactivate) {
+      return <>{t('header.activation.moved.choice', { card: t(`card.name.${factionCard}`), player: playerName })}</>
+    } else {
+      return <Trans defaults="header.activation.moved.choose" values={{ card: t(`card.name.${factionCard}`) }}>
+        <PlayMoveButton move={deactivate}/>
+      </Trans>
+    }
+  }
+
+  const isInitiativeSequence = rules?.remind(Memory.IsInitiativeSequence)
   if (isInitiativeSequence) {
     if (!legalMoves.length) {
       return <>{t('header.initiative', { player: playerName })}</>

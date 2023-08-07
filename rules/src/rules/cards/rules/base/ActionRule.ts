@@ -10,20 +10,21 @@ import { Attack } from './AttackRule'
 
 export class ActionRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   getPlayerMoves(): MaterialMove[] {
-    const moves = []
+    return this.availableCards
+      .filter(index => getCardRule(this.game, index).canPerformAction)
+      .map(index => this.rules().customMove(CustomMoveType.PerformAction, index))
+  }
 
+  get availableCards() {
+    const movedCard = this.remind<number[]>(Memory.MovedCards)
+    if (movedCard.length) {
+      return [movedCard[0]]
+    }
     const attacks = this.remind<Attack[]>(Memory.Attacks)
-
-    const playerCards = this.material(MaterialType.FactionCard)
+    return this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
       .player(this.player)
-
-    for (const cardIndex of playerCards.getIndexes()) {
-      if (!attacks.some(attack => attack.card === cardIndex) && getCardRule(this.game, cardIndex).canPerformAction) {
-        moves.push(this.rules().customMove(CustomMoveType.PerformAction, cardIndex))
-      }
-    }
-
-    return moves
+      .getIndexes()
+      .filter(index => !attacks.some(attack => attack.card === index))
   }
 }
