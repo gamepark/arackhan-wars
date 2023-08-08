@@ -204,6 +204,10 @@ export function getCardRule(game: MaterialGame<PlayerId, MaterialType, LocationT
   return cardsRulesCache.rules[cardIndex]
 }
 
+export function resetCardsRulesCache() {
+  cardsRulesCache = undefined
+}
+
 function getDistance(location1: Location, location2: Location) {
   if (location1.type !== LocationType.Battlefield || location2.type !== LocationType.Battlefield) {
     return 0 // Consider Astral plan as distance 0 from everything on the battlefield

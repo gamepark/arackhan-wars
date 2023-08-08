@@ -28,7 +28,7 @@ import sumBy from 'lodash/sumBy'
 import { FactionCardsCharacteristics } from './material/FactionCard'
 import { MimicryActionRule } from './rules/cards/rules/action/MimicryActionRule'
 import { isCreature } from './rules/cards/descriptions/base/Creature'
-import { getCardRule } from './rules/cards/rules/base/CardRule'
+import { getCardRule, resetCardsRulesCache } from './rules/cards/rules/base/CardRule'
 
 
 /**
@@ -44,6 +44,11 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
 
   giveTime(): number {
     return 60
+  }
+
+  play(move: any) {
+    resetCardsRulesCache()
+    return super.play(move)
   }
 
   rankPlayers(playerA: PlayerId, playerB: PlayerId): number {
