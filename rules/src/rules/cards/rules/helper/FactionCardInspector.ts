@@ -2,13 +2,12 @@ import { Ability, EffectRule } from '../../descriptions/base/Ability'
 import { isLooseSkillEffect } from '../effect/LooseSkillsEffect'
 import { CardAttributeType, FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
 import { isLooseAttributesEffect } from '../effect/LooseAttributesEffect'
-import { isLand } from '../../descriptions/base/Land'
 import { isSpell } from '../../descriptions/base/Spell'
 import { isCreature } from '../../descriptions/base/Creature'
 import { isValueModifierEffect, ValueModifierEffect } from '../effect/ValueModifierEffect'
 import sumBy from 'lodash/sumBy'
 import { isAttackEffect } from '../../descriptions/base/AttackEffect'
-import { Material, MaterialGame, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
+import { Material, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { isAttackAttribute } from '../attribute/AttackAttribute'
@@ -127,22 +126,6 @@ export class FactionCardInspector extends MaterialRulesPart {
     if (!(cardIndex in this.cardsEffects)) return baseAttack
     const valueModifierEffects = this.cardsEffects[cardIndex].filter(isValueModifierEffect)
     return baseAttack + sumBy(valueModifierEffects, (e) => e.getBonus().attack ?? 0)
-  }
-
-  getDefense(cardIndex: number): number {
-    const cardDescription = getCardRule(this.game, cardIndex).characteristics
-    if (!isLand(cardDescription) && !isCreature(cardDescription)) return 0
-    const baseDefense = cardDescription.defense ?? 0
-    if (!(cardIndex in this.cardsEffects)) return baseDefense
-    const valueModifierEffects = this.cardsEffects[cardIndex].filter(isValueModifierEffect)
-    return baseDefense + sumBy(valueModifierEffects, (e) => e.getBonus().defense ?? 0)
-  }
-
-  afterAttack(cardIndex: number): MaterialMove[] {
-    if (!(cardIndex in this.cardsEffects)) return []
-    return this.cardsEffects[cardIndex]
-      .filter(isAttackEffect)
-      .flatMap((e) => e.getAttackConsequences(this.material(MaterialType.FactionCard).index(cardIndex)))
   }
 
   canAttack(attackerIndex: number, targetIndex: number): boolean {

@@ -1,5 +1,5 @@
 import { EffectRule } from './Ability'
-import { Material, MaterialGame, MaterialMove } from '@gamepark/rules-api'
+import { MaterialGame } from '@gamepark/rules-api'
 import { isSpell } from './Spell'
 import { getCardRule } from '../../rules/base/CardRule'
 
@@ -19,21 +19,6 @@ export class AttackEffect extends EffectRule {
    */
   canAttack(_attacker: number, opponent: number, _otherAttackers: number[] = [], game: MaterialGame): boolean {
     return !isSpell(getCardRule(game, opponent).characteristics)
-  }
-
-  /**
-   * Only for carnivorous plant. Used in attack resolution (if not valid => attack = 0)
-   */
-  isValidAttack(_attackers: number[]): boolean {
-    return true
-  }
-
-  getAttackValue(_attackers: number[]): number {
-    return 0
-  }
-
-  getAttackConsequences(_attacker: Material): MaterialMove[] {
-    return []
   }
 }
 

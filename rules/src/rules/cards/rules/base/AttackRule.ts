@@ -160,9 +160,9 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       moves.push(...this.onSuccessfulAttack(defeatedEnemy))
     }
     for (const attack of attacks) {
-      // TODO: trigger failed attack effects (child eater)
-
       const cardRule = getCardRule(this.game, attack.card)
+      let attackFailed = attack.targets.some(target => !defeatedEnemies.includes(target))
+
       if (cardRule.hasPerforation) {
         const cardLocation = cardRule.item.location
         for (const target of attack.targets) {
@@ -173,8 +173,8 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
             let x = enemyLocation.x! + delta.x, y = enemyLocation.y! + delta.y
             while (attackValue >= 0) {
               const nextEnemy = this.material(MaterialType.FactionCard)
-                .location(location => location.type === LocationType.Battlefield && location.x === x && location.x === y)
-                .player(player => player !== player)
+                .location(location => location.type === LocationType.Battlefield && location.x === x && location.y === y)
+                .player(player => player !== this.player)
                 .filter((_, index) => !isSpell(getCardRule(this.game, index).characteristics) && !defeatedEnemies.includes(index))
               if (nextEnemy.length) {
                 const enemyIndex = nextEnemy.getIndex()
@@ -185,7 +185,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
                   x = x + delta.x
                   y = y + delta.y
                 } else {
-                  // TODO: trigger failed attack effects (child eater)
+                  attackFailed = true
                   attackValue = -1
                 }
               } else {
@@ -194,6 +194,10 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
             }
           }
         }
+      }
+
+      if (attackFailed) {
+        moves.push(...cardRule.triggerFailAttackEffects())
       }
     }
 

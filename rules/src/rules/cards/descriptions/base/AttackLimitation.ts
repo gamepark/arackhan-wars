@@ -7,7 +7,7 @@ import { getCardRule } from '../../rules/base/CardRule'
 import { Attack } from '../../rules/base/AttackRule'
 
 export enum AttackLimitation {
-  NoLonelyCreature, NoGroupedCreatures, EvenValueDefender, NoCreature
+  NoLonelyCreature = 1, NoGroupedCreatures, EvenValueDefender, NoCreature
 }
 
 export abstract class AttackLimitationRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {

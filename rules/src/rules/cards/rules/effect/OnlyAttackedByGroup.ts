@@ -6,9 +6,6 @@ import { AttackLimitation } from '../../descriptions/base/AttackLimitation'
 import { himself } from '../../descriptions/utils/applicable-filter.utils'
 
 export class OnlyAttackedByGroup extends AttackEffect {
-  isValidAttack(_attackers: number[]): boolean {
-    return _attackers.length > 1
-  }
 }
 
 export const onlyAttackedByGroup = new class extends Ability {
