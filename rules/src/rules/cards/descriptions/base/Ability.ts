@@ -1,6 +1,6 @@
 import { Material, MaterialGame } from '@gamepark/rules-api'
 import { ApplicableFilter, itself } from '../utils/applicable-filter.utils'
-import { Effect, EffectType, LoseAttributes } from './Effect'
+import { Effect, EffectType, LoseAttributes, TriggerAction, TriggerCondition } from './Effect'
 import { CardAttributeType } from './FactionCardCharacteristics'
 import { AttackLimitation } from './AttackLimitation'
 
@@ -76,6 +76,11 @@ export class Ability {
     this.effects.push({ type: EffectType.Deactivated })
     return this
   }
+
+  trigger(condition: TriggerCondition, action: TriggerAction) {
+    this.effects.push({ type: EffectType.Trigger, condition, action })
+    return this
+  }
 }
 
 export const attack = (modifier: number) => new Ability().attack(modifier)
@@ -86,3 +91,4 @@ export const loseAttribute = (attribute: CardAttributeType) => new Ability().los
 export const canOnlyAttack = (limitation: AttackLimitation) => new Ability().canOnlyAttack(limitation)
 export const canOnlyBeAttackedBy = (limitation: AttackLimitation) => new Ability().canOnlyBeAttackedBy(limitation)
 export const deactivate = (...applicableFilters: ApplicableFilter[]) => new Ability().deactivate().to(...applicableFilters)
+export const trigger = (action: TriggerAction) => ({ when: (condition: TriggerCondition) => new Ability().trigger(condition, action) })
