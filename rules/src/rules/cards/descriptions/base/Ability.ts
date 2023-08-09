@@ -1,6 +1,6 @@
 import { Material, MaterialGame } from '@gamepark/rules-api'
 import { ApplicableFilter, itself } from '../utils/applicable-filter.utils'
-import { Effect, EffectType } from './Effect'
+import { Effect, EffectType, LoseAttributes } from './Effect'
 import { CardAttributeType } from './FactionCardCharacteristics'
 
 export class Ability {
@@ -39,8 +39,21 @@ export class Ability {
     this.effects.push({ type: EffectType.GainAttributes, attributes })
     return this
   }
+
+  loseAttributes(...attributes: CardAttributeType[]) {
+    const effect: LoseAttributes = { type: EffectType.LoseAttributes }
+    if (attributes.length > 0) effect.attributes = attributes
+    this.effects.push(effect)
+    return this
+  }
+
+  loseAttribute(attribute: CardAttributeType) {
+    return this.loseAttributes(attribute)
+  }
 }
 
 export const attack = (modifier: number) => new Ability().attack(modifier)
 export const defense = (modifier: number) => new Ability().defense(modifier)
 export const gainAttributes = (...attributes: CardAttributeType[]) => new Ability().gainAttributes(...attributes)
+export const loseAttributes = (...attributes: CardAttributeType[]) => new Ability().loseAttributes(...attributes)
+export const loseAttribute = (attribute: CardAttributeType) => new Ability().loseAttribute(attribute)

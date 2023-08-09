@@ -1,9 +1,9 @@
 import { CardAttributeType } from '../base/FactionCardCharacteristics'
-import { looseAttributes } from '../../rules/effect/LooseAttributesEffect'
 import { adjacent, creature, enemy } from '../utils/applicable-filter.utils'
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
 import { flight } from '../../rules/attribute'
+import { loseAttribute } from '../base/Ability'
 
 export class SnowGriffin extends Creature {
   faction = Faction.Whitelands
@@ -15,5 +15,5 @@ export class SnowGriffin extends Creature {
 
   attribute = flight
 
-  skill = looseAttributes([adjacent, enemy, creature], [CardAttributeType.Swarm])
+  skill = loseAttribute(CardAttributeType.Swarm).to(adjacent, enemy, creature)
 }

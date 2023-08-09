@@ -1,7 +1,7 @@
-import { looseAttributes } from '../../rules/effect/LooseAttributesEffect'
 import { adjacent, allied, creature, enemy } from '../utils/applicable-filter.utils'
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
+import { loseAttributes } from '../base/Ability'
 
 export class PlagueCollector extends Creature {
   faction = Faction.Blight
@@ -10,6 +10,6 @@ export class PlagueCollector extends Creature {
   attack = 1
   defense = 2
 
-  skill = looseAttributes([adjacent, enemy, creature])
-  weakness = looseAttributes([adjacent, allied, creature])
+  skill = loseAttributes().to(adjacent, enemy, creature)
+  weakness = loseAttributes().to(adjacent, allied, creature)
 }
