@@ -2,13 +2,13 @@ import { FactionCard } from '../../../../material/FactionCard'
 import { CardAttributeType } from './FactionCardCharacteristics'
 import { AttackLimitation } from './AttackLimitation'
 
-export type Effect = AddAttack | AddDefense
+export type Effect = ModifyAttack | ModifyDefense
   | GainAttributes | LoseAttributes | LoseSkills
   | CannotAttack | CannotBeAttacked
   | Deactivated | Mimic | Trigger
 
 export enum EffectType {
-  AddAttack, AddDefense,
+  Attack, Defense,
   GainAttributes, LoseAttributes,
   LoseSkills,
   CannotAttack, CannotBeAttacked,
@@ -17,13 +17,13 @@ export enum EffectType {
   Trigger
 }
 
-export type AddAttack = {
-  type: EffectType.AddAttack
+export type ModifyAttack = {
+  type: EffectType.Attack
   value: number
 }
 
-export type AddDefense = {
-  type: EffectType.AddDefense
+export type ModifyDefense = {
+  type: EffectType.Defense
   value: number
 }
 

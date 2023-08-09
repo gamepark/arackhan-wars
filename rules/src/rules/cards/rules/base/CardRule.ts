@@ -189,13 +189,13 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
 
   get attack() {
     const baseAttack = (this.characteristics as Creature | Spell).attack ?? 0
-    const effectsModifier = sumBy(this.effects, effect => effect.type === EffectType.AddAttack ? effect.value : 0)
+    const effectsModifier = sumBy(this.effects, effect => effect.type === EffectType.Attack ? effect.value : 0)
     return Math.max(0, baseAttack + effectsModifier)
   }
 
   get defense() {
     const baseDefense = (this.characteristics as Creature | Land).defense ?? 0
-    const effectsModifier = sumBy(this.effects, effect => effect.type === EffectType.AddDefense ? effect.value : 0)
+    const effectsModifier = sumBy(this.effects, effect => effect.type === EffectType.Defense ? effect.value : 0)
     return Math.max(0, baseDefense + effectsModifier)
   }
 
