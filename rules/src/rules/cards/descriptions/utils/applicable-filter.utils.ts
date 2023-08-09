@@ -6,10 +6,9 @@ import { isLand } from '../base/Land'
 import { Family } from '../base/Family'
 import { getCardRule } from '../../rules/base/CardRule'
 
-
 export type ApplicableFilter = (source: Material, target: Material, game: MaterialGame) => boolean
 
-export const himself = (source: Material, target: Material) => source.getIndex() === target.getIndex()
+export const itself = (source: Material, target: Material) => source.getIndex() === target.getIndex()
 export const adjacent = (source: Material, target: Material) => areAdjacentCards(source, target)
 
 export const enemy = (source: Material, target: Material) => source.getItem()!.location.player !== target.getItem()!.location.player

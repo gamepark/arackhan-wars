@@ -1,10 +1,10 @@
 import { Material, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
-import { ApplicableFilter } from '../utils/applicable-filter.utils'
+import { ApplicableFilter, itself } from '../utils/applicable-filter.utils'
 import { Effect } from './Effect'
 
 export abstract class Ability {
 
-  constructor(readonly filters: ApplicableFilter[] = []) {
+  constructor(readonly filters: ApplicableFilter[] = [itself]) {
   }
 
   isApplicable(game: MaterialGame, source: Material, target: Material) {

@@ -2,7 +2,6 @@ import { destroyIfAttackFail } from '../../rules/effect/DestroyWhenAttackFailEff
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
 import { perforation } from '../../rules/attribute'
-import { himself } from '../utils/applicable-filter.utils'
 
 export class ChildEater extends Creature {
   faction = Faction.Blight
@@ -13,5 +12,5 @@ export class ChildEater extends Creature {
   defense = 2
 
   attribute = perforation
-  weakness = destroyIfAttackFail([himself])
+  weakness = destroyIfAttackFail
 }
