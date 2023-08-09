@@ -50,6 +50,11 @@ export class Ability {
   loseAttribute(attribute: CardAttributeType) {
     return this.loseAttributes(attribute)
   }
+
+  loseSkills() {
+    this.effects.push({ type: EffectType.LoseSkills })
+    return this
+  }
 }
 
 export const attack = (modifier: number) => new Ability().attack(modifier)

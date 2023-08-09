@@ -1,5 +1,4 @@
 import { creature, enemy } from '../utils/applicable-filter.utils'
-import { looseSkills } from '../../rules/effect/LooseSkillsEffect'
 import { Faction } from '../../../../Faction'
 import { Spell } from '../base/Spell'
 import { loseAttributes } from '../base/Ability'
@@ -11,8 +10,5 @@ export class Blizzard extends Spell {
 
   astral = true
 
-  effects = [
-    loseAttributes().to(enemy, creature),
-    looseSkills([enemy, creature])
-  ]
+  effect = loseAttributes().loseSkills().to(enemy, creature)
 }
