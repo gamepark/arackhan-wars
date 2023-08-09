@@ -20,12 +20,6 @@ export class Ability {
     return this.filters.every((filter) => filter(source, target, game))
   }
 
-  effect?: Effect
-
-  getEffects(): Effect[] {
-    return this.effect ? [this.effect] : this.effects
-  }
-
   attack(modifier: number) {
     this.effects.push({ type: EffectType.Attack, modifier })
     return this

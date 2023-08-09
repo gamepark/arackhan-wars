@@ -62,7 +62,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   private get loseSkills() {
     return this.battleFieldCardsRules.some(card =>
       card.characteristics.getAbilities().some(ability =>
-        ability.getEffects().some(isLoseSkills) && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
+        ability.effects.some(isLoseSkills) && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
       )
     )
   }
@@ -82,10 +82,10 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
 
   private get effects(): Effect[] {
     if (!this.effectsCache) {
-      this.effectsCache = this.battleFieldCardsRules.flatMap(rule => rule.abilities
-        .filter(ability => ability.isApplicable(this.game, rule.cardMaterial, this.cardMaterial))
-        .flatMap(ability => ability.getEffects())
-        .concat(...this.turnEffects)
+      this.effectsCache = this.battleFieldCardsRules.flatMap(rule =>
+        rule.abilities.filter(ability => ability.isApplicable(this.game, rule.cardMaterial, this.cardMaterial))
+          .flatMap(ability => ability.effects)
+          .concat(...this.turnEffects)
       )
     }
     return this.effectsCache
