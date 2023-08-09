@@ -1,4 +1,4 @@
-import { Material, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
+import { Material, MaterialGame } from '@gamepark/rules-api'
 import { ApplicableFilter, itself } from '../utils/applicable-filter.utils'
 import { Effect } from './Effect'
 
@@ -19,8 +19,4 @@ export abstract class Ability {
   getEffects(): Effect[] {
     return this.effect ? [this.effect] : this.effects
   }
-}
-
-export class EffectRule extends MaterialRulesPart {
-// Maybe do another class ?
 }
