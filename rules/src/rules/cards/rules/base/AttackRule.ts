@@ -1,10 +1,7 @@
-import { CustomMove, Material, MaterialGame, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { CustomMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
-import { isAttackAttribute } from '../attribute/AttackAttribute'
-import { FactionCardInspector } from '../helper/FactionCardInspector'
 import { discardCard } from '../../../../utils/discard.utils'
-import { areAdjacentCards } from '../../../../utils/adjacent.utils'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { isSpell } from '../../descriptions/base/Spell'
@@ -22,13 +19,6 @@ export type Attack = {
 }
 
 export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
-  private readonly cardInspector: FactionCardInspector
-
-  constructor(game: MaterialGame) {
-    super(game)
-    this.cardInspector = new FactionCardInspector(game)
-  }
-
   getPlayerMoves(): MaterialMove[] {
     const moves: MaterialMove[] = []
 
@@ -42,9 +32,15 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
 
     for (const card of this.potentialAttackers) {
       const attackerRules = getCardRule(this.game, card)
-      for (const target of potentialTargets) {
-        if (attackerRules.canAttackTarget(target)) {
-          moves.push(this.rules().customMove(CustomMoveType.Attack, { card, target })) // TODO: only 1 legal move for Omnistrick, without a target
+      if (attackerRules.hasOmnistrike) {
+        if (potentialTargets.some(target => attackerRules.canAttackTarget(target))) {
+          moves.push(this.rules().customMove(CustomMoveType.Attack, { card }))
+        }
+      } else {
+        for (const target of potentialTargets) {
+          if (attackerRules.canAttackTarget(target)) {
+            moves.push(this.rules().customMove(CustomMoveType.Attack, { card, target }))
+          }
         }
       }
     }
@@ -74,71 +70,13 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
     return uniq(attacks.flatMap(attacks => attacks.targets))
   }
 
-  getAuthorizedTargets(attacker: Material, opponentCards: Material): number[] {
-    const attackerIndex = attacker.getIndex()
-    const attacks = this.remind<Attack[]>(Memory.Attacks)
-
-    return opponentCards.getIndexes().filter((o) => {
-      const opponentCharacteristics = getCardRule(this.game, o).characteristics
-      const opponentMaterial = this.material(MaterialType.FactionCard).index(o)
-
-      if (isSpell(getCardRule(this.game, o).characteristics)
-        || !this.cardInspector.canAttack(attackerIndex, o)) return false
-
-      if (!attacks.length) return true
-
-      return attacks.some(attack => {
-        if (!attack.targets.includes(o)) return false
-        const cardMaterial = this.material(MaterialType.FactionCard).index(attack.card)
-        const characteristics = getCardRule(this.game, attack.card).characteristics
-        if (characteristics.hasRangeAttack() || opponentCharacteristics.hasRangeAttack()) return true
-        return areAdjacentCards(attacker, opponentMaterial) && areAdjacentCards(cardMaterial, opponentMaterial)
-      })
-    })
-  }
-
-  conquerLand(opponentIndex: number): MaterialMove[] {
-    const opponentCard = this.material(MaterialType.FactionCard).index(opponentIndex).getItem()!
-    opponentCard.location.player = this.player
-
-    return [
-      this.material(MaterialType.FactionToken).parent(opponentIndex).deleteItem(),
-      this.material(MaterialType.FactionToken).parent(opponentIndex).createItem({
-        // Must be the faction instead of the player
-        id: this.remind(Memory.Token, this.player),
-        location: { parent: opponentIndex, type: LocationType.FactionTokenSpace, player: this.player }
-      })
-
-    ]
-  }
-
   onCustomMove(move: CustomMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     if (move.type === CustomMoveType.Attack) {
-
       delete this.game.droppedItem
-
-      const battlefieldCards = this
-        .material(MaterialType.FactionCard)
-        .location(onBattlefieldAndAstralPlane)
-
-      const cardMaterial = this.material(MaterialType.FactionCard).index(move.data.card)
-
-      const opponentMaterial = this.material(MaterialType.FactionCard).index(move.data.target)
-      const opponents = battlefieldCards.player((player) => player !== this.player)
-      const filteredOpponents = this.getAuthorizedTargets(cardMaterial, opponents)
-
-      const characteristics = getCardRule(this.game, move.data.card).characteristics
-      const attributeTargets = characteristics.getAttributes().filter(isAttackAttribute)
-        .filter((a) => !this.cardInspector.hasLostAttributes(move.data.card, a.type))
-        // In case of omnistrike, opponentMaterial is empty, but the attribute don't care about opponent since its all adjacent enemies
-        .flatMap((attribute) => attribute.getAttributeRule(this.game).getTargets(cardMaterial, opponentMaterial, opponents.indexes(filteredOpponents)))
-
-      const targets = attributeTargets.length ? uniq(attributeTargets) : [move.data.target]
+      const targets = move.data.target !== undefined ? [move.data.target] : getCardRule(this.game, move.data.card).omnistrikeTargets
       this.memorize<number[]>(Memory.MovedCards, movedCard => movedCard.filter(card => card !== move.data.card))
       this.memorize<Attack[]>(Memory.Attacks, attacks => [...attacks, { card: move.data.card, targets }])
-    }
-
-    if (move.type === CustomMoveType.SolveAttack) {
+    } else if (move.type === CustomMoveType.SolveAttack) {
       return this.solveAttack()
     }
 
@@ -234,5 +172,19 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       const opponentCardToken = this.material(MaterialType.FactionToken).parent(enemy)
       return discardCard(this.material(MaterialType.FactionCard).index(enemy), opponentCardToken)
     }
+  }
+
+  conquerLand(opponentIndex: number): MaterialMove[] {
+    const opponentCard = this.material(MaterialType.FactionCard).index(opponentIndex).getItem()!
+    opponentCard.location.player = this.player
+
+    return [
+      this.material(MaterialType.FactionToken).parent(opponentIndex).deleteItem(),
+      this.material(MaterialType.FactionToken).parent(opponentIndex).createItem({
+        id: this.remind(Memory.Token, this.player),
+        location: { parent: opponentIndex, type: LocationType.FactionTokenSpace, player: this.player }
+      })
+
+    ]
   }
 }

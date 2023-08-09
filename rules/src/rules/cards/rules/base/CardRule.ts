@@ -199,6 +199,16 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
     return Math.max(0, baseDefense + effectsModifier)
   }
 
+  get hasOmnistrike() {
+    return this.attributes.some(attribute => attribute.type === CardAttributeType.Omnistrike)
+  }
+
+  get omnistrikeTargets() {
+    return this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
+      .player(player => player !== this.item.location.player)
+      .getIndexes().filter(opponent => getCardRule(this.game, opponent).canBeAttacked && this.canAttackTarget(opponent))
+  }
+
   get hasPerforation() {
     return this.attributes.some(attribute => attribute.type === CardAttributeType.Perforation)
   }

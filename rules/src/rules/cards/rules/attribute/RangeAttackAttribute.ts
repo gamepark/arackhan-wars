@@ -4,10 +4,6 @@ import { CardAttribute, CardAttributeType } from '../../descriptions/base/Factio
 import { AttackAttributeRule } from './AttackAttribute'
 
 export class RangeAttackAttributeRule extends AttackAttributeRule {
-
-  constructor(game: MaterialGame, readonly strength: number) {
-    super(game)
-  }
 }
 
 export const rangedAttack = (distance: number) => new class extends Attribute<RangeAttackAttributeRule> {
@@ -17,7 +13,7 @@ export const rangedAttack = (distance: number) => new class extends Attribute<Ra
   cardAttribute: CardAttribute = { type: CardAttributeType.RangedAttack, strength: distance }
 
   getAttributeRule(game: MaterialGame) {
-    return new RangeAttackAttributeRule(game, distance)
+    return new RangeAttackAttributeRule(game)
   }
 
 }
