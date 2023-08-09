@@ -1,8 +1,8 @@
 import { onlyAttackedByGroup } from '../../rules/effect/OnlyAttackedByGroup'
-import { valueModifier } from '../../rules/effect/ValueModifierEffect'
 import { adjacent, allied, creature } from '../utils/applicable-filter.utils'
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
+import { defense } from '../base/Ability'
 
 export class CarnivorousPlant extends Creature {
   faction = Faction.Nakka
@@ -12,7 +12,7 @@ export class CarnivorousPlant extends Creature {
   defense = 1
 
   skills = [
-    valueModifier([adjacent, allied, creature], { defense: +1 }),
+    defense(+1).to(adjacent, allied, creature),
     onlyAttackedByGroup
   ]
 }

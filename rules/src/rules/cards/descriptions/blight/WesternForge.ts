@@ -1,7 +1,7 @@
-import { valueModifier } from '../../rules/effect/ValueModifierEffect'
 import { adjacent, allied, creature } from '../utils/applicable-filter.utils'
 import { Faction } from '../../../../Faction'
 import { Land } from '../base/Land'
+import { attack } from '../base/Ability'
 
 export class WesternForge extends Land {
   faction = Faction.Blight
@@ -9,5 +9,5 @@ export class WesternForge extends Land {
 
   defense = 4
 
-  benefit = valueModifier([adjacent, allied, creature], { attack: +2 })
+  benefit = attack(+2).to(adjacent, allied, creature)
 }

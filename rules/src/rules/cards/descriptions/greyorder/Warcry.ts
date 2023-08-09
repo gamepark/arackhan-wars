@@ -1,8 +1,8 @@
-import { valueModifier } from '../../rules/effect/ValueModifierEffect'
 import { allied, creature, family } from '../utils/applicable-filter.utils'
 import { Faction } from '../../../../Faction'
 import { Spell } from '../base/Spell'
 import { Family } from '../base/Family'
+import { attack } from '../base/Ability'
 
 export class Warcry extends Spell {
   faction = Faction.GreyOrder
@@ -10,5 +10,5 @@ export class Warcry extends Spell {
 
   astral = true
 
-  effect = valueModifier([allied, family(Family.SixthLegion), creature], { attack: +1 })
+  effect = attack(+1).to(allied, family(Family.SixthLegion), creature)
 }

@@ -1,8 +1,8 @@
-import { valueModifier } from '../../rules/effect/ValueModifierEffect'
 import { adjacent, allied, creature, family } from '../utils/applicable-filter.utils'
 import { Creature } from '../base/Creature'
 import { Faction } from '../../../../Faction'
 import { Family } from '../base/Family'
+import { attack } from '../base/Ability'
 
 export class Champion extends Creature {
   faction = Faction.GreyOrder
@@ -13,5 +13,5 @@ export class Champion extends Creature {
   attack = 2
   defense = 2
 
-  skill = valueModifier([adjacent, allied, family(Family.SixthLegion), creature], { attack: +1, defense: +1 })
+  skill = attack(+1).defense(+1).to(adjacent, allied, family(Family.SixthLegion), creature)
 }

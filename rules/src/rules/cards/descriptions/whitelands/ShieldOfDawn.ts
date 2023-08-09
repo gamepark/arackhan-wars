@@ -1,8 +1,8 @@
-import { valueModifier } from '../../rules/effect/ValueModifierEffect'
 import { adjacent, allied, creature } from '../utils/applicable-filter.utils'
 import { Creature } from '../base/Creature'
 import { Faction } from '../../../../Faction'
 import { Family } from '../base/Family'
+import { defense } from '../base/Ability'
 
 export class ShieldOfDawn extends Creature {
   faction = Faction.Whitelands
@@ -12,5 +12,5 @@ export class ShieldOfDawn extends Creature {
   attack = 1
   defense = 2
 
-  skill = valueModifier([adjacent, allied, creature], { defense: +1 })
+  skill = defense(+1).to(adjacent, allied, creature)
 }

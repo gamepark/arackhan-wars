@@ -1,9 +1,9 @@
-import { valueModifier } from '../../rules/effect/ValueModifierEffect'
 import { allied, creature, family } from '../utils/applicable-filter.utils'
 import { cantAttack } from '../../rules/effect/CantAttackEffect'
 import { Spell } from '../base/Spell'
 import { Faction } from '../../../../Faction'
 import { Family } from '../base/Family'
+import { defense } from '../base/Ability'
 
 export class ShieldWall extends Spell {
   faction = Faction.GreyOrder
@@ -12,7 +12,7 @@ export class ShieldWall extends Spell {
   astral = true
 
   effects = [
-    valueModifier([allied, family(Family.SixthLegion), creature], { defense: +2 }),
+    defense(+2).to(allied, family(Family.SixthLegion), creature),
     cantAttack([allied, family(Family.SixthLegion), creature])
   ]
 }

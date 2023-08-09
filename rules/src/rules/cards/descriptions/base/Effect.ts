@@ -19,12 +19,12 @@ export enum EffectType {
 
 export type ModifyAttack = {
   type: EffectType.Attack
-  value: number
+  modifier: number
 }
 
 export type ModifyDefense = {
   type: EffectType.Defense
-  value: number
+  modifier: number
 }
 
 export type GainAttributes = {

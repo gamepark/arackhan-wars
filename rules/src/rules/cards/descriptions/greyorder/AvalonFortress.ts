@@ -1,7 +1,7 @@
-import { valueModifier } from '../../rules/effect/ValueModifierEffect'
 import { adjacent, allied, creature } from '../utils/applicable-filter.utils'
 import { Land } from '../base/Land'
 import { Faction } from '../../../../Faction'
+import { attack } from '../base/Ability'
 
 export class AvalonFortress extends Land {
   faction = Faction.GreyOrder
@@ -9,5 +9,5 @@ export class AvalonFortress extends Land {
 
   defense = 4
 
-  benefit = valueModifier([adjacent, allied, creature], { attack: +1, defense: +1 })
+  benefit = attack(+1).defense(+1).to(adjacent, allied, creature)
 }
