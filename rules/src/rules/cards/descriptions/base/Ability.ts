@@ -2,9 +2,13 @@ import { Material, MaterialGame } from '@gamepark/rules-api'
 import { ApplicableFilter, itself } from '../utils/applicable-filter.utils'
 import { Effect } from './Effect'
 
-export abstract class Ability {
+export class Ability {
 
-  constructor(readonly filters: ApplicableFilter[] = [itself]) {
+  filters: ApplicableFilter[] = [itself]
+
+  to(...applicableFilters: ApplicableFilter[]) {
+    this.filters = applicableFilters
+    return this
   }
 
   isApplicable(game: MaterialGame, source: Material, target: Material) {

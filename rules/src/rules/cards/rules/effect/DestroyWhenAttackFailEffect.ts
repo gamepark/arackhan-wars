@@ -1,6 +1,5 @@
 import { Ability } from '../../descriptions/base/Ability'
-import { EffectType, Trigger, TriggerAction, TriggerCondition } from '../../descriptions/base/Effect'
+import { EffectType, TriggerAction, TriggerCondition } from '../../descriptions/base/Effect'
 
-export const destroyIfAttackFail = new class extends Ability {
-  effect: Trigger = { type: EffectType.Trigger, condition: TriggerCondition.FailAttack, action: TriggerAction.SelfDestroy }
-}
+export const destroyIfAttackFail = new Ability()
+destroyIfAttackFail.effect = { type: EffectType.Trigger, condition: TriggerCondition.FailAttack, action: TriggerAction.SelfDestroy }
