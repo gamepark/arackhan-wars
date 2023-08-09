@@ -1,7 +1,7 @@
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
 import { Family } from '../base/Family'
-import { canOnlyBeAttackedBy } from '../base/Ability'
+import { cannotBeAttacked } from '../base/Ability'
 import { AttackLimitation } from '../base/AttackLimitation'
 
 export class SwampTroll extends Creature {
@@ -12,5 +12,5 @@ export class SwampTroll extends Creature {
   attack = 2
   defense = 1
 
-  skill = canOnlyBeAttackedBy(AttackLimitation.NoGroupedCreatures)
+  skill = cannotBeAttacked(AttackLimitation.ByGroupedCreatures)
 }

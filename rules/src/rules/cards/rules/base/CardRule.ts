@@ -6,11 +6,13 @@ import { FactionCard, FactionCardsCharacteristics } from '../../../../material/F
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { Creature, isCreature } from '../../descriptions/base/Creature'
 import {
-  CannotAttack,
-  CannotBeAttacked,
+  AttackerConstraint,
+  DefenderConstraint,
   Effect,
   EffectType,
   GainAttributes,
+  isAttackerConstraint,
+  isDefenderConstraint,
   isGainAttributes,
   isLoseSkills,
   isMimic,
@@ -24,7 +26,7 @@ import { TurnEffect } from '../action/TurnEffect'
 import { Memory } from '../../../Memory'
 import { isFlipped } from '../../../../utils/activation.utils'
 import { areAdjacentCards } from '../../../../utils/adjacent.utils'
-import { AttackLimitationRules } from '../../descriptions/base/AttackLimitation'
+import { getAttackConstraint } from '../../descriptions/base/AttackLimitation'
 import { isSpell, Spell } from '../../descriptions/base/Spell'
 import sumBy from 'lodash/sumBy'
 import { Land } from '../../descriptions/base/Land'
@@ -140,12 +142,12 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
 
   canAttackTarget(opponent: number) {
     return this.isInRange(opponent)
-      && !this.effects.some(effect => effect.type === EffectType.CannotAttack && this.isPreventingAttack(effect, opponent))
-      && !getCardRule(this.game, opponent).effects.some(effect => effect.type === EffectType.CannotBeAttacked && this.isPreventingAttack(effect, opponent))
+      && !this.effects.some(effect => isAttackerConstraint(effect) && this.isPreventingAttack(effect, opponent))
+      && !getCardRule(this.game, opponent).effects.some(effect => isDefenderConstraint(effect) && this.isPreventingAttack(effect, opponent))
   }
 
-  private isPreventingAttack(effect: CannotAttack | CannotBeAttacked, opponent: number) {
-    return !effect.except || new AttackLimitationRules[effect.except](this.game).preventAttack(this.index, opponent)
+  private isPreventingAttack(effect: AttackerConstraint | DefenderConstraint, opponent: number) {
+    return getAttackConstraint(effect, this.game).preventAttack(this.index, opponent)
   }
 
   private isInRange(opponent: number) {
@@ -175,16 +177,16 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
 
   isInvalidAttackGroup(attackers: number[]) {
     return this.effects.some(effect =>
-      effect.type === EffectType.CannotBeAttacked && this.isEffectInvalidAttackGroup(effect, attackers)
+      isAttackerConstraint(effect) && this.isEffectInvalidAttackGroup(effect, attackers)
     ) || attackers.some(attacker =>
       getCardRule(this.game, attacker).effects.some(effect =>
-        effect.type === EffectType.CannotAttack && this.isEffectInvalidAttackGroup(effect, attackers)
+        isDefenderConstraint(effect) && this.isEffectInvalidAttackGroup(effect, attackers)
       )
     )
   }
 
-  private isEffectInvalidAttackGroup(effect: CannotAttack | CannotBeAttacked, attackers: number[]) {
-    return !effect.except || new AttackLimitationRules[effect.except](this.game).isInvalidAttackGroup(attackers, this.index)
+  private isEffectInvalidAttackGroup(effect: AttackerConstraint | DefenderConstraint, attackers: number[]) {
+    return getAttackConstraint(effect, this.game).isInvalidAttackGroup(attackers, this.index)
   }
 
   get attack() {

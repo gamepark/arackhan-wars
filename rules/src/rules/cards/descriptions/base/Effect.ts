@@ -1,17 +1,17 @@
 import { FactionCard } from '../../../../material/FactionCard'
 import { CardAttributeType } from './FactionCardCharacteristics'
-import { AttackLimitation } from './AttackLimitation'
+import { AttackCondition, AttackLimitation } from './AttackLimitation'
 
 export type Effect = ModifyAttack | ModifyDefense
   | GainAttributes | LoseAttributes | LoseSkills
-  | CannotAttack | CannotBeAttacked
+  | AttackerConstraint | DefenderConstraint
   | Deactivated | Mimic | Trigger
 
 export enum EffectType {
   Attack, Defense,
   GainAttributes, LoseAttributes,
   LoseSkills,
-  CannotAttack, CannotBeAttacked,
+  CannotAttack, CanOnlyAttack, CannotBeAttacked, CanOnlyBeAttacked,
   Deactivated,
   Mimic,
   Trigger
@@ -51,12 +51,33 @@ export function isLoseSkills(effect: Effect): effect is LoseSkills {
 
 export type CannotAttack = {
   type: EffectType.CannotAttack
-  except?: AttackLimitation
+  limitation?: AttackLimitation
+}
+
+export type CanOnlyAttack = {
+  type: EffectType.CanOnlyAttack
+  condition: AttackCondition
 }
 
 export type CannotBeAttacked = {
   type: EffectType.CannotBeAttacked
-  except?: AttackLimitation
+  limitation?: AttackLimitation
+}
+
+export type CanOnlyBeAttacked = {
+  type: EffectType.CanOnlyBeAttacked
+  condition: AttackCondition
+}
+
+export type AttackerConstraint = CannotAttack | CanOnlyAttack
+export type DefenderConstraint = CannotBeAttacked | CanOnlyBeAttacked
+
+export function isAttackerConstraint(effect: Effect): effect is AttackerConstraint {
+  return effect.type === EffectType.CannotAttack || effect.type === EffectType.CanOnlyAttack
+}
+
+export function isDefenderConstraint(effect: Effect): effect is DefenderConstraint {
+  return effect.type === EffectType.CannotBeAttacked || effect.type === EffectType.CanOnlyBeAttacked
 }
 
 export type Deactivated = {

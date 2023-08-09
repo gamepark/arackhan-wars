@@ -2,7 +2,7 @@ import { Material, MaterialGame } from '@gamepark/rules-api'
 import { ApplicableFilter, itself } from '../utils/applicable-filter.utils'
 import { Effect, EffectType, LoseAttributes, TriggerAction, TriggerCondition } from './Effect'
 import { CardAttributeType } from './FactionCardCharacteristics'
-import { AttackLimitation } from './AttackLimitation'
+import { AttackCondition, AttackLimitation } from './AttackLimitation'
 
 export class Ability {
 
@@ -62,13 +62,18 @@ export class Ability {
     return this
   }
 
-  canOnlyAttack(except: AttackLimitation) {
-    this.effects.push({ type: EffectType.CannotAttack, except })
+  canOnlyAttack(condition: AttackCondition) {
+    this.effects.push({ type: EffectType.CanOnlyAttack, condition })
     return this
   }
 
-  canOnlyBeAttackedBy(except: AttackLimitation) {
-    this.effects.push({ type: EffectType.CannotBeAttacked, except })
+  cannotBeAttacked(limitation: AttackLimitation) {
+    this.effects.push({ type: EffectType.CannotBeAttacked, limitation })
+    return this
+  }
+
+  canOnlyBeAttacked(condition: AttackCondition) {
+    this.effects.push({ type: EffectType.CanOnlyBeAttacked, condition })
     return this
   }
 
@@ -88,7 +93,8 @@ export const defense = (modifier: number) => new Ability().defense(modifier)
 export const gainAttributes = (...attributes: CardAttributeType[]) => new Ability().gainAttributes(...attributes)
 export const loseAttributes = (...attributes: CardAttributeType[]) => new Ability().loseAttributes(...attributes)
 export const loseAttribute = (attribute: CardAttributeType) => new Ability().loseAttribute(attribute)
-export const canOnlyAttack = (limitation: AttackLimitation) => new Ability().canOnlyAttack(limitation)
-export const canOnlyBeAttackedBy = (limitation: AttackLimitation) => new Ability().canOnlyBeAttackedBy(limitation)
+export const canOnlyAttack = (condition: AttackCondition) => new Ability().canOnlyAttack(condition)
+export const canOnlyBeAttacked = (condition: AttackCondition) => new Ability().canOnlyBeAttacked(condition)
+export const cannotBeAttacked = (limitation: AttackLimitation) => new Ability().cannotBeAttacked(limitation)
 export const deactivate = (...applicableFilters: ApplicableFilter[]) => new Ability().deactivate().to(...applicableFilters)
 export const trigger = (action: TriggerAction) => ({ when: (condition: TriggerCondition) => new Ability().trigger(condition, action) })
