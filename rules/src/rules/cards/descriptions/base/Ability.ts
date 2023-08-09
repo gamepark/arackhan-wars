@@ -19,8 +19,6 @@ export abstract class Ability {
   getEffects(): Effect[] {
     return this.effect ? [this.effect] : this.effects
   }
-
-  abstract getEffectRule(_game: MaterialGame): EffectRule
 }
 
 export class EffectRule extends MaterialRulesPart {
