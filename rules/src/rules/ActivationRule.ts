@@ -47,17 +47,19 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
   }
 
   onRuleEnd(move: RuleMove) {
-    if (isStartRule(move) && move.id === RuleId.EndPhaseRule) {
-      this.memorize(Memory.StartPlayer, this.player)
-      return this.onEndOfTurn()
-    } else if (isStartPlayerTurn(move) && move.id === RuleId.ActivationRule) {
-      return this.onEndOfTurn()
+    if (this.remind(Memory.IsInitiativeSequence)) {
+      if (isStartPlayerTurn(move) && move.player === this.remind(Memory.StartPlayer)) {
+        this.forget(Memory.IsInitiativeSequence)
+      }
+    } else {
+      if (isStartPlayerTurn(move) || (isStartRule(move) && move.id === RuleId.EndPhaseRule)) {
+        return this.onEndOfTurn()
+      }
     }
     return []
   }
 
   onEndOfTurn() {
-    this.forget(Memory.TurnEffects)
     return discardSpells(this.game,
       this
         .material(MaterialType.FactionCard)
@@ -83,13 +85,10 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
 
   get nextRuleMove() {
     const nextPlayer = this.nextPlayer
-    if (nextPlayer === this.remind(Memory.StartPlayer)) {
-      if (this.remind(Memory.IsInitiativeSequence)) {
-        this.forget(Memory.IsInitiativeSequence)
-      } else {
-        return this.rules().startRule(RuleId.EndPhaseRule)
-      }
+    if (nextPlayer === this.remind(Memory.StartPlayer) && !this.remind(Memory.IsInitiativeSequence)) {
+      return this.rules().startRule(RuleId.EndPhaseRule)
+    } else {
+      return this.rules().startPlayerTurn(RuleId.ActivationRule, nextPlayer)
     }
-    return this.rules().startPlayerTurn(RuleId.ActivationRule, nextPlayer)
   }
 }

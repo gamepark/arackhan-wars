@@ -9,6 +9,7 @@ import { isSpell } from './cards/descriptions/base/Spell'
 import { DiscardTiming } from './cards/descriptions/base/FactionCardCharacteristics'
 import { discardCard } from '../utils/discard.utils'
 import { getCardRule } from './cards/rules/base/CardRule'
+import { Memory } from './Memory'
 
 export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
 
@@ -45,5 +46,10 @@ export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, Loc
     }
 
     return moves
+  }
+
+  onRuleEnd() {
+    this.memorize(Memory.StartPlayer, player => this.game.players[(this.game.players.indexOf(player) + 1) % this.game.players.length])
+    return []
   }
 }
