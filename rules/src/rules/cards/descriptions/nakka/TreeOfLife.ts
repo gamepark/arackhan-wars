@@ -1,8 +1,8 @@
 import { CardAttributeType } from '../base/FactionCardCharacteristics'
-import { gainAttributes } from '../../rules/effect/GainAttributesEffect'
 import { adjacent, allied, creature } from '../utils/applicable-filter.utils'
 import { Land } from '../base/Land'
 import { Faction } from '../../../../Faction'
+import { gainAttributes } from '../base/Ability'
 
 export class TreeOfLife extends Land {
   faction = Faction.Nakka
@@ -10,5 +10,5 @@ export class TreeOfLife extends Land {
 
   defense = 4
 
-  benefit = gainAttributes([adjacent, allied, creature], [CardAttributeType.Regeneration])
+  benefit = gainAttributes(CardAttributeType.Regeneration).to(adjacent, allied, creature)
 }
