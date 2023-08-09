@@ -1,8 +1,8 @@
-import { onlyAttackedByGroup } from '../../rules/effect/OnlyAttackedByGroup'
 import { adjacent, allied, creature } from '../utils/applicable-filter.utils'
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
-import { defense } from '../base/Ability'
+import { canOnlyBeAttackedBy, defense } from '../base/Ability'
+import { AttackLimitation } from '../base/AttackLimitation'
 
 export class CarnivorousPlant extends Creature {
   faction = Faction.Nakka
@@ -13,6 +13,6 @@ export class CarnivorousPlant extends Creature {
 
   skills = [
     defense(+1).to(adjacent, allied, creature),
-    onlyAttackedByGroup
+    canOnlyBeAttackedBy(AttackLimitation.NoLonelyCreature)
   ]
 }

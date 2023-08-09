@@ -1,7 +1,8 @@
-import { onlyNotGroupedAttack } from '../../rules/effect/OnlyNotGroupedAttack'
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
 import { Family } from '../base/Family'
+import { canOnlyBeAttackedBy } from '../base/Ability'
+import { AttackLimitation } from '../base/AttackLimitation'
 
 export class SwampTroll extends Creature {
   faction = Faction.Blight
@@ -11,5 +12,5 @@ export class SwampTroll extends Creature {
   attack = 2
   defense = 1
 
-  skill = onlyNotGroupedAttack
+  skill = canOnlyBeAttackedBy(AttackLimitation.NoGroupedCreatures)
 }

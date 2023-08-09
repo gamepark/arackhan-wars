@@ -66,6 +66,11 @@ export class Ability {
     this.effects.push({ type: EffectType.CannotAttack, except })
     return this
   }
+
+  canOnlyBeAttackedBy(except: AttackLimitation) {
+    this.effects.push({ type: EffectType.CannotBeAttacked, except })
+    return this
+  }
 }
 
 export const attack = (modifier: number) => new Ability().attack(modifier)
@@ -74,3 +79,4 @@ export const gainAttributes = (...attributes: CardAttributeType[]) => new Abilit
 export const loseAttributes = (...attributes: CardAttributeType[]) => new Ability().loseAttributes(...attributes)
 export const loseAttribute = (attribute: CardAttributeType) => new Ability().loseAttribute(attribute)
 export const canOnlyAttack = (limitation: AttackLimitation) => new Ability().canOnlyAttack(limitation)
+export const canOnlyBeAttackedBy = (limitation: AttackLimitation) => new Ability().canOnlyBeAttackedBy(limitation)
