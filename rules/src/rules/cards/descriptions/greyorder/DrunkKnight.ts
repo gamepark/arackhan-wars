@@ -1,6 +1,7 @@
-import { drunkKnight } from '../../rules/effect/DrunkKnightWeaknessEffect'
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
+import { canOnlyAttack } from '../base/Ability'
+import { AttackLimitation } from '../base/AttackLimitation'
 
 export class DrunkKnight extends Creature {
   faction = Faction.GreyOrder
@@ -9,5 +10,5 @@ export class DrunkKnight extends Creature {
   attack = 1
   defense = 1
 
-  weakness = drunkKnight
+  weakness = canOnlyAttack(AttackLimitation.EvenValueDefender)
 }
