@@ -7,7 +7,7 @@ export const FactionTokenRules = (props: MaterialRulesProps) => {
   const { t } = useTranslation()
   const flipped = item.rotation?.y === 1
   return <>
-    <h2>{t('rules.faction-token.title')}</h2>
+    <h2>{t('rules.faction-token.title', { faction: t(`faction.${item.id}`)})}</h2>
     <p>{t('rules.faction-token.purpose')}</p>
     {flipped && <p><Trans defaults='rules.faction-token.flipped'><strong /></Trans></p> }
   </>
