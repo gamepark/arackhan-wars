@@ -1,15 +1,15 @@
 import { Material, MaterialGame } from '@gamepark/rules-api'
-import { ApplicableFilter, itself } from '../utils/applicable-filter.utils'
+import { AbilityTargetFilter, itself } from './AbilityTargetFilter'
 import { Effect, EffectType, LoseAttributes, TriggerAction, TriggerCondition } from './Effect'
 import { CardAttributeType } from './FactionCardCharacteristics'
 import { AttackCondition, AttackLimitation } from './AttackLimitation'
 
 export class Ability {
 
-  filters: ApplicableFilter[] = [itself]
+  filters: AbilityTargetFilter[] = [itself]
   effects: Effect[] = []
 
-  to(...applicableFilters: ApplicableFilter[]) {
+  to(...applicableFilters: AbilityTargetFilter[]) {
     this.filters = applicableFilters
     return this
   }
@@ -90,5 +90,5 @@ export const loseAttribute = (attribute: CardAttributeType) => new Ability().los
 export const canOnlyAttack = (condition: AttackCondition) => new Ability().canOnlyAttack(condition)
 export const canOnlyBeAttacked = (condition: AttackCondition) => new Ability().canOnlyBeAttacked(condition)
 export const cannotBeAttacked = (limitation: AttackLimitation) => new Ability().cannotBeAttacked(limitation)
-export const deactivate = (...applicableFilters: ApplicableFilter[]) => new Ability().deactivate().to(...applicableFilters)
+export const deactivate = (...applicableFilters: AbilityTargetFilter[]) => new Ability().deactivate().to(...applicableFilters)
 export const trigger = (action: TriggerAction) => ({ when: (condition: TriggerCondition) => new Ability().trigger(condition, action) })

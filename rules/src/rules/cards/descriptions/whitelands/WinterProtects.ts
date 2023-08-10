@@ -1,4 +1,4 @@
-import { adjacent, allied, creature, land, or } from '../utils/applicable-filter.utils'
+import { adjacent, allied, creature, land, or } from '../base/AbilityTargetFilter'
 import { Spell } from '../base/Spell'
 import { Faction } from '../../../../Faction'
 import { defense } from '../base/Ability'

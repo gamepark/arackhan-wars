@@ -1,4 +1,4 @@
-import { creature, enemy } from '../utils/applicable-filter.utils'
+import { creature, enemy } from '../base/AbilityTargetFilter'
 import { Faction } from '../../../../Faction'
 import { Spell } from '../base/Spell'
 import { loseAttributes } from '../base/Ability'

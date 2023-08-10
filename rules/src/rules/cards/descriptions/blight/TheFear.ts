@@ -1,6 +1,6 @@
 import { Faction } from '../../../../Faction'
 import { Spell } from '../base/Spell'
-import { adjacent, creature, enemy } from '../utils/applicable-filter.utils'
+import { adjacent, creature, enemy } from '../base/AbilityTargetFilter'
 import { deactivate } from '../base/Ability'
 
 export class TheFear extends Spell {

@@ -1,4 +1,4 @@
-import { adjacent, allied, creature, enemy } from '../utils/applicable-filter.utils'
+import { adjacent, allied, creature, enemy } from '../base/AbilityTargetFilter'
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
 import { loseAttributes } from '../base/Ability'

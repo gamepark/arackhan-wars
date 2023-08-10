@@ -1,5 +1,5 @@
 import { CardAttributeType } from '../base/FactionCardCharacteristics'
-import { adjacent, creature, enemy } from '../utils/applicable-filter.utils'
+import { adjacent, creature, enemy } from '../base/AbilityTargetFilter'
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
 import { flight } from '../../rules/attribute'

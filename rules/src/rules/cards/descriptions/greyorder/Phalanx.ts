@@ -1,4 +1,4 @@
-import { adjacent, allied, creature, family } from '../utils/applicable-filter.utils'
+import { adjacent, allied, creature, family } from '../base/AbilityTargetFilter'
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
 import { Family } from '../base/Family'

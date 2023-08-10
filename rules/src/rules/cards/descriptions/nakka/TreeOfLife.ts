@@ -1,5 +1,5 @@
 import { CardAttributeType } from '../base/FactionCardCharacteristics'
-import { adjacent, allied, creature } from '../utils/applicable-filter.utils'
+import { adjacent, allied, creature } from '../base/AbilityTargetFilter'
 import { Land } from '../base/Land'
 import { Faction } from '../../../../Faction'
 import { gainAttributes } from '../base/Ability'

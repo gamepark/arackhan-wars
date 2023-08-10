@@ -1,4 +1,4 @@
-import { allied, creature, family } from '../utils/applicable-filter.utils'
+import { allied, creature, family } from '../base/AbilityTargetFilter'
 import { Spell } from '../base/Spell'
 import { Faction } from '../../../../Faction'
 import { Family } from '../base/Family'
