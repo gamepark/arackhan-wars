@@ -1,6 +1,6 @@
 import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
-import { CustomMove, isCustomMoveType, isStartPlayerTurn, isStartRule, ItemMove, MaterialMove, PlayerTurnRule, RuleMove } from '@gamepark/rules-api'
+import { CustomMove, isCustomMove, isMoveItem, isStartPlayerTurn, isStartRule, ItemMove, MaterialMove, PlayerTurnRule, RuleMove } from '@gamepark/rules-api'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { RuleId } from './RuleId'
@@ -25,9 +25,14 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
   }
 
   getAutomaticMoves() {
-    const remainingMoves = this.getPlayerMoves()
-    if (remainingMoves.length !== 1 || !isCustomMoveType(CustomMoveType.SolveAttack)(remainingMoves[0])) return []
-    return [remainingMoves[0]]
+    const moves = this.getPlayerMoves()
+    if (moves.length === 1 && (
+      (isCustomMove(moves[0]) && moves[0].type === CustomMoveType.SolveAttack)
+      || (isMoveItem(moves[0]) && moves[0].itemType === MaterialType.FactionToken)
+    )) {
+      return moves
+    }
+    return []
   }
 
   getPlayerMoves() {
