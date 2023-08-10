@@ -63,7 +63,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
           .location(LocationType.Battlefield)
           .player(playerId)
           .getItems()
-        return sumBy(cardsOnBattlefield, card => FactionCardsCharacteristics[card.id.front].value)
+        return sumBy(cardsOnBattlefield, card => FactionCardsCharacteristics[card.id.front]?.value ?? 0)
       case 1:
         return this
           .material(MaterialType.FactionCard)
