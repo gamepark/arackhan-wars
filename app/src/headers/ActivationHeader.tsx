@@ -14,13 +14,13 @@ export const ActivationHeader = () => {
   const legalMoves = useLegalMoves()
 
   const movedCard = rules?.remind(Memory.MovedCards)?.[0]
-  if (movedCard !== undefined) {
-    const factionCard = rules!.material(MaterialType.FactionCard).getItem(movedCard)!.id.front
+  const movedCardId = movedCard !== undefined ? rules?.material(MaterialType.FactionCard).getItem(movedCard)?.id.front : undefined
+  if (movedCardId !== undefined) {
     const deactivate = legalMoves.find(isMoveItemType(MaterialType.FactionToken))
     if (!deactivate) {
-      return <>{t('header.activation.moved.choice', { card: t(`card.name.${factionCard}`), player: playerName })}</>
+      return <>{t('header.activation.moved.choice', { card: t(`card.name.${movedCardId}`), player: playerName })}</>
     } else {
-      return <Trans defaults="header.activation.moved.choose" values={{ card: t(`card.name.${factionCard}`) }}>
+      return <Trans defaults="header.activation.moved.choose" values={{ card: t(`card.name.${movedCardId}`) }}>
         <PlayMoveButton move={deactivate}/>
       </Trans>
     }
