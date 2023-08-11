@@ -1,4 +1,4 @@
-import { Location, Material, MaterialGame, MaterialItem, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
+import { Location, Material, MaterialGame, MaterialItem, MaterialMove, MaterialRulesPart, XYCoordinates } from '@gamepark/rules-api'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
@@ -25,11 +25,13 @@ import { CardAttribute, CardAttributeType, FactionCardCharacteristics } from '..
 import { TurnEffect } from '../action/TurnEffect'
 import { Memory } from '../../../Memory'
 import { isFlipped } from '../../../../utils/activation.utils'
-import { areAdjacentCards } from '../../../../utils/adjacent.utils'
+import { areAdjacent, areAdjacentCards } from '../../../../utils/adjacent.utils'
 import { getAttackConstraint } from '../../descriptions/base/AttackLimitation'
 import { isSpell, Spell } from '../../descriptions/base/Spell'
 import sumBy from 'lodash/sumBy'
 import { Land } from '../../descriptions/base/Land'
+import { battlefieldSpaceCoordinates } from '../../../../material/spaces'
+import { Attack } from './AttackRule'
 
 export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
   private effectsCache: Effect[] | undefined = undefined
@@ -48,6 +50,10 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
 
   get card(): FactionCard {
     return this.item.id.front as FactionCard
+  }
+
+  get owner() {
+    return this.item.location.player!
   }
 
   get characteristics(): FactionCardCharacteristics {
@@ -158,10 +164,6 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
       )
   }
 
-  get canMove() {
-    return this.canBeActivated && this.attributes.some(attribute => attribute.type === CardAttributeType.Movement || attribute.type === CardAttributeType.Flight)
-  }
-
   get canPerformAction() {
     return this.characteristics.action && this.canBeActivated
   }
@@ -207,7 +209,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
 
   get omnistrikeTargets() {
     return this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-      .player(player => player !== this.item.location.player)
+      .player(player => player !== this.owner)
       .getIndexes().filter(opponent => getCardRule(this.game, opponent).canBeAttacked && this.canAttackTarget(opponent))
   }
 
@@ -231,10 +233,105 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
     if (effect.action === TriggerAction.SelfDestroy) {
       return [
         ...this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(this.index).deleteItems(),
-        this.cardMaterial.moveItem({ location: { type: LocationType.PlayerDiscard, player: this.item.location.player } })
+        this.cardMaterial.moveItem({ location: { type: LocationType.PlayerDiscard, player: this.owner } })
       ]
     }
     return []
+  }
+
+  get canFly() {
+    return this.attributes.some(attribute => attribute.type === CardAttributeType.Flight)
+  }
+
+  get movement() {
+    return this.attributes.find(attribute => attribute.type === CardAttributeType.Movement)?.strength ?? 0
+  }
+
+  get legalMovements() {
+    return this.legalDestinations.map(({ x, y }) =>
+      this.cardMaterial.moveItem({ location: { type: LocationType.Battlefield, x, y, player: this.owner } })
+    )
+  }
+
+  get legalDestinations() {
+    if (!this.canBeActivated) return []
+    if (this.canFly) {
+      return battlefieldSpaceCoordinates.filter(coordinates => this.canEndMovementAt(coordinates))
+    } else if (this.movement > 0) {
+      const paths: Path[][] = [
+        [X, X, X, _, _, _, _, X],
+        [_, _, _, _, _, _, _, _],
+        [_, _, _, _, _, _, _, _],
+        [_, _, _, _, _, _, _, _],
+        [_, _, _, _, _, _, _, _],
+        [X, _, _, _, _, X, X, X]
+      ]
+      const itemLocation = this.item.location as XYCoordinates
+      paths[itemLocation.x][itemLocation.y] = Path.Blocked
+      this.buildMovementPaths(paths, itemLocation)
+      const legalDestinations: XYCoordinates[] = []
+      for (let x = 0; x < paths.length; x++) {
+        for (let y = 0; y < paths[x].length; y++) {
+          if (paths[x][y] === Path.CanStop) {
+            legalDestinations.push({ x, y })
+          }
+        }
+      }
+      return legalDestinations
+    } else {
+      return []
+    }
+  }
+
+  private buildMovementPaths(paths: Path[][], { x, y }: XYCoordinates, distance: number = 1) {
+    const adjacentLocations = [{ x: x + 1, y }, { x: x - 1, y }, { x, y: y + 1 }, { x, y: y - 1 }]
+    for (const { x, y } of adjacentLocations) {
+      if (x >= 0 && x < paths.length && y >= 0 && y < paths[x].length && paths[x][y] === Path.Unknown) {
+        paths[x][y] = this.getPath({ x, y }, distance)
+        if (paths[x][y] !== Path.Blocked && distance < this.movement) {
+          this.buildMovementPaths(paths, { x, y }, distance + 1)
+        }
+      }
+    }
+  }
+
+  private getPath(location: XYCoordinates, distance: number) {
+    const card = this.getCardAt(location)
+    if (card.length) {
+      if (card.getItem()?.location.player !== this.owner) {
+        return Path.Blocked
+      }
+      return getCardRule(this.game, card.getIndex()).canSwap(location, distance) ? Path.CanStop : Path.CanGoThrough
+    }
+    return this.thereIsAnotherCardAdjacentTo(location) ? Path.CanStop : Path.CanGoThrough
+  }
+
+  private thereIsAnotherCardAdjacentTo(location: XYCoordinates) {
+    return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).filter((_, index) => index !== this.index).getItems()
+      .some(card => areAdjacent(card.location as XYCoordinates, location))
+  }
+
+  getCardAt({ x, y }: XYCoordinates) {
+    return this.material(MaterialType.FactionCard)
+      .location(location => location.type === LocationType.Battlefield && location.x === x && location.y === y)
+  }
+
+  canEndMovementAt(location: XYCoordinates, distance?: number) {
+    const cardAtDestination = this.getCardAt(location)
+    if (!cardAtDestination.length) {
+      return this.thereIsAnotherCardAdjacentTo(location)
+    } else if (cardAtDestination.getIndex() === this.index || cardAtDestination.getItem()!.location.player !== this.owner) {
+      return false
+    } else {
+      return getCardRule(this.game, cardAtDestination.getIndex()).canSwap(this.item.location as XYCoordinates, distance)
+    }
+  }
+
+  canSwap(location: XYCoordinates, distance?: number): boolean {
+    if (!this.canBeActivated || this.remind<Attack[]>(Memory.Attacks).some(attack => attack.card === this.index)) return false
+    if (this.canFly) return true
+    else if (distance) return this.movement >= distance
+    else return this.legalDestinations.some(({ x, y }) => location.x === x && location.y === y)
   }
 }
 
@@ -260,3 +357,10 @@ function getDistance(location1: Location, location2: Location) {
   }
   return Math.abs(location1.x! - location2.x!) + Math.abs(location1.y! - location2.y!)
 }
+
+enum Path {
+  Unknown, Blocked, CanStop, CanGoThrough
+}
+
+const X = Path.Blocked
+const _ = Path.Unknown

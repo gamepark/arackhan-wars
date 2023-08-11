@@ -1,5 +1,4 @@
 import { isMoveItem, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { isMovementAttribute } from '../attribute/MovementAttribute'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
@@ -16,23 +15,12 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
       return deactivateTokens(token)
     }
     const attacks = this.remind<Attack[]>(Memory.Attacks)
-    const cardsAbleToMove = this.material(MaterialType.FactionCard)
+    return this.material(MaterialType.FactionCard)
       .location(LocationType.Battlefield)
       .player(this.player)
       .getIndexes()
-      .filter(index => getCardRule(this.game, index).canMove && !attacks.some(attack => attack.card === index))
-
-    return cardsAbleToMove.flatMap(card => this.getMoves(card))
-  }
-
-  getMoves(cardIndex: number): MaterialMove[] {
-    const cardMaterial = this.material(MaterialType.FactionCard).index(cardIndex)
-    const characteristics = getCardRule(this.game, cardIndex).characteristics
-
-    return characteristics
-      .getAttributes()
-      .filter(isMovementAttribute)
-      .flatMap((attribute) => attribute.getAttributeRule(this.game).getLegalMovements(cardMaterial))
+      .filter(index => !attacks.some(attack => attack.card === index))
+      .flatMap(index => getCardRule(this.game, index).legalMovements)
   }
 
   beforeItemMove(move: ItemMove): MaterialMove[] {
@@ -42,7 +30,6 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
         const cardToSwap = this.material(MaterialType.FactionCard)
           .location(location => location.type === LocationType.Battlefield
             && location.x === move.position.location?.x && location.y === move.position.location?.y)
-          .filter((_, index) => index !== move.itemIndex)
         if (cardToSwap.length) {
           const swapLocation = this.material(MaterialType.FactionCard).getItem(move.itemIndex)!.location
           return [cardToSwap.moveItem({ location: { ...swapLocation } })]

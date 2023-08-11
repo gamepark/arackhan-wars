@@ -5,15 +5,14 @@ import { LocationDescription, MaterialContext } from '@gamepark/react-game'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { css } from '@emotion/react'
 import { factionCardDescription } from '../material/FactionCardDescription'
-import { isCustomMoveType, isMoveItemLocation, Location, MaterialMove } from '@gamepark/rules-api'
+import { isCustomMove, isMoveItemLocation, Location, MaterialMove } from '@gamepark/rules-api'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
-import { isLocationSubset } from '@gamepark/react-game/dist/components/material/utils/IsLocationSubset'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/cards/rules/base/CardRule'
 
 export class FactionCardLocationDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
-  height = factionCardDescription.width / factionCardDescription.ratio
   width = factionCardDescription.width
+  ratio = factionCardDescription.ratio
   alwaysVisible = false
 
   getExtraCss() {
@@ -25,7 +24,7 @@ export class FactionCardLocationDescription extends LocationDescription<PlayerId
   }
 
   canDrop(move: MaterialMove, location: Location, context: MaterialContext) {
-    if (isCustomMoveType(CustomMoveType.Attack)(move)) {
+    if (isCustomMove(move) && move.type === CustomMoveType.Attack) {
       if (move.data.target !== undefined) {
         return location.parent === move.data.target
       } else {
@@ -35,10 +34,10 @@ export class FactionCardLocationDescription extends LocationDescription<PlayerId
       }
     }
 
-    if (isMoveItemLocation(move) && move.itemType === MaterialType.FactionCard) {
+    if (isMoveItemLocation(move) && move.itemType === MaterialType.FactionCard && move.position.location.type === LocationType.Battlefield) {
       const rules = new ArackhanWarsRules(context.game)
-      const parentCard = rules.material(MaterialType.FactionCard).index(location.parent!)
-      return isLocationSubset(move.position.location, parentCard.getItem()!.location)
+      const parentCardLocation = rules.material(MaterialType.FactionCard).index(location.parent!).getItem()?.location
+      return move.position.location.x === parentCardLocation?.x && move.position.location.y === parentCardLocation?.y
     }
 
     return super.canDrop(move, location, context)
