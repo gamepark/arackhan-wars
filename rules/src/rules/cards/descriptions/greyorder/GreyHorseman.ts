@@ -1,6 +1,6 @@
 import { Creature } from '../base/Creature'
 import { Faction } from '../../../../Faction'
-import { movement } from '../../rules/attribute'
+import { movement } from '../base/Attribute'
 
 export class GreyHorseman extends Creature {
   faction = Faction.GreyOrder

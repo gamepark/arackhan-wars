@@ -1,7 +1,7 @@
 import { Creature } from '../base/Creature'
 import { Faction } from '../../../../Faction'
-import { movement } from '../../rules/attribute'
 import { Family } from '../base/Family'
+import { movement } from '../base/Attribute'
 
 export class NihilistPenguin extends Creature {
   faction = Faction.Whitelands

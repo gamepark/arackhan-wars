@@ -1,21 +1,10 @@
 import { Faction } from '../../../../Faction'
 import { Ability } from './Ability'
-import { Attribute } from '../../rules/attribute/Attribute'
+import { Attribute, AttributeType } from './Attribute'
 import { RuleId } from '../../../RuleId'
 
-export enum CardAttributeType {
-  Flight = 1,
-  Initiative,
-  Perforation,
-  Movement,
-  RangedAttack,
-  Omnistrike,
-  Regeneration,
-  Swarm
-}
-
 export type CardAttribute = {
-  type: CardAttributeType,
+  type: AttributeType,
   strength?: number
 }
 
@@ -48,17 +37,7 @@ export abstract class FactionCardCharacteristics {
 
   abstract getAbilities(): Ability[]
 
-  hasInitiative = () => this.hasAttribute(CardAttributeType.Initiative)
-  hasOmnistrike = () => this.hasAttribute(CardAttributeType.Omnistrike)
-  hasPerforation = () => this.hasAttribute(CardAttributeType.Perforation)
-  hasRangeAttack = () => this.hasAttribute(CardAttributeType.RangedAttack)
-  canFly = () => this.hasAttribute(CardAttributeType.Flight)
-  hasMovement = () => this.hasAttribute(CardAttributeType.Movement)
-  canMove = () => this.hasMovement() ?? this.canFly()
-
   canAttack = (): boolean => false
-
-  private hasAttribute = (type: CardAttributeType) => this.getAttributes().some(attribute => attribute.type === type)
 
   getLimit() {
     return this.legendary ? 1 : this.limit ?? Infinity

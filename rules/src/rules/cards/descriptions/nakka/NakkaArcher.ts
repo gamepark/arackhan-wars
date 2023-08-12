@@ -1,6 +1,6 @@
 import { Creature } from '../base/Creature'
 import { Faction } from '../../../../Faction'
-import { rangedAttack } from '../../rules/attribute'
+import { rangedAttack } from '../base/Attribute'
 
 export class NakkaArcher extends Creature {
   faction = Faction.Nakka

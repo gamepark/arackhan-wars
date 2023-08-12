@@ -1,7 +1,8 @@
-import { rangedAttack } from '../../rules/attribute'
+
 import { Creature } from '../base/Creature'
 import { Faction } from '../../../../Faction'
 import { Family } from '../base/Family'
+import { rangedAttack } from '../base/Attribute'
 
 export class Ballista extends Creature {
   faction = Faction.GreyOrder

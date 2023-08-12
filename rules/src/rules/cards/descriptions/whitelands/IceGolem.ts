@@ -1,6 +1,6 @@
 import { Creature } from '../base/Creature'
 import { Faction } from '../../../../Faction'
-import { perforation } from '../../rules/attribute'
+import { perforation } from '../base/Attribute'
 
 export class IceGolem extends Creature {
   faction = Faction.Whitelands

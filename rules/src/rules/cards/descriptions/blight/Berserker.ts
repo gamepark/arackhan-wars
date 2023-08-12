@@ -1,6 +1,6 @@
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
-import { initiative, omnistrike } from '../../rules/attribute'
+import { initiative, omnistrike } from '../base/Attribute'
 
 export class Berserker extends Creature {
   faction = Faction.Blight
@@ -9,8 +9,5 @@ export class Berserker extends Creature {
   attack = 1
   defense = 1
 
-  attributes = [
-    initiative,
-    omnistrike
-  ]
+  attributes = [initiative, omnistrike]
 }

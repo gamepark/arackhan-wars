@@ -1,7 +1,7 @@
 import { Faction } from '../../../../Faction'
 import { Spell } from '../base/Spell'
-import { initiative } from '../../rules/attribute'
 import { RuleId } from '../../../RuleId'
+import { initiative } from '../base/Attribute'
 
 export class ForcedExile extends Spell {
   faction = Faction.Blight

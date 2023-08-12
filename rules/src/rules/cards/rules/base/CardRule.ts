@@ -21,7 +21,7 @@ import {
   TriggerCondition
 } from '../../descriptions/base/Effect'
 import { Ability } from '../../descriptions/base/Ability'
-import { CardAttribute, CardAttributeType, FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
+import { FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
 import { TurnEffect } from '../action/TurnEffect'
 import { Memory } from '../../../Memory'
 import { isFlipped } from '../../../../utils/activation.utils'
@@ -32,6 +32,7 @@ import sumBy from 'lodash/sumBy'
 import { Land } from '../../descriptions/base/Land'
 import { battlefieldSpaceCoordinates } from '../../../../material/spaces'
 import { Attack } from './AttackRule'
+import { Attribute, AttributeType, isMovement } from '../../descriptions/base/Attribute'
 
 export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
   private effectsCache: Effect[] | undefined = undefined
@@ -103,18 +104,15 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
       .map(turnEffect => turnEffect.effect) ?? []
   }
 
-  get attributes(): CardAttribute[] {
+  get attributes(): Attribute[] {
     if (this.effects.some(effect => effect.type === EffectType.LoseAttributes && !effect.attributes)) {
       return []
     }
     return this.characteristics.getAttributes()
-      .map(attribute => attribute.cardAttribute) // TODO: simplify characteristics to remove this line
       .concat(...this.effects.filter(isGainAttributes)
-        .flatMap((effect: GainAttributes) =>
-          effect.attributes.map(type => ({ type })) // TODO: fix GainAttributes.attributes
-        )
+        .flatMap((effect: GainAttributes) => effect.attributes)
       ).filter(attribute => !this.effects.some(effect =>
-        effect.type === EffectType.LoseAttributes && effect.attributes?.some(type => attribute.type === type)) // TODO: fix LoseAttributes.attributes
+        effect.type === EffectType.LoseAttributes && effect.attributes?.includes(attribute.type))
       )
   }
 
@@ -127,7 +125,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get hasInitiative() {
-    return this.attributes.some(attribute => attribute.type === CardAttributeType.Initiative)
+    return this.attributes.some(attribute => attribute.type === AttributeType.Initiative)
   }
 
   private get isInitiativeSequence() {
@@ -160,7 +158,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
     const opponentRule = getCardRule(this.game, opponent)
     return areAdjacentCards(this.cardMaterial, opponentRule.cardMaterial)
       || this.attributes.some(attribute =>
-        attribute.type === CardAttributeType.RangedAttack && getDistance(this.item.location, opponentRule.item.location) <= attribute.strength! // TODO: attribute.distance
+        attribute.type === AttributeType.RangedAttack && getDistance(this.item.location, opponentRule.item.location) <= attribute.distance
       )
   }
 
@@ -204,7 +202,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get hasOmnistrike() {
-    return this.attributes.some(attribute => attribute.type === CardAttributeType.Omnistrike)
+    return this.attributes.some(attribute => attribute.type === AttributeType.Omnistrike)
   }
 
   get omnistrikeTargets() {
@@ -214,7 +212,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get hasPerforation() {
-    return this.attributes.some(attribute => attribute.type === CardAttributeType.Perforation)
+    return this.attributes.some(attribute => attribute.type === AttributeType.Perforation)
   }
 
   triggerFailAttackEffects() {
@@ -240,11 +238,11 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get canFly() {
-    return this.attributes.some(attribute => attribute.type === CardAttributeType.Flight)
+    return this.attributes.some(attribute => attribute.type === AttributeType.Flight)
   }
 
   get movement() {
-    return this.attributes.find(attribute => attribute.type === CardAttributeType.Movement)?.strength ?? 0
+    return this.attributes.find(isMovement)?.distance ?? 0
   }
 
   get legalMovements() {

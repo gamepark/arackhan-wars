@@ -1,8 +1,8 @@
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
-import { perforation } from '../../rules/attribute'
 import { trigger } from '../base/Ability'
 import { TriggerAction, TriggerCondition } from '../base/Effect'
+import { perforation } from '../base/Attribute'
 
 export class ChildEater extends Creature {
   faction = Faction.Blight

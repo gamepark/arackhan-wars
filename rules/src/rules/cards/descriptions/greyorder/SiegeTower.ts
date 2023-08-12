@@ -1,6 +1,6 @@
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
-import { perforation } from '../../rules/attribute'
+import { perforation } from '../base/Attribute'
 
 export class SiegeTower extends Creature {
   faction = Faction.GreyOrder

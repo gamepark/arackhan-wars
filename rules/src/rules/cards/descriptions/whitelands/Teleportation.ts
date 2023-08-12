@@ -1,7 +1,7 @@
 import { Spell } from '../base/Spell'
 import { Faction } from '../../../../Faction'
-import { initiative } from '../../rules/attribute'
 import { RuleId } from '../../../RuleId'
+import { initiative } from '../base/Attribute'
 
 export class Teleportation extends Spell {
   faction = Faction.Whitelands

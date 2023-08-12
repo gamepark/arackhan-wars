@@ -1,6 +1,6 @@
 import { FactionCard } from '../../../../material/FactionCard'
-import { CardAttributeType } from './FactionCardCharacteristics'
 import { AttackCondition, AttackLimitation } from './AttackLimitation'
+import { Attribute, AttributeType } from './Attribute'
 
 export type Effect = ModifyAttack | ModifyDefense
   | GainAttributes | LoseAttributes | LoseSkills
@@ -29,7 +29,7 @@ export type ModifyDefense = {
 
 export type GainAttributes = {
   type: EffectType.GainAttributes
-  attributes: CardAttributeType[] // TODO: should be type "Attribute"
+  attributes: Attribute[]
 }
 
 export function isGainAttributes(effect: Effect): effect is GainAttributes {
@@ -38,7 +38,7 @@ export function isGainAttributes(effect: Effect): effect is GainAttributes {
 
 export type LoseAttributes = {
   type: EffectType.LoseAttributes
-  attributes?: CardAttributeType[] // TODO: should be type "Attribute"
+  attributes?: AttributeType[]
 }
 
 export type LoseSkills = {

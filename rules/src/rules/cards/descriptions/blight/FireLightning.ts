@@ -1,6 +1,6 @@
 import { Faction } from '../../../../Faction'
 import { Spell } from '../base/Spell'
-import { rangedAttack } from '../../rules/attribute'
+import { rangedAttack } from '../base/Attribute'
 
 export class FireLightning extends Spell {
   faction = Faction.Blight

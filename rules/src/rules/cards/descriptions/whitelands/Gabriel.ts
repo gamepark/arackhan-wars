@@ -1,7 +1,7 @@
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
-import { initiative } from '../../rules/attribute'
 import { Family } from '../base/Family'
+import { initiative } from '../base/Attribute'
 
 export class Gabriel extends Creature {
   faction = Faction.Whitelands

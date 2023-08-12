@@ -1,7 +1,7 @@
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
-import { flight } from '../../rules/attribute'
 import { Family } from '../base/Family'
+import { flight } from '../base/Attribute'
 
 export class MountedBanshee extends Creature {
   faction = Faction.Nakka

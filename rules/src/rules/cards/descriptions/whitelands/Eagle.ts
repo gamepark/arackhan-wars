@@ -1,6 +1,6 @@
 import { Creature } from '../base/Creature'
 import { Faction } from '../../../../Faction'
-import { flight } from '../../rules/attribute'
+import { flight } from '../base/Attribute'
 
 export class Eagle extends Creature {
   faction = Faction.Whitelands

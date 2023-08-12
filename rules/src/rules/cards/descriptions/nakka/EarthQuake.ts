@@ -1,6 +1,6 @@
 import { Spell } from '../base/Spell'
 import { Faction } from '../../../../Faction'
-import { omnistrike } from '../../rules/attribute'
+import { omnistrike } from '../base/Attribute'
 
 export class EarthQuake extends Spell {
   faction = Faction.Nakka

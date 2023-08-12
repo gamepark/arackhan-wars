@@ -1,6 +1,6 @@
 import { Faction } from '../../../../Faction'
 import { Creature } from '../base/Creature'
-import { movement } from '../../rules/attribute'
+import { movement } from '../base/Attribute'
 
 export class Xenodon extends Creature {
   faction = Faction.Nakka

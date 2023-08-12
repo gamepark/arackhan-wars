@@ -1,6 +1,6 @@
 import { Spell } from '../base/Spell'
 import { Faction } from '../../../../Faction'
-import { rangedAttack } from '../../rules/attribute'
+import { rangedAttack } from '../base/Attribute'
 
 export class IceMeteor extends Spell {
   faction = Faction.Whitelands
