@@ -1,12 +1,7 @@
 import { Faction } from '../../../../Faction'
 import { Ability } from './Ability'
-import { Attribute, AttributeType } from './Attribute'
+import { Attribute } from './Attribute'
 import { RuleId } from '../../../RuleId'
-
-export type CardAttribute = {
-  type: AttributeType,
-  strength?: number
-}
 
 export enum FactionCardKind {
   Creature = 1,

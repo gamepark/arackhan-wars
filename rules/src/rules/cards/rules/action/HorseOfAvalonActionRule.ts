@@ -6,7 +6,6 @@ import { isCreature } from '../../descriptions/base/Creature'
 import { Memory } from '../../../Memory'
 import { FactionCardsCharacteristics } from '../../../../material/FactionCard'
 
-
 export class HorseOfAvalonActionRule extends CardActionRule {
   onRuleStart(): MaterialMove[] {
     this.memorize(Memory.Location, this.actionCard.location)
