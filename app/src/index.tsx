@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { GameOptionsSpec } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
+import { ArackhanWarsOptionsSpec } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { GameProvider, MaterialGameAnimations, setupTranslation } from '@gamepark/react-game'
 import { StrictMode } from 'react'
@@ -14,7 +14,7 @@ setupTranslation(translations, { debug: false })
 
 ReactDOM.render(
   <StrictMode>
-    <GameProvider game="arackhan-wars" GameSetup={ArackhanWarsSetup} Rules={ArackhanWarsRules} optionsSpec={GameOptionsSpec}
+    <GameProvider game="arackhan-wars" GameSetup={ArackhanWarsSetup} Rules={ArackhanWarsRules} optionsSpec={ArackhanWarsOptionsSpec}
                   material={Material} locators={Locators} animations={new MaterialGameAnimations()}>
       <App/>
     </GameProvider>

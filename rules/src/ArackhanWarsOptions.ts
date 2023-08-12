@@ -22,7 +22,7 @@ export type ArackhanWarsOptions = {
  * This object describes all the options a game can have, and will be used by GamePark website to create automatically forms for you game
  * (forms for friendly games, or forms for matchmaking preferences, for instance).
  */
-export const GameOptionsSpec: OptionsSpec<ArackhanWarsOptions> = {
+export const ArackhanWarsOptionsSpec: OptionsSpec<ArackhanWarsOptions> = {
   players: {
     faction: {
       label: (t: TFunction) => t('Player faction'),
