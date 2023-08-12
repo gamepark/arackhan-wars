@@ -41,6 +41,11 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
   rules = rules
   locationsStrategies = locationsStrategies
   hidingStrategies = hidingStrategies
+  materialLocations = {
+    [MaterialType.PlayMat]: [LocationType.PlayerDeck, LocationType.Battlefield, LocationType.AstralPlane, LocationType.PlayerDiscard],
+    [MaterialType.RoundTracker]: [LocationType.RoundTracker],
+    [MaterialType.FactionCard]: [LocationType.FactionCard, LocationType.FactionTokenSpace]
+  }
 
   giveTime(): number {
     return 60
