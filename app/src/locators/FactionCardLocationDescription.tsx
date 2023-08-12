@@ -7,7 +7,6 @@ import { css } from '@emotion/react'
 import { factionCardDescription } from '../material/FactionCardDescription'
 import { isCustomMove, isMoveItemLocation, Location, MaterialMove } from '@gamepark/rules-api'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
-import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/cards/rules/base/CardRule'
 
 export class FactionCardLocationDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
@@ -17,8 +16,6 @@ export class FactionCardLocationDescription extends LocationDescription<PlayerId
 
   getExtraCss() {
     return css`
-      height: 100%;
-      width: 100%;
       border-radius: inherit;
     `
   }
@@ -35,8 +32,7 @@ export class FactionCardLocationDescription extends LocationDescription<PlayerId
     }
 
     if (isMoveItemLocation(move) && move.itemType === MaterialType.FactionCard && move.position.location.type === LocationType.Battlefield) {
-      const rules = new ArackhanWarsRules(context.game)
-      const parentCardLocation = rules.material(MaterialType.FactionCard).index(location.parent!).getItem()?.location
+      const parentCardLocation = context.game.items[MaterialType.FactionCard]?.[location.parent!]?.location
       return move.position.location.x === parentCardLocation?.x && move.position.location.y === parentCardLocation?.y
     }
 
