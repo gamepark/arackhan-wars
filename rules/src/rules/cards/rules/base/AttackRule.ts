@@ -8,6 +8,7 @@ import { isSpell } from '../../descriptions/base/Spell'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import uniq from 'lodash/uniq'
 import mapValues from 'lodash/mapValues'
+import partition from 'lodash/partition'
 import { isLand } from '../../descriptions/base/Land'
 import { Memory } from '../../../Memory'
 import { getCardRule } from './CardRule'
@@ -94,8 +95,14 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
     const attackValues = this.attackValues
     const defeatedEnemies = Object.keys(attackValues).map(key => parseInt(key))
       .filter(enemy => attackValues[enemy] > getCardRule(this.game, enemy).defense)
-    for (const defeatedEnemy of defeatedEnemies) {
-      moves.push(...this.onSuccessfulAttack(defeatedEnemy))
+    const [regeneratingEnemies, killedEnemies] = partition(defeatedEnemies, enemy =>
+      getCardRule(this.game, enemy).canRegenerate && !attacks.some(attack => attack.targets.includes(enemy) && getCardRule(this.game, attack.card).isSpell)
+    )
+    for (const regeneratingEnemy of regeneratingEnemies) {
+      moves.push(this.material(MaterialType.FactionToken).parent(regeneratingEnemy).moveItem({ rotation: { y: 1 } }))
+    }
+    for (const killedEnemy of killedEnemies) {
+      moves.push(...this.onSuccessfulAttack(killedEnemy))
     }
     for (const attack of attacks) {
       const cardRule = getCardRule(this.game, attack.card)
@@ -113,12 +120,16 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
               const nextEnemy = this.material(MaterialType.FactionCard)
                 .location(location => location.type === LocationType.Battlefield && location.x === x && location.y === y)
                 .player(player => player !== this.player)
-                .filter((_, index) => !isSpell(getCardRule(this.game, index).characteristics) && !defeatedEnemies.includes(index))
+                .filter((_, index) => !isSpell(getCardRule(this.game, index).characteristics) && !killedEnemies.includes(index))
               if (nextEnemy.length) {
                 const enemyIndex = nextEnemy.getIndex()
-                const defense = getCardRule(this.game, enemyIndex).defense
-                if (attackValue > defense) {
-                  moves.push(...this.onSuccessfulAttack(enemyIndex))
+                const defender = getCardRule(this.game, enemyIndex)
+                if (attackValue > defender.defense) {
+                  if (!cardRule.isSpell && defender.canRegenerate) {
+                    moves.push(this.material(MaterialType.FactionToken).parent(enemyIndex).moveItem({ rotation: { y: 1 } }))
+                  } else {
+                    moves.push(...this.onSuccessfulAttack(enemyIndex))
+                  }
                   attackValue--
                   x = x + delta.x
                   y = y + delta.y
@@ -140,7 +151,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
     }
 
     moves.push(...this.material(MaterialType.FactionCard)
-      .filter((_, index) => attacks.some(attack => attack.card === index) && isSpell(getCardRule(this.game, index).characteristics))
+      .filter((_, index) => attacks.some(attack => attack.card === index) && getCardRule(this.game, index).isSpell)
       .moveItems({ location: { type: LocationType.PlayerDiscard, player: this.player } })
     )
 

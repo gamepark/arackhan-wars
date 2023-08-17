@@ -66,6 +66,10 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
     return isCreature(this.characteristics)
   }
 
+  get isSpell() {
+    return isSpell(this.characteristics)
+  }
+
   private get loseSkills() {
     return this.battleFieldCardsRules.some(card =>
       card.characteristics.getAbilities().some(ability =>
@@ -330,6 +334,10 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
     if (this.canFly) return true
     else if (distance) return this.movement >= distance
     else return this.legalDestinations.some(({ x, y }) => location.x === x && location.y === y)
+  }
+
+  get canRegenerate(): boolean {
+    return this.attributes.some(attribute => attribute.type === AttributeType.Regeneration) && this.isActive
   }
 }
 
