@@ -1,11 +1,4 @@
-import { PlayerId } from '../ArackhanWarsOptions'
-import { LocationType } from '../material/LocationType'
-import { MaterialType } from '../material/MaterialType'
-import { Material, MaterialItem, XYCoordinates } from '@gamepark/rules-api'
-
-export const isAdjacentToFactionCard = (battlefield: MaterialItem<PlayerId, LocationType, MaterialType>[], position: XYCoordinates) => {
-  return battlefield.some(card => areAdjacent(card.location as XYCoordinates, position))
-}
+import { Material, XYCoordinates } from '@gamepark/rules-api'
 
 export const areAdjacentCards = (card1: Material, card2: Material) => {
   const item1 = card1.getItem()

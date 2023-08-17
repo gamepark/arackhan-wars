@@ -308,7 +308,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
     return this.thereIsAnotherCardAdjacentTo(location) ? Path.CanStop : Path.CanGoThrough
   }
 
-  private thereIsAnotherCardAdjacentTo(location: XYCoordinates) {
+  public thereIsAnotherCardAdjacentTo(location: XYCoordinates) {
     return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).filter((_, index) => index !== this.index).getItems()
       .some(card => areAdjacent(card.location as XYCoordinates, location))
   }

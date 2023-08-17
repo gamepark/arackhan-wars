@@ -1,23 +1,27 @@
-import { isMoveItem, ItemMove, MaterialMove } from '@gamepark/rules-api'
+import { isMoveItem, ItemMove } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
-import { getAvailableCardPlacement } from '../../../../utils/move.utils'
 import { CardActionRule } from './CardActionRule'
-import { isCreature } from '../../descriptions/base/Creature'
 import { getCardRule } from '../base/CardRule'
+import { battlefieldSpaceCoordinates } from '../../../../material/spaces'
 
 export class TeleportationActionRule extends CardActionRule {
   getPlayerMoves() {
     const battlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-    const alliedCards = battlefield
-      .player(this.player)
-      .filter((_, index) => isCreature(getCardRule(this.game, index).characteristics))
-
-    return getAvailableCardPlacement(battlefield.getItems(), alliedCards, this.player)
+    const myCards = battlefield.player(this.player)
+    return battlefieldSpaceCoordinates.flatMap(({ x, y }) => {
+      if (battlefield.location(location => location.x === x && location.y === y).length) return []
+      return myCards.filter((_, index) => {
+        const rule = getCardRule(this.game, index)
+        return rule.isCreature && rule.thereIsAnotherCardAdjacentTo({ x, y })
+      }).moveItems({ location: { type: LocationType.Battlefield, x, y, player: this.player } })
+    })
   }
 
-  afterItemMove(move: ItemMove<number, number, number>): MaterialMove<number, number, number>[] {
-    if (!(isMoveItem(move) && move.itemType === MaterialType.FactionCard)) return []
-    return super.afterCardAction()
+  afterItemMove(move: ItemMove<number, number, number>) {
+    if (isMoveItem(move) && move.itemType === MaterialType.FactionCard && move.position.location?.type === LocationType.Battlefield) {
+      return super.afterCardAction()
+    }
+    return []
   }
 }

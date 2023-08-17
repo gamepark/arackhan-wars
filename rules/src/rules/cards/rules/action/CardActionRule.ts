@@ -17,7 +17,6 @@ export abstract class CardActionRule extends PlayerTurnRule<PlayerId, MaterialTy
       moves.push(this.discardActionCard())
     }
     moves.push(this.rules().startRule(RuleId.ActivationRule))
-    this.forget(Memory.ActionCard)
     return moves
   }
 
@@ -27,5 +26,8 @@ export abstract class CardActionRule extends PlayerTurnRule<PlayerId, MaterialTy
     })
   }
 
-
+  onRuleEnd() {
+    this.forget(Memory.ActionCard)
+    return []
+  }
 }
