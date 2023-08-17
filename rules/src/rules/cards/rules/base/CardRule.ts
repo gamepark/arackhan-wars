@@ -269,12 +269,12 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
         [X, _, _, _, _, X, X, X]
       ]
       const itemLocation = this.item.location as XYCoordinates
-      paths[itemLocation.x][itemLocation.y] = Path.Blocked
+      paths[itemLocation.y][itemLocation.x] = Path.Blocked
       this.buildMovementPaths(paths, itemLocation)
       const legalDestinations: XYCoordinates[] = []
-      for (let x = 0; x < paths.length; x++) {
-        for (let y = 0; y < paths[x].length; y++) {
-          if (paths[x][y] === Path.CanStop) {
+      for (let y = 0; y < paths.length; y++) {
+        for (let x = 0; x < paths[y].length; x++) {
+          if (paths[y][x] === Path.CanStop) {
             legalDestinations.push({ x, y })
           }
         }
@@ -288,9 +288,9 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   private buildMovementPaths(paths: Path[][], { x, y }: XYCoordinates, distance: number = 1) {
     const adjacentLocations = [{ x: x + 1, y }, { x: x - 1, y }, { x, y: y + 1 }, { x, y: y - 1 }]
     for (const { x, y } of adjacentLocations) {
-      if (x >= 0 && x < paths.length && y >= 0 && y < paths[x].length && paths[x][y] === Path.Unknown) {
-        paths[x][y] = this.getPath({ x, y }, distance)
-        if (paths[x][y] !== Path.Blocked && distance < this.movement) {
+      if (y >= 0 && y < paths.length && x >= 0 && x < paths[y].length && paths[y][x] === Path.Unknown) {
+        paths[y][x] = this.getPath({ x, y }, distance)
+        if (paths[y][x] !== Path.Blocked && distance < this.movement) {
           this.buildMovementPaths(paths, { x, y }, distance + 1)
         }
       }
