@@ -3,7 +3,7 @@ import board from '../images/boards/core-box-battle-mat.jpg'
 import { BoardDescription, MaterialContext } from '@gamepark/react-game'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { PlayMatRules } from './PlayMatRules'
-import { battlefieldSpaceCoordinates } from '@gamepark/arackhan-wars/material/spaces'
+import { battlefieldCoordinates } from '@gamepark/arackhan-wars/material/Board'
 import { Location, MaterialItem } from '@gamepark/rules-api'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 
@@ -28,7 +28,7 @@ export class PlayMatDescription extends BoardDescription {
   rules = PlayMatRules
 
   private getBattlefieldSpaces = () => {
-    return battlefieldSpaceCoordinates.map((space) => ({
+    return battlefieldCoordinates.map((space) => ({
       type: LocationType.Battlefield,
       x: space.x,
       y: space.y

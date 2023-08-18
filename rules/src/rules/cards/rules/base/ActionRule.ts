@@ -1,12 +1,12 @@
 import { MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
-import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { LocationType } from '../../../../material/LocationType'
 import { getCardRule } from './CardRule'
 import { Memory } from '../../../Memory'
 import { Attack } from './AttackRule'
+import { onBattlefieldAndAstralPlane } from '../../../../material/Board'
 
 export class ActionRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   getPlayerMoves(): MaterialMove[] {

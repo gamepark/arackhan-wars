@@ -2,7 +2,6 @@ import { CustomMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
-import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { isSpell } from '../../descriptions/base/Spell'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import uniq from 'lodash/uniq'
@@ -11,6 +10,7 @@ import partition from 'lodash/partition'
 import { isLand } from '../../descriptions/base/Land'
 import { Memory } from '../../../Memory'
 import { getCardRule } from './CardRule'
+import { onBattlefieldAndAstralPlane } from '../../../../material/Board'
 
 export type Attack = {
   card: number

@@ -3,13 +3,13 @@ import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
 import { CardActionRule } from './CardActionRule'
 import { getCardRule } from '../base/CardRule'
-import { battlefieldSpaceCoordinates } from '../../../../material/spaces'
+import { battlefieldCoordinates } from '../../../../material/Board'
 
 export class TeleportationActionRule extends CardActionRule {
   getPlayerMoves() {
     const battlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
     const myCards = battlefield.player(this.player)
-    return battlefieldSpaceCoordinates.flatMap(({ x, y }) => {
+    return battlefieldCoordinates.flatMap(({ x, y }) => {
       if (battlefield.location(location => location.x === x && location.y === y).length) return []
       return myCards.filter((_, index) => {
         const rule = getCardRule(this.game, index)

@@ -3,10 +3,10 @@ import { LocationType } from '../material/LocationType'
 import { ItemMove, ItemMoveType, MaterialRulesPart, MoveKind } from '@gamepark/rules-api'
 import { RuleId } from './RuleId'
 import { PlayerId } from '../ArackhanWarsOptions'
-import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
 import { isSpell } from './cards/descriptions/base/Spell'
 import { Memory } from './Memory'
 import { getCardRule } from './cards/rules/base/CardRule'
+import { onBattlefieldAndAstralPlane } from '../material/Board'
 
 export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
 

@@ -4,7 +4,6 @@ import { CustomMove, isCustomMove, isMoveItem, isStartPlayerTurn, isStartRule, I
 import { PlayerId } from '../ArackhanWarsOptions'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { RuleId } from './RuleId'
-import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
 import { DiscardTiming } from './cards/descriptions/base/FactionCardCharacteristics'
 import { Attack, AttackRule } from './cards/rules/base/AttackRule'
 import { MoveRules } from './cards/rules/base/MoveRules'
@@ -12,6 +11,7 @@ import { ActionRule } from './cards/rules/base/ActionRule'
 import { Memory } from './Memory'
 import { getCardRule } from './cards/rules/base/CardRule'
 import { Spell } from './cards/descriptions/base/Spell'
+import { onBattlefieldAndAstralPlane } from '../material/Board'
 
 export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
 

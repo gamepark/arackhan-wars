@@ -13,7 +13,6 @@ import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
 import { FactionCard, FactionCardsCharacteristics } from '../../../../material/FactionCard'
-import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { Creature, isCreature } from '../../descriptions/base/Creature'
 import {
   AttackerConstraint,
@@ -38,7 +37,7 @@ import { getAttackConstraint } from '../../descriptions/base/AttackLimitation'
 import { isSpell, Spell } from '../../descriptions/base/Spell'
 import sumBy from 'lodash/sumBy'
 import { Land } from '../../descriptions/base/Land'
-import { battlefieldSpaceCoordinates } from '../../../../material/spaces'
+import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../../../../material/Board'
 import { Attack } from './AttackRule'
 import { Attribute, AttributeType, isMovement } from '../../descriptions/base/Attribute'
 
@@ -288,7 +287,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   get legalDestinations() {
     if (!this.canBeActivated) return []
     if (this.canFly) {
-      return battlefieldSpaceCoordinates.filter(coordinates => this.canEndMovementAt(coordinates))
+      return battlefieldCoordinates.filter(coordinates => this.canEndMovementAt(coordinates))
     } else if (this.movement > 0) {
       const paths: Path[][] = [
         [X, X, X, _, _, _, _, X],

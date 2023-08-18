@@ -3,11 +3,11 @@ import { LocationType } from '../material/LocationType'
 import { MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { RuleId } from './RuleId'
-import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
 import { Spell } from './cards/descriptions/base/Spell'
 import { DiscardTiming } from './cards/descriptions/base/FactionCardCharacteristics'
 import { getCardRule } from './cards/rules/base/CardRule'
 import { Memory } from './Memory'
+import { onBattlefieldAndAstralPlane } from '../material/Board'
 
 export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
 
