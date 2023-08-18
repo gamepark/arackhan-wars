@@ -8,10 +8,10 @@ import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
 import { DiscardTiming } from './cards/descriptions/base/FactionCardCharacteristics'
 import { Attack, AttackRule } from './cards/rules/base/AttackRule'
 import { MoveRules } from './cards/rules/base/MoveRules'
-import { discardSpells } from '../utils/discard.utils'
 import { ActionRule } from './cards/rules/base/ActionRule'
 import { Memory } from './Memory'
 import { getCardRule } from './cards/rules/base/CardRule'
+import { Spell } from './cards/descriptions/base/Spell'
 
 export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
 
@@ -71,13 +71,11 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
   }
 
   onEndOfTurn() {
-    return discardSpells(this.game,
-      this
-        .material(MaterialType.FactionCard)
-        .location(onBattlefieldAndAstralPlane)
-        .player(this.player),
-      DiscardTiming.ActivationOrEndOfTurn
-    )
+    return this.material(MaterialType.FactionCard)
+      .location(onBattlefieldAndAstralPlane)
+      .player(this.player)
+      .filter((_, index) => (getCardRule(this.game, index).characteristics as Spell).discardTiming === DiscardTiming.ActivationOrEndOfTurn)
+      .moveItems({ location: { type: LocationType.PlayerDiscard, player: this.player } })
   }
 
   onCustomMove(move: CustomMove) {

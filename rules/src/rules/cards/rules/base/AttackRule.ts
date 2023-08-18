@@ -1,7 +1,6 @@
 import { CustomMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
-import { discardCard } from '../../../../utils/discard.utils'
 import { CustomMoveType } from '../../../../material/CustomMoveType'
 import { onBattlefieldAndAstralPlane } from '../../../../utils/LocationUtils'
 import { isSpell } from '../../descriptions/base/Spell'
@@ -180,8 +179,13 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
     if (isLand(getCardRule(this.game, enemy).characteristics)) {
       return this.conquerLand(enemy)
     } else {
-      const opponentCardToken = this.material(MaterialType.FactionToken).parent(enemy)
-      return discardCard(this.material(MaterialType.FactionCard).index(enemy), opponentCardToken)
+      const card = this.material(MaterialType.FactionCard).index(enemy)
+      return [
+        this.material(MaterialType.FactionToken).parent(enemy).deleteItem(),
+        card.moveItem(
+          { location: { type: LocationType.PlayerDiscard, player: card.getItem()?.location.player } }
+        )
+      ]
     }
   }
 

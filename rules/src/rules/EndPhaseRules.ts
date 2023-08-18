@@ -4,27 +4,23 @@ import { MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { RuleId } from './RuleId'
 import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
-import { isSpell } from './cards/descriptions/base/Spell'
+import { Spell } from './cards/descriptions/base/Spell'
 import { DiscardTiming } from './cards/descriptions/base/FactionCardCharacteristics'
-import { discardCard } from '../utils/discard.utils'
 import { getCardRule } from './cards/rules/base/CardRule'
 import { Memory } from './Memory'
 
 export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
 
   getAutomaticMoves(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
-    const battlefieldCards = this
-      .material(MaterialType.FactionCard)
-      .location(onBattlefieldAndAstralPlane)
-
     const moves: MaterialMove[] = []
-    for (const index of battlefieldCards.getIndexes()) {
-      const cardMaterial = this.material(MaterialType.FactionCard).index(index)!
-      const card = getCardRule(this.game, index).characteristics
 
-      if (isSpell(card) && card.discardTiming === DiscardTiming.EndOfRound) {
-        moves.push(...discardCard(cardMaterial))
-      }
+    for (const player of this.game.players) {
+      moves.push(...this.material(MaterialType.FactionCard)
+        .location(onBattlefieldAndAstralPlane)
+        .player(player)
+        .filter((_, index) => (getCardRule(this.game, index).characteristics as Spell).discardTiming === DiscardTiming.EndOfRound)
+        .moveItems({ location: { type: LocationType.PlayerDiscard, player } })
+      )
     }
 
     moves.push(...this.material(MaterialType.FactionToken)
