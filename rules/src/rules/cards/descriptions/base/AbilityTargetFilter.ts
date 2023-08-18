@@ -13,10 +13,7 @@ export const adjacent = (source: Material, target: Material) => areAdjacentCards
 
 export const enemy = (source: Material, target: Material) => source.getItem()!.location.player !== target.getItem()!.location.player
 export const allied = (source: Material, target: Material) => !enemy(source, target)
-export const family = (family: Family) => (_source: Material, target: Material, game: MaterialGame) => {
-  const details = getCardRule(game, target.getIndex()).characteristics
-  return isCreature(details) && details.family === family
-}
+export const family = (family: Family) => (_source: Material, target: Material, game: MaterialGame) => getCardRule(game, target.getIndex()).family === family
 
 export const creature = (_source: Material, target: Material) => isCreature(FactionCardsCharacteristics[target.getItem()!.id.front])
 export const land = (_source: Material, target: Material) => isLand(FactionCardsCharacteristics[target.getItem()!.id.front])

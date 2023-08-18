@@ -195,14 +195,30 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
 
   get attack() {
     const baseAttack = (this.characteristics as Creature | Spell).attack ?? 0
-    const effectsModifier = sumBy(this.effects, effect => effect.type === EffectType.Attack ? effect.modifier : 0)
-    return Math.max(0, baseAttack + effectsModifier)
+    return Math.max(0, baseAttack + this.attackModifier)
+  }
+
+  get attackModifier() {
+    return sumBy(this.effects, effect => effect.type === EffectType.Attack ? effect.modifier : 0) + this.swarmBonus
+  }
+
+  get swarmBonus() {
+    if (!this.family || this.attributes.some(attribute => attribute.type === AttributeType.Swarm)) return 0
+    return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).player(this.owner).getIndexes()
+      .filter(index => index !== this.index && getCardRule(this.game, index).family === this.family).length
+  }
+
+  get family() {
+    return (this.characteristics as Creature).family
   }
 
   get defense() {
     const baseDefense = (this.characteristics as Creature | Land).defense ?? 0
-    const effectsModifier = sumBy(this.effects, effect => effect.type === EffectType.Defense ? effect.modifier : 0)
-    return Math.max(0, baseDefense + effectsModifier)
+    return Math.max(0, baseDefense + this.defenseModifier)
+  }
+
+  get defenseModifier() {
+    return sumBy(this.effects, effect => effect.type === EffectType.Defense ? effect.modifier : 0)
   }
 
   get hasOmnistrike() {
