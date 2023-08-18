@@ -6,7 +6,7 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import translations from './translations.json'
-import { Material } from './material/Material'
+import { Material, materialI18n } from './material/Material'
 import { Locators } from './locators/Locators'
 import { ArackhanWarsSetup } from '@gamepark/arackhan-wars/ArackhanWarsSetup'
 
@@ -15,7 +15,7 @@ setupTranslation(translations, { debug: false })
 ReactDOM.render(
   <StrictMode>
     <GameProvider game="arackhan-wars" GameSetup={ArackhanWarsSetup} Rules={ArackhanWarsRules} optionsSpec={ArackhanWarsOptionsSpec}
-                  material={Material} locators={Locators} animations={new MaterialGameAnimations()}>
+                  material={Material} locators={Locators} materialI18n={materialI18n} animations={new MaterialGameAnimations()}>
       <App/>
     </GameProvider>
   </StrictMode>,

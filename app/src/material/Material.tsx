@@ -7,6 +7,7 @@ import { factionTokenDescription } from './FactionTokenDescription'
 import { roundTrackerDescription } from './RoundTrackerDescription'
 import { roundTrackerTokenDescription } from './RoundTrackerTokenDescription'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
+import { factionCardFrenchDescription } from './FactionCardFrenchDescription'
 
 export const Material: Record<MaterialType, MaterialDescription<PlayerId, MaterialType, LocationType>> = {
   [MaterialType.PlayMat]: playMatDescription,
@@ -15,3 +16,10 @@ export const Material: Record<MaterialType, MaterialDescription<PlayerId, Materi
   [MaterialType.RoundTracker]: roundTrackerDescription,
   [MaterialType.RoundTrackerToken]: roundTrackerTokenDescription
 }
+
+export const materialI18n: Record<string, Partial<Record<MaterialType, MaterialDescription>>> = {
+  'fr': {
+    [MaterialType.FactionCard]: factionCardFrenchDescription,
+  }
+}
+
