@@ -62,7 +62,7 @@ import TheFear from '../images/cards/blight/en/s1-aw1-191-en-the-fear.jpg'
 import ForcedExile from '../images/cards/blight/en/s1-aw1-186-en-forced-exile.jpg'
 
 import { FactionCardRules } from './FactionCardRules'
-import { Faction } from '@gamepark/arackhan-wars/Faction'
+import { Faction } from '@gamepark/arackhan-wars/material/Faction'
 import { CardDescription, ItemContext } from '@gamepark/react-game'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { isCustomMove, isCustomMoveType, Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'

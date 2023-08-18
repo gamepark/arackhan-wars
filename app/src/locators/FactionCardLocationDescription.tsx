@@ -7,7 +7,7 @@ import { css } from '@emotion/react'
 import { factionCardDescription } from '../material/FactionCardDescription'
 import { isCustomMove, isMoveItemLocation, Location, MaterialMove } from '@gamepark/rules-api'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
-import { getCardRule } from '@gamepark/arackhan-wars/rules/cards/rules/base/CardRule'
+import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 
 export class FactionCardLocationDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
   width = factionCardDescription.width

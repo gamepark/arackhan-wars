@@ -4,7 +4,7 @@ import { MaterialType } from '../material/MaterialType'
 import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
 import { RuleId } from './RuleId'
 import { PlayerId } from '../ArackhanWarsOptions'
-import { isSpell } from './cards/descriptions/base/Spell'
+import { isSpell } from '../material/cards/Spell'
 import { FactionCardsCharacteristics } from '../material/FactionCard'
 import { Memory } from './Memory'
 

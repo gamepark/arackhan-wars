@@ -1,6 +1,6 @@
 import { OptionsSpec } from '@gamepark/rules-api'
 import { TFunction } from 'i18next'
-import { Faction, playerFactions } from './Faction'
+import { Faction, playerFactions } from './material/Faction'
 
 /**
  * This is the options for each player in the game.
