@@ -4,7 +4,6 @@ import { MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { RuleId } from './RuleId'
 import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
-import { activateTokens } from '../utils/activation.utils'
 import { isSpell } from './cards/descriptions/base/Spell'
 import { DiscardTiming } from './cards/descriptions/base/FactionCardCharacteristics'
 import { discardCard } from '../utils/discard.utils'
@@ -28,14 +27,10 @@ export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, Loc
       }
     }
 
-    const unflipTokens = activateTokens(
-      this
-        .material(MaterialType.FactionToken)
-        .location(LocationType.FactionTokenSpace)
-        .rotation((rotation) => !!rotation?.y)
-    )
-
-    moves.push(...unflipTokens)
+    moves.push(...this.material(MaterialType.FactionToken)
+      .location(LocationType.FactionTokenSpace)
+      .rotation(rotation => rotation?.y === 1)
+      .moveItems({ rotation: {} }))
 
     const turn = this.material(MaterialType.RoundTrackerToken).getItem()!.location.x!
     if (turn === 9) {

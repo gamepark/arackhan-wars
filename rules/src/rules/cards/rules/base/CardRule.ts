@@ -24,7 +24,6 @@ import { Ability } from '../../descriptions/base/Ability'
 import { FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
 import { TurnEffect } from '../action/TurnEffect'
 import { Memory } from '../../../Memory'
-import { isFlipped } from '../../../../utils/activation.utils'
 import { areAdjacent, areAdjacentCards } from '../../../../utils/adjacent.utils'
 import { getAttackConstraint } from '../../descriptions/base/AttackLimitation'
 import { isSpell, Spell } from '../../descriptions/base/Spell'
@@ -125,7 +124,11 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get isActive() {
-    return !isFlipped(this.token) && !this.effects.some(effect => effect.type === EffectType.Deactivated)
+    return this.isTokenFlipped && !this.effects.some(effect => effect.type === EffectType.Deactivated)
+  }
+
+  get isTokenFlipped() {
+    return this.token.getItem()?.rotation?.y === 1
   }
 
   get hasInitiative() {

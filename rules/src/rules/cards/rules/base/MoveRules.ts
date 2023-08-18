@@ -4,15 +4,13 @@ import { LocationType } from '../../../../material/LocationType'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { Memory } from '../../../Memory'
 import { getCardRule } from './CardRule'
-import { deactivateTokens } from '../../../../utils/activation.utils'
 import { Attack } from './AttackRule'
 
 export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   getPlayerMoves(): MaterialMove[] {
     const movedCards = this.remind<number[]>(Memory.MovedCards)
     if (movedCards.length) {
-      const token = this.material(MaterialType.FactionToken).parent(movedCards[0])
-      return deactivateTokens(token)
+      return [this.material(MaterialType.FactionToken).parent(movedCards[0]).moveItem({ rotation: { y: 1 } })]
     }
     const attacks = this.remind<Attack[]>(Memory.Attacks)
     return this.material(MaterialType.FactionCard)
