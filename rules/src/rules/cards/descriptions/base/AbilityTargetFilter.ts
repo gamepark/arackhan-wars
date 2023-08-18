@@ -1,5 +1,4 @@
-import { Material, MaterialGame } from '@gamepark/rules-api'
-import { areAdjacentCards } from '../../../../utils/adjacent.utils'
+import { areAdjacentSquares, Material, MaterialGame } from '@gamepark/rules-api'
 import { FactionCardsCharacteristics } from '../../../../material/FactionCard'
 import { isCreature } from './Creature'
 import { isLand } from './Land'
@@ -9,7 +8,7 @@ import { getCardRule } from '../../rules/base/CardRule'
 export type AbilityTargetFilter = (source: Material, target: Material, game: MaterialGame) => boolean
 
 export const itself = (source: Material, target: Material) => source.getIndex() === target.getIndex()
-export const adjacent = (source: Material, target: Material) => areAdjacentCards(source, target)
+export const adjacent = (source: Material, target: Material) => areAdjacentSquares(source.getItem()!.location, target.getItem()!.location)
 
 export const enemy = (source: Material, target: Material) => source.getItem()!.location.player !== target.getItem()!.location.player
 export const allied = (source: Material, target: Material) => !enemy(source, target)

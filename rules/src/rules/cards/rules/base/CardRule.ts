@@ -1,4 +1,14 @@
-import { Location, Material, MaterialGame, MaterialItem, MaterialMove, MaterialRulesPart, XYCoordinates } from '@gamepark/rules-api'
+import {
+  areAdjacentSquares,
+  getDistanceBetweenSquares,
+  isXYCoordinates,
+  Material,
+  MaterialGame,
+  MaterialItem,
+  MaterialMove,
+  MaterialRulesPart,
+  XYCoordinates
+} from '@gamepark/rules-api'
 import { PlayerId } from '../../../../ArackhanWarsOptions'
 import { MaterialType } from '../../../../material/MaterialType'
 import { LocationType } from '../../../../material/LocationType'
@@ -24,7 +34,6 @@ import { Ability } from '../../descriptions/base/Ability'
 import { FactionCardCharacteristics } from '../../descriptions/base/FactionCardCharacteristics'
 import { TurnEffect } from '../action/TurnEffect'
 import { Memory } from '../../../Memory'
-import { areAdjacent, areAdjacentCards } from '../../../../utils/adjacent.utils'
 import { getAttackConstraint } from '../../descriptions/base/AttackLimitation'
 import { isSpell, Spell } from '../../descriptions/base/Spell'
 import sumBy from 'lodash/sumBy'
@@ -124,7 +133,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get isActive() {
-    return this.isTokenFlipped && !this.effects.some(effect => effect.type === EffectType.Deactivated)
+    return !this.isTokenFlipped && !this.effects.some(effect => effect.type === EffectType.Deactivated)
   }
 
   get isTokenFlipped() {
@@ -162,11 +171,13 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   private isInRange(opponent: number) {
-    const opponentRule = getCardRule(this.game, opponent)
-    return areAdjacentCards(this.cardMaterial, opponentRule.cardMaterial)
-      || this.attributes.some(attribute =>
-        attribute.type === AttributeType.RangedAttack && getDistance(this.item.location, opponentRule.item.location) <= attribute.distance
-      )
+    const cardLocation = this.item.location
+    const opponentLocation = getCardRule(this.game, opponent).item.location
+    if (!isXYCoordinates(cardLocation) || !isXYCoordinates(opponentLocation)) return false
+    const distance = getDistanceBetweenSquares(cardLocation, opponentLocation)
+    return distance === 1 || this.attributes.some(attribute =>
+      attribute.type === AttributeType.RangedAttack && distance <= attribute.distance
+    )
   }
 
   get canPerformAction() {
@@ -329,7 +340,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
 
   public thereIsAnotherCardAdjacentTo(location: XYCoordinates) {
     return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).filter((_, index) => index !== this.index).getItems()
-      .some(card => areAdjacent(card.location as XYCoordinates, location))
+      .some(card => areAdjacentSquares(card.location, location))
   }
 
   getCardAt({ x, y }: XYCoordinates) {
@@ -374,13 +385,6 @@ export function getCardRule(game: MaterialGame<PlayerId, MaterialType, LocationT
 
 export function resetCardsRulesCache() {
   cardsRulesCache = undefined
-}
-
-function getDistance(location1: Location, location2: Location) {
-  if (location1.type !== LocationType.Battlefield || location2.type !== LocationType.Battlefield) {
-    return 0 // Consider Astral plan as distance 0 from everything on the battlefield
-  }
-  return Math.abs(location1.x! - location2.x!) + Math.abs(location1.y! - location2.y!)
 }
 
 enum Path {

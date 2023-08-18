@@ -1,5 +1,5 @@
 import { LocationType } from '../material/LocationType'
-import { MaterialItem, MaterialMove, PlayerTurnRule, XYCoordinates } from '@gamepark/rules-api'
+import { areAdjacentSquares, MaterialItem, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { MaterialType } from '../material/MaterialType'
 import { battlefieldSpaceCoordinates, startingCoordinates } from '../material/spaces'
 import { RuleId } from './RuleId'
@@ -7,7 +7,6 @@ import { PlayerId } from '../ArackhanWarsOptions'
 import { onBattlefieldAndAstralPlane } from '../utils/LocationUtils'
 import { isSpell } from './cards/descriptions/base/Spell'
 import { FactionCardsCharacteristics } from '../material/FactionCard'
-import { areAdjacent } from '../utils/adjacent.utils'
 import { Memory } from './Memory'
 
 export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
@@ -51,7 +50,7 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
       return battlefieldSpaceCoordinates
         .filter(space =>
           !battlefieldCards.some(card => card.location.x === space.x && card.location.y === space.y)
-          && battlefieldCards.some(card => areAdjacent(card.location as XYCoordinates, space))
+          && battlefieldCards.some(card => areAdjacentSquares(card.location, space))
         )
     }
   }
