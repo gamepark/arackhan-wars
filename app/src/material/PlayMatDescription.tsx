@@ -5,7 +5,6 @@ import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { PlayMatRules } from './PlayMatRules'
 import { battlefieldCoordinates } from '@gamepark/arackhan-wars/material/Board'
 import { Location, MaterialItem } from '@gamepark/rules-api'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 
 export const boardRatio = 576 / 576
 
@@ -35,18 +34,8 @@ export class PlayMatDescription extends BoardDescription {
     }))
   }
 
-  private getAstralPlanes = (context: MaterialContext) => {
-    return context.game.players.flatMap((player: PlayerId) => {
-      return [{
-        type: LocationType.AstralPlane,
-        x: 0,
-        player: player
-      }, {
-        type: LocationType.AstralPlane,
-        x: 1,
-        player: player
-      }]
-    })
+  private getAstralPlanes = ({ rules: { players } }: MaterialContext) => {
+    return players.flatMap(player => [0, 1].map(x => ({ type: LocationType.AstralPlane, x, player })))
   }
 
   private getDecks(context: MaterialContext) {
@@ -56,14 +45,9 @@ export class PlayMatDescription extends BoardDescription {
     }]
   }
 
-  private getDiscards(context: MaterialContext) {
-    return context.game.players.map((player: PlayerId) => ({
-      type: LocationType.PlayerDiscard,
-      id: player,
-      player
-    }))
+  private getDiscards({ rules: { players } }: MaterialContext) {
+    return players.map(player => ({ type: LocationType.PlayerDiscard, player }))
   }
 }
 
 export const playMatDescription = new PlayMatDescription()
-

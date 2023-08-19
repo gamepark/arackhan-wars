@@ -14,15 +14,13 @@ export class BattlefieldDescription extends LocationDescription<PlayerId, Materi
 
   canDrop(move: MaterialMove, location: Location, context: MaterialContext): boolean {
     // When 2 cards are swapped, we have to disable the battlefield drop area beneath the card to prevent glitches with dnd-kit
-    if (isMoveItem(move) && move.itemType === MaterialType.FactionCard
-      && move.position.location?.type === LocationType.Battlefield
-      && context.game.items[MaterialType.FactionCard]?.find(item =>
-        item.location.type === LocationType.Battlefield && item.location.x === move.position.location?.x && item.location.y === move.position.location?.y
-      )
-    ) {
-      return false
-    }
-
-    return super.canDrop(move, location, context)
+    return !this.isSwapCards(move, context) && super.canDrop(move, location, context)
   }
+
+  private isSwapCards = (move: MaterialMove, { rules }: MaterialContext) =>
+    isMoveItem(move) && move.itemType === MaterialType.FactionCard
+    && move.position.location?.type === LocationType.Battlefield
+    && rules.material(MaterialType.FactionCard).location(location =>
+      location.type === LocationType.Battlefield && location.x === move.position.location?.x && location.y === move.position.location?.y
+    ).length > 0
 }

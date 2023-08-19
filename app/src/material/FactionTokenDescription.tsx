@@ -34,23 +34,17 @@ export class FactionTokenDescription extends RoundTokenDescription {
     [TokenFaction.Neutral]: NeutralTokenBack
   }
 
-  getStaticItems = ({ game }: MaterialContext) => {
-    return game.players.map((player) => ({
-      id: game.memory[Memory.Token][player],
+  getStaticItems = ({ rules }: MaterialContext) =>
+    rules.players.map((player) => ({
+      id: rules.remind(Memory.Token, player),
       quantity: 34,
-      location: {
-        type: LocationType.PlayerTokenStock,
-        player
-      }
+      location: { type: LocationType.PlayerTokenStock, player }
     }))
-  }
 
-  getStockLocation(item: MaterialItem) {
-    return {
-      type: LocationType.PlayerTokenStock,
-      player: item.location.player
-    }
-  }
+  getStockLocation = (item: MaterialItem) => ({
+    type: LocationType.PlayerTokenStock,
+    player: item.location.player
+  })
 
   rules = FactionTokenRules
 }

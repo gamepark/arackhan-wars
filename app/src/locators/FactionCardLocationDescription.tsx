@@ -14,25 +14,24 @@ export class FactionCardLocationDescription extends LocationDescription<PlayerId
   ratio = factionCardDescription.ratio
   alwaysVisible = false
 
-  getExtraCss() {
-    return css`
-      border-radius: inherit;
-    `
-  }
+  getExtraCss = () => css`
+    border-radius: inherit;
+  `
 
   canDrop(move: MaterialMove, location: Location, context: MaterialContext) {
+    const { player, rules } = context
     if (isCustomMove(move) && move.type === CustomMoveType.Attack) {
       if (move.data.target !== undefined) {
         return location.parent === move.data.target
       } else {
-        const cardRule = getCardRule(context.game, location.parent!)
-        return cardRule.canBeAttacked && cardRule.item.location.player !== context.player
-          && getCardRule(context.game, move.data.card).canAttackTarget(location.parent!)
+        const cardRule = getCardRule(rules.game, location.parent!)
+        return cardRule.canBeAttacked && cardRule.item.location.player !== player
+          && getCardRule(rules.game, move.data.card).canAttackTarget(location.parent!)
       }
     }
 
     if (isMoveItemLocation(move) && move.itemType === MaterialType.FactionCard && move.position.location.type === LocationType.Battlefield) {
-      const parentCardLocation = context.game.items[MaterialType.FactionCard]?.[location.parent!]?.location
+      const parentCardLocation = rules.material(MaterialType.FactionCard).getItem(location.parent!)?.location
       return move.position.location.x === parentCardLocation?.x && move.position.location.y === parentCardLocation?.y
     }
 
