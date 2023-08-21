@@ -32,7 +32,9 @@ export abstract class FactionCardCharacteristics {
 
   abstract getAbilities(): Ability[]
 
-  canAttack = (): boolean => false
+  get canAttack() {
+    return false
+  }
 
   getLimit() {
     return this.legendary ? 1 : this.limit ?? Infinity

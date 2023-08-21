@@ -17,7 +17,9 @@ export abstract class Spell extends FactionCardCharacteristics {
     return this.getEffects()
   }
 
-  canAttack = () => this.attack !== undefined
+  get canAttack() {
+    return this.attack !== undefined
+  }
 
   get discardTiming() {
     return this.getEffects().length > 0 ? DiscardTiming.EndOfRound : DiscardTiming.ActivationOrEndOfTurn

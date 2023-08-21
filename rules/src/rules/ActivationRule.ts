@@ -46,7 +46,6 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     moves.push(...new AttackRule(this.game).getPlayerMoves())
     moves.push(...new MoveRules(this.game).getPlayerMoves())
     moves.push(...new ActionRule(this.game).getPlayerMoves())
-    // TODO: must solve attacks & moved cards before pass
     if (!this.remind<Attack[]>(Memory.Attacks).length && !this.remind<number[]>(Memory.MovedCards).length) {
       moves.push(this.rules().customMove(CustomMoveType.Pass))
     }

@@ -152,7 +152,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get canAttack() {
-    return this.canBeActivated && this.characteristics.canAttack() // TODO canAttack can be a getter
+    return this.canBeActivated && this.characteristics.canAttack
   }
 
   get canBeAttacked() {

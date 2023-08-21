@@ -30,7 +30,9 @@ export abstract class Creature extends FactionCardCharacteristics {
     ]
   }
 
-  canAttack = () => true
+  get canAttack() {
+    return true
+  }
 }
 
 export const isCreature = (detail?: FactionCardCharacteristics): detail is Creature => detail?.kind === FactionCardKind.Creature
