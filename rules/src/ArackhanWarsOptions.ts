@@ -25,13 +25,9 @@ export type ArackhanWarsOptions = {
 export const ArackhanWarsOptionsSpec: OptionsSpec<ArackhanWarsOptions> = {
   players: {
     faction: {
-      label: (t: TFunction) => t('Player faction'),
+      label: (t: TFunction) => t('faction.choice'),
       values: playerFactions,
-      valueSpec: (faction: Faction) => ({ label: (t: TFunction) => getPlayerName(faction, t) })
+      valueSpec: (faction: Faction) => ({ label: (t: TFunction) => t(`faction.${faction}`) })
     }
   }
-}
-
-export function getPlayerName(playerId: PlayerId, t: TFunction) {
-  return t('Player {playerId}', { playerId })
 }
