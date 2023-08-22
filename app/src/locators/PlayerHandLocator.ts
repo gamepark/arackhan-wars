@@ -9,16 +9,16 @@ export class PlayerHandLocator extends HandLocator<PlayerId, MaterialType, Locat
     return item.location.player !== context.player
   }
 
-  getCoordinates(location: Location<PlayerId, LocationType>, context: ItemContext<PlayerId, MaterialType, LocationType>) {
-    if (location.player === context.player) {
+  getCoordinates(location: Location<PlayerId, LocationType>, { player, rules }: ItemContext<PlayerId, MaterialType, LocationType>) {
+    if (location.player === (player ?? rules.players[0])) {
       return { x: 50, y: 12, z: 10 }
     } else {
       return { x: 50, y: -12, z: 10 }
     }
   }
 
-  getBaseAngle(item: MaterialItem, { player }: ItemContext): number {
-    return item.location.player === player ? 0 : -180
+  getBaseAngle(item: MaterialItem, { player, rules }: ItemContext): number {
+    return item.location.player === (player ?? rules.players[0]) ? 0 : -180
   }
 
   getGapMaxAngle(): number {

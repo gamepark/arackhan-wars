@@ -9,8 +9,8 @@ export class PlayerTokenStockLocator extends PileLocator<PlayerId, MaterialType,
   rotate = true
   radius = 3
 
-  getCoordinates({ location }: MaterialItem, context: ItemContext): Coordinates {
-    if (location.player === context.player) {
+  getCoordinates({ location }: MaterialItem, { player, rules }: ItemContext): Coordinates {
+    if (location.player === (player ?? rules.players[0])) {
       return { x: 35, y: 23, z: 0 }
     }
 
