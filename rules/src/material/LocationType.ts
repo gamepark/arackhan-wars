@@ -8,5 +8,6 @@ export enum LocationType {
   PlayerDiscard, // The player discard
   FactionTokenSpace, // The token on faction card,
   FactionCard,
-  AstralPlane // Cards in astral plane
+  AstralPlane, // Cards in astral plane
+  CombatIcon
 }

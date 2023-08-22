@@ -68,6 +68,8 @@ import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { isCustomMove, isCustomMoveType, Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
+import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
+import { CombatIcon } from '../locators/CombatIconLocator'
 
 export class FactionCardDescription extends CardDescription {
   images = {
@@ -135,12 +137,19 @@ export class FactionCardDescription extends CardDescription {
     [Faction.Blight]: BlightBack
   }
 
-  getLocations(item: MaterialItem, context: ItemContext): Location[] {
-    if (item.location.type !== LocationType.Battlefield) return []
-    return [{
-      type: LocationType.FactionCard,
-      parent: context.index
-    }]
+  getLocations(item: MaterialItem, { index, rules }: ItemContext): Location[] {
+    const locations: Location[] = []
+    if (item.location.type === LocationType.Battlefield && item.id.front !== undefined) {
+      const cardRule = getCardRule(rules.game, index)
+      if (cardRule.attackModifier) {
+        locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Attack, parent: index })
+      }
+      if (cardRule.defenseModifier) {
+        locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Defense, parent: index })
+      }
+      locations.push({ type: LocationType.FactionCard, parent: index })
+    }
+    return locations
   }
 
   canDrag(move: MaterialMove, context: ItemContext): boolean {

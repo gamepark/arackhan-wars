@@ -64,7 +64,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
     return this.item.location.player!
   }
 
-  get characteristics(): FactionCardCharacteristics {
+  get characteristics(): FactionCardCharacteristics | undefined {
     const mimic = this.turnEffects.find(isMimic)
     return FactionCardsCharacteristics[mimic?.target ?? this.card]
   }
@@ -79,7 +79,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
 
   private get loseSkills() {
     return this.battleFieldCardsRules.some(card =>
-      card.characteristics.getAbilities().some(ability =>
+      card.characteristics?.getAbilities().some(ability =>
         ability.effects.some(isLoseSkills) && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
       )
     )
@@ -90,7 +90,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
     if (isCreature(characteristics) && this.loseSkills) {
       return characteristics.getWeaknesses()
     }
-    return characteristics.getAbilities()
+    return characteristics?.getAbilities() ?? []
   }
 
   get battleFieldCardsRules() {
@@ -119,7 +119,8 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
     if (this.effects.some(effect => effect.type === EffectType.LoseAttributes && !effect.attributes)) {
       return []
     }
-    return this.characteristics.getAttributes()
+    const attributes = this.characteristics?.getAttributes() ?? []
+    return attributes
       .concat(...this.effects.filter(isGainAttributes)
         .flatMap((effect: GainAttributes) => effect.attributes)
       ).filter(attribute => !this.effects.some(effect =>
@@ -152,7 +153,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get canAttack() {
-    return this.canBeActivated && this.characteristics.canAttack
+    return this.canBeActivated && this.characteristics?.canAttack
   }
 
   get canBeAttacked() {
@@ -180,7 +181,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get canPerformAction() {
-    return this.characteristics.action && this.canBeActivated
+    return this.characteristics?.action && this.canBeActivated
   }
 
   getAttackValue(attackers: number[]): number {
@@ -207,7 +208,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get attack() {
-    const baseAttack = (this.characteristics as Creature | Spell).attack ?? 0
+    const baseAttack = (this.characteristics as Creature | Spell)?.attack ?? 0
     return Math.max(0, baseAttack + this.attackModifier)
   }
 
@@ -216,17 +217,17 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get swarmBonus() {
-    if (!this.family || this.attributes.some(attribute => attribute.type === AttributeType.Swarm)) return 0
+    if (!this.family || !this.attributes.some(attribute => attribute.type === AttributeType.Swarm)) return 0
     return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).player(this.owner).getIndexes()
       .filter(index => index !== this.index && getCardRule(this.game, index).family === this.family).length
   }
 
   get family() {
-    return (this.characteristics as Creature).family
+    return (this.characteristics as Creature)?.family
   }
 
   get defense() {
-    const baseDefense = (this.characteristics as Creature | Land).defense ?? 0
+    const baseDefense = (this.characteristics as Creature | Land)?.defense ?? 0
     return Math.max(0, baseDefense + this.defenseModifier)
   }
 

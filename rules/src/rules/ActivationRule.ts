@@ -84,7 +84,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
         return new AttackRule(this.game).onCustomMove(move)
       case CustomMoveType.PerformAction:
         this.memorize(Memory.ActionCard, move.data)
-        return [this.rules().startRule(getCardRule(this.game, move.data).characteristics.action!)]
+        return [this.rules().startRule(getCardRule(this.game, move.data).characteristics!.action!)]
       case CustomMoveType.Pass:
         return [this.nextRuleMove]
     }
