@@ -25,18 +25,17 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
   }
 
   setupPlayers(options: ArackhanWarsOptions) {
-    const availableFactions = [...playerFactions]
+    const availableFactionTokens = [...playerFactions]
     for (let index = 0; index < options.players.length; index++) {
       const player = options.players[index]
       const playerId = index + 1
-      const faction = player.faction ?? availableFactions[Math.floor(Math.random() * availableFactions.length)]
-      if (availableFactions.includes(faction)) {
-        this.memorize(Memory.Token, faction, playerId)
-        availableFactions.splice(availableFactions.indexOf(faction), 1)
+      if (availableFactionTokens.includes(player.faction)) {
+        this.memorize(Memory.Token, player.faction, playerId)
+        availableFactionTokens.splice(availableFactionTokens.indexOf(player.faction), 1)
       } else {
         this.memorize(Memory.Token, TokenFaction.Neutral, playerId)
       }
-      this.setupPlayer(playerId, faction)
+      this.setupPlayer(playerId, player.faction)
     }
   }
 

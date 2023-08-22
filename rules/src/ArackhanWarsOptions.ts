@@ -7,7 +7,7 @@ import { Faction, playerFactions } from './material/Faction'
  */
 export type PlayerId = number
 export type  PlayerOptions = {
-  faction?: Faction
+  faction: Faction
 }
 
 /**
@@ -25,6 +25,7 @@ export type ArackhanWarsOptions = {
 export const ArackhanWarsOptionsSpec: OptionsSpec<ArackhanWarsOptions> = {
   players: {
     faction: {
+      share: true,
       label: (t: TFunction) => t('faction.choice'),
       values: playerFactions,
       valueSpec: (faction: Faction) => ({ label: (t: TFunction) => t(`faction.${faction}`) })
