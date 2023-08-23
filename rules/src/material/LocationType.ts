@@ -9,5 +9,6 @@ export enum LocationType {
   FactionTokenSpace, // The token on faction card,
   FactionCard,
   AstralPlane, // Cards in astral plane
-  CombatIcon
+  CombatIcon,
+  AttributesIcons,
 }

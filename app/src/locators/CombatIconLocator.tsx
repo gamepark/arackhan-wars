@@ -29,8 +29,9 @@ export class CombatIconDescription extends LocationDescription<PlayerId, Materia
   width = 1.75
   ratio = 272 / 236
 
-  getImage(location: Location<PlayerId, LocationType>) {
-    return location.id === CombatIcon.Attack ? attackIcon : defenseIcon
+  images = {
+    [CombatIcon.Attack]: attackIcon,
+    [CombatIcon.Defense]: defenseIcon
   }
 
   getExtraCss(location: Location<PlayerId, LocationType>, { rules }: MaterialContext) {

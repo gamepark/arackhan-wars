@@ -13,6 +13,7 @@ import { AstralPlaneLocator } from './AstralPlaneLocator'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { FactionCardLocator } from './FactionCardLocator'
 import { CombatIconLocator } from './CombatIconLocator'
+import { AttributesIconsLocator } from './AttributesIconsLocator'
 
 export const Locators: Record<LocationType, ItemLocator<PlayerId, MaterialType, LocationType>> = {
   [LocationType.Table]: new TableLocator(),
@@ -25,5 +26,6 @@ export const Locators: Record<LocationType, ItemLocator<PlayerId, MaterialType, 
   [LocationType.FactionTokenSpace]: new FactionTokenSpaceLocator(),
   [LocationType.FactionCard]: new FactionCardLocator(),
   [LocationType.AstralPlane]: new AstralPlaneLocator(),
-  [LocationType.CombatIcon]: new CombatIconLocator()
+  [LocationType.CombatIcon]: new CombatIconLocator(),
+  [LocationType.AttributesIcons]: new AttributesIconsLocator()
 }

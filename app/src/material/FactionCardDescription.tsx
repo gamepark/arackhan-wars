@@ -70,6 +70,7 @@ import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { CombatIcon } from '../locators/CombatIconLocator'
+import { difference } from 'lodash'
 
 export class FactionCardDescription extends CardDescription {
   images = {
@@ -146,6 +147,17 @@ export class FactionCardDescription extends CardDescription {
       }
       if (cardRule.defenseModifier) {
         locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Defense, parent: index })
+      }
+      const nativeAttributes = cardRule.characteristics?.getAttributes().map(attribute => attribute.type) ?? []
+      const attributes = cardRule.attributes.map(attribute => attribute.type)
+      const cancelledAttributes = difference(nativeAttributes, attributes)
+      let attributeIconPosition = 0
+      for (const attribute of cancelledAttributes) {
+        locations.push({ type: LocationType.AttributesIcons, id: { type: attribute, cancel: true }, x: attributeIconPosition++ })
+      }
+      const gainedAttributes = difference(attributes, nativeAttributes)
+      for (const attribute of gainedAttributes) {
+        locations.push({ type: LocationType.AttributesIcons, id: { type: attribute }, x: attributeIconPosition++ })
       }
       locations.push({ type: LocationType.FactionCard, parent: index })
     }
