@@ -71,6 +71,8 @@ import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { CombatIcon } from '../locators/CombatIconLocator'
 import { difference } from 'lodash'
+import { EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
+import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
 
 export class FactionCardDescription extends CardDescription {
   images = {
@@ -148,7 +150,8 @@ export class FactionCardDescription extends CardDescription {
       if (cardRule.defenseModifier) {
         locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Defense, parent: index })
       }
-      const nativeAttributes = cardRule.characteristics?.getAttributes().map(attribute => attribute.type) ?? []
+      const characteristics = cardRule.characteristics
+      const nativeAttributes = characteristics?.getAttributes().map(attribute => attribute.type) ?? []
       const attributes = cardRule.attributes.map(attribute => attribute.type)
       const cancelledAttributes = difference(nativeAttributes, attributes)
       let attributeIconPosition = 0
@@ -158,6 +161,10 @@ export class FactionCardDescription extends CardDescription {
       const gainedAttributes = difference(attributes, nativeAttributes)
       for (const attribute of gainedAttributes) {
         locations.push({ type: LocationType.AttributesIcons, id: { type: attribute }, x: attributeIconPosition++ })
+      }
+      const hasSkill = isCreature(characteristics) && characteristics.getSkills().length > 0
+      if (hasSkill && cardRule.effects.some(effect => effect.type === EffectType.LoseSkills)) {
+        locations.push({ type: LocationType.SkillLostIcon })
       }
       locations.push({ type: LocationType.FactionCard, parent: index })
     }

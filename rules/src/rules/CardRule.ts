@@ -98,7 +98,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
       .map(index => getCardRule(this.game, index))
   }
 
-  private get effects(): Effect[] {
+  get effects(): Effect[] {
     if (!this.effectsCache) {
       this.effectsCache = this.battleFieldCardsRules.flatMap(rule =>
         rule.abilities.filter(ability => ability.isApplicable(this.game, rule.cardMaterial, this.cardMaterial))
