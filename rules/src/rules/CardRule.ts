@@ -172,12 +172,17 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
 
   private isInRange(opponent: number) {
     const cardLocation = this.item.location
-    const opponentLocation = getCardRule(this.game, opponent).item.location
+    const opponentRule = getCardRule(this.game, opponent)
+    const opponentLocation = opponentRule.item.location
     if (!isXYCoordinates(cardLocation) || !isXYCoordinates(opponentLocation)) return false
-    const distance = getDistanceBetweenSquares(cardLocation, opponentLocation)
+    const distance = getDistanceBetweenSquares(cardLocation, opponentLocation) + (opponentRule.hasStealth ? 1 : 0)
     return distance === 1 || this.attributes.some(attribute =>
       attribute.type === AttributeType.RangedAttack && distance <= attribute.distance
     )
+  }
+
+  get hasStealth() {
+    return this.attributes.some(attribute => attribute.type === AttributeType.Stealth)
   }
 
   get canPerformAction() {
