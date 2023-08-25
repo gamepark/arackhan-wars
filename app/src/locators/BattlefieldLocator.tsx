@@ -18,3 +18,5 @@ export class BattlefieldLocator extends ItemLocator<PlayerId, MaterialType, Loca
     return item.rotation?.y === 1
   }
 }
+
+export const battleFieldLocator = new BattlefieldLocator()

@@ -4,7 +4,7 @@ import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { TableLocator } from './TableLocator'
 import { PlayerDeckLocator } from './PlayerDeckLocator'
 import { PlayerHandLocator } from './PlayerHandLocator'
-import { BattlefieldLocator } from './BattlefieldLocator'
+import { battleFieldLocator } from './BattlefieldLocator'
 import { PlayerTokenStockLocator } from './PlayerTokenStockLocator'
 import { RoundTrackerLocator } from './RoundTrackerLocator'
 import { PlayerDiscardLocator } from './PlayerDiscardLocator'
@@ -20,7 +20,7 @@ export const Locators: Record<LocationType, ItemLocator<PlayerId, MaterialType, 
   [LocationType.Table]: new TableLocator(),
   [LocationType.PlayerDeck]: new PlayerDeckLocator(),
   [LocationType.Hand]: new PlayerHandLocator(),
-  [LocationType.Battlefield]: new BattlefieldLocator(),
+  [LocationType.Battlefield]: battleFieldLocator,
   [LocationType.PlayerTokenStock]: new PlayerTokenStockLocator(),
   [LocationType.RoundTracker]: new RoundTrackerLocator(),
   [LocationType.PlayerDiscard]: new PlayerDiscardLocator(),

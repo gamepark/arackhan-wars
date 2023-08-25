@@ -6,11 +6,11 @@ import { PlayMatRules } from './PlayMatRules'
 import { battlefieldCoordinates } from '@gamepark/arackhan-wars/material/Board'
 import { Location, MaterialItem } from '@gamepark/rules-api'
 
-export const boardRatio = 576 / 576
+export const platMatSize = 57.6
 
 export class PlayMatDescription extends BoardDescription {
-  height = 57.6
-  ratio = boardRatio
+  width = platMatSize
+  height = platMatSize
   image = board
 
   staticItem = { location: { type: LocationType.Table } }
