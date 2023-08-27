@@ -11,5 +11,6 @@ export enum LocationType {
   AstralPlane, // Cards in astral plane
   CombatIcon,
   AttributesIcons,
-  SkillLostIcon
+  SkillLostIcon,
+  CombatResultIcon
 }

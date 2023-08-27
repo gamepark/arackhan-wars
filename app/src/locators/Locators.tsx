@@ -15,6 +15,7 @@ import { FactionCardLocator } from './FactionCardLocator'
 import { CombatIconLocator } from './CombatIconLocator'
 import { AttributesIconsLocator } from './AttributesIconsLocator'
 import { SkillLostIconLocator } from './SkillLostIconLocator'
+import { CombatResultIconLocator } from './CombatResultIconLocator'
 
 export const Locators: Record<LocationType, ItemLocator<PlayerId, MaterialType, LocationType>> = {
   [LocationType.Table]: new TableLocator(),
@@ -29,5 +30,6 @@ export const Locators: Record<LocationType, ItemLocator<PlayerId, MaterialType, 
   [LocationType.AstralPlane]: new AstralPlaneLocator(),
   [LocationType.CombatIcon]: new CombatIconLocator(),
   [LocationType.AttributesIcons]: new AttributesIconsLocator(),
-  [LocationType.SkillLostIcon]: new SkillLostIconLocator()
+  [LocationType.SkillLostIcon]: new SkillLostIconLocator(),
+  [LocationType.CombatResultIcon]: new CombatResultIconLocator()
 }

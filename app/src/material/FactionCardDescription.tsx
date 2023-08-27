@@ -73,6 +73,9 @@ import { CombatIcon } from '../locators/CombatIconLocator'
 import { difference } from 'lodash'
 import { EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
+import { Attack } from '@gamepark/arackhan-wars/rules/AttackRule'
+import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
+import { CombatResult } from '../locators/CombatResultIconLocator'
 
 export class FactionCardDescription extends CardDescription {
   images = {
@@ -165,6 +168,12 @@ export class FactionCardDescription extends CardDescription {
       const hasSkill = isCreature(characteristics) && characteristics.getSkills().length > 0
       if (hasSkill && cardRule.effects.some(effect => effect.type === EffectType.LoseSkills)) {
         locations.push({ type: LocationType.SkillLostIcon })
+      }
+      const attacks = (rules.remind<Attack[]>(Memory.Attacks) ?? []).filter(attack => attack.targets.includes(index))
+      if (attacks.length) {
+        const attackValue = cardRule.getAttackValue(attacks.map(attack => attack.card))
+        const icon = cardRule.defense >= attackValue ? CombatResult.Defense : cardRule.canRegenerate ? CombatResult.Regeneration : CombatResult.Dead
+        locations.push({ type: LocationType.CombatResultIcon, parent: index, id: icon, x: attackValue })
       }
       locations.push({ type: LocationType.FactionCard, parent: index })
     }
