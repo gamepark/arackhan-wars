@@ -89,5 +89,6 @@ const CardFrontRule = (props: MaterialRulesProps) => {
     )}
     {isLand(characteristics) && <p><Trans defaults="rules.card.land" values={characteristics}><strong/></Trans></p>}
     {item.location && item.location.player === playerId && onBattlefieldAndAstralPlane(item.location) && <PerformActionButton {...props}/>}
+    <p><Trans defaults="rules.card.value" values={{ value: characteristics.value }}><strong/></Trans></p>
   </>
 }
