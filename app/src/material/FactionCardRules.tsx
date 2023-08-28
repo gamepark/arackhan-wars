@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { MaterialRulesProps, PlayMoveButton, useLegalMove, usePlayerId, usePlayerName } from '@gamepark/react-game'
+import { MaterialRulesProps, PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
 import { displayLocationRules, isCustomMove } from '@gamepark/rules-api'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
@@ -11,6 +11,8 @@ import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
 import { isSpell } from '@gamepark/arackhan-wars/material/cards/Spell'
 import { isLand } from '@gamepark/arackhan-wars/material/cards/Land'
 import { FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
+import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
+import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 
 export const FactionCardRules = (props: MaterialRulesProps) => {
   const { item, itemIndex, closeDialog } = props
@@ -24,7 +26,8 @@ export const FactionCardRules = (props: MaterialRulesProps) => {
   </>
 }
 
-const CardLocationRule = ({ item }: MaterialRulesProps) => {
+const CardLocationRule = (props: MaterialRulesProps) => {
+  const { item } = props
   const { t } = useTranslation()
   const playerId = usePlayerId()
   const player = usePlayerName(item.location?.player)
@@ -34,9 +37,8 @@ const CardLocationRule = ({ item }: MaterialRulesProps) => {
     case LocationType.Hand:
       return <p>{item.location?.player === playerId ? t('rules.card.hand.mine') : t('rules.card.hand', { player })}</p>
     case LocationType.Battlefield:
-      return <p>{item.location?.player === playerId ? t('rules.card.battlefield.mine') : t('rules.card.battlefield', { player })}</p>
     case LocationType.AstralPlane:
-      return <p>{item.location?.player === playerId ? t('rules.card.astral-plane.mine') : t('rules.card.astral-plane', { player })}</p>
+      return <InGameLocationRule {...props}/>
     case LocationType.PlayerDiscard:
       return <p>
         <Trans defaults={item.location?.player === playerId ? 'rules.card.discard.mine' : 'rules.card.discard'} values={{ player }}>
@@ -46,6 +48,21 @@ const CardLocationRule = ({ item }: MaterialRulesProps) => {
     default:
       return null
   }
+}
+
+const InGameLocationRule = ({ item: { location }, itemIndex }: MaterialRulesProps) => {
+  const { t } = useTranslation()
+  const playerId = usePlayerId()
+  const player = usePlayerName(location?.player)
+  const rules = useRules<ArackhanWarsRules>()!
+  const cardRule = getCardRule(rules.game, itemIndex!)
+  return <p>
+    {location?.type === LocationType.Battlefield ?
+      (location?.player === playerId ? t('rules.card.battlefield.mine') : t('rules.card.battlefield', { player }))
+      : (location?.player === playerId ? t('rules.card.astral-plane.mine') : t('rules.card.astral-plane', { player }))
+    }{' '}
+    <Trans defaults={cardRule.isActive ? 'rules.card.active' : 'rules.card.deactivated'}><strong/></Trans>
+  </p>
 }
 
 const PerformActionButton = ({ itemIndex, closeDialog }: MaterialRulesProps) => {
