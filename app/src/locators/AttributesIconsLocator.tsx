@@ -26,7 +26,7 @@ import perforation from '../images/icons/attributes/perforation.png'
 import perforationCancel from '../images/icons/attributes/perforation-cancel.png'
 
 export class AttributesIconsLocator extends ItemLocator<PlayerId, MaterialType, LocationType> {
-  locationDescription = new AttributesIconsDescription()
+  locationDescription = attributesIconDescription
   parentItemType = MaterialType.FactionCard
 
   getPositionOnParent(location: Location<PlayerId, LocationType>) {
@@ -34,7 +34,7 @@ export class AttributesIconsLocator extends ItemLocator<PlayerId, MaterialType, 
   }
 }
 
-export class AttributesIconsDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
+class AttributesIconsDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
   width = 1
   ratio = 200 / 172
 
@@ -70,3 +70,5 @@ export class AttributesIconsDescription extends LocationDescription<PlayerId, Ma
     pointer-events: none;
   `
 }
+
+export const attributesIconDescription = new AttributesIconsDescription()

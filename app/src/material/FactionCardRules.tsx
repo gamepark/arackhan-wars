@@ -10,9 +10,10 @@ import { DiscardTiming } from '@gamepark/arackhan-wars/material/cards/FactionCar
 import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
 import { isSpell } from '@gamepark/arackhan-wars/material/cards/Spell'
 import { isLand } from '@gamepark/arackhan-wars/material/cards/Land'
-import { FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
+import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
+import { AttributeRule } from './AttributeRule'
 
 export const FactionCardRules = (props: MaterialRulesProps) => {
   const { item, itemIndex, closeDialog } = props
@@ -75,7 +76,7 @@ const CardFrontRule = (props: MaterialRulesProps) => {
   const { item } = props
   const { t } = useTranslation()
   const playerId = usePlayerId()
-  const characteristics = FactionCardsCharacteristics[item.id.front]
+  const characteristics = FactionCardsCharacteristics[item.id.front as FactionCard]
   return <>
     {isCreature(characteristics) && <>
       <p><Trans defaults="rules.card.creature" values={characteristics}><strong/></Trans></p>
@@ -89,6 +90,7 @@ const CardFrontRule = (props: MaterialRulesProps) => {
     )}
     {isLand(characteristics) && <p><Trans defaults="rules.card.land" values={characteristics}><strong/></Trans></p>}
     {item.location && item.location.player === playerId && onBattlefieldAndAstralPlane(item.location) && <PerformActionButton {...props}/>}
+    {characteristics.getAttributes().map(attribute => <AttributeRule attribute={attribute}/>)}
     <p><Trans defaults="rules.card.value" values={{ value: characteristics.value }}><strong/></Trans></p>
   </>
 }
