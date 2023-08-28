@@ -8,7 +8,7 @@ import { BattlefieldDescription } from './BattlefieldDescription'
 
 export class BattlefieldLocator extends ItemLocator<PlayerId, MaterialType, LocationType> {
   locationDescription = new BattlefieldDescription()
-  parentItemType = MaterialType.PlayMat
+  parentItemType = MaterialType.BattleMat
 
   getPositionOnParent(location: Location<PlayerId, LocationType>): XYCoordinates {
     return { x: location.x! * 11.35 + 10.2, y: location.y! * 15.8 + 10.5 }

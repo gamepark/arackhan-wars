@@ -9,7 +9,7 @@ import { AstralPlaneDescription } from './AstralPlaneDescription'
 
 export class AstralPlaneLocator extends ItemLocator<PlayerId, MaterialType, LocationType> {
   locationDescription = new AstralPlaneDescription()
-  parentItemType = MaterialType.PlayMat
+  parentItemType = MaterialType.BattleMat
 
 
   getPositionOnParent(location: Location, context: MaterialContext): XYCoordinates {

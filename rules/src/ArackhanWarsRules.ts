@@ -42,7 +42,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
   locationsStrategies = locationsStrategies
   hidingStrategies = hidingStrategies
   materialLocations = {
-    [MaterialType.PlayMat]: [LocationType.PlayerDeck, LocationType.Battlefield, LocationType.AstralPlane, LocationType.PlayerDiscard],
+    [MaterialType.BattleMat]: [LocationType.PlayerDeck, LocationType.Battlefield, LocationType.AstralPlane, LocationType.PlayerDiscard],
     [MaterialType.RoundTracker]: [LocationType.RoundTracker],
     [MaterialType.FactionCard]: [LocationType.FactionCard, LocationType.FactionTokenSpace]
   }

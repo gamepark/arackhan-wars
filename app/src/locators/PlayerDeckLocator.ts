@@ -8,7 +8,7 @@ import { PlayerDeckDescription } from './PlayerDeckDescription'
 
 export class PlayerDeckLocator extends DeckLocator<PlayerId, MaterialType, LocationType> {
   locationDescription = new PlayerDeckDescription()
-  parentItemType = MaterialType.PlayMat
+  parentItemType = MaterialType.BattleMat
 
   delta = { x: -0.04, y: -0.04, z: 0.1 }
   hidden = true

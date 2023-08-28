@@ -1,6 +1,6 @@
 import { MaterialDescription } from '@gamepark/react-game'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { playMatDescription } from './PlayMatDescription'
+import { playMatDescription } from './BattleMatDescription'
 import { factionCardDescription } from './FactionCardDescription'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { factionTokenDescription } from './FactionTokenDescription'
@@ -10,7 +10,7 @@ import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { factionCardFrenchDescription } from './FactionCardFrenchDescription'
 
 export const Material: Record<MaterialType, MaterialDescription<PlayerId, MaterialType, LocationType>> = {
-  [MaterialType.PlayMat]: playMatDescription,
+  [MaterialType.BattleMat]: playMatDescription,
   [MaterialType.FactionCard]: factionCardDescription,
   [MaterialType.FactionToken]: factionTokenDescription,
   [MaterialType.RoundTracker]: roundTrackerDescription,
