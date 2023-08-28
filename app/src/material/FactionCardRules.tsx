@@ -56,10 +56,16 @@ const PerformActionButton = ({ itemIndex, closeDialog }: MaterialRulesProps) => 
 
 const CardFrontRule = (props: MaterialRulesProps) => {
   const { item } = props
+  const { t } = useTranslation()
   const playerId = usePlayerId()
   const characteristics = FactionCardsCharacteristics[item.id.front]
   return <>
-    {isCreature(characteristics) && <p><Trans defaults="rules.card.creature" values={characteristics}><strong/></Trans></p>}
+    {isCreature(characteristics) && <>
+      <p><Trans defaults="rules.card.creature" values={characteristics}><strong/></Trans></p>
+      {characteristics.family &&
+        <p><Trans defaults="rules.card.family" values={{ family: t(`card.family.${characteristics.family}`) }}><strong/></Trans></p>
+      }
+    </>}
     {isSpell(characteristics) && (
       characteristics.discardTiming === DiscardTiming.ActivationOrEndOfTurn ? <p><Trans defaults="rules.card.spell.active"><strong/></Trans></p>
         : <p><Trans defaults="rules.card.spell.passive"><strong/></Trans></p>
