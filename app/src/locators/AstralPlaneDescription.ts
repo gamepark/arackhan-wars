@@ -8,11 +8,10 @@ import { AstralPlaneRules } from './AstralPlaneRules'
 import AstralPlaneImage from '../images/locations/astral-plane.png'
 
 export class AstralPlaneDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
-  height = factionCardDescription.width / factionCardDescription.ratio
   width = factionCardDescription.width
-  borderRadius = 0.2
-
-  image = AstralPlaneImage
+  ratio = 785 / 1095
+  borderRadius = 0.4
 
   rules = AstralPlaneRules
+  rulesImage = AstralPlaneImage
 }
