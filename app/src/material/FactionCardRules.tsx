@@ -17,6 +17,7 @@ import { alignIcon, AttributeRule } from './AttributeRule'
 import astral from '../images/icons/astral.png'
 import captureFlag from '../images/icons/capture-flag.png'
 import { AbilityRule } from './AbilityRule'
+import { CardEffectsRules } from './CardEffectsRules'
 
 export const FactionCardRules = (props: MaterialRulesProps) => {
   const { item, itemIndex, closeDialog } = props
@@ -76,7 +77,7 @@ const PerformActionButton = ({ itemIndex, closeDialog }: MaterialRulesProps) => 
 }
 
 const CardFrontRule = (props: MaterialRulesProps) => {
-  const { item } = props
+  const { item, itemIndex } = props
   const { t } = useTranslation()
   const playerId = usePlayerId()
   const factionCard = item.id.front as FactionCard
@@ -123,6 +124,7 @@ const CardFrontRule = (props: MaterialRulesProps) => {
       <p><strong>{t('card.action')}</strong> - <Trans defaults={`action.${factionCard}`}><strong/><em/></Trans></p>
       {item.location && item.location.player === playerId && onBattlefieldAndAstralPlane(item.location) && <PerformActionButton {...props}/>}
     </>}
+    {item.location?.type === LocationType.Battlefield && <CardEffectsRules index={itemIndex!}/>}
     <p><Trans defaults="rules.card.value" values={{ value: characteristics.value }}><strong/></Trans></p>
     {characteristics.deckBuildingValue &&
       <p><Trans defaults="rules.card.deck-value" values={{ value: characteristics.deckBuildingValue }}><strong/></Trans></p>

@@ -11,9 +11,9 @@ const locale = new URLSearchParams(window.location.search).get('locale') ?? 'en'
 let icon = locale === 'fr' ? skillCancelFr : skillCancelEn
 
 export class SkillLostIconLocator extends ItemLocator<PlayerId, MaterialType, LocationType> {
-  locationDescription = new SkillLostIconDescription()
+  locationDescription = skillLostIconDescription
   parentItemType = MaterialType.FactionCard
-  positionOnParent = { x: 25, y: 80 }
+  positionOnParent = { x: 75, y: 87 }
 }
 
 export class SkillLostIconDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
@@ -25,3 +25,5 @@ export class SkillLostIconDescription extends LocationDescription<PlayerId, Mate
     pointer-events: none;
   `
 }
+
+export const skillLostIconDescription = new SkillLostIconDescription()

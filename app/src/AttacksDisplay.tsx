@@ -9,7 +9,7 @@ import { platMatSize } from './material/BattleMatDescription'
 import { css } from '@emotion/react'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { battleFieldLocator } from './locators/BattlefieldLocator'
-import { XYCoordinates } from '../../../workshop/packages/rules-api'
+import { XYCoordinates } from '@gamepark/rules-api'
 
 export default function AttacksDisplay() {
   const rules = useRules<ArackhanWarsRules>()

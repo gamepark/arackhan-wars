@@ -65,12 +65,12 @@ import { FactionCardRules } from './FactionCardRules'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
 import { CardDescription, ItemContext } from '@gamepark/react-game'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
-import { isCustomMove, isCustomMoveType, Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { isCustomMove, isCustomMoveType, Location, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { CombatIcon } from '../locators/CombatIconLocator'
-import { difference } from 'lodash'
+import { differenceBy } from 'lodash'
 import { EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
 import { Attack } from '@gamepark/arackhan-wars/rules/AttackRule'
@@ -144,39 +144,17 @@ export class FactionCardDescription extends CardDescription {
   }
 
   getLocations(item: MaterialItem, { index, rules }: ItemContext): Location[] {
-    const locations: Location[] = []
-    if (item.location.type === LocationType.Battlefield && item.id.front !== undefined) {
-      const cardRule = getCardRule(rules.game, index)
-      if (cardRule.attackModifier) {
-        locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Attack, parent: index })
-      }
-      if (cardRule.defenseModifier) {
-        locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Defense, parent: index })
-      }
-      const characteristics = cardRule.characteristics
-      const nativeAttributes = characteristics?.getAttributes().map(attribute => attribute.type) ?? []
-      const attributes = cardRule.attributes.map(attribute => attribute.type)
-      const cancelledAttributes = difference(nativeAttributes, attributes)
-      let attributeIconPosition = 0
-      for (const attribute of cancelledAttributes) {
-        locations.push({ type: LocationType.AttributesIcons, id: { type: attribute, cancel: true }, x: attributeIconPosition++ })
-      }
-      const gainedAttributes = difference(attributes, nativeAttributes)
-      for (const attribute of gainedAttributes) {
-        locations.push({ type: LocationType.AttributesIcons, id: { type: attribute }, x: attributeIconPosition++ })
-      }
-      const hasSkill = isCreature(characteristics) && characteristics.getSkills().length > 0
-      if (hasSkill && cardRule.effects.some(effect => effect.type === EffectType.LoseSkills)) {
-        locations.push({ type: LocationType.SkillLostIcon })
-      }
-      const attacks = (rules.remind<Attack[]>(Memory.Attacks) ?? []).filter(attack => attack.targets.includes(index))
-      if (attacks.length) {
-        const attackValue = cardRule.getAttackValue(attacks.map(attack => attack.card))
-        const icon = cardRule.defense >= attackValue ? CombatResult.Defense : cardRule.canRegenerate ? CombatResult.Regeneration : CombatResult.Dead
-        locations.push({ type: LocationType.CombatResultIcon, parent: index, id: icon, x: attackValue })
-      }
-      locations.push({ type: LocationType.FactionCard, parent: index })
+    if (item.location.type !== LocationType.Battlefield || item.id.front === undefined) return []
+
+    const locations: Location[] = getCardBattlefieldModifierLocations(rules.game, index)
+    const cardRule = getCardRule(rules.game, index)
+    const attacks = (rules.remind<Attack[]>(Memory.Attacks) ?? []).filter(attack => attack.targets.includes(index))
+    if (attacks.length) {
+      const attackValue = cardRule.getAttackValue(attacks.map(attack => attack.card))
+      const icon = cardRule.defense >= attackValue ? CombatResult.Defense : cardRule.canRegenerate ? CombatResult.Regeneration : CombatResult.Dead
+      locations.push({ type: LocationType.CombatResultIcon, parent: index, id: icon, x: attackValue })
     }
+    locations.push({ type: LocationType.FactionCard, parent: index })
     return locations
   }
 
@@ -203,3 +181,32 @@ export class FactionCardDescription extends CardDescription {
 }
 
 export const factionCardDescription = new FactionCardDescription()
+
+
+export function getCardBattlefieldModifierLocations(game: MaterialGame, index: number) {
+  const locations: Location[] = []
+  const cardRule = getCardRule(game, index)
+  if (cardRule.attackModifier) {
+    locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Attack, parent: index, x: cardRule.attack, y: cardRule.attackModifier })
+  }
+  if (cardRule.defenseModifier) {
+    locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Defense, parent: index, x: cardRule.defense, y: cardRule.defenseModifier })
+  }
+  const characteristics = cardRule.characteristics
+  const nativeAttributes = characteristics?.getAttributes() ?? []
+  const attributes = cardRule.attributes
+  const cancelledAttributes = differenceBy(nativeAttributes, attributes, attribute => attribute.type)
+  let attributeIconPosition = 0
+  for (const attribute of cancelledAttributes) {
+    locations.push({ type: LocationType.AttributesIcons, id: { ...attribute, cancel: true }, x: attributeIconPosition++ })
+  }
+  const gainedAttributes = differenceBy(attributes, nativeAttributes, attribute => attribute.type)
+  for (const attribute of gainedAttributes) {
+    locations.push({ type: LocationType.AttributesIcons, id: attribute, x: attributeIconPosition++ })
+  }
+  const hasSkill = isCreature(characteristics) && characteristics.getSkills().length > 0
+  if (hasSkill && cardRule.effects.some(effect => effect.type === EffectType.LoseSkills)) {
+    locations.push({ type: LocationType.SkillLostIcon })
+  }
+  return locations
+}
