@@ -19,7 +19,7 @@ export abstract class FactionCardCharacteristics {
   abstract kind: FactionCardKind
   abstract value: number
   deckBuildingValue?: number
-  protected limit?: number
+  limit?: number
   legendary = false
   action?: RuleId
 

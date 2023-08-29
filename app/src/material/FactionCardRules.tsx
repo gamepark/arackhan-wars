@@ -107,5 +107,14 @@ const CardFrontRule = (props: MaterialRulesProps) => {
     {item.location && item.location.player === playerId && onBattlefieldAndAstralPlane(item.location) && <PerformActionButton {...props}/>}
     {characteristics.getAttributes().map(attribute => <AttributeRule attribute={attribute}/>)}
     <p><Trans defaults="rules.card.value" values={{ value: characteristics.value }}><strong/></Trans></p>
+    {characteristics.deckBuildingValue &&
+      <p><Trans defaults="rules.card.deck-value" values={{ value: characteristics.deckBuildingValue }}><strong/></Trans></p>
+    }
+    {characteristics.legendary &&
+      <p><Trans defaults="rules.card.legendary"><strong/></Trans></p>
+    }
+    {characteristics.limit &&
+      <p><Trans defaults="rules.card.limit" values={{ limit: characteristics.limit }}><strong/></Trans></p>
+    }
   </>
 }
