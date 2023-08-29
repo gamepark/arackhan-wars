@@ -106,7 +106,6 @@ const CardFrontRule = (props: MaterialRulesProps) => {
         <span><Trans defaults={`rules.card.land`} values={characteristics}><strong/></Trans></span>
       </p>
     }
-    {item.location && item.location.player === playerId && onBattlefieldAndAstralPlane(item.location) && <PerformActionButton {...props}/>}
     {characteristics.getAttributes().map(attribute => <AttributeRule key={attribute.type} attribute={attribute}/>)}
     {isCreature(characteristics) && characteristics.getSkills().map((skill, index) =>
       <AbilityRule key={index} type={t('card.skill')} ability={skill} card={factionCard}/>
@@ -120,6 +119,10 @@ const CardFrontRule = (props: MaterialRulesProps) => {
     {isLand(characteristics) && characteristics.getBenefits().map((benefit, index) =>
       <AbilityRule key={index} type={t('card.benefit')} ability={benefit} card={factionCard}/>
     )}
+    {characteristics.action && <>
+      <p><strong>{t('card.action')}</strong> - <Trans defaults={`action.${factionCard}`}><strong/><em/></Trans></p>
+      {item.location && item.location.player === playerId && onBattlefieldAndAstralPlane(item.location) && <PerformActionButton {...props}/>}
+    </>}
     <p><Trans defaults="rules.card.value" values={{ value: characteristics.value }}><strong/></Trans></p>
     {characteristics.deckBuildingValue &&
       <p><Trans defaults="rules.card.deck-value" values={{ value: characteristics.deckBuildingValue }}><strong/></Trans></p>
