@@ -17,7 +17,7 @@ export class Ability {
   isApplicable(game: MaterialGame, source: Material, target: Material) {
     if (!source.getItem() || !target.getItem()) return false
 
-    return this.filters.every((filter) => filter(source, target, game))
+    return this.filters.every(filter => filter.filter(source, target, game))
   }
 
   attack(modifier: number) {

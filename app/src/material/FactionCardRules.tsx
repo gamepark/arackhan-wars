@@ -16,6 +16,7 @@ import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { alignIcon, AttributeRule } from './AttributeRule'
 import astral from '../images/icons/astral.png'
 import captureFlag from '../images/icons/capture-flag.png'
+import { AbilityRule } from './AbilityRule'
 
 export const FactionCardRules = (props: MaterialRulesProps) => {
   const { item, itemIndex, closeDialog } = props
@@ -78,7 +79,8 @@ const CardFrontRule = (props: MaterialRulesProps) => {
   const { item } = props
   const { t } = useTranslation()
   const playerId = usePlayerId()
-  const characteristics = FactionCardsCharacteristics[item.id.front as FactionCard]
+  const factionCard = item.id.front as FactionCard
+  const characteristics = FactionCardsCharacteristics[factionCard]
   return <>
     {isCreature(characteristics) && <>
       <p><Trans defaults="rules.card.creature" values={characteristics}><strong/></Trans></p>
@@ -105,7 +107,19 @@ const CardFrontRule = (props: MaterialRulesProps) => {
       </p>
     }
     {item.location && item.location.player === playerId && onBattlefieldAndAstralPlane(item.location) && <PerformActionButton {...props}/>}
-    {characteristics.getAttributes().map(attribute => <AttributeRule attribute={attribute}/>)}
+    {characteristics.getAttributes().map(attribute => <AttributeRule key={attribute.type} attribute={attribute}/>)}
+    {isCreature(characteristics) && characteristics.getSkills().map((skill, index) =>
+      <AbilityRule key={index} type={t('card.skill')} ability={skill} card={factionCard}/>
+    )}
+    {isCreature(characteristics) && characteristics.getWeaknesses().map((weakness, index) =>
+      <AbilityRule key={index} type={t('card.weakness')} ability={weakness} card={factionCard}/>
+    )}
+    {isSpell(characteristics) && characteristics.getEffects().map((effect, index) =>
+      <AbilityRule key={index} type={t('card.effect')} ability={effect} card={factionCard}/>
+    )}
+    {isLand(characteristics) && characteristics.getBenefits().map((benefit, index) =>
+      <AbilityRule key={index} type={t('card.benefit')} ability={benefit} card={factionCard}/>
+    )}
     <p><Trans defaults="rules.card.value" values={{ value: characteristics.value }}><strong/></Trans></p>
     {characteristics.deckBuildingValue &&
       <p><Trans defaults="rules.card.deck-value" values={{ value: characteristics.deckBuildingValue }}><strong/></Trans></p>
