@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { MaterialRulesProps, PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
+import { MaterialRulesProps, Picture, PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
 import { displayLocationRules, isCustomMove } from '@gamepark/rules-api'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
@@ -13,7 +13,9 @@ import { isLand } from '@gamepark/arackhan-wars/material/cards/Land'
 import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
-import { AttributeRule } from './AttributeRule'
+import { alignIcon, AttributeRule } from './AttributeRule'
+import astral from '../images/icons/astral.png'
+import captureFlag from '../images/icons/capture-flag.png'
 
 export const FactionCardRules = (props: MaterialRulesProps) => {
   const { item, itemIndex, closeDialog } = props
@@ -88,7 +90,20 @@ const CardFrontRule = (props: MaterialRulesProps) => {
       characteristics.discardTiming === DiscardTiming.ActivationOrEndOfTurn ? <p><Trans defaults="rules.card.spell.active"><strong/></Trans></p>
         : <p><Trans defaults="rules.card.spell.passive"><strong/></Trans></p>
     )}
-    {isLand(characteristics) && <p><Trans defaults="rules.card.land" values={characteristics}><strong/></Trans></p>}
+    {isSpell(characteristics) && characteristics.astral &&
+      <p css={alignIcon}>
+        <Picture src={astral}/>
+        &nbsp;
+        <span><Trans defaults={`rules.card.spell.astral`}><strong/></Trans></span>
+      </p>
+    }
+    {isLand(characteristics) &&
+      <p css={alignIcon}>
+        <Picture src={captureFlag}/>
+        &nbsp;
+        <span><Trans defaults={`rules.card.land`} values={characteristics}><strong/></Trans></span>
+      </p>
+    }
     {item.location && item.location.player === playerId && onBattlefieldAndAstralPlane(item.location) && <PerformActionButton {...props}/>}
     {characteristics.getAttributes().map(attribute => <AttributeRule attribute={attribute}/>)}
     <p><Trans defaults="rules.card.value" values={{ value: characteristics.value }}><strong/></Trans></p>

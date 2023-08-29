@@ -13,7 +13,7 @@ export const AttributeRule = ({ attribute }: { attribute: Attribute }) => {
   </p>
 }
 
-const alignIcon = css`
+export const alignIcon = css`
   > span {
     vertical-align: middle;
   }
