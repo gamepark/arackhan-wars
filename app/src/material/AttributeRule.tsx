@@ -14,11 +14,12 @@ export const AttributeRule = ({ attribute }: { attribute: Attribute }) => {
 }
 
 const alignIcon = css`
-  * {
+  > span {
     vertical-align: middle;
   }
 
   picture, img {
+    vertical-align: middle;
     height: 1.5em;
   }
 `
