@@ -13,6 +13,9 @@ import { ActivationHeader } from './headers/ActivationHeader'
 import { MimicryActionHeader } from './headers/actions/MimicryActionHeader'
 import { HorseOfAvalonActionHeader } from './headers/actions/HorseOfAvalonActionHeader'
 import { MoveCreatureActionHeader } from './headers/actions/MoveCreatureActionHeader'
+import { DrawHeader } from './headers/DrawHeader'
+import { RevealHeader } from './headers/RevealHeader'
+import { EndPhaseHeader } from './headers/EndPhaseHeader'
 
 export default function App() {
   const game = useGame<MaterialGame>()
@@ -39,11 +42,11 @@ const RulesHeaders: Record<RuleId, () => ReactJSXElement> = {
   // TODO: all headers
   [RuleId.ChooseStartPlayer]: ChooseStartPlayerHeader,
   [RuleId.Mulligan]: MulliganHeader,
-  [RuleId.DrawRule]: () => <p></p>,
+  [RuleId.DrawRule]:  DrawHeader,
   [RuleId.PlacementRule]: PlacementHeader,
-  [RuleId.RevealRule]: () => <p></p>,
+  [RuleId.RevealRule]: RevealHeader,
   [RuleId.ActivationRule]: ActivationHeader,
-  [RuleId.EndPhaseRule]: () => <p></p>,
+  [RuleId.EndPhaseRule]: EndPhaseHeader,
   [RuleId.ForcedExileActionRule]: MoveCreatureActionHeader,
   [RuleId.HorseOfAvalonActionRule]: HorseOfAvalonActionHeader,
   [RuleId.TeleportationActionRule]: MoveCreatureActionHeader,
