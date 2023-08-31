@@ -27,10 +27,15 @@ export class CombatIconLocator extends ItemLocator<PlayerId, MaterialType, Locat
 class CombatIconDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
   width = 1.75
   ratio = 272 / 236
+  borderRadius = 0.4
 
   images = {
     [CombatIcon.Attack]: attackIcon,
     [CombatIcon.Defense]: defenseIcon
+  }
+
+  getImage(location: Location<PlayerId, LocationType>): string | undefined {
+    return location.x ? this.images[location.id] : undefined
   }
 
   getExtraCss(location: Location<PlayerId, LocationType>) {

@@ -4,7 +4,7 @@ import { PlayMoveButton, RulesDialog, ThemeButton, useGame, useLegalMoves, usePl
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
-import { CustomMove, MaterialGame } from '@gamepark/rules-api'
+import { CustomMove, isCustomMove, MaterialGame } from '@gamepark/rules-api'
 import { useState } from 'react'
 import { css } from '@emotion/react'
 
@@ -12,7 +12,7 @@ export const ChooseStartPlayerHeader = () => {
   const { t } = useTranslation()
   const game = useGame<MaterialGame<PlayerId, MaterialType, LocationType>>()!
   const player = usePlayerId()
-  const legalMoves = useLegalMoves<CustomMove>()
+  const legalMoves = useLegalMoves<CustomMove>(isCustomMove)
   const playerName = usePlayerName(game.rule!.player!)
   const [dialogOpen, setDialogOpen] = useState(legalMoves.length > 0)
   if (!legalMoves.length) {

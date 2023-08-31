@@ -50,4 +50,4 @@ export class BattleMatDescription extends BoardDescription {
   }
 }
 
-export const playMatDescription = new BattleMatDescription()
+export const battleMatDescription = new BattleMatDescription()

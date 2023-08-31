@@ -9,13 +9,15 @@ import translations from './translations.json'
 import { Material, materialI18n } from './material/Material'
 import { Locators } from './locators/Locators'
 import { ArackhanWarsSetup } from '@gamepark/arackhan-wars/ArackhanWarsSetup'
+import { Tutorial } from './tutorial/Tutorial'
 
 setupTranslation(translations, { debug: false })
 
 ReactDOM.render(
   <StrictMode>
     <GameProvider game="arackhan-wars" GameSetup={ArackhanWarsSetup} Rules={ArackhanWarsRules} optionsSpec={ArackhanWarsOptionsSpec}
-                  material={Material} locators={Locators} materialI18n={materialI18n} animations={new MaterialGameAnimations()}>
+                  material={Material} locators={Locators} materialI18n={materialI18n} animations={new MaterialGameAnimations()}
+                  tutorial={new Tutorial()}>
       <App/>
     </GameProvider>
   </StrictMode>,
