@@ -39,13 +39,12 @@ export const ActivationHeader = () => {
     return <>{t('header.activation', { player: playerName })}</>
   } else {
     const solveAttack = legalMoves.find(isCustomMoveType(CustomMoveType.SolveAttack))
-    const pass = legalMoves.find(isCustomMoveType(CustomMoveType.Pass))
     if (solveAttack) {
-      return <Trans defaults="You can play card, <0>pass</0> or <1>solve your attack</1>">
-        <PlayMoveButton move={pass}/>
+      return <Trans defaults="header.attack.solve">
         <PlayMoveButton move={solveAttack}/>
       </Trans>
     }
+    const pass = legalMoves.find(isCustomMoveType(CustomMoveType.Pass))
     return <Trans defaults="header.activation.me"><PlayMoveButton move={pass}/></Trans>
   }
 }

@@ -10,7 +10,7 @@ import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
 import { roundTrackerDescription } from '../material/RoundTrackerDescription'
-import { isCustomMove, isMoveItem, MaterialGame, MaterialMove } from '@gamepark/rules-api'
+import { isCustomMove, isCustomMoveType, isMoveItem, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { TFunction } from 'i18next'
 import { startingCoordinates } from '@gamepark/arackhan-wars/rules/PlacementRule'
 import { battleMatDescription } from '../material/BattleMatDescription'
@@ -212,6 +212,66 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
       move: {
         filter: (move, game) => isCustomMove(move) && move.type === CustomMoveType.Attack
           && move.data.card === this.getBattlefieldCard(game, FactionCard.LunarWendigo).getIndex()
+      }
+    },
+    {
+      popup: {
+        text: () => <Trans defaults="tuto.attack.solve"><strong/></Trans>,
+        position: { x: 40, y: -5 }
+      },
+      focus: (game: MaterialGame) => [
+        this.material(game, MaterialType.FactionCard).location(LocationType.Battlefield),
+        this.material(game, MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(parent => {
+            const parentCard = this.material(game, MaterialType.FactionCard).getItem(parent!)?.id.front
+            return parentCard === FactionCard.LunarWendigo || parentCard === FactionCard.ScuttleJaw
+          }
+        ),
+        this.location(LocationType.FactionTokenSpace).parent(this.getBattlefieldCard(game, FactionCard.SwampOgre).getIndex()),
+        this.location(LocationType.FactionTokenSpace).parent(this.getBattlefieldCard(game, FactionCard.NihilistPenguin).getIndex())
+      ],
+      move: {
+        filter: isCustomMoveType(CustomMoveType.SolveAttack)
+      }
+    },
+    {
+      popup: {
+        text: () => <Trans defaults="tuto.deactivate"><em/></Trans>,
+        position: { x: 0, y: -20 }
+      },
+      focus: (game: MaterialGame) => [
+        this.material(game, MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(
+          this.getBattlefieldCard(game, FactionCard.LunarWendigo).getIndex()
+        )
+      ]
+    },
+    {
+      popup: {
+        text: () => <Trans defaults="tuto.movement"><em/><strong/></Trans>,
+        position: { x: -40, y: -10 }
+      },
+      focus: (game: MaterialGame) => this.getBattlefieldCard(game, FactionCard.NihilistPenguin)
+    },
+    {
+      popup: {
+        text: () => <Trans defaults="tuto.move.penguin"><em/></Trans>,
+        position: { x: 40, y: -10 }
+      },
+      focus: (game: MaterialGame) => [
+        this.getBattlefieldCard(game, FactionCard.NihilistPenguin),
+        this.location(LocationType.Battlefield).x(3).y(1)
+      ],
+      move: {
+        filter: move => isMoveItem(move) && move.itemType === MaterialType.FactionCard
+          && move.position.location?.type === LocationType.Battlefield && move.position.location.x === 3 && move.position.location.y === 1
+      }
+    },
+    {
+      popup: {
+        text: () => <Trans defaults="tuto.pass.1"><strong/></Trans>,
+        position: { x: 40, y: -10 }
+      },
+      move: {
+        filter: isCustomMoveType(CustomMoveType.Pass)
       }
     }
   ]
