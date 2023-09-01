@@ -2,7 +2,7 @@
 import WhitelandsBack from '../images/cards/whitelands/whitelands-card-back.jpg'
 import BlightBack from '../images/cards/blight/blight-card-back.jpg'
 import NakkaBack from '../images/cards/nakka/nakka-card-back.jpg'
-import GreyOrderBack from '../images/cards/greyorder/greyorder-card-back.jpeg'
+import GreyOrderBack from '../images/cards/greyorder/greyorder-card-back.jpg'
 
 import NihilistPenguin from '../images/cards/whitelands/en/s1-aw1-022-en-nihilist-penguin.jpg'
 import LunarWendigo from '../images/cards/whitelands/en/s1-aw1-019-en-lunar-wendigo.jpg'
