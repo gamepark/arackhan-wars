@@ -45,7 +45,7 @@ export default function AttacksDisplay() {
         ctx.stroke()
       }
     }
-  }, [attacks])
+  }, [rules, attacks])
 
   if (!attacks?.length) return null
   return <canvas ref={ref} css={canvasCss} width={100 * scale} height={100 * scale}/>
