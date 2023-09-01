@@ -365,6 +365,70 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
     },
     {
       move: { player: 2, filter: isCustomMoveType(CustomMoveType.Pass) }
+    },
+    {
+      popup: {
+        text: (t: TFunction) => <Trans defaults="tuto.activation.2" values={{
+          card1: t(`card.name.${FactionCard.NihilistPenguin}`),
+          card2: t(`card.name.${FactionCard.LunarWendigo}`),
+          card3: t(`card.name.${FactionCard.ShieldOfDawn}`)
+        }}><em/></Trans>,
+        position: { x: 40, y: -30 }
+      },
+      focus: (game: MaterialGame) => [
+        this.material(game, MaterialType.FactionCard).location(LocationType.Battlefield)
+      ]
+    },
+    {
+      popup: {
+        text: (t: TFunction) => <Trans defaults="tuto.group-attack" values={{
+          card1: t(`card.name.${FactionCard.SwampTroll}`),
+          card2: t(`card.name.${FactionCard.LunarWendigo}`)
+        }}><strong/><em/></Trans>,
+        position: { x: 40, y: 30 }
+      },
+      focus: (game: MaterialGame) => [
+        this.getBattlefieldCard(game, FactionCard.SwampTroll), this.getBattlefieldCard(game, FactionCard.LunarWendigo),
+        this.location(LocationType.FactionTokenSpace).parent(this.getBattlefieldCard(game, FactionCard.SwampOgre).getIndex()),
+        this.location(LocationType.FactionTokenSpace).parent(this.getBattlefieldCard(game, FactionCard.IceMeteor).getIndex())
+      ],
+      move: {
+        filter: (move, game) => isCustomMove(move) && move.type === CustomMoveType.Attack
+          && move.data.card === this.getBattlefieldCard(game, FactionCard.LunarWendigo).getIndex()
+      }
+    },
+    {
+      popup: {
+        text: (t: TFunction) => <Trans defaults="tuto.attack.meteor" values={{
+          card1: t(`card.name.${FactionCard.SwampTroll}`),
+          card2: t(`card.name.${FactionCard.IceMeteor}`)
+        }}><strong/><em/></Trans>,
+        position: { x: 40, y: 25 }
+      },
+      focus: (game: MaterialGame) => [
+        this.getBattlefieldCard(game, FactionCard.SwampTroll), this.getBattlefieldCard(game, FactionCard.IceMeteor),
+        this.location(LocationType.FactionTokenSpace).parent(this.getBattlefieldCard(game, FactionCard.SwampOgre).getIndex())
+      ],
+      move: {
+        filter: (move, game) => isCustomMove(move) && move.type === CustomMoveType.Attack
+          && move.data.card === this.getBattlefieldCard(game, FactionCard.IceMeteor).getIndex()
+          && move.data.target === this.getBattlefieldCard(game, FactionCard.SwampTroll).getIndex()
+      }
+    },
+    {
+      popup: {
+        text: (t: TFunction) => <Trans defaults="tuto.pass.2" values={{
+          card1: t(`card.name.${FactionCard.ShieldOfDawn}`),
+          card2: t(`card.name.${FactionCard.SwampOgre}`)
+        }}><em/><strong/></Trans>,
+        position: { x: 40, y: 0 }
+      },
+      focus: (game: MaterialGame) => [
+        this.getBattlefieldCard(game, FactionCard.ShieldOfDawn), this.getBattlefieldCard(game, FactionCard.SwampOgre)
+      ],
+      move: {
+        filter: isCustomMoveType(CustomMoveType.Pass)
+      }
     }
   ]
 
@@ -375,7 +439,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
   }
 
   getHandCard(game: MaterialGame, card: FactionCard) {
-    return this.material(game, MaterialType.FactionCard).location(LocationType.Hand).player(1).filter(item => item.id.front === card)
+    return this.material(game, MaterialType.FactionCard).location(LocationType.Hand).filter(item => item.id.front === card)
   }
 
   getBattlefieldCard(game: MaterialGame, card: FactionCard) {

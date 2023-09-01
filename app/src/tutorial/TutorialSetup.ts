@@ -8,7 +8,7 @@ import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 
 export class TutorialSetup extends ArackhanWarsSetup {
   requiredCards = {
-    [Faction.Whitelands]: [FactionCard.LunarWendigo, FactionCard.NihilistPenguin, FactionCard.ShieldOfDawn, FactionCard.IceMeteor],
+    [Faction.Whitelands]: [FactionCard.LunarWendigo, FactionCard.NihilistPenguin, FactionCard.ShieldOfDawn, FactionCard.IceMeteor, FactionCard.FortressOfMyjir],
     [Faction.Blight]: [FactionCard.ScuttleJaw, FactionCard.SwampOgre, FactionCard.ForgePatriarch, FactionCard.SwampTroll]
   }
 

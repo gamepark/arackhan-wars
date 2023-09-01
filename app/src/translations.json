@@ -410,12 +410,20 @@
       "tuto.attack.solve": "L’attaque est planifiée. Le crâne indique que la créature ennemie sera détruite et ira dans la défausse de l'adversaire.\nCliquez sur <0>Résoudre l’attaque</0> en haut.",
       "tuto.deactivate": "Le jeton sur votre <0>{card}</0> est retourné pour indiquer que la carte est désactivée : elle ne peut plus agir lors de ce round.",
       "tuto.movement": "Votre <0>{card}</0> a un attribut <1>Mouvement 2</1>.\nIl peut se déplacer de 2 cases (sans traverser de cartes adverses).",
-      "tuto.move.penguin": "Déplacez votre <0>{card1}</0> au-dessus votre <0>{card2}</0> pour le mettre à l'abri de L’<0>{card3}</0> adverse !",
+      "tuto.move.penguin": "Déplacez votre <0>{card1}</0> au-dessus votre <0>{card2}</0> pour le mettre à l'abri de l’<0>{card3}</0> adverse !",
       "tuto.pass.1": "Bravo ! Vous n'avez plus de cartes à activer. Cliquez sur <0>Passer</0> en haut pour donner la main à l'adversaire.",
       "tuto.end-round-1": "Votre adversaire a passé. Après la phase d'activation, les cartes sont réactivées, <0>chaque joueur pioche 2 cartes</0> et un nouveau round commence. Cette fois, votre adversaire place et active ses cartes en premier !",
       "tuto.skills": "Votre <0>{card1}</0> a une compétence qui améliorer la défense des créatures adjacentes.\nElle nous permettra peut être de protéger notre <0>{card2}</0> !",
       "tuto.spell": "<0>{card}</0> est un sort. Un sort ne peut pas être attaqué par l’adversaire, par contre il est défaussé après utilisation ou au plus tard à la fin du round.",
       "tuto.astral": "Certains sorts avec le symbole <0/> ne sont pas joués sur le champ de bataille mais dans le Plan Astral du joueur.",
+      "tuto.activation.2": "Votre <0>{card1}</0> a été détruit, mais votre <0>{card2}</0> a survécu grâce au support de votre <0>{card3}</0>.\nC'est le moment de risposter !",
+      "tuto.group-attack": "Dans <0>AracKhan Wars</0>, les cartes peuvent grouper leurs attaques.\nCommencez par attaquer le <1>{card1}</1> avec votre <1>{card2}</1>",
+      "tuto.attack.meteor": "Ce n’est pas suffisant pour tuer le <1>{card1}</1>, mais votre <1>{card2}</1> à l’attribut <0>Attaque à distance 3</0>.\nC'est suffisant pour attaquer le <1>{card1}</1>. Sa capacité ne le protège pas des attaques groupées avec un sort !",
+      "tuto.pass.2": "Bravo ! Votre <0>{card1}</0> ne pourra pas tuer l‘<0>{card2}</0> adverse, vous pouvez <1>Passer</1>",
+      "tuto.land": "Outre les <0>Créatures</0> et les <0>Sorts</0>, il existe un 3ème type de cartes dans AracKhan Wars : les <0>Lieux</0>.\nIls ne peuvent pas attaquer, mais offrent des bénéfices puissants. Attention cependant : si un Lieu est vaincu, il passe sous le contrôle du joueur adverse !",
+      "tuto.help": "Les cartes ont de nombreux attributs, compétences ou effets différents : cliquez sur les cartes pour découvrir ce qu'elle font !",
+      "tuto.score": "A la fin du Round 9, chaque joueur fait la somme des valeurs des cartes sous son contrôle sur le champ de bataille (Créatures et Lieux).\nLe joueur qui a le plus de point l'emporte ! Faire survivre vos cartes est donc aussi important que de détruire les cartes adverses.",
+      "tuto.over": "Félicitations, vous avez terminé le tutoriel !\nPrêt à jouer avec d’autres joueurs ?",
       "card.family.1": "Forgerons",
       "card.family.2": "Trolls",
       "card.family.3": "Légion VI",
@@ -595,8 +603,7 @@
       "time.think.max": "Temps de réflexion maximum",
       "time.wait.total": "Temps d’attente total",
       "time.wait.max": "Temps d’attente maximum",
-      "time.awaited": "A fait attendre les autres (moyenne)",
-      "tuto.over": "Félicitations, vous avez terminé le tutoriel !\nPrêt à jouer avec d’autres joueurs ?"
+      "time.awaited": "A fait attendre les autres (moyenne)"
     }
   },
   "de": {
