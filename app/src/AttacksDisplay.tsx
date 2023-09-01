@@ -32,8 +32,8 @@ export default function AttacksDisplay() {
         const defender = rules.material(MaterialType.FactionCard).getItem(target)
         const b = battleFieldLocator.getPositionOnParent(defender!.location)
         b.y -= 2
-        const start = getCoordinatesOnLineAtDistance(a, b, 2)
-        const end = getCoordinatesOnLineAtDistance(b, a, 2)
+        const start = getCoordinatesOnLineAtDistance(a, b, 3)
+        const end = getCoordinatesOnLineAtDistance(b, a, 3)
         const arrow = getArrowCoordinates(start, end, 2)
         ctx.beginPath()
         ctx.moveTo(start.x * scale, start.y * scale)
@@ -52,7 +52,7 @@ export default function AttacksDisplay() {
 }
 
 const getCoordinatesOnLineAtDistance = (a: XYCoordinates, b: XYCoordinates, d: number): XYCoordinates => {
-  const baseDistance = Math.sqrt(Math.pow((a.x - b.x) + (a.y - b.y), 2))
+  const baseDistance = Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2))
   return { x: a.x - d * (a.x - b.x) / baseDistance, y: a.y - d * (a.y - b.y) / baseDistance }
 }
 
