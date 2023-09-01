@@ -39,7 +39,7 @@ export class NoAttackByGroupedCreatures extends AttackConstraintRule {
   preventAttack(attacker: number, defender: number): boolean {
     return getCardRule(this.game, attacker).isCreature
       && this.remind<Attack[]>(Memory.Attacks).some(attack =>
-        attack.targets.includes(defender) || getCardRule(this.game, attack.card).isCreature
+        attack.targets.includes(defender) && getCardRule(this.game, attack.card).isCreature
       )
   }
 }
