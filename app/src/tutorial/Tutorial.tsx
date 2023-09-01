@@ -390,7 +390,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
       focus: (game: MaterialGame) => [
         this.getBattlefieldCard(game, FactionCard.SwampTroll), this.getBattlefieldCard(game, FactionCard.LunarWendigo),
         this.location(LocationType.FactionTokenSpace).parent(this.getBattlefieldCard(game, FactionCard.SwampOgre).getIndex()),
-        this.location(LocationType.FactionTokenSpace).parent(this.getBattlefieldCard(game, FactionCard.IceMeteor).getIndex())
+        this.location(LocationType.FactionTokenSpace).parent(this.getBattlefieldCard(game, FactionCard.ForgePatriarch).getIndex())
       ],
       move: {
         filter: (move, game) => isCustomMove(move) && move.type === CustomMoveType.Attack
@@ -428,6 +428,31 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
       ],
       move: {
         filter: isCustomMoveType(CustomMoveType.Pass)
+      }
+    },
+    {
+      popup: {
+        text: () => <Trans defaults="tuto.land"><strong/></Trans>,
+        position: { x: 0, y: -20 }
+      },
+      focus: (game: MaterialGame) => [
+        this.getHandCard(game, FactionCard.FortressOfMyjir),
+        this.material(game, MaterialType.RoundTrackerToken)
+      ]
+    },
+    {
+      popup: {
+        text: (t: TFunction) => t('tuto.help')
+      }
+    },
+    {
+      popup: {
+        text: (t: TFunction) => t('tuto.score') // TODO: focus battlefield cards values
+      }
+    },
+    {
+      popup: {
+        text: (t: TFunction) => t('tuto.end')
       }
     }
   ]
