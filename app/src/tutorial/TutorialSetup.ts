@@ -1,4 +1,4 @@
-import { ArackhanWarsSetup } from '@gamepark/arackhan-wars/ArackhanWarsSetup'
+import { ArackhanWarsSetup, START_HAND } from '@gamepark/arackhan-wars/ArackhanWarsSetup'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
 import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
@@ -8,22 +8,19 @@ import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 
 export class TutorialSetup extends ArackhanWarsSetup {
   requiredCards = {
-    [Faction.Whitelands]: [FactionCard.LunarWendigo, FactionCard.NihilistPenguin],
-    [Faction.Blight]: [FactionCard.ScuttleJaw, FactionCard.SwampOgre]
+    [Faction.Whitelands]: [FactionCard.LunarWendigo, FactionCard.NihilistPenguin, FactionCard.ShieldOfDawn, FactionCard.IceMeteor],
+    [Faction.Blight]: [FactionCard.ScuttleJaw, FactionCard.SwampOgre, FactionCard.ForgePatriarch, FactionCard.SwampTroll]
   }
 
   setupPlayer(player: number, faction: Faction) {
-    super.setupPlayer(player, faction)
-    const playerDeck = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(player)
-    const playerHand = this.material(MaterialType.FactionCard).location(LocationType.Hand).player(player)
-    const handCards = playerHand.getItems()
+    this.createPlayerDeck(player, faction)
     const requiredCards = this.requiredCards[faction]
+    const playerDeck = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(player)
     for (const requiredCard of requiredCards) {
-      if (!handCards.some(item => item.id.front === requiredCard)) {
-        playerHand.filter(item => !requiredCards.includes(item.id.front)).moveItem({ location: { type: LocationType.PlayerDeck } })
-        playerDeck.filter(item => item.id.front === requiredCard).moveItem({ location: { type: LocationType.Hand, player } })
-      }
+      playerDeck.filter(item => item.id.front === requiredCard).moveItem({ location: { type: LocationType.Hand, player } })
     }
+    this.shufflePlayerDeck(player)
+    this.draw(player, START_HAND - requiredCards.length)
   }
 
   start() {

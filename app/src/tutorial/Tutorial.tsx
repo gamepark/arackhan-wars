@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { TutorialSetup } from './TutorialSetup'
-import { MaterialTutorial, TutorialStep } from '@gamepark/react-game'
+import { MaterialTutorial, Picture, TutorialStep } from '@gamepark/react-game'
 import { Trans } from 'react-i18next'
 import { AvatarProps, ClotheType, EyebrowType, EyeType, FacialHairType, GraphicType, MouthType, TopType } from '@gamepark/avataaars'
 import HairColorName from '@gamepark/avataaars/dist/avatar/top/HairColorName'
@@ -17,6 +17,8 @@ import { battleMatDescription } from '../material/BattleMatDescription'
 import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { CombatIcon } from '../locators/CombatIconLocator'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
+import astral from '../images/icons/astral.png'
+import { css } from '@emotion/react'
 
 export class Tutorial extends MaterialTutorial<number, MaterialType, LocationType> {
   version = 1
@@ -235,7 +237,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.deactivate"><em/></Trans>,
+        text: (t: TFunction) => <Trans defaults="tuto.deactivate" values={{ card: t(`card.name.${FactionCard.LunarWendigo}`) }}><em/></Trans>,
         position: { x: 0, y: -20 }
       },
       focus: (game: MaterialGame) => [
@@ -246,14 +248,22 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.movement"><em/><strong/></Trans>,
-        position: { x: -40, y: -10 }
+        text: (t: TFunction) => <Trans defaults="tuto.movement" values={{ card: t(`card.name.${FactionCard.NihilistPenguin}`) }}><em/><strong/></Trans>,
+        position: { x: 40, y: -20 }
       },
-      focus: (game: MaterialGame) => this.getBattlefieldCard(game, FactionCard.NihilistPenguin)
+      focus: (game: MaterialGame) => [
+        this.material(game, MaterialType.FactionCard).location(LocationType.Battlefield),
+        this.location(LocationType.FactionTokenSpace).parent(this.getBattlefieldCard(game, FactionCard.SwampOgre).getIndex()),
+        this.location(LocationType.FactionTokenSpace).parent(this.getBattlefieldCard(game, FactionCard.LunarWendigo).getIndex())
+      ]
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.move.penguin"><em/></Trans>,
+        text: (t: TFunction) => <Trans defaults="tuto.move.penguin" values={{
+          card1: t(`card.name.${FactionCard.NihilistPenguin}`),
+          card2: t(`card.name.${FactionCard.LunarWendigo}`),
+          card3: t(`card.name.${FactionCard.SwampOgre}`)
+        }}><em/></Trans>,
         position: { x: 40, y: -10 }
       },
       focus: (game: MaterialGame) => [
@@ -273,6 +283,88 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
       move: {
         filter: isCustomMoveType(CustomMoveType.Pass)
       }
+    },
+    { move: { player: 2 } },
+    {
+      popup: {
+        text: () => <Trans defaults="tuto.end-round-1"><strong/></Trans>
+      }
+    },
+    {
+      move: {
+        player: 2,
+        filter: (move, game) => this.isPlaceCard(game, move, FactionCard.ForgePatriarch, 2, 1)
+      }
+    },
+    {
+      move: {
+        player: 2,
+        filter: (move, game) => this.isPlaceCard(game, move, FactionCard.SwampTroll, 2, 2)
+      }
+    },
+    {
+      popup: {
+        text: (t: TFunction) => <Trans defaults="tuto.skills" values={
+          { card1: t(`card.name.${FactionCard.ShieldOfDawn}`), card2: t(`card.name.${FactionCard.LunarWendigo}`) }
+        }><em/></Trans>,
+        position: { x: 30, y: -10 }
+      },
+      focus: (game: MaterialGame) => [
+        this.getHandCard(game, FactionCard.ShieldOfDawn), this.getBattlefieldCard(game, FactionCard.LunarWendigo)
+      ]
+    },
+    {
+      popup: {
+        text: (t: TFunction) => <Trans defaults="tuto.place-card" values={{ card: t(`card.name.${FactionCard.ShieldOfDawn}`) }}><em/></Trans>,
+        position: { x: 30, y: -10 }
+      },
+      focus: (game: MaterialGame) => [
+        { type: MaterialType.BattleMat, item: battleMatDescription.staticItem },
+        this.location(LocationType.Battlefield).x(4).y(2),
+        this.getHandCard(game, FactionCard.ShieldOfDawn)
+      ],
+      move: {
+        filter: (move, game) => this.isPlaceCard(game, move, FactionCard.ShieldOfDawn, 4, 2)
+      }
+    },
+    {
+      popup: {
+        text: (t: TFunction) => <Trans defaults="tuto.spell" values={{ card: t(`card.name.${FactionCard.IceMeteor}`) }}><em/></Trans>,
+        position: { x: 30, y: -10 }
+      },
+      focus: (game: MaterialGame) => [
+        this.getHandCard(game, FactionCard.IceMeteor),
+        this.location(LocationType.Battlefield).x(4).y(2)
+      ]
+    },
+    {
+      popup: {
+        text: () => <Trans defaults="tuto.astral"><Picture src={astral} css={inlineIcon}/></Trans>
+      }
+    },
+    {
+      popup: {
+        text: (t: TFunction) => <Trans defaults="tuto.place-card" values={{ card: t(`card.name.${FactionCard.IceMeteor}`) }}><em/></Trans>,
+        position: { x: 30, y: -10 }
+      },
+      focus: (game: MaterialGame) => [
+        { type: MaterialType.BattleMat, item: battleMatDescription.staticItem },
+        this.location(LocationType.Battlefield).x(4).y(1),
+        this.getHandCard(game, FactionCard.IceMeteor)
+      ],
+      move: {
+        filter: (move, game) => this.isPlaceCard(game, move, FactionCard.IceMeteor, 4, 1)
+      }
+    },
+    {
+      move: {
+        player: 2,
+        filter: (move, game) => isCustomMove(move) && move.type === CustomMoveType.Attack
+          && move.data.card === this.getBattlefieldCard(game, FactionCard.ForgePatriarch).getIndex()
+      }
+    },
+    {
+      move: { player: 2, filter: isCustomMoveType(CustomMoveType.Pass) }
     }
   ]
 
@@ -283,7 +375,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
   }
 
   getHandCard(game: MaterialGame, card: FactionCard) {
-    return this.material(game, MaterialType.FactionCard).location(LocationType.Hand).filter(item => item.id.front === card)
+    return this.material(game, MaterialType.FactionCard).location(LocationType.Hand).player(1).filter(item => item.id.front === card)
   }
 
   getBattlefieldCard(game: MaterialGame, card: FactionCard) {
@@ -291,3 +383,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
   }
 }
 
+const inlineIcon = css`
+  height: 2em;
+  vertical-align: bottom;
+`

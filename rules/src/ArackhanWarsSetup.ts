@@ -40,25 +40,32 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
   }
 
   setupPlayer(player: number, faction: Faction) {
-    this.material(MaterialType.FactionCard)
-      .createItems(
-        Object.entries(PreBuildDecks[faction])
-          .flatMap(([id, quantity]) =>
-            Array.from(Array(quantity)).map(() => ({
-                id: { front: parseInt(id), back: faction }, location: { type: LocationType.PlayerDeck, player }
-              })
-            )
-          )
+    this.createPlayerDeck(player, faction)
+    this.shufflePlayerDeck(player)
+    this.draw(player)
+  }
+
+  createPlayerDeck(player: number, faction: Faction) {
+    this.material(MaterialType.FactionCard).createItems(
+      Object.entries(PreBuildDecks[faction]).flatMap(([id, quantity]) =>
+        Array.from(Array(quantity)).map(() => ({
+          id: { front: parseInt(id), back: faction }, location: { type: LocationType.PlayerDeck, player }
+        }))
       )
+    )
+  }
 
-    this.material(MaterialType.FactionCard).player(player).shuffle()
+  shufflePlayerDeck(player: number) {
+    this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(player).shuffle()
+  }
 
+  draw(player: number, quantity = START_HAND) {
     this.material(MaterialType.FactionCard)
       .location(LocationType.PlayerDeck)
       .player(player)
       .sort(card => -card.location.x!)
-      .limit(START_HAND)
-      .moveItems({ location: { type: LocationType.Hand, player: player } })
+      .limit(quantity)
+      .moveItems({ location: { type: LocationType.Hand, player } })
   }
 
   placeRoundTracker() {
