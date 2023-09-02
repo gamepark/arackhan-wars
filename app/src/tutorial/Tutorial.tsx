@@ -27,16 +27,17 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
 
   avatars: Record<number, AvatarProps> = {
     2: {
-      topType: TopType.LongHairBun,
-      hairColor: HairColorName.BrownDark,
-      facialHairType: FacialHairType.MoustacheFancy,
+      topType: TopType.LongHairStraight,
+      hairColor: HairColorName.Brown,
+      facialHairType: FacialHairType.BeardLight,
+      facialHairColor: HairColorName.Brown,
       clotheType: ClotheType.GraphicShirt,
       clotheColor: ClotheColorName.Red,
-      graphicType: GraphicType.Hola,
-      eyeType: EyeType.Happy,
+      graphicType: GraphicType.Skull,
+      eyeType: EyeType.Side,
       eyebrowType: EyebrowType.DefaultNatural,
       mouthType: MouthType.Smile,
-      skinColor: SkinColor.Brown
+      skinColor: SkinColor.Light
     }
   }
 
