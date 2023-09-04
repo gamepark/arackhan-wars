@@ -448,8 +448,15 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
     },
     {
       popup: {
-        text: (t: TFunction) => t('tuto.score') // TODO: focus battlefield cards values
-      }
+        text: (t: TFunction) => t('tuto.score'),
+        position: { x: -30, y: 20 }
+      },
+      focus: (game: MaterialGame) => [
+        this.material(game, MaterialType.FactionCard).location(LocationType.Battlefield),
+        ...this.material(game, MaterialType.FactionCard).location(LocationType.Battlefield).getIndexes().map(index =>
+          this.location(LocationType.CardValue).parent(index)
+        )
+      ]
     },
     {
       popup: {

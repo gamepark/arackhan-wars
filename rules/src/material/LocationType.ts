@@ -12,5 +12,6 @@ export enum LocationType {
   CombatIcon,
   AttributesIcons,
   SkillLostIcon,
-  CombatResultIcon
+  CombatResultIcon,
+  CardValue
 }
