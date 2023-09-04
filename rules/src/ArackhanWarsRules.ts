@@ -25,10 +25,12 @@ import { HorseOfAvalonActionRule } from './rules/action/HorseOfAvalonActionRule'
 import { TeleportationActionRule } from './rules/action/TeleportationActionRule'
 import { ChooseStartPlayerRule } from './rules/ChooseStartPlayerRule'
 import sumBy from 'lodash/sumBy'
-import { FactionCardsCharacteristics } from './material/FactionCard'
+import { FactionCard, FactionCardsCharacteristics } from './material/FactionCard'
 import { MimicryActionRule } from './rules/action/MimicryActionRule'
 import { isCreature } from './material/cards/Creature'
 import { getCardRule, resetCardsRulesCache } from './rules/CardRule'
+import { Faction } from './material/Faction'
+import { isSpell } from './material/cards/Spell'
 
 
 /**
@@ -67,8 +69,12 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
           .material(MaterialType.FactionCard)
           .location(LocationType.Battlefield)
           .player(playerId)
+          .id<{ front?: FactionCard, back: Faction }>(id => id?.front !== undefined)
           .getItems()
-        return sumBy(cardsOnBattlefield, card => FactionCardsCharacteristics[card.id.front]?.value ?? 0)
+        return sumBy(cardsOnBattlefield, card => {
+          const characteristics = FactionCardsCharacteristics[card.id.front as FactionCard]
+          return isSpell(characteristics) ? 0 : characteristics.value
+        })
       case 1:
         return this
           .material(MaterialType.FactionCard)
