@@ -24,7 +24,7 @@ export const PlayerDiscardRules = ({ location }: LocationRulesProps) => {
       {cards?.entries.map(([index, card]) =>
         <li key={index}>
           <MaterialComponent type={MaterialType.FactionCard} itemId={card.id} css={pointerCursorCss}
-                             onClick={() => play(displayMaterialRules(MaterialType.FactionCard, card, index))}/>
+                             onClick={() => play(displayMaterialRules(MaterialType.FactionCard, card, index), { local: true })}/>
         </li>
       )}
     </ol>
