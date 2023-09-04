@@ -2,7 +2,7 @@
 import { TutorialSetup } from './TutorialSetup'
 import { MaterialTutorial, Picture, TutorialStep } from '@gamepark/react-game'
 import { Trans } from 'react-i18next'
-import { AvatarProps, ClotheType, EyebrowType, EyeType, FacialHairType, GraphicType, MouthType, TopType } from '@gamepark/avataaars'
+import { ClotheType, EyebrowType, EyeType, FacialHairType, GraphicType, MouthType, TopType } from '@gamepark/avataaars'
 import HairColorName from '@gamepark/avataaars/dist/avatar/top/HairColorName'
 import ClotheColorName from '@gamepark/avataaars/dist/avatar/clothes/ClotheColorName'
 import SkinColor from '@gamepark/avataaars/dist/avatar/SkinColor'
@@ -25,21 +25,26 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
   options = { players: [{ faction: Faction.Whitelands }, { faction: Faction.Blight }] }
   setup = new TutorialSetup()
 
-  avatars: Record<number, AvatarProps> = {
-    2: {
-      topType: TopType.LongHairStraight,
-      hairColor: HairColorName.Brown,
-      facialHairType: FacialHairType.BeardLight,
-      facialHairColor: HairColorName.Brown,
-      clotheType: ClotheType.GraphicShirt,
-      clotheColor: ClotheColorName.Red,
-      graphicType: GraphicType.Skull,
-      eyeType: EyeType.Side,
-      eyebrowType: EyebrowType.DefaultNatural,
-      mouthType: MouthType.Smile,
-      skinColor: SkinColor.Light
+  players = [
+    { id: 1 },
+    {
+      id: 2,
+      name: 'Bob',
+      avatar: {
+        topType: TopType.LongHairStraight,
+        hairColor: HairColorName.Brown,
+        facialHairType: FacialHairType.BeardLight,
+        facialHairColor: HairColorName.Brown,
+        clotheType: ClotheType.GraphicShirt,
+        clotheColor: ClotheColorName.Red,
+        graphicType: GraphicType.Skull,
+        eyeType: EyeType.Side,
+        eyebrowType: EyebrowType.DefaultNatural,
+        mouthType: MouthType.Smile,
+        skinColor: SkinColor.Light
+      }
     }
-  }
+  ]
 
   steps: TutorialStep<number, MaterialType, LocationType>[] = [
     {
