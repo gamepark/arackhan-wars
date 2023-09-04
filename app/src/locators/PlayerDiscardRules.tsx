@@ -36,7 +36,7 @@ const grid = css`
   grid-template-columns: auto auto auto;
   list-style-type: none;
   gap: 1em;
-  padding: 0;
+  padding: 0 0.5em 0.5em 0;
   margin: 0;
   font-size: 1.5em;
 `
