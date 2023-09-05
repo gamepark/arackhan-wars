@@ -453,7 +453,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
     },
     {
       popup: {
-        text: (t: TFunction) => t('tuto.score'),
+        text: (t: TFunction) => t('rules.score') + '\n' + t('tuto.advice'),
         position: { x: -30, y: 20 }
       },
       focus: (game: MaterialGame) => [
