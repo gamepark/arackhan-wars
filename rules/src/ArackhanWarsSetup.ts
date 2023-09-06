@@ -47,11 +47,7 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
 
   createPlayerDeck(player: number, faction: Faction) {
     this.material(MaterialType.FactionCard).createItems(
-      Object.entries(PreBuildDecks[faction]).flatMap(([id, quantity]) =>
-        Array.from(Array(quantity)).map(() => ({
-          id: { front: parseInt(id), back: faction }, location: { type: LocationType.PlayerDeck, player }
-        }))
-      )
+      PreBuildDecks[faction].map(card => ({ id: { front: card, back: faction }, location: { type: LocationType.PlayerDeck, player } }))
     )
   }
 
