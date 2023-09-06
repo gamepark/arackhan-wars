@@ -9,6 +9,8 @@ import { getCardRule } from './CardRule'
 import { Memory } from './Memory'
 import { onBattlefieldAndAstralPlane } from '../material/Board'
 
+export const NUMBER_OF_ROUNDS = 9
+
 export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
 
   getAutomaticMoves(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
@@ -28,11 +30,11 @@ export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, Loc
       .rotation(rotation => rotation?.y === 1)
       .moveItems({ rotation: {} }))
 
-    const turn = this.material(MaterialType.RoundTrackerToken).getItem()!.location.x!
-    if (turn === 9) {
+    const round = this.material(MaterialType.RoundTrackerToken).getItem()!.location.x!
+    if (round === NUMBER_OF_ROUNDS) {
       moves.push(this.rules().endGame())
     } else {
-      moves.push(this.material(MaterialType.RoundTrackerToken).moveItem({ location: { type: LocationType.RoundTracker, x: turn + 1 } }))
+      moves.push(this.material(MaterialType.RoundTrackerToken).moveItem({ location: { type: LocationType.RoundTracker, x: round + 1 } }))
       moves.push(this.rules().startRule(RuleId.DrawRule))
     }
 

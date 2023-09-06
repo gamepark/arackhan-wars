@@ -91,6 +91,10 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
     }
     return
   }
+
+  get round() {
+    return this.material(MaterialType.RoundTrackerToken).getItem()!.location.x!
+  }
 }
 
 export const hideCardFront: HidingStrategy = () => ['id.front']
