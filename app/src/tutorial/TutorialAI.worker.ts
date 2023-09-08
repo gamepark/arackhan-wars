@@ -1,14 +1,27 @@
-import { MaterialGame, MaterialMove, MaterialRules, MaterialRulesCreator, MoveKind, playMove, RuleMoveType } from '@gamepark/rules-api'
+import {
+  isCustomMove,
+  isCustomMoveType,
+  isMoveItemLocation,
+  Location,
+  MaterialGame,
+  MaterialMove,
+  MaterialRules,
+  MaterialRulesCreator,
+  MoveKind,
+  playMove,
+  RuleMoveType
+} from '@gamepark/rules-api'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
-import { sortBy, sumBy, uniq } from 'lodash'
+import { minBy, sortBy, sumBy, uniq } from 'lodash'
 import { PreBuildDecks } from '@gamepark/arackhan-wars/material/cards/PreBuildDecks'
 import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
 import { NUMBER_OF_ROUNDS } from '@gamepark/arackhan-wars/rules/EndPhaseRules'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
+import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 
 export async function tutorialAI(game: MaterialGame, bot: number): Promise<MaterialMove[]> {
   switch (game.rule?.id) {
@@ -67,8 +80,56 @@ const getArackhanWarsNegamax = (rules: ArackhanWarsRules, bot: number, timeLimit
   return getNegamax(rules, bot,
     (rules: ArackhanWarsRules) => rules.round > round,
     (rules: ArackhanWarsRules) => compareScores(rules, bot) + (placement ? comparePotential(rules, bot) : 0),
-    (moves) => moves, timeLimit
+    prune, timeLimit
   )
+}
+
+const prune = (moves: MaterialMove[], rules: ArackhanWarsRules): MaterialMove[] => {
+  switch (rules.game.rule?.id) {
+    case RuleId.ActivationRule:
+      return pruneActivationMoves(moves, rules)
+    case RuleId.PlacementRule:
+      return prunePlacementMoves(moves, rules)
+    default:
+      return moves
+  }
+}
+
+const pruneActivationMoves = (moves: MaterialMove[], rules: ArackhanWarsRules): MaterialMove[] => {
+  // If forced exile is here, start with it
+  if (moves.some(isCustomMoveType(CustomMoveType.PerformAction))) return moves.filter(isCustomMoveType(CustomMoveType.PerformAction))
+
+  const attacks = moves.filter(isCustomMoveType(CustomMoveType.Attack))
+  // never pass when attacking is possible, except with child eater or Initiative cards
+  if (attacks.some(move => {
+    const cardRule = getCardRule(rules.game, move.data.card)
+    return cardRule.card !== FactionCard.ChildEater && !cardRule.hasInitiative
+  })) {
+    moves = moves.filter(move => !(isCustomMove(move) && move.type === CustomMoveType.Pass))
+  }
+  // Attack card in ascending order
+  if (attacks.length) {
+    const firstAttacker = minBy(attacks, attack => attack.data.card)!.data.card
+    moves = moves.filter(move => !(isCustomMove(move) && move.type === CustomMoveType.Attack && move.data.card !== firstAttacker))
+  }
+  return moves
+}
+
+const prunePlacementMoves = (moves: MaterialMove[], rules: ArackhanWarsRules): MaterialMove[] => {
+  const placedCard = rules.material(MaterialType.FactionCard).location(LocationType.Battlefield).player(rules.getActivePlayer()!).getItem()
+  if (placedCard) {
+    moves = moves.filter(move =>
+      !(isMoveItemLocation(move) && move.position.location.type === LocationType.AstralPlane)
+      && !(isMoveItemLocation(move) && move.position.location.type === LocationType.Battlefield && isLocatedBefore(move.position.location, placedCard.location))
+    )
+  } else {
+    moves = moves.filter(move => !(isMoveItemLocation(move) && move.position.location.type === LocationType.AstralPlane && move.position.location.x === 1))
+  }
+  return moves
+}
+
+const isLocatedBefore = (location1: Location, location2: Location) => {
+  return location1.x! < location2.x! || (location1.x === location2.x && location1.y! < location2.y!)
 }
 
 const getNegamax = <Rules extends MaterialRules>(
@@ -109,7 +170,7 @@ const comparePotential = (rules: ArackhanWarsRules, bot: number) => {
 const getPotential = (rules: ArackhanWarsRules, player: number) => {
   const roundsLeft = NUMBER_OF_ROUNDS - rules.round
   const remainingCards = getRemainingCards(rules, player)
-  return sumBy(remainingCards.slice(0, roundsLeft * 2), card => FactionCardsCharacteristics[card].getDeckBuildingValue())
+  return sumBy(remainingCards.slice(0, roundsLeft * 2), card => FactionCardsCharacteristics[card].getDeckBuildingValue() / 2)
 }
 
 const getRemainingCards = (rules: ArackhanWarsRules, player: number): FactionCard[] => {
