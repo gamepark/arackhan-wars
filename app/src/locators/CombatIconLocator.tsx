@@ -35,7 +35,7 @@ class CombatIconDescription extends LocationDescription<PlayerId, MaterialType, 
   }
 
   getImage(location: Location<PlayerId, LocationType>): string | undefined {
-    return location.x ? this.images[location.id] : undefined
+    return location.x !== undefined ? this.images[location.id] : undefined
   }
 
   getExtraCss(location: Location<PlayerId, LocationType>) {
