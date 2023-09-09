@@ -20,7 +20,7 @@ export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, Loc
       moves.push(...this.material(MaterialType.FactionCard)
         .location(onBattlefieldAndAstralPlane)
         .player(player)
-        .filter((_, index) => (getCardRule(this.game, index).characteristics as Spell).discardTiming === DiscardTiming.EndOfRound)
+        .filter((_, index) => (getCardRule(this.game, index).characteristics as Spell)?.discardTiming === DiscardTiming.EndOfRound)
         .moveItems({ location: { type: LocationType.PlayerDiscard, player } })
       )
     }

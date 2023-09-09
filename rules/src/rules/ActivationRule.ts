@@ -73,7 +73,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     return this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
       .player(this.player)
-      .filter((_, index) => (getCardRule(this.game, index).characteristics as Spell).discardTiming === DiscardTiming.ActivationOrEndOfTurn)
+      .filter((_, index) => (getCardRule(this.game, index).characteristics as Spell)?.discardTiming === DiscardTiming.ActivationOrEndOfTurn)
       .moveItems({ location: { type: LocationType.PlayerDiscard, player: this.player } })
   }
 
