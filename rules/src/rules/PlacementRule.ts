@@ -10,8 +10,15 @@ import { Memory } from './Memory'
 
 export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   getPlayerMoves(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
-    const moves: MaterialMove[] = []
+    const placedCards = this.material(MaterialType.FactionCard)
+      .location(onBattlefieldAndAstralPlane)
+      .player(this.player)
+      .rotation(rotation => rotation?.y === 1)
+    if (placedCards.length === 2) {
+      return [this.validationMove]
+    }
 
+    const moves: MaterialMove[] = []
     const factionCards = this.material(MaterialType.FactionCard)
     const playerHand = factionCards.location(LocationType.Hand).player(this.player)
     const astralCards = playerHand.filter(this.isAstral)
@@ -54,21 +61,12 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
     }
   }
 
-  getAutomaticMoves() {
-    const placedCards = this.material(MaterialType.FactionCard)
-      .location(onBattlefieldAndAstralPlane)
-      .player(this.player)
-      .rotation(rotation => rotation?.y === 1)
-
-    if (placedCards.length === 2) {
-      if (this.nextPlayer !== this.remind(Memory.StartPlayer)) {
-        return [this.rules().startPlayerTurn(RuleId.PlacementRule, this.nextPlayer)]
-      } else {
-        return [this.rules().startRule(RuleId.RevealRule)]
-      }
+  get validationMove() {
+    if (this.nextPlayer !== this.remind(Memory.StartPlayer)) {
+      return this.rules().startPlayerTurn(RuleId.PlacementRule, this.nextPlayer)
+    } else {
+      return this.rules().startRule(RuleId.RevealRule)
     }
-
-    return []
   }
 }
 
