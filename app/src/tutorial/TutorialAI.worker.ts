@@ -17,7 +17,11 @@ import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
-import { minBy, partition, sortBy, sumBy, uniqBy } from 'lodash'
+import minBy from 'lodash/minBy'
+import partition from 'lodash/partition'
+import sortBy from 'lodash/sortBy'
+import sumBy from 'lodash/sumBy'
+import uniqBy from 'lodash/uniqBy'
 import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
@@ -69,7 +73,7 @@ const placementAi = (game: MaterialGame, bot: number) => {
     for (const battlefieldCard of battlefieldUniqCards) {
       for (const space of battlefieldSpaces) {
         const rules = new ArackhanWarsRules(JSON.parse(JSON.stringify(game)))
-        const moves: MoveItem[] = [
+        const moves: MaterialMove[] = [
           rules.material(MaterialType.FactionCard).index(astralCard).moveItem({
             location: { type: LocationType.AstralPlane, x: 0, player: bot },
             rotation: { y: 1 }
@@ -77,7 +81,8 @@ const placementAi = (game: MaterialGame, bot: number) => {
           rules.material(MaterialType.FactionCard).index(battlefieldCard).moveItem({
             location: { type: LocationType.Battlefield, ...space, player: bot },
             rotation: { y: 1 }
-          })
+          }),
+          new PlacementRule(game).validationMove
         ]
         moves.forEach(move => playMove(rules, move))
         placements.push({
@@ -101,7 +106,8 @@ const placementAi = (game: MaterialGame, bot: number) => {
             rules.material(MaterialType.FactionCard).index(battlefieldUniqCards[j]).moveItem({
               location: { type: LocationType.Battlefield, ...battlefieldSpaces[l], player: bot },
               rotation: { y: 1 }
-            })
+            }),
+            new PlacementRule(game).validationMove
           ]
           moves.forEach(move => playMove(rules, move))
           placements.push({
@@ -136,8 +142,8 @@ const placementAi = (game: MaterialGame, bot: number) => {
   return negamax!.moves
 }
 
-const evaluatePlacement = (rules: ArackhanWarsRules, isFirstPlayer: boolean, bot: number, move: MoveItem): number => {
-  if (move.position.location?.type === LocationType.AstralPlane) {
+const evaluatePlacement = (rules: ArackhanWarsRules, isFirstPlayer: boolean, bot: number, move: MaterialMove): number => {
+  if (!isMoveItem(move) || move.position.location?.type === LocationType.AstralPlane) {
     return 0
   }
   let score = 0

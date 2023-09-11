@@ -113,6 +113,12 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
       }
     },
     {
+      popup: {
+        text: () => <Trans defaults="tuto.placement.validation"><strong/></Trans>
+      },
+      move: {}
+    },
+    {
       move: {
         player: 2,
         filter: (move, game) => this.isPlaceCard(game, move, FactionCard.ScuttleJaw, 3, 1)
@@ -135,6 +141,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
         filter: (move, game) => this.isPlaceCard(game, move, FactionCard.SwampOgre, 4, 3)
       }
     },
+    { move: { player: 2 } },
     {
       popup: {
         text: (t: TFunction) => t('tuto.reveal'),
@@ -308,6 +315,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
         filter: (move, game) => this.isPlaceCard(game, move, FactionCard.SwampTroll, 2, 2)
       }
     },
+    { move: { player: 2 } },
     {
       popup: {
         text: (t: TFunction) => <Trans defaults="tuto.skills" values={
@@ -361,6 +369,12 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
       move: {
         filter: (move, game) => this.isPlaceCard(game, move, FactionCard.IceMeteor, 4, 1)
       }
+    },
+    {
+      popup: {
+        text: () => <Trans defaults="tuto.placement.validation"><strong/></Trans>
+      },
+      move: {}
     },
     {
       move: {
