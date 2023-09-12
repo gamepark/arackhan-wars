@@ -33,9 +33,11 @@ import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
 import { NUMBER_OF_ROUNDS } from '@gamepark/arackhan-wars/rules/EndPhaseRules'
 import { PreBuildDecks } from '@gamepark/arackhan-wars/material/cards/PreBuildDecks'
 
+// eslint-disable-next-line no-restricted-globals
 self.onmessage = (e: MessageEvent<string>) => {
   const data = JSON.parse(e.data) as [MaterialGame, number]
   const result = tutorialAI(...data)
+  // eslint-disable-next-line no-restricted-globals
   self.postMessage(JSON.stringify(result))
 }
 
