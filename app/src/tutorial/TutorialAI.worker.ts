@@ -33,16 +33,22 @@ import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
 import { NUMBER_OF_ROUNDS } from '@gamepark/arackhan-wars/rules/EndPhaseRules'
 import { PreBuildDecks } from '@gamepark/arackhan-wars/material/cards/PreBuildDecks'
 
-export async function tutorialAI(game: MaterialGame, bot: number): Promise<MaterialMove[]> {
+self.onmessage = (e: MessageEvent<string>) => {
+  const data = JSON.parse(e.data) as [MaterialGame, number]
+  const result = tutorialAI(...data)
+  self.postMessage(JSON.stringify(result))
+}
+
+export function tutorialAI(game: MaterialGame, bot: number): MaterialMove[] {
   switch (game.rule?.id) {
     case RuleId.ChooseStartPlayer:
-      return Promise.resolve([{ kind: MoveKind.CustomMove, type: CustomMoveType.ChoosePlayer, data: bot }])
+      return [{ kind: MoveKind.CustomMove, type: CustomMoveType.ChoosePlayer, data: bot }]
     case RuleId.Mulligan:
-      return Promise.resolve([{ kind: MoveKind.RulesMove, type: RuleMoveType.EndPlayerTurn, player: bot }])
+      return [{ kind: MoveKind.RulesMove, type: RuleMoveType.EndPlayerTurn, player: bot }]
     case RuleId.PlacementRule:
-      return Promise.resolve(placementAi(game, bot))
+      return placementAi(game, bot)
     default:
-      return Promise.resolve(getActivationNegamax(new ArackhanWarsRules(game), bot).moves)
+      return getActivationNegamax(new ArackhanWarsRules(game), bot).moves
   }
 }
 

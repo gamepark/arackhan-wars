@@ -10,7 +10,7 @@ import { Material, materialI18n } from './material/Material'
 import { Locators } from './locators/Locators'
 import { ArackhanWarsSetup } from '@gamepark/arackhan-wars/ArackhanWarsSetup'
 import { Tutorial } from './tutorial/Tutorial'
-import { tutorialAI } from './tutorial/TutorialAI.worker'
+import { tutorialAI } from './tutorial/TutorialAI'
 
 setupTranslation(translations, { debug: false })
 
@@ -18,7 +18,7 @@ ReactDOM.render(
   <StrictMode>
     <GameProvider game="arackhan-wars" GameSetup={ArackhanWarsSetup} Rules={ArackhanWarsRules} optionsSpec={ArackhanWarsOptionsSpec}
                   material={Material} locators={Locators} materialI18n={materialI18n} animations={new MaterialGameAnimations()}
-                  tutorial={new Tutorial()} ai={tutorialAI}>
+                  tutorial={new Tutorial()} ai={window.Worker ? tutorialAI : undefined}>
       <App/>
     </GameProvider>
   </StrictMode>,
