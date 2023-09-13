@@ -31,7 +31,7 @@ export const GameOverHeader = () => {
       <div css={rulesCss}>
         <h2>{t('rules.end')}</h2>
         <p>{t('rules.score')}</p>
-        <h2>{t('rules.tie')}</h2>
+        <h3>{t('rules.tie')}</h3>
         <ul>
           <li><p>{t('rules.tie.1')}</p></li>
           <li><p>{t('rules.tie.2')}</p></li>
