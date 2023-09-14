@@ -16,6 +16,7 @@
     "linkgp": "yarn link @gamepark/react-client @gamepark/rules-api @gamepark/react-game",
     "unlinkgp": "yarn unlink @gamepark/react-client @gamepark/rules-api @gamepark/react-game",
     "start": "yarn workspace @gamepark/arackhan-wars-app run start",
-    "build": "yarn workspace @gamepark/arackhan-wars-app run build"
+    "build": "yarn workspace @gamepark/arackhan-wars-app run build",
+    "deploy": "yarn workspace @gamepark/arackhan-wars-app run deploy"
   }
 }

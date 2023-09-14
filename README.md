@@ -182,11 +182,8 @@ Edit advanced config> n
 
 This configuration is only required once.
 
-Now, to deploy a new version of the board game, you have 2 command lines to run:
+Now you can deploy a new version of the react application with this command:
 
 ```
-yarn build
-rclone sync app/build arackhan-wars:arackhan-wars.game-park.com --progress --s3-acl=public-read
+yarn deploy
 ```
-
-More details about this deployment method here: https://www.clever-cloud.com/blog/engineering/2020/06/24/deploy-cellar-s3-static-site/
