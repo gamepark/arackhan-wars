@@ -7,9 +7,6 @@ import attackIcon from '../images/icons/attack.png'
 import defenseIcon from '../images/icons/defense.png'
 import { css } from '@emotion/react'
 import { Location } from '@gamepark/rules-api'
-import { addStylesheetUrl } from '@gamepark/react-game/dist/components/menus/menuCss'
-
-addStylesheetUrl('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap')
 
 export enum CombatIcon {
   Attack = 1, Defense

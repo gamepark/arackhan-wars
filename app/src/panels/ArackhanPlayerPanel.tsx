@@ -44,6 +44,7 @@ const panelCss = css`
   right: 1em;
   width: ${panelWidth}em;
   height: ${panelWidth / 3.95}em;
+  font-family: "Cinzel", sans-serif;
 `
 
 const topPosition = css`
@@ -74,20 +75,23 @@ const avatarStyle = css`
 
 const nameStyle = css`
   position: absolute;
-  top: 49%;
-  left: 30%;
-  font-size: 3.5em;
-  max-width: 7em;
+  color: rgba(238, 238, 238, 0.9);
+  top: 51.8%;
+  left: 52%;
+  font-size: 2.8em;
+  width: 50%;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%);
 `
 
 const scoreStyle = css`
   position: absolute;
-  top: 50%;
-  right: 8.6%;
+  color: #DFC7A1;
+  top: 53%;
+  right: 8.3%;
   transform: translate(50%, -50%);
   font-size: 4em;
 `
@@ -104,8 +108,8 @@ const timerCss = css`
 
 const timerText = css`
   position: absolute;
-  font-size: 3em;
-  top: 52%;
+  font-size: 2.8em;
+  top: 56%;
   left: 60%;
   transform: translate(-50%, -50%);
 `
