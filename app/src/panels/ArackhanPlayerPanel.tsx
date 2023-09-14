@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { FC, useMemo } from 'react'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
-import { Avatar, backgroundCss, SpeechBubbleDirection, usePlayerName, useRules } from '@gamepark/react-game'
+import { Avatar, backgroundCss, PlayerTimer, SpeechBubbleDirection, usePlayerName, useRules } from '@gamepark/react-game'
 import { css } from '@emotion/react'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
@@ -9,6 +9,7 @@ import whitelandsPanel from '../images/panels/whitelands-panel.png'
 import nakkaPanel from '../images/panels/nakka-panel.png'
 import greyOrderPanel from '../images/panels/grey-order-panel.png'
 import blightPanel from '../images/panels/blight-panel.png'
+import timerBackground from '../images/panels/timer.png'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 
@@ -30,11 +31,13 @@ export const ArackhanPlayerPanel: FC<PlayerPanelProps> = ({ player, bottom }) =>
               speechBubbleProps={{ direction: bottom ? SpeechBubbleDirection.TOP_LEFT : SpeechBubbleDirection.BOTTOM_LEFT }}/>
       <span css={nameStyle}>{playerName}</span>
       {score !== undefined && <span css={[scoreStyle, score > 100 && css`font-size: 3em;`]}>{rules?.getScore(player)}</span>}
+      {!rules?.isOver() && <div css={timerCss}><PlayerTimer playerId={player} css={timerText}/></div>}
     </div>
   )
 }
 
 const panelWidth = 50
+const timerWidth = 19.2
 
 const panelCss = css`
   position: absolute;
@@ -87,4 +90,22 @@ const scoreStyle = css`
   right: 8.6%;
   transform: translate(50%, -50%);
   font-size: 4em;
+`
+
+const timerCss = css`
+  position: absolute;
+  background-image: url("${timerBackground}");
+  background-size: cover;
+  width: ${timerWidth}em;
+  height: ${timerWidth * 73 / 283}em;
+  top: 78%;
+  left: 48.7%;
+`
+
+const timerText = css`
+  position: absolute;
+  font-size: 3em;
+  top: 52%;
+  left: 60%;
+  transform: translate(-50%, -50%);
 `
