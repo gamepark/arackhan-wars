@@ -48,17 +48,23 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
 
   get battlefieldLegalSpaces() {
     const battlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-    const battlefieldCards = battlefield.getItems()
-    const battlefieldBeforeMyPlacement = battlefield.filter(card => !card.rotation || card.location.player !== this.player)
-    if (battlefieldBeforeMyPlacement.length === 0) {
-      return startingCoordinates.filter(space => !battlefieldCards.some(card => card.location.x === space.x && card.location.y === space.y))
-    } else {
-      return battlefieldCoordinates
-        .filter(space =>
-          !battlefieldCards.some(card => card.location.x === space.x && card.location.y === space.y)
-          && battlefieldCards.some(card => areAdjacentSquares(card.location, space))
-        )
+    if (!battlefield.length) {
+      return startingCoordinates
     }
+    const battlefieldCards = battlefield.getItems()
+    const potentialArea = battlefieldCards.every(card => this.isPlacedThisTurnByMe(card)) ? startingCoordinates : battlefieldCoordinates
+    return potentialArea.filter(space => {
+      let adjacentCardFound = false
+      for (const card of battlefieldCards) {
+        if (card.location.x === space.x && card.location.y === space.y) return false
+        adjacentCardFound = adjacentCardFound || areAdjacentSquares(card.location, space)
+      }
+      return adjacentCardFound
+    })
+  }
+
+  isPlacedThisTurnByMe(card: MaterialItem) {
+    return card.rotation && card.location.player === this.player
   }
 
   get validationMove() {
