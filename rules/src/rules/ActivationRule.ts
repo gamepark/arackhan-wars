@@ -20,6 +20,10 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
       this.memorize(Memory.MovedCards, [])
       this.memorize(Memory.Attacks, [])
       this.memorize(Memory.TurnEffects, [])
+      const moves = this.getPlayerMoves()
+      if (moves.length === 1) {
+        return moves
+      }
     }
     return []
   }
@@ -29,16 +33,10 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     if (moves.length === 1 && (
       (isCustomMove(moves[0]) && moves[0].type === CustomMoveType.SolveAttack)
       || (isMoveItem(moves[0]) && moves[0].itemType === MaterialType.FactionToken)
-      || (this.remind(Memory.IsInitiativeSequence) && !this.hasCardWithInitiative())
     )) {
       return moves
     }
     return []
-  }
-
-  hasCardWithInitiative() {
-    return this.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane).player(this.player)
-      .getIndexes().some(index => getCardRule(this.game, index).hasInitiative)
   }
 
   getPlayerMoves() {
