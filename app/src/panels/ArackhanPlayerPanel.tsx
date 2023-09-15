@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { FC, useMemo } from 'react'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
-import { Avatar, backgroundCss, PlayerTimer, SpeechBubbleDirection, usePlayerName, useRules } from '@gamepark/react-game'
+import { Avatar, backgroundCss, PlayerTimerDisplay, SpeechBubbleDirection, usePlayerName, usePlayerTime, useRules } from '@gamepark/react-game'
 import { css } from '@emotion/react'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
@@ -25,13 +25,14 @@ export const ArackhanPlayerPanel: FC<PlayerPanelProps> = ({ player, bottom }) =>
       rules.material(MaterialType.FactionCard).location(LocationType.Hand).player(player).getItem()!.id.back as Faction
     , [rules, player])
   const score = useMemo(() => rules?.getScore(player), [rules, player])
+  const playerTime = usePlayerTime(player)
   return (
     <div css={[panelCss, bottom ? bottomPosition : topPosition, backgroundCss(backgroundImage[faction])]}>
       <Avatar css={avatarStyle} playerId={player}
               speechBubbleProps={{ direction: bottom ? SpeechBubbleDirection.TOP_LEFT : SpeechBubbleDirection.BOTTOM_LEFT }}/>
       <span css={nameStyle}>{playerName}</span>
       {score !== undefined && <span css={[scoreStyle, score > 100 && css`font-size: 3em;`]}>{rules?.getScore(player)}</span>}
-      {!rules?.isOver() && <div css={timerCss}><PlayerTimer playerId={player} css={timerText}/></div>}
+      {playerTime !== undefined && !rules.isOver() && <div css={timerCss}><PlayerTimerDisplay playerTime={playerTime} playerId={player} css={timerText}/></div>}
     </div>
   )
 }
@@ -111,5 +112,6 @@ const timerText = css`
   font-size: 2.8em;
   top: 56%;
   left: 60%;
+  white-space: nowrap;
   transform: translate(-50%, -50%);
 `
