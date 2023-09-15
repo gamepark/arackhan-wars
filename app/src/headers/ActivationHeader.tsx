@@ -12,39 +12,42 @@ export const ActivationHeader = () => {
   const activePlayer = rules?.getActivePlayer()
   const playerName = usePlayerName(activePlayer)
   const legalMoves = useLegalMoves()
-
+  const isInitiativeSequence = rules?.remind(Memory.IsInitiativeSequence)
   const movedCard = rules?.remind(Memory.MovedCards)?.[0]
   const movedCardId = movedCard !== undefined ? rules?.material(MaterialType.FactionCard).getItem(movedCard)?.id.front : undefined
-  if (movedCardId !== undefined) {
-    const deactivate = legalMoves.find(isMoveItemType(MaterialType.FactionToken))
-    if (!deactivate) {
-      return <>{t('header.activation.moved.choice', { card: t(`card.name.${movedCardId}`), player: playerName })}</>
-    } else {
-      return <Trans defaults="header.activation.moved.choose" values={{ card: t(`card.name.${movedCardId}`) }}>
-        <PlayMoveButton move={deactivate}/>
-      </Trans>
-    }
-  }
-
-  const isInitiativeSequence = rules?.remind(Memory.IsInitiativeSequence)
-  if (isInitiativeSequence) {
-    if (!legalMoves.length) {
-      return <>{t('header.initiative', { player: playerName })}</>
-    } else {
-      return <Trans defaults="header.initiative.me"><PlayMoveButton move={legalMoves.find(isCustomMoveType(CustomMoveType.Pass))}/></Trans>
-    }
-  }
 
   if (!legalMoves.length) {
-    return <>{t('header.activation', { player: playerName })}</>
-  } else {
-    const solveAttack = legalMoves.find(isCustomMoveType(CustomMoveType.SolveAttack))
-    if (solveAttack) {
-      return <Trans defaults="header.attack.solve">
-        <PlayMoveButton move={solveAttack}/>
-      </Trans>
+    if (movedCardId !== undefined) {
+      return <>{t('header.activation.moved.choice', { card: t(`card.name.${movedCardId}`), player: playerName })}</>
     }
-    const pass = legalMoves.find(isCustomMoveType(CustomMoveType.Pass))
-    return <Trans defaults="header.activation.me"><PlayMoveButton move={pass}/></Trans>
+    if (isInitiativeSequence) {
+      return <>{t('header.initiative', { player: playerName })}</>
+    }
+    return <>{t('header.activation', { player: playerName })}</>
   }
+
+  if (movedCardId !== undefined) {
+    const deactivate = legalMoves.find(isMoveItemType(MaterialType.FactionToken))!
+    return <Trans defaults="header.activation.moved.choose" values={{ card: t(`card.name.${movedCardId}`) }}>
+      <PlayMoveButton move={deactivate}/>
+    </Trans>
+  }
+
+  const solveAttack = legalMoves.find(isCustomMoveType(CustomMoveType.SolveAttack))
+  if (solveAttack) {
+    return <Trans defaults="header.attack.solve">
+      <PlayMoveButton move={solveAttack}/>
+    </Trans>
+  }
+
+  const pass = legalMoves.find(isCustomMoveType(CustomMoveType.Pass))
+  if (legalMoves.length === 1) {
+    return <Trans defaults="header.activation.pass"><PlayMoveButton move={pass}/></Trans>
+  }
+
+  if (isInitiativeSequence) {
+    return <Trans defaults="header.initiative.me"><PlayMoveButton move={legalMoves.find(isCustomMoveType(CustomMoveType.Pass))}/></Trans>
+  }
+
+  return <Trans defaults="header.activation.me"><PlayMoveButton move={pass}/></Trans>
 }
