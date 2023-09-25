@@ -48,7 +48,10 @@ export class MulliganRule extends SimultaneousRule<PlayerId, MaterialType, Locat
       .location(LocationType.PlayerDeck)
       .player(player)
 
-    const moves: MaterialMove[] = [cardsInDeck.shuffle()]
+    const moves: MaterialMove[] = [
+      this.rules().endPlayerTurn(player),
+      cardsInDeck.shuffle()
+    ]
 
     const cardsInHand = this
       .material(MaterialType.FactionCard)
@@ -62,8 +65,6 @@ export class MulliganRule extends SimultaneousRule<PlayerId, MaterialType, Locat
         .limit(START_HAND - cardsInHand)
         .moveItems({ location: { type: LocationType.Hand, player } })
     )
-
-    moves.push(this.rules().endPlayerTurn(player))
 
     return moves
   }
