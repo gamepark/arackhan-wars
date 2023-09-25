@@ -21,9 +21,11 @@ type PlayerPanelProps = {
 export const ArackhanPlayerPanel: FC<PlayerPanelProps> = ({ player, bottom }) => {
   const playerName = usePlayerName(player)
   const rules = useRules<ArackhanWarsRules>()!
-  const faction = useMemo(() =>
-      rules.material(MaterialType.FactionCard).location(LocationType.Hand).player(player).getItem()!.id.back as Faction
-    , [rules, player])
+  const faction = useMemo<Faction>(() =>
+      rules.material(MaterialType.FactionCard).location(location =>
+        location.player === player && (location.type === LocationType.Hand || location.type === LocationType.PlayerDeck)
+      ).getItem()?.id.back ?? Faction.GreyOrder
+    , [player])
   const score = useMemo(() => rules?.getScore(player), [rules, player])
   const playerTime = usePlayerTime(player)
   return (
