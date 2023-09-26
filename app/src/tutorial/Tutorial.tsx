@@ -297,7 +297,6 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
         filter: isCustomMoveType(CustomMoveType.Pass)
       }
     },
-    { move: { player: 2 } },
     {
       popup: {
         text: () => <Trans defaults="tuto.end-round-1"><strong/></Trans>
