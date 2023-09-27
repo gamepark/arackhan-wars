@@ -20,9 +20,14 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
       this.memorize(Memory.MovedCards, [])
       this.memorize(Memory.Attacks, [])
       this.memorize(Memory.TurnEffects, [])
-      const moves = this.getPlayerMoves()
-      if (moves.length === 1) {
-        return moves
+
+      // If we know all the cards in the player's hand, we know all the legal moves. If there is only 1 legal move (pass), automatically play it.
+      const playerCards = this.material(MaterialType.FactionCard).location(LocationType.Hand).player(this.player).getItems()
+      if (playerCards.every(card => card.id.front !== undefined)) {
+        const moves = this.getPlayerMoves()
+        if (moves.length === 1) {
+          return moves
+        }
       }
     }
     return []
