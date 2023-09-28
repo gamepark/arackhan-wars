@@ -5,7 +5,7 @@ import GameDisplay from './GameDisplay'
 import { MaterialGame } from '@gamepark/rules-api'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
-import { GameOverHeader } from './headers/GameOverHeader'
+import { GameOverRule } from './headers/GameOverRule'
 import { MulliganHeader } from './headers/MulliganHeader'
 import { PlacementHeader } from './headers/PlacementHeader'
 import { ChooseStartPlayerHeader } from './headers/ChooseStartPlayerHeader'
@@ -29,7 +29,7 @@ export default function App() {
     <>
       <GameDisplay/>
       <LoadingScreen display={loading} author={['Robert Palmer', 'Mickaël Bour']} artist="Robert Palmer" publisher="Nothing But Games" developer="Game Park"/>
-      <MaterialHeader rulesStepsHeaders={RulesHeaders} GameOver={GameOverHeader} loading={loading}/>
+      <MaterialHeader rulesStepsHeaders={RulesHeaders} GameOverRule={GameOverRule} loading={loading}/>
       <MaterialImageLoader onImagesLoad={() => setImagesLoading(false)}/>
       <Menu/>
       <FailuresDialog/>
@@ -42,7 +42,7 @@ const RulesHeaders: Record<RuleId, () => ReactJSXElement> = {
   // TODO: all headers
   [RuleId.ChooseStartPlayer]: ChooseStartPlayerHeader,
   [RuleId.Mulligan]: MulliganHeader,
-  [RuleId.DrawRule]:  DrawHeader,
+  [RuleId.DrawRule]: DrawHeader,
   [RuleId.PlacementRule]: PlacementHeader,
   [RuleId.RevealRule]: RevealHeader,
   [RuleId.ActivationRule]: ActivationHeader,

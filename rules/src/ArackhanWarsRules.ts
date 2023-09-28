@@ -7,7 +7,6 @@ import {
   MaterialItem,
   MaterialMove,
   MaterialRulesPartCreator,
-  rankByScore,
   SecretMaterialRules,
   TimeLimit
 } from '@gamepark/rules-api'
@@ -58,36 +57,21 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
     return super.play(move)
   }
 
-  rankPlayers(playerA: PlayerId, playerB: PlayerId): number {
-    return rankByScore(playerA, playerB, this.getScore.bind(this))
+  getScore(playerId: PlayerId) {
+    const cardsOnBattlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
+      .player(playerId).id<{ front?: FactionCard, back: Faction }>(id => id?.front !== undefined).getItems()
+    return sumBy(cardsOnBattlefield, card => {
+      const characteristics = FactionCardsCharacteristics[card.id.front as FactionCard]
+      return isSpell(characteristics) ? 0 : characteristics.value
+    })
   }
 
-  getScore(playerId: PlayerId, tieBreaker = 0) {
-    switch (tieBreaker) {
-      case 0:
-        const cardsOnBattlefield = this
-          .material(MaterialType.FactionCard)
-          .location(LocationType.Battlefield)
-          .player(playerId)
-          .id<{ front?: FactionCard, back: Faction }>(id => id?.front !== undefined)
-          .getItems()
-        return sumBy(cardsOnBattlefield, card => {
-          const characteristics = FactionCardsCharacteristics[card.id.front as FactionCard]
-          return isSpell(characteristics) ? 0 : characteristics.value
-        })
-      case 1:
-        return this
-          .material(MaterialType.FactionCard)
-          .location(LocationType.Battlefield)
-          .player(playerId)
-          .length
-      case 2:
-        return -this
-          .material(MaterialType.FactionCard)
-          .location(LocationType.PlayerDiscard)
-          .player(playerId)
-          .filter((_, index) => isCreature(getCardRule(this.game, index).characteristics))
-          .length
+  getTieBreaker(tieBreaker: number, playerId: PlayerId) {
+    if (tieBreaker === 1) {
+      return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).player(playerId).length
+    } else if (tieBreaker === 2) {
+      return -this.material(MaterialType.FactionCard).location(LocationType.PlayerDiscard).player(playerId)
+        .filter((_, index) => isCreature(getCardRule(this.game, index).characteristics)).length
     }
     return
   }
