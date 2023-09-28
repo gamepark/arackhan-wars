@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { ItemContext, LocationDescription, MaterialContext } from '@gamepark/react-game'
+import { LocationDescription, MaterialContext } from '@gamepark/react-game'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { factionCardDescription } from '../material/FactionCardDescription'
@@ -12,9 +12,9 @@ export class BattlefieldDescription extends LocationDescription<PlayerId, Materi
   borderRadius = 0.2
   alwaysVisible = false
 
-  canDrop(move: MaterialMove, location: Location, context: ItemContext): boolean {
+  isMoveToLocation(move: MaterialMove, location: Location, context: MaterialContext): boolean {
     // When 2 cards are swapped, we have to disable the battlefield drop area beneath the card to prevent glitches with dnd-kit
-    return !this.isSwapCards(move, context) && super.canDrop(move, location, context)
+    return !this.isSwapCards(move, context) && super.isMoveToLocation(move, location, context)
   }
 
   private isSwapCards = (move: MaterialMove, { rules }: MaterialContext) =>

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { ItemContext, LocationDescription } from '@gamepark/react-game'
+import { LocationDescription, MaterialContext } from '@gamepark/react-game'
 import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { css } from '@emotion/react'
 import { factionCardDescription } from '../material/FactionCardDescription'
@@ -18,7 +18,7 @@ export class FactionCardLocationDescription extends LocationDescription<PlayerId
     border-radius: inherit;
   `
 
-  canDrop(move: MaterialMove, location: Location, context: ItemContext) {
+  isMoveToLocation(move: MaterialMove, location: Location, context: MaterialContext) {
     const { player, rules } = context
     if (isCustomMove(move) && move.type === CustomMoveType.Attack) {
       if (move.data.target !== undefined) {
@@ -35,6 +35,6 @@ export class FactionCardLocationDescription extends LocationDescription<PlayerId
       return move.position.location.x === parentCardLocation?.x && move.position.location.y === parentCardLocation?.y
     }
 
-    return super.canDrop(move, location, context)
+    return super.isMoveToLocation(move, location, context)
   }
 }
