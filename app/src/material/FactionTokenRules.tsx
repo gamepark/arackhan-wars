@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Trans, useTranslation } from 'react-i18next'
-import { MaterialRulesProps } from '@gamepark/react-game/dist/components/material/MaterialDescription'
+import { MaterialRulesProps } from '@gamepark/react-game'
 import { TokenFaction } from '@gamepark/arackhan-wars/material/TokenFaction'
 
 export const FactionTokenRules = (props: MaterialRulesProps) => {

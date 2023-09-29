@@ -1,10 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { MaterialRulesProps, Picture, PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
+import { linkButtonCss, MaterialRulesProps, Picture, PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
 import { displayLocationRules, isCustomMove } from '@gamepark/rules-api'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { linkButtonCss } from '@gamepark/react-game/dist/css/buttonCss'
 import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
 import { DiscardTiming } from '@gamepark/arackhan-wars/material/cards/FactionCardCharacteristics'
 import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { ArackhanWarsOptionsSpec } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
-import { GameProvider, MaterialGameAnimations, setupTranslation } from '@gamepark/react-game'
+import { addStylesheetUrl, GameProvider, MaterialGameAnimations, setupTranslation } from '@gamepark/react-game'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
@@ -12,7 +12,6 @@ import { ArackhanWarsSetup } from '@gamepark/arackhan-wars/ArackhanWarsSetup'
 import { Tutorial } from './tutorial/Tutorial'
 import { tutorialAI } from './tutorial/TutorialAI'
 import background from './images/background.jpg'
-import { addStylesheetUrl } from '@gamepark/react-game/dist/components/menus/menuCss'
 
 setupTranslation(translations, { debug: false })
 addStylesheetUrl('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap')

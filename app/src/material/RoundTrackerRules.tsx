@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useTranslation } from 'react-i18next'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
-import { useRules } from '@gamepark/react-game/dist/hooks/useRules'
+import { useRules } from '@gamepark/react-game'
 
 export const RoundTrackerRules = () => {
   const { t } = useTranslation()

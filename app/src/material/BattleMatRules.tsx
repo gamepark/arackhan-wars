@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { Trans, useTranslation } from 'react-i18next'
-import { PlayMoveButton } from '@gamepark/react-game/dist/components/buttons/PlayMoveButton/PlayMoveButton'
-import { linkButtonCss } from '@gamepark/react-game/dist/css/buttonCss'
-import { displayLocationRules } from '@gamepark/rules-api/dist/material/moves/local/DisplayRules'
+import { linkButtonCss, PlayMoveButton } from '@gamepark/react-game'
+import { displayLocationRules } from '@gamepark/rules-api'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 
 export const BattleMatRules = () => {
