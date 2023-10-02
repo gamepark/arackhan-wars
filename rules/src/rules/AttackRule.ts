@@ -172,7 +172,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
         attackedBy[target].push(attack.card)
       }
     }
-    return mapValues(attackedBy, (attackers, card) => getCardRule(this.game, parseInt(card)).getAttackValue(attackers))
+    return mapValues(attackedBy, (attackers, card) => getCardRule(this.game, parseInt(card)).getDamagesInflicted(attackers))
   }
 
   onSuccessfulAttack(enemy: number) {

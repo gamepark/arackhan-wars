@@ -189,21 +189,21 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
     return this.characteristics?.action && this.canBeActivated
   }
 
-  getAttackValue(attackers: number[]): number {
+  getDamagesInflicted(attackers: number[]): number {
     if (attackers.length === 0) return 0
-    if (this.isInvalidAttackGroup(attackers)) {
+    if (this.isInvalidAttackersGroup(attackers)) {
       // We recursively try all attack groups made of all attackers but one, and keep the best value
-      return Math.max(...attackers.map(excludedAttacker => this.getAttackValue(attackers.filter(attacker => attacker !== excludedAttacker))))
+      return Math.max(...attackers.map(excludedAttacker => this.getDamagesInflicted(attackers.filter(attacker => attacker !== excludedAttacker))))
     }
     return sumBy(attackers, attacker => getCardRule(this.game, attacker).attack)
   }
 
-  isInvalidAttackGroup(attackers: number[]) {
+  isInvalidAttackersGroup(attackers: number[]) {
     return this.effects.some(effect =>
-      isAttackerConstraint(effect) && this.isEffectInvalidAttackGroup(effect, attackers)
+      isDefenderConstraint(effect) && this.isEffectInvalidAttackGroup(effect, attackers)
     ) || attackers.some(attacker =>
       getCardRule(this.game, attacker).effects.some(effect =>
-        isDefenderConstraint(effect) && this.isEffectInvalidAttackGroup(effect, attackers)
+        isAttackerConstraint(effect) && this.isEffectInvalidAttackGroup(effect, attackers)
       )
     )
   }
