@@ -1,21 +1,23 @@
 /** @jsxImportSource @emotion/react */
-import { linkButtonCss, MaterialRulesProps, Picture, PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
-import { Trans, useTranslation } from 'react-i18next'
-import { displayLocationRules, isCustomMove } from '@gamepark/rules-api'
-import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
-import { DiscardTiming } from '@gamepark/arackhan-wars/material/cards/FactionCardCharacteristics'
-import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
-import { isSpell } from '@gamepark/arackhan-wars/material/cards/Spell'
-import { isLand } from '@gamepark/arackhan-wars/material/cards/Land'
-import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
+import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
+import { Attribute } from '@gamepark/arackhan-wars/material/cards/Attribute'
+import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
+import { EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
+import { DiscardTiming } from '@gamepark/arackhan-wars/material/cards/FactionCardCharacteristics'
+import { isLand } from '@gamepark/arackhan-wars/material/cards/Land'
+import { isSpell } from '@gamepark/arackhan-wars/material/cards/Spell'
+import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
+import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
+import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
-import { alignIcon, AttributeRule } from './AttributeRule'
+import { linkButtonCss, MaterialRulesProps, Picture, PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
+import { displayLocationRules, isCustomMove } from '@gamepark/rules-api'
+import { Trans, useTranslation } from 'react-i18next'
 import astral from '../images/icons/astral.png'
 import captureFlag from '../images/icons/capture-flag.png'
 import { AbilityRule } from './AbilityRule'
+import { alignIcon, AttributeRule } from './AttributeRule'
 import { CardEffectsRules } from './CardEffectsRules'
 
 export const FactionCardRules = (props: MaterialRulesProps) => {
@@ -83,9 +85,9 @@ const CardFrontRule = (props: MaterialRulesProps) => {
   const characteristics = FactionCardsCharacteristics[factionCard]
   return <>
     {isCreature(characteristics) && <>
-      <p><Trans defaults="rules.card.creature" values={characteristics}><strong/></Trans></p>
+        <p><Trans defaults="rules.card.creature" values={characteristics}><strong/></Trans></p>
       {characteristics.family &&
-        <p><Trans defaults="rules.card.family" values={{ family: t(`card.family.${characteristics.family}`) }}><strong/></Trans></p>
+          <p><Trans defaults="rules.card.family" values={{ family: t(`card.family.${characteristics.family}`) }}><strong/></Trans></p>
       }
     </>}
     {isSpell(characteristics) && (
@@ -93,18 +95,18 @@ const CardFrontRule = (props: MaterialRulesProps) => {
         : <p><Trans defaults="rules.card.spell.passive"><strong/></Trans></p>
     )}
     {isSpell(characteristics) && characteristics.astral &&
-      <p css={alignIcon}>
-        <Picture src={astral}/>
-        &nbsp;
-        <span><Trans defaults={`rules.card.spell.astral`}><strong/></Trans></span>
-      </p>
+        <p css={alignIcon}>
+            <Picture src={astral}/>
+            &nbsp;
+            <span><Trans defaults={`rules.card.spell.astral`}><strong/></Trans></span>
+        </p>
     }
     {isLand(characteristics) &&
-      <p css={alignIcon}>
-        <Picture src={captureFlag}/>
-        &nbsp;
-        <span><Trans defaults={`rules.card.land`} values={characteristics}><strong/></Trans></span>
-      </p>
+        <p css={alignIcon}>
+            <Picture src={captureFlag}/>
+            &nbsp;
+            <span><Trans defaults={`rules.card.land`} values={characteristics}><strong/></Trans></span>
+        </p>
     }
     {characteristics.getAttributes().map(attribute => <AttributeRule key={attribute.type} attribute={attribute}/>)}
     {isCreature(characteristics) && characteristics.getSkills().map((skill, index) =>
@@ -119,20 +121,34 @@ const CardFrontRule = (props: MaterialRulesProps) => {
     {isLand(characteristics) && characteristics.getBenefits().map((benefit, index) =>
       <AbilityRule key={index} type={t('card.benefit')} ability={benefit} card={factionCard}/>
     )}
+    {characteristics.getAbilities().map(ability =>
+      ability.effects.map(effect => {
+        switch (effect.type) {
+          case EffectType.GainAttributes:
+            return effect.attributes.map(attribute => <AttributeRule key={attribute.type} attribute={attribute}/>)
+          case EffectType.LoseAttributes:
+            return effect.attributes?.map(attributeType =>
+              <AttributeRule key={attributeType} attribute={{ type: attributeType } as Attribute}/>
+            )
+          default:
+            return null
+        }
+      })
+    )}
     {characteristics.action && <>
-      <p><strong>{t('card.action')}</strong> - <Trans defaults={`action.${factionCard}`}><strong/><em/></Trans></p>
+        <p><strong>{t('card.action')}</strong> - <Trans defaults={`action.${factionCard}`}><strong/><em/></Trans></p>
       {item.location && item.location.player === playerId && onBattlefieldAndAstralPlane(item.location) && <PerformActionButton {...props}/>}
     </>}
     {item.location?.type === LocationType.Battlefield && <CardEffectsRules index={itemIndex!}/>}
     <p><Trans defaults="rules.card.value" values={{ value: characteristics.value }}><strong/></Trans></p>
     {characteristics.deckBuildingValue &&
-      <p><Trans defaults="rules.card.deck-value" values={{ value: characteristics.deckBuildingValue }}><strong/></Trans></p>
+        <p><Trans defaults="rules.card.deck-value" values={{ value: characteristics.deckBuildingValue }}><strong/></Trans></p>
     }
     {characteristics.legendary &&
-      <p><Trans defaults="rules.card.legendary"><strong/></Trans></p>
+        <p><Trans defaults="rules.card.legendary"><strong/></Trans></p>
     }
     {characteristics.limit &&
-      <p><Trans defaults="rules.card.limit" values={{ limit: characteristics.limit }}><strong/></Trans></p>
+        <p><Trans defaults="rules.card.limit" values={{ limit: characteristics.limit }}><strong/></Trans></p>
     }
   </>
 }
