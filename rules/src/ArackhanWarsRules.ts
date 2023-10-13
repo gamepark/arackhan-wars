@@ -1,5 +1,3 @@
-import { MaterialType } from './material/MaterialType'
-import { LocationType } from './material/LocationType'
 import {
   CompetitiveScore,
   HidingStrategy,
@@ -10,26 +8,28 @@ import {
   SecretMaterialRules,
   TimeLimit
 } from '@gamepark/rules-api'
-import { RuleId } from './rules/RuleId'
-import { MulliganRule } from './rules/MulliganRule'
-import { locationsStrategies } from './material/LocationStrategies'
-import { PlacementRule } from './rules/PlacementRule'
-import { RevealRule } from './rules/RevealRule'
+import sumBy from 'lodash/sumBy'
 import { PlayerId } from './ArackhanWarsOptions'
-import { ActivationRule } from './rules/ActivationRule'
-import { EndPhaseRules } from './rules/EndPhaseRules'
-import { DrawRules } from './rules/DrawRules'
+import { isCreature } from './material/cards/Creature'
+import { isSpell } from './material/cards/Spell'
+import { Faction } from './material/Faction'
+import { FactionCard, FactionCardsCharacteristics } from './material/FactionCard'
+import { locationsStrategies } from './material/LocationStrategies'
+import { LocationType } from './material/LocationType'
+import { MaterialType } from './material/MaterialType'
 import { ForcedExileActionRule } from './rules/action/ForcedExileActionRule'
 import { HorseOfAvalonActionRule } from './rules/action/HorseOfAvalonActionRule'
-import { TeleportationActionRule } from './rules/action/TeleportationActionRule'
-import { ChooseStartPlayerRule } from './rules/ChooseStartPlayerRule'
-import sumBy from 'lodash/sumBy'
-import { FactionCard, FactionCardsCharacteristics } from './material/FactionCard'
 import { MimicryActionRule } from './rules/action/MimicryActionRule'
-import { isCreature } from './material/cards/Creature'
+import { TeleportationActionRule } from './rules/action/TeleportationActionRule'
+import { ActivationRule } from './rules/ActivationRule'
 import { getCardRule, resetCardsRulesCache } from './rules/CardRule'
-import { Faction } from './material/Faction'
-import { isSpell } from './material/cards/Spell'
+import { ChooseStartPlayerRule } from './rules/ChooseStartPlayerRule'
+import { DrawRules } from './rules/DrawRules'
+import { EndPhaseRules } from './rules/EndPhaseRules'
+import { MulliganRule } from './rules/MulliganRule'
+import { PlacementRule } from './rules/PlacementRule'
+import { RevealRule } from './rules/RevealRule'
+import { RuleId } from './rules/RuleId'
 
 
 /**
@@ -42,11 +42,6 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
   rules = rules
   locationsStrategies = locationsStrategies
   hidingStrategies = hidingStrategies
-  materialLocations = {
-    [MaterialType.BattleMat]: [LocationType.PlayerDeck, LocationType.Battlefield, LocationType.AstralPlane, LocationType.PlayerDiscard],
-    [MaterialType.RoundTracker]: [LocationType.RoundTracker],
-    [MaterialType.FactionCard]: [LocationType.FactionCard, LocationType.FactionTokenSpace]
-  }
 
   giveTime(): number {
     return 60
