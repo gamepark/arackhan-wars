@@ -4,7 +4,7 @@ import {
   MaterialGame,
   MaterialItem,
   MaterialMove,
-  MaterialRulesPartCreator,
+  PositiveSequenceStrategy,
   SecretMaterialRules,
   TimeLimit
 } from '@gamepark/rules-api'
@@ -14,7 +14,6 @@ import { isCreature } from './material/cards/Creature'
 import { isSpell } from './material/cards/Spell'
 import { Faction } from './material/Faction'
 import { FactionCard, FactionCardsCharacteristics } from './material/FactionCard'
-import { locationsStrategies } from './material/LocationStrategies'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { ForcedExileActionRule } from './rules/action/ForcedExileActionRule'
@@ -39,9 +38,37 @@ import { RuleId } from './rules/RuleId'
 export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialType, LocationType>
   implements CompetitiveScore<MaterialGame<PlayerId, MaterialType, LocationType>, MaterialMove<PlayerId, MaterialType, LocationType>, PlayerId>,
     TimeLimit<MaterialGame<PlayerId, MaterialType, LocationType>, MaterialMove<PlayerId, MaterialType, LocationType>, PlayerId> {
-  rules = rules
-  locationsStrategies = locationsStrategies
-  hidingStrategies = hidingStrategies
+
+  rules = {
+    [RuleId.ChooseStartPlayer]: ChooseStartPlayerRule,
+    [RuleId.Mulligan]: MulliganRule,
+    [RuleId.DrawRule]: DrawRules,
+    [RuleId.PlacementRule]: PlacementRule,
+    [RuleId.RevealRule]: RevealRule,
+    [RuleId.ActivationRule]: ActivationRule,
+    [RuleId.EndPhaseRule]: EndPhaseRules,
+    [RuleId.ForcedExileActionRule]: ForcedExileActionRule,
+    [RuleId.HorseOfAvalonActionRule]: HorseOfAvalonActionRule,
+    [RuleId.TeleportationActionRule]: TeleportationActionRule,
+    [RuleId.MimicryActionRule]: MimicryActionRule
+  }
+
+  locationsStrategies = {
+    [MaterialType.FactionCard]: {
+      [LocationType.PlayerDeck]: new PositiveSequenceStrategy(),
+      [LocationType.PlayerDiscard]: new PositiveSequenceStrategy(),
+      [LocationType.Hand]: new PositiveSequenceStrategy()
+    }
+  }
+
+  hidingStrategies = {
+    [MaterialType.FactionCard]: {
+      [LocationType.PlayerDeck]: hideCardFront,
+      [LocationType.Hand]: hideCardFrontToOthers,
+      [LocationType.Battlefield]: hideCardWhenRotated,
+      [LocationType.AstralPlane]: hideCardWhenRotated
+    }
+  }
 
   giveTime(): number {
     return 60
@@ -91,25 +118,5 @@ export const hideCardWhenRotated: HidingStrategy = (
   return []
 }
 
-export const rules: Record<RuleId, MaterialRulesPartCreator<PlayerId, MaterialType, LocationType>> = {
-  [RuleId.ChooseStartPlayer]: ChooseStartPlayerRule,
-  [RuleId.Mulligan]: MulliganRule,
-  [RuleId.DrawRule]: DrawRules,
-  [RuleId.PlacementRule]: PlacementRule,
-  [RuleId.RevealRule]: RevealRule,
-  [RuleId.ActivationRule]: ActivationRule,
-  [RuleId.EndPhaseRule]: EndPhaseRules,
-  [RuleId.ForcedExileActionRule]: ForcedExileActionRule,
-  [RuleId.HorseOfAvalonActionRule]: HorseOfAvalonActionRule,
-  [RuleId.TeleportationActionRule]: TeleportationActionRule,
-  [RuleId.MimicryActionRule]: MimicryActionRule
-}
 
-export const hidingStrategies: Partial<Record<MaterialType, Partial<Record<LocationType, HidingStrategy>>>> = {
-  [MaterialType.FactionCard]: {
-    [LocationType.PlayerDeck]: hideCardFront,
-    [LocationType.Hand]: hideCardFrontToOthers,
-    [LocationType.Battlefield]: hideCardWhenRotated,
-    [LocationType.AstralPlane]: hideCardWhenRotated
-  }
-}
+

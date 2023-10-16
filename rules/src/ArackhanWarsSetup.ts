@@ -1,13 +1,13 @@
 import { MaterialGameSetup } from '@gamepark/rules-api'
-import { MaterialType } from './material/MaterialType'
-import { LocationType } from './material/LocationType'
 import { ArackhanWarsOptions, PlayerId } from './ArackhanWarsOptions'
-import { RuleId } from './rules/RuleId'
-import { locationsStrategies } from './material/LocationStrategies'
-import { Faction, playerFactions } from './material/Faction'
+import { ArackhanWarsRules } from './ArackhanWarsRules'
 import { PreBuildDecks } from './material/cards/PreBuildDecks'
-import { Memory } from './rules/Memory'
+import { Faction, playerFactions } from './material/Faction'
+import { LocationType } from './material/LocationType'
+import { MaterialType } from './material/MaterialType'
 import { TokenFaction } from './material/TokenFaction'
+import { Memory } from './rules/Memory'
+import { RuleId } from './rules/RuleId'
 
 export const START_HAND = 7
 
@@ -16,7 +16,7 @@ export const START_HAND = 7
  * It must follow Game Park "Rules" API so that the Game Park server can enforce the rules.
  */
 export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType, LocationType, ArackhanWarsOptions> {
-  locationsStrategies = locationsStrategies
+  Rules = ArackhanWarsRules
 
   setupMaterial(options: ArackhanWarsOptions) {
     this.setupPlayers(options)
@@ -70,6 +70,6 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
   }
 
   start() {
-    return { id: RuleId.ChooseStartPlayer, player: this.game.players[0] }
+    this.startPlayerTurn(RuleId.ChooseStartPlayer, this.game.players[0])
   }
 }
