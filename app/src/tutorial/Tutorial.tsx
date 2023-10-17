@@ -21,7 +21,7 @@ import astral from '../images/icons/astral.png'
 import { css } from '@emotion/react'
 
 export class Tutorial extends MaterialTutorial<number, MaterialType, LocationType> {
-  version = 2
+  version = 3
   options = { players: [{ faction: Faction.Whitelands }, { faction: Faction.Blight }] }
   setup = new TutorialSetup()
 

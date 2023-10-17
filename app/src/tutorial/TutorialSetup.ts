@@ -1,10 +1,10 @@
 import { ArackhanWarsSetup, START_HAND } from '@gamepark/arackhan-wars/ArackhanWarsSetup'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
 import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
-import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
+import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
+import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 
 export class TutorialSetup extends ArackhanWarsSetup {
   requiredCards = {
@@ -25,6 +25,6 @@ export class TutorialSetup extends ArackhanWarsSetup {
 
   start() {
     this.memorize(Memory.StartPlayer, this.players[0])
-    return { id: RuleId.PlacementRule, player: this.game.players[0] }
+    this.startPlayerTurn(RuleId.PlacementRule, this.game.players[0])
   }
 }
