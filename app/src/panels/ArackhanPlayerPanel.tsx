@@ -1,20 +1,22 @@
 /** @jsxImportSource @emotion/react */
-import { FC, useMemo } from 'react'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
-import { Avatar, backgroundCss, PlayerTimerDisplay, SpeechBubbleDirection, usePlayerName, usePlayerTime, useRules } from '@gamepark/react-game'
 import { css } from '@emotion/react'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
-import whitelandsPanel from '../images/panels/whitelands-panel.png'
-import nakkaPanel from '../images/panels/nakka-panel.png'
-import greyOrderPanel from '../images/panels/grey-order-panel.png'
-import blightPanel from '../images/panels/blight-panel.png'
-import timerBackground from '../images/panels/timer.png'
-import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
+import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
+import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
+import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
+import { Avatar, backgroundCss, PlayerTimerDisplay, SpeechBubble, SpeechBubbleDirection, usePlayerName, usePlayerTime, useRules } from '@gamepark/react-game'
+import { FC, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import blightPanel from '../images/panels/blight-panel.png'
+import greyOrderPanel from '../images/panels/grey-order-panel.png'
+import nakkaPanel from '../images/panels/nakka-panel.png'
+import timerBackground from '../images/panels/timer.png'
+import whitelandsPanel from '../images/panels/whitelands-panel.png'
 
 type PlayerPanelProps = {
-  player: PlayerId
+  player: number
   bottom: boolean
 }
 
@@ -31,11 +33,24 @@ export const ArackhanPlayerPanel: FC<PlayerPanelProps> = ({ player, bottom }) =>
   return (
     <div css={[panelCss, bottom ? bottomPosition : topPosition, backgroundCss(backgroundImage[faction])]}>
       <Avatar css={avatarStyle} playerId={player}
-              speechBubbleProps={{ direction: bottom ? SpeechBubbleDirection.TOP_LEFT : SpeechBubbleDirection.BOTTOM_LEFT }}/>
+              speechBubbleProps={{ direction: SpeechBubbleDirection.TOP_LEFT }}>
+        {rules.game.rule?.id === RuleId.Mulligan && rules.players[0] === player && <StartPlayerChoice player={player}/>}
+      </Avatar>
       <span css={nameStyle}>{playerName}</span>
       {score !== undefined && <span css={[scoreStyle, score > 100 && css`font-size: 3em;`]}>{rules?.getScore(player)}</span>}
       {playerTime !== undefined && !rules.isOver() && <div css={timerCss}><PlayerTimerDisplay playerTime={playerTime} playerId={player} css={timerText}/></div>}
     </div>
+  )
+}
+
+const StartPlayerChoice = ({ player }: { player: number }) => {
+  const { t } = useTranslation()
+  const startPlayer = useRules<ArackhanWarsRules>()?.remind(Memory.StartPlayer)
+  const playerName = usePlayerName(startPlayer)
+  return (
+    <SpeechBubble direction={SpeechBubbleDirection.TOP_LEFT}>
+      {startPlayer === player ? t('rules.start.choose.me') : t('rules.start.choose.player', { player: playerName })}
+    </SpeechBubble>
   )
 }
 
@@ -47,7 +62,6 @@ const panelCss = css`
   right: 1em;
   width: ${panelWidth}em;
   height: ${panelWidth / 3.95}em;
-  font-family: "Cinzel", sans-serif;
 `
 
 const topPosition = css`
@@ -88,6 +102,7 @@ const nameStyle = css`
   overflow: hidden;
   text-overflow: ellipsis;
   transform: translate(-50%, -50%);
+  font-family: "Cinzel", sans-serif;
 `
 
 const scoreStyle = css`
@@ -97,6 +112,7 @@ const scoreStyle = css`
   right: 8.3%;
   transform: translate(50%, -50%);
   font-size: 4em;
+  font-family: "Cinzel", sans-serif;
 `
 
 const timerCss = css`
@@ -116,4 +132,5 @@ const timerText = css`
   left: 60%;
   white-space: nowrap;
   transform: translate(-50%, -50%);
+  font-family: "Cinzel", sans-serif;
 `
