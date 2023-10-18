@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import { Trans, TransProps, useTranslation } from 'react-i18next'
-import { Ability } from '@gamepark/arackhan-wars/material/cards/Ability'
-import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
-import { Effect, EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
-import { merge } from 'lodash'
-import { AttackCondition, AttackLimitation } from '@gamepark/arackhan-wars/material/cards/AttackLimitation'
 import { css } from '@emotion/react'
+import { Ability } from '@gamepark/arackhan-wars/material/cards/Ability'
+import { AttackCondition, AttackLimitation } from '@gamepark/arackhan-wars/material/cards/AttackLimitation'
+import { Effect, EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
+import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { TFunction } from 'i18next'
+import { merge } from 'lodash'
+import { Trans, TransProps, useTranslation } from 'react-i18next'
 
 export const AbilityRule = ({ type, ability, card }: { type: string, ability: Ability, card: FactionCard }) => {
   const { t } = useTranslation()
@@ -59,16 +59,16 @@ const getAbilityText = (effect: Effect, targets: string, t: TFunction, card: Fac
     case EffectType.CannotAttack:
       return {
         defaults: effect.limitation ?
-          t(`ability.attack.limit.${attackLimitationText[effect.limitation]}`)
-          : t('ability.attack.limit')
+          `ability.attack.limit.${attackLimitationText[effect.limitation]}`
+          : 'ability.attack.limit'
       }
     case EffectType.CanOnlyAttack:
       return { defaults: `ability.attack.condition.${attackConditionText[effect.condition]}` }
     case EffectType.CannotBeAttacked:
       return {
         defaults: effect.limitation ?
-          t(`ability.attacked.limit.${attackLimitationText[effect.limitation]}`)
-          : t('ability.attacked.limit'),
+          `ability.attacked.limit.${attackLimitationText[effect.limitation]}`
+          : 'ability.attacked.limit',
         values: { targets, card: t(`card.name.${card}`) }
       }
     case EffectType.CanOnlyBeAttacked:
