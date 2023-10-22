@@ -1,14 +1,15 @@
 /** @jsxImportSource @emotion/react */
+import { Picture } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
+import astral from '../images/icons/astral.png'
+import { alignIcon } from '../material/AttributeRule'
 
 export const AstralPlaneRules = () => {
   const { t } = useTranslation()
   return <>
     <h2>{t('rules.astral-plane.title')}</h2>
-    <p>
-      <Trans defaults="rules.astral-plane.purpose">
-        {/* TODO: ask astral icon and place it as the <0/> child */}
-      </Trans>
+    <p css={alignIcon}>
+      <Trans defaults="rules.astral-plane.purpose"><Picture src={astral}/></Trans>
     </p>
   </>
 }
