@@ -5,12 +5,12 @@ import uniq from 'lodash/uniq'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { onBattlefieldAndAstralPlane } from '../material/Board'
 import { isLand } from '../material/cards/Land'
-import { isSpell } from '../material/cards/Spell'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { getCardRule } from './CardRule'
 import { Memory } from './Memory'
+import { RuleId } from './RuleId'
 
 export type Attack = {
   card: number
@@ -91,6 +91,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
   solveAttack(): MaterialMove[] {
     const moves: MaterialMove[] = []
     const attacks = this.remind<Attack[]>(Memory.Attacks)
+    const perforations: Perforation[] = []
 
     moves.push(...this.material(MaterialType.FactionToken)
       .parent(parent => attacks.some(attack => attack.card === parent))
@@ -120,7 +121,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
             const attackValue = cardRule.attack - 1
             if (attackValue >= 0 && Math.abs(delta.x) + Math.abs(delta.y) === 1) {
               const perforation = { attacker: attack.card, x: enemyLocation.x! + delta.x, y: enemyLocation.y! + delta.y, attackValue }
-              this.memorize<Perforation[]>(Memory.Perforations, perforations => perforations.concat(perforation))
+              perforations.push(perforation)
             }
           }
         }
@@ -137,6 +138,11 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
     )
 
     this.memorize(Memory.Attacks, [])
+
+    if (perforations.length > 0) {
+      this.memorize<Perforation[]>(Memory.Perforations, perforations)
+      moves.push(this.rules().startRule(RuleId.SolvePerforations))
+    }
 
     return moves
   }
@@ -183,43 +189,5 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       })
 
     ]
-  }
-
-  getAutomaticMoves(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
-    const moves: MaterialMove[] = []
-    const perforations = this.remind<Perforation[]>(Memory.Perforations)
-    const nextPerforations: Perforation[] = []
-    for (const perforation of perforations) {
-      const attacker = getCardRule(this.game, perforation.attacker)
-      const attackerLocation = attacker.item.location
-      if (attackerLocation.type !== LocationType.Battlefield) continue
-      const target = this.material(MaterialType.FactionCard)
-        .location(location => location.type === LocationType.Battlefield && location.x === perforation.x && location.y === perforation.y)
-        .player(player => player !== this.player)
-        .filter((_, index) => !isSpell(getCardRule(this.game, index).characteristics))
-      if (!target.length) continue
-      const targetIndex = target.getIndex()
-      const defender = getCardRule(this.game, targetIndex)
-      if (perforation.attackValue > defender.defense) {
-        if (!attacker.isSpell && defender.canRegenerate) {
-          moves.push(this.material(MaterialType.FactionToken).parent(targetIndex).moveItem({ rotation: { y: 1 } }))
-        } else {
-          moves.push(...this.onSuccessfulAttack(targetIndex))
-        }
-        if (perforation.attackValue > 0) {
-          const nextPerforation: Perforation = { ...perforation, attackValue: perforation.attackValue - 1 }
-          if (attackerLocation.x! > perforation.x!) nextPerforation.x--
-          else if (attackerLocation.x! < perforation.x!) nextPerforation.x++
-          else if (attackerLocation.y! > perforation.y!) nextPerforation.y--
-          else if (attackerLocation.y! < perforation.y!) nextPerforation.y++
-          nextPerforations.push(nextPerforation)
-        }
-      } else {
-        moves.push(...attacker.triggerFailAttackEffects())
-      }
-
-    }
-    this.memorize(Memory.Perforations, nextPerforations)
-    return moves
   }
 }

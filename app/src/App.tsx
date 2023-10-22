@@ -1,21 +1,21 @@
 /** @jsxImportSource @emotion/react */
+import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
+import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import { FailuresDialog, FullscreenDialog, LoadingScreen, MaterialHeader, MaterialImageLoader, Menu, useGame } from '@gamepark/react-game'
+import { MaterialGame } from '@gamepark/rules-api'
 import { useEffect, useState } from 'react'
 import GameDisplay from './GameDisplay'
-import { MaterialGame } from '@gamepark/rules-api'
-import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
-import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
+import { HorseOfAvalonActionHeader } from './headers/actions/HorseOfAvalonActionHeader'
+import { MimicryActionHeader } from './headers/actions/MimicryActionHeader'
+import { MoveCreatureActionHeader } from './headers/actions/MoveCreatureActionHeader'
+import { ActivationHeader } from './headers/ActivationHeader'
+import { ChooseStartPlayerHeader } from './headers/ChooseStartPlayerHeader'
+import { DrawHeader } from './headers/DrawHeader'
+import { EndPhaseHeader } from './headers/EndPhaseHeader'
 import { GameOverRule } from './headers/GameOverRule'
 import { MulliganHeader } from './headers/MulliganHeader'
 import { PlacementHeader } from './headers/PlacementHeader'
-import { ChooseStartPlayerHeader } from './headers/ChooseStartPlayerHeader'
-import { ActivationHeader } from './headers/ActivationHeader'
-import { MimicryActionHeader } from './headers/actions/MimicryActionHeader'
-import { HorseOfAvalonActionHeader } from './headers/actions/HorseOfAvalonActionHeader'
-import { MoveCreatureActionHeader } from './headers/actions/MoveCreatureActionHeader'
-import { DrawHeader } from './headers/DrawHeader'
 import { RevealHeader } from './headers/RevealHeader'
-import { EndPhaseHeader } from './headers/EndPhaseHeader'
 
 export default function App() {
   const game = useGame<MaterialGame>()
@@ -39,13 +39,13 @@ export default function App() {
 }
 
 const RulesHeaders: Record<RuleId, () => ReactJSXElement> = {
-  // TODO: all headers
   [RuleId.ChooseStartPlayer]: ChooseStartPlayerHeader,
   [RuleId.Mulligan]: MulliganHeader,
   [RuleId.DrawRule]: DrawHeader,
   [RuleId.PlacementRule]: PlacementHeader,
   [RuleId.RevealRule]: RevealHeader,
   [RuleId.ActivationRule]: ActivationHeader,
+  [RuleId.SolvePerforations]: ActivationHeader,
   [RuleId.EndPhaseRule]: EndPhaseHeader,
   [RuleId.ForcedExileActionRule]: MoveCreatureActionHeader,
   [RuleId.HorseOfAvalonActionRule]: HorseOfAvalonActionHeader,

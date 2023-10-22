@@ -26,6 +26,7 @@ import { ChooseStartPlayerRule } from './rules/ChooseStartPlayerRule'
 import { DrawRules } from './rules/DrawRules'
 import { EndPhaseRules } from './rules/EndPhaseRules'
 import { MulliganRule } from './rules/MulliganRule'
+import { SolvePerforationsRule } from './rules/SolvePerforationsRule'
 import { PlacementRule } from './rules/PlacementRule'
 import { RevealRule } from './rules/RevealRule'
 import { RuleId } from './rules/RuleId'
@@ -46,6 +47,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
     [RuleId.PlacementRule]: PlacementRule,
     [RuleId.RevealRule]: RevealRule,
     [RuleId.ActivationRule]: ActivationRule,
+    [RuleId.SolvePerforations]: SolvePerforationsRule,
     [RuleId.EndPhaseRule]: EndPhaseRules,
     [RuleId.ForcedExileActionRule]: ForcedExileActionRule,
     [RuleId.HorseOfAvalonActionRule]: HorseOfAvalonActionRule,

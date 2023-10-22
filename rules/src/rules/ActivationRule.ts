@@ -20,7 +20,6 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
       this.memorize(Memory.MovedCards, [])
       this.memorize(Memory.Attacks, [])
       this.memorize(Memory.TurnEffects, [])
-      this.memorize(Memory.Perforations, [])
 
       // If we know all the cards in the player's hand, we know all the legal moves. If there is only 1 legal move (pass), automatically play it.
       const playerCards = this.material(MaterialType.FactionCard).location(LocationType.Hand).player(this.player).getItems()
@@ -35,20 +34,13 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
   }
 
   getAutomaticMoves() {
-    const automaticMoves: MaterialMove[] = []
-    automaticMoves.push(...new AttackRule(this.game).getAutomaticMoves())
-    automaticMoves.push(...new MoveRules(this.game).getAutomaticMoves())
-    automaticMoves.push(...new ActionRule(this.game).getAutomaticMoves())
-    if (automaticMoves.length > 0) return automaticMoves
-
-    const playerMoves = this.getPlayerMoves()
-    if (playerMoves.length === 1 && (
-      (isCustomMove(playerMoves[0]) && playerMoves[0].type === CustomMoveType.SolveAttack)
-      || (isMoveItem(playerMoves[0]) && playerMoves[0].itemType === MaterialType.FactionToken)
+    const moves = this.getPlayerMoves()
+    if (moves.length === 1 && (
+      (isCustomMove(moves[0]) && moves[0].type === CustomMoveType.SolveAttack)
+      || (isMoveItem(moves[0]) && moves[0].itemType === MaterialType.FactionToken)
     )) {
-      return playerMoves
+      return moves
     }
-
     return []
   }
 

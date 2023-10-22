@@ -9,5 +9,6 @@ export enum RuleId {
   ForcedExileActionRule,
   HorseOfAvalonActionRule,
   TeleportationActionRule,
-  MimicryActionRule
+  MimicryActionRule,
+  SolvePerforations
 }
