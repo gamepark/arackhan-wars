@@ -381,7 +381,7 @@
       "rules.battle-mat.players": "Chaque joueur dispose d'une emplacement pour son deck, pour sa défausse et un <0>Plan Astral</0>.",
       "rules.battle-mat.battlefield": "Au centre du champ de bataille, les 4 cases en vert représentent la zone de départ où le premier joueur doit déployer ses cartes lors du premier round.",
       "rules.astral-plane.title": "Plan astral",
-      "rules.astral-plane.purpose": "Les cartes sorts frappées du symbole doivent être\r\nobligatoirement posées sur le plan astral. À noter : le plan\r\nastral ne fait pas partie du champ de bataille.",
+      "rules.astral-plane.purpose": "Les cartes sorts frappées du symbole <0/> doivent être\r\nobligatoirement posées sur le plan astral. À noter : le plan\r\nastral ne fait pas partie du champ de bataille.",
       "rules.round-track.title": "Piste de rounds",
       "rules.round-track.round": "Round {round}/9",
       "rules.round-track.purpose": "Une partie d'AracKhan Wars se déroule en 9 rounds. Cette piste sert à connaître le round actuel.",
