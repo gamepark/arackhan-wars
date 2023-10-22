@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
-import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { LocationDescription, MaterialContext } from '@gamepark/react-game'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { css } from '@emotion/react'
-import { factionCardDescription } from '../material/FactionCardDescription'
-import { isCustomMove, isMoveItemLocation, Location, MaterialMove } from '@gamepark/rules-api'
+import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
+import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
+import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
+import { LocationDescription, MaterialContext } from '@gamepark/react-game'
+import { isCustomMove, isMoveItem, Location, MaterialMove } from '@gamepark/rules-api'
+import { factionCardDescription } from '../material/FactionCardDescription'
 
 export class FactionCardLocationDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
   width = factionCardDescription.width
@@ -30,9 +30,9 @@ export class FactionCardLocationDescription extends LocationDescription<PlayerId
       }
     }
 
-    if (isMoveItemLocation(move) && move.itemType === MaterialType.FactionCard && move.position.location.type === LocationType.Battlefield) {
+    if (isMoveItem(move) && move.itemType === MaterialType.FactionCard && move.location.type === LocationType.Battlefield) {
       const parentCardLocation = rules.material(MaterialType.FactionCard).getItem(location.parent!)?.location
-      return move.position.location.x === parentCardLocation?.x && move.position.location.y === parentCardLocation?.y
+      return move.location.x === parentCardLocation?.x && move.location.y === parentCardLocation?.y
     }
 
     return super.isMoveToLocation(move, location, context)

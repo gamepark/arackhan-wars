@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import { ItemLocator, MaterialContext } from '@gamepark/react-game'
-import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
+import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
+import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
+import { ItemLocator, MaterialContext } from '@gamepark/react-game'
 import { Location, MaterialItem, XYCoordinates } from '@gamepark/rules-api'
 import { factionCardDescription } from '../material/FactionCardDescription'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { AstralPlaneDescription } from './AstralPlaneDescription'
 
 export class AstralPlaneLocator extends ItemLocator<PlayerId, MaterialType, LocationType> {
@@ -19,6 +19,6 @@ export class AstralPlaneLocator extends ItemLocator<PlayerId, MaterialType, Loca
   }
 
   isHidden(item: MaterialItem): boolean {
-    return item.rotation?.y === 1
+    return item.location.rotation
   }
 }

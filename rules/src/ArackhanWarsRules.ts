@@ -1,5 +1,7 @@
 import {
   CompetitiveScore,
+  hideFront,
+  hideFrontToOthers,
   HidingStrategy,
   MaterialGame,
   MaterialItem,
@@ -26,10 +28,10 @@ import { ChooseStartPlayerRule } from './rules/ChooseStartPlayerRule'
 import { DrawRules } from './rules/DrawRules'
 import { EndPhaseRules } from './rules/EndPhaseRules'
 import { MulliganRule } from './rules/MulliganRule'
-import { SolvePerforationsRule } from './rules/SolvePerforationsRule'
 import { PlacementRule } from './rules/PlacementRule'
 import { RevealRule } from './rules/RevealRule'
 import { RuleId } from './rules/RuleId'
+import { SolvePerforationsRule } from './rules/SolvePerforationsRule'
 
 
 /**
@@ -65,10 +67,10 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
 
   hidingStrategies = {
     [MaterialType.FactionCard]: {
-      [LocationType.PlayerDeck]: hideCardFront,
-      [LocationType.Hand]: hideCardFrontToOthers,
-      [LocationType.Battlefield]: hideCardWhenRotated,
-      [LocationType.AstralPlane]: hideCardWhenRotated
+      [LocationType.PlayerDeck]: hideFront,
+      [LocationType.Hand]: hideFrontToOthers,
+      [LocationType.Battlefield]: hideRotatedCardToOthers,
+      [LocationType.AstralPlane]: hideRotatedCardToOthers
     }
   }
 
@@ -105,20 +107,8 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
   }
 }
 
-export const hideCardFront: HidingStrategy = () => ['id.front']
-export const hideCardFrontToOthers: HidingStrategy = (
-  item: MaterialItem<PlayerId, LocationType>, player?: PlayerId
-) => item.location.player === player ? [] : ['id.front']
-
-export const hideCardWhenRotated: HidingStrategy = (
-  item: MaterialItem<PlayerId, LocationType>, player?: PlayerId
-) => {
-  if (item.rotation?.y) {
-    return item.location.player === player ? [] : ['id.front']
-  }
-
-  return []
-}
+export const hideRotatedCardToOthers: HidingStrategy = (item: MaterialItem<PlayerId, LocationType>, player?: PlayerId) =>
+  item.location.rotation && item.location.player !== player ? ['id.front'] : []
 
 
 

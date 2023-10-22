@@ -1,7 +1,7 @@
-import { MaterialType } from '../material/MaterialType'
-import { LocationType } from '../material/LocationType'
 import { MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
 import { PlayerId } from '../ArackhanWarsOptions'
+import { LocationType } from '../material/LocationType'
+import { MaterialType } from '../material/MaterialType'
 import { RuleId } from './RuleId'
 
 export class DrawRules extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
@@ -14,7 +14,7 @@ export class DrawRules extends MaterialRulesPart<PlayerId, MaterialType, Locatio
         .player(player)
         .sort(card => -card.location.x!)
         .limit(2)
-        .moveItems({ location: { type: LocationType.Hand, player } })
+        .moveItems({ type: LocationType.Hand, player })
     ))
 
     return [

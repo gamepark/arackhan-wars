@@ -1,24 +1,24 @@
 /** @jsxImportSource @emotion/react */
-import { TutorialSetup } from './TutorialSetup'
-import { MaterialTutorial, Picture, TutorialStep } from '@gamepark/react-game'
-import { Trans } from 'react-i18next'
+import { css } from '@emotion/react'
+import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
+import { Faction } from '@gamepark/arackhan-wars/material/Faction'
+import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
+import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
+import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
+import { startingCoordinates } from '@gamepark/arackhan-wars/rules/PlacementRule'
 import { ClotheType, EyebrowType, EyeType, FacialHairType, GraphicType, MouthType, TopType } from '@gamepark/avataaars'
-import HairColorName from '@gamepark/avataaars/dist/avatar/top/HairColorName'
 import ClotheColorName from '@gamepark/avataaars/dist/avatar/clothes/ClotheColorName'
 import SkinColor from '@gamepark/avataaars/dist/avatar/SkinColor'
-import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { Faction } from '@gamepark/arackhan-wars/material/Faction'
-import { roundTrackerDescription } from '../material/RoundTrackerDescription'
+import HairColorName from '@gamepark/avataaars/dist/avatar/top/HairColorName'
+import { MaterialTutorial, Picture, TutorialStep } from '@gamepark/react-game'
 import { isCustomMove, isCustomMoveType, isMoveItem, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { TFunction } from 'i18next'
-import { startingCoordinates } from '@gamepark/arackhan-wars/rules/PlacementRule'
-import { battleMatDescription } from '../material/BattleMatDescription'
-import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
-import { CombatIcon } from '../locators/CombatIconLocator'
-import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
+import { Trans } from 'react-i18next'
 import astral from '../images/icons/astral.png'
-import { css } from '@emotion/react'
+import { CombatIcon } from '../locators/CombatIconLocator'
+import { battleMatDescription } from '../material/BattleMatDescription'
+import { roundTrackerDescription } from '../material/RoundTrackerDescription'
+import { TutorialSetup } from './TutorialSetup'
 
 export class Tutorial extends MaterialTutorial<number, MaterialType, LocationType> {
   version = 3
@@ -285,7 +285,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
       ],
       move: {
         filter: move => isMoveItem(move) && move.itemType === MaterialType.FactionCard
-          && move.position.location?.type === LocationType.Battlefield && move.position.location.x === 3 && move.position.location.y === 1
+          && move.location.type === LocationType.Battlefield && move.location.x === 3 && move.location.y === 1
       }
     },
     {
@@ -485,7 +485,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
 
   isPlaceCard(game: MaterialGame, move: MaterialMove, card: FactionCard, x: number, y: number) {
     return isMoveItem(move) && move.itemType === MaterialType.FactionCard
-      && move.position.location?.x === x && move.position.location.y === y
+      && move.location.x === x && move.location.y === y
       && this.getHandCard(game, card).getIndexes().includes(move.itemIndex)
   }
 

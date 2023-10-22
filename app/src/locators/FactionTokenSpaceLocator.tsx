@@ -15,6 +15,6 @@ export class FactionTokenSpaceLocator extends ItemLocator<PlayerId, MaterialType
   }
 
   isHidden(item: MaterialItem<PlayerId, LocationType>): boolean {
-    return item.rotation?.y === 1
+    return item.location.rotation
   }
 }

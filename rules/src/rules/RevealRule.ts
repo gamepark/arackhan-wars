@@ -1,20 +1,20 @@
-import { MaterialType } from '../material/MaterialType'
-import { LocationType } from '../material/LocationType'
 import { ItemMove, ItemMoveType, MaterialRulesPart, MoveKind } from '@gamepark/rules-api'
-import { RuleId } from './RuleId'
 import { PlayerId } from '../ArackhanWarsOptions'
-import { isSpell } from '../material/cards/Spell'
-import { Memory } from './Memory'
-import { getCardRule } from './CardRule'
 import { onBattlefieldAndAstralPlane } from '../material/Board'
+import { isSpell } from '../material/cards/Spell'
+import { LocationType } from '../material/LocationType'
+import { MaterialType } from '../material/MaterialType'
+import { getCardRule } from './CardRule'
+import { Memory } from './Memory'
+import { RuleId } from './RuleId'
 
 export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
 
   getAutomaticMoves() {
     const revealCards = this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
-      .filter(item => !!item.rotation?.y)
-      .moveItems({ rotation: {} })
+      .rotation(true)
+      .rotateItems(false)
 
     return [
       ...revealCards,

@@ -1,13 +1,13 @@
-import { MaterialType } from '../material/MaterialType'
-import { LocationType } from '../material/LocationType'
 import { MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
 import { PlayerId } from '../ArackhanWarsOptions'
-import { RuleId } from './RuleId'
-import { Spell } from '../material/cards/Spell'
+import { onBattlefieldAndAstralPlane } from '../material/Board'
 import { DiscardTiming } from '../material/cards/FactionCardCharacteristics'
+import { Spell } from '../material/cards/Spell'
+import { LocationType } from '../material/LocationType'
+import { MaterialType } from '../material/MaterialType'
 import { getCardRule } from './CardRule'
 import { Memory } from './Memory'
-import { onBattlefieldAndAstralPlane } from '../material/Board'
+import { RuleId } from './RuleId'
 
 export const NUMBER_OF_ROUNDS = 9
 
@@ -21,20 +21,17 @@ export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, Loc
         .location(onBattlefieldAndAstralPlane)
         .player(player)
         .filter((_, index) => (getCardRule(this.game, index).characteristics as Spell)?.discardTiming === DiscardTiming.EndOfRound)
-        .moveItems({ location: { type: LocationType.PlayerDiscard, player } })
+        .moveItems({ type: LocationType.PlayerDiscard, player })
       )
     }
 
-    moves.push(...this.material(MaterialType.FactionToken)
-      .location(LocationType.FactionTokenSpace)
-      .rotation(rotation => rotation?.y === 1)
-      .moveItems({ rotation: {} }))
+    moves.push(...this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).rotation(true).rotateItems(false))
 
     const round = this.material(MaterialType.RoundTrackerToken).getItem()!.location.x!
     if (round === NUMBER_OF_ROUNDS) {
       moves.push(this.rules().endGame())
     } else {
-      moves.push(this.material(MaterialType.RoundTrackerToken).moveItem({ location: { type: LocationType.RoundTracker, x: round + 1 } }))
+      moves.push(this.material(MaterialType.RoundTrackerToken).moveItem({ type: LocationType.RoundTracker, x: round + 1 }))
       moves.push(this.rules().startRule(RuleId.DrawRule))
     }
 

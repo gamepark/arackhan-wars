@@ -1,19 +1,19 @@
-import { LocationType } from '../material/LocationType'
 import { areAdjacentSquares, MaterialItem, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { MaterialType } from '../material/MaterialType'
-import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
-import { RuleId } from './RuleId'
 import { PlayerId } from '../ArackhanWarsOptions'
+import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
 import { isSpell } from '../material/cards/Spell'
 import { FactionCardsCharacteristics } from '../material/FactionCard'
+import { LocationType } from '../material/LocationType'
+import { MaterialType } from '../material/MaterialType'
 import { Memory } from './Memory'
+import { RuleId } from './RuleId'
 
 export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   getPlayerMoves(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     const placedCards = this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
       .player(this.player)
-      .rotation(rotation => rotation?.y === 1)
+      .rotation(true)
     if (placedCards.length === 2) {
       return [this.validationMove]
     }
@@ -25,17 +25,11 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
     const otherCards = playerHand.filter(item => !this.isAstral(item))
 
     for (let x = 0; x < 2; x++) {
-      moves.push(...astralCards.moveItems({
-        location: { type: LocationType.AstralPlane, x, player: this.player },
-        rotation: { y: 1 }
-      }))
+      moves.push(...astralCards.moveItems({ type: LocationType.AstralPlane, x, rotation: true, player: this.player }))
     }
 
     for (const space of this.battlefieldLegalSpaces) {
-      moves.push(...otherCards.moveItems({
-        location: { type: LocationType.Battlefield, ...space, player: this.player },
-        rotation: { y: 1 }
-      }))
+      moves.push(...otherCards.moveItems({ type: LocationType.Battlefield, ...space, rotation: true, player: this.player }))
     }
 
     return moves
@@ -64,7 +58,7 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
   }
 
   isPlacedThisTurnByMe(card: MaterialItem) {
-    return card.rotation && card.location.player === this.player
+    return card.location.rotation && card.location.player === this.player
   }
 
   get validationMove() {

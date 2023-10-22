@@ -1,7 +1,7 @@
 import { MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { MaterialType } from '../../material/MaterialType'
 import { PlayerId } from '../../ArackhanWarsOptions'
 import { LocationType } from '../../material/LocationType'
+import { MaterialType } from '../../material/MaterialType'
 import { Memory } from '../Memory'
 import { RuleId } from '../RuleId'
 
@@ -20,9 +20,8 @@ export abstract class CardActionRule extends PlayerTurnRule<PlayerId, MaterialTy
   }
 
   discardActionCard() {
-    return this.material(MaterialType.FactionCard).index(this.remind(Memory.ActionCard)).moveItem({
-      location: { type: LocationType.PlayerDiscard, player: this.player }
-    })
+    return this.material(MaterialType.FactionCard).index(this.remind(Memory.ActionCard))
+      .moveItem({ type: LocationType.PlayerDiscard, player: this.player })
   }
 
   onRuleEnd() {

@@ -137,7 +137,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get isTokenFlipped() {
-    return this.token.getItem()?.rotation?.y === 1
+    return this.token.getItem()?.location.rotation
   }
 
   get hasInitiative() {
@@ -273,7 +273,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
     if (effect.action === TriggerAction.SelfDestroy) {
       return [
         ...this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(this.index).deleteItems(),
-        this.cardMaterial.moveItem({ location: { type: LocationType.PlayerDiscard, player: this.owner } })
+        this.cardMaterial.moveItem({ type: LocationType.PlayerDiscard, player: this.owner })
       ]
     }
     return []
@@ -289,7 +289,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
 
   get legalMovements() {
     return this.legalDestinations.map(({ x, y }) =>
-      this.cardMaterial.moveItem({ location: { type: LocationType.Battlefield, x, y, player: this.owner } })
+      this.cardMaterial.moveItem({ type: LocationType.Battlefield, x, y, player: this.owner })
     )
   }
 
@@ -379,7 +379,10 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 }
 
-let cardsRulesCache: { game: MaterialGame<PlayerId, MaterialType, LocationType>, rules: Record<number, CardRule> } | undefined
+let cardsRulesCache: {
+  game: MaterialGame<PlayerId, MaterialType, LocationType>,
+  rules: Record<number, CardRule>
+} | undefined
 
 export function getCardRule(game: MaterialGame<PlayerId, MaterialType, LocationType>, cardIndex: number) {
   if (cardsRulesCache?.game !== game) {

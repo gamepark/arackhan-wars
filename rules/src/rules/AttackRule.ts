@@ -95,7 +95,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
 
     moves.push(...this.material(MaterialType.FactionToken)
       .parent(parent => attacks.some(attack => attack.card === parent))
-      .moveItems({ rotation: { y: 1 } }))
+      .rotateItems(true))
 
     const attackValues = this.attackValues
     const defeatedEnemies = Object.keys(attackValues).map(key => parseInt(key))
@@ -104,7 +104,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       getCardRule(this.game, enemy).canRegenerate && !attacks.some(attack => attack.targets.includes(enemy) && getCardRule(this.game, attack.card).isSpell)
     )
     for (const regeneratingEnemy of regeneratingEnemies) {
-      moves.push(this.material(MaterialType.FactionToken).parent(regeneratingEnemy).moveItem({ rotation: { y: 1 } }))
+      moves.push(this.material(MaterialType.FactionToken).parent(regeneratingEnemy).rotateItem(true))
     }
     for (const killedEnemy of killedEnemies) {
       moves.push(...this.onSuccessfulAttack(killedEnemy))
@@ -134,7 +134,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
 
     moves.push(...this.material(MaterialType.FactionCard)
       .filter((_, index) => attacks.some(attack => attack.card === index) && getCardRule(this.game, index).isSpell)
-      .moveItems({ location: { type: LocationType.PlayerDiscard, player: this.player } })
+      .moveItems({ type: LocationType.PlayerDiscard, player: this.player })
     )
 
     this.memorize(Memory.Attacks, [])
@@ -170,9 +170,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       const card = this.material(MaterialType.FactionCard).index(enemy)
       return [
         this.material(MaterialType.FactionToken).parent(enemy).deleteItem(),
-        card.moveItem(
-          { location: { type: LocationType.PlayerDiscard, player: card.getItem()?.location.player } }
-        )
+        card.moveItem({ type: LocationType.PlayerDiscard, player: card.getItem()?.location.player })
       ]
     }
   }

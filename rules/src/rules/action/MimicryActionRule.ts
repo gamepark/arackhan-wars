@@ -1,14 +1,14 @@
 import { CustomMove, MaterialMove } from '@gamepark/rules-api'
-import { MaterialType } from '../../material/MaterialType'
-import { LocationType } from '../../material/LocationType'
-import { FactionCard, FactionCardsCharacteristics } from '../../material/FactionCard'
-import { CardActionRule } from './CardActionRule'
-import { CustomMoveType } from '../../material/CustomMoveType'
-import { TurnEffect } from './TurnEffect'
 import { isCreature } from '../../material/cards/Creature'
-import { Memory } from '../Memory'
 import { EffectType } from '../../material/cards/Effect'
+import { CustomMoveType } from '../../material/CustomMoveType'
+import { FactionCard, FactionCardsCharacteristics } from '../../material/FactionCard'
+import { LocationType } from '../../material/LocationType'
+import { MaterialType } from '../../material/MaterialType'
 import { getCardRule } from '../CardRule'
+import { Memory } from '../Memory'
+import { CardActionRule } from './CardActionRule'
+import { TurnEffect } from './TurnEffect'
 
 export class MimicryActionRule extends CardActionRule {
 
@@ -44,7 +44,7 @@ export class MimicryActionRule extends CardActionRule {
         )
         const cardRule = getCardRule(this.game, target)
         if (cardRule.isTokenFlipped) {
-          moves.push(cardRule.token.moveItem({ rotation: {} }))
+          moves.push(cardRule.token.rotateItem(false))
         }
         moves.push(...super.afterCardAction())
       }

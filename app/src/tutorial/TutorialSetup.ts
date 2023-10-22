@@ -17,7 +17,7 @@ export class TutorialSetup extends ArackhanWarsSetup {
     const requiredCards = this.requiredCards[faction]
     const playerDeck = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(player)
     for (const requiredCard of requiredCards) {
-      playerDeck.filter(item => item.id.front === requiredCard).moveItem({ location: { type: LocationType.Hand, player } })
+      playerDeck.filter(item => item.id.front === requiredCard).moveItem({ type: LocationType.Hand, player })
     }
     this.shufflePlayerDeck(player)
     this.draw(player, START_HAND - requiredCards.length)

@@ -1,3 +1,17 @@
+import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
+import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
+import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
+import { FactionCardCharacteristics } from '@gamepark/arackhan-wars/material/cards/FactionCardCharacteristics'
+import { PreBuildDecks } from '@gamepark/arackhan-wars/material/cards/PreBuildDecks'
+import { isSpell, Spell } from '@gamepark/arackhan-wars/material/cards/Spell'
+import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
+import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
+import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
+import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
+import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
+import { NUMBER_OF_ROUNDS } from '@gamepark/arackhan-wars/rules/EndPhaseRules'
+import { PlacementRule } from '@gamepark/arackhan-wars/rules/PlacementRule'
+import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import {
   areAdjacentSquares,
   isCustomMove,
@@ -13,25 +27,11 @@ import {
   RuleMoveType,
   XYCoordinates
 } from '@gamepark/rules-api'
-import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
-import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import minBy from 'lodash/minBy'
 import partition from 'lodash/partition'
 import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import uniqBy from 'lodash/uniqBy'
-import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
-import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
-import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
-import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
-import { PlacementRule } from '@gamepark/arackhan-wars/rules/PlacementRule'
-import { isSpell, Spell } from '@gamepark/arackhan-wars/material/cards/Spell'
-import { FactionCardCharacteristics } from '@gamepark/arackhan-wars/material/cards/FactionCardCharacteristics'
-import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
-import { NUMBER_OF_ROUNDS } from '@gamepark/arackhan-wars/rules/EndPhaseRules'
-import { PreBuildDecks } from '@gamepark/arackhan-wars/material/cards/PreBuildDecks'
 
 // eslint-disable-next-line no-restricted-globals
 self.onmessage = (e: MessageEvent<string>) => {
@@ -82,14 +82,10 @@ const placementAi = (game: MaterialGame, bot: number) => {
       for (const space of battlefieldSpaces) {
         const rules = new ArackhanWarsRules(JSON.parse(JSON.stringify(game)))
         const moves: MaterialMove[] = [
-          rules.material(MaterialType.FactionCard).index(astralCard).moveItem({
-            location: { type: LocationType.AstralPlane, x: 0, player: bot },
-            rotation: { y: 1 }
-          }),
-          rules.material(MaterialType.FactionCard).index(battlefieldCard).moveItem({
-            location: { type: LocationType.Battlefield, ...space, player: bot },
-            rotation: { y: 1 }
-          }),
+          rules.material(MaterialType.FactionCard).index(astralCard)
+            .moveItem({ type: LocationType.AstralPlane, x: 0, rotation: true, player: bot }),
+          rules.material(MaterialType.FactionCard).index(battlefieldCard)
+            .moveItem({ type: LocationType.Battlefield, ...space, rotation: true, player: bot }),
           new PlacementRule(game).validationMove
         ]
         moves.forEach(move => playMove(rules, move))
@@ -107,14 +103,10 @@ const placementAi = (game: MaterialGame, bot: number) => {
         for (let l = 0; l < k; l++) {
           const rules = new ArackhanWarsRules(JSON.parse(JSON.stringify(game)))
           const moves = [
-            rules.material(MaterialType.FactionCard).index(battlefieldUniqCards[i]).moveItem({
-              location: { type: LocationType.Battlefield, ...battlefieldSpaces[k], player: bot },
-              rotation: { y: 1 }
-            }),
-            rules.material(MaterialType.FactionCard).index(battlefieldUniqCards[j]).moveItem({
-              location: { type: LocationType.Battlefield, ...battlefieldSpaces[l], player: bot },
-              rotation: { y: 1 }
-            }),
+            rules.material(MaterialType.FactionCard).index(battlefieldUniqCards[i])
+              .moveItem({ type: LocationType.Battlefield, ...battlefieldSpaces[k], rotation: true, player: bot }),
+            rules.material(MaterialType.FactionCard).index(battlefieldUniqCards[j])
+              .moveItem({ type: LocationType.Battlefield, ...battlefieldSpaces[l], rotation: true, player: bot }),
             new PlacementRule(game).validationMove
           ]
           moves.forEach(move => playMove(rules, move))
@@ -131,9 +123,8 @@ const placementAi = (game: MaterialGame, bot: number) => {
     const opponent = rules.players.find(p => p !== bot)!
     for (const placement of placements) {
       for (let i = 0; i < 2; i++) {
-        playMove(placement.rules, placement.rules.material(MaterialType.FactionCard).location(LocationType.Hand).player(opponent).moveItem({
-          location: { type: LocationType.AstralPlane }
-        }))
+        playMove(placement.rules, placement.rules.material(MaterialType.FactionCard).location(LocationType.Hand).player(opponent)
+          .moveItem({ type: LocationType.AstralPlane }))
       }
     }
   }
@@ -151,11 +142,11 @@ const placementAi = (game: MaterialGame, bot: number) => {
 }
 
 const evaluatePlacement = (rules: ArackhanWarsRules, isFirstPlayer: boolean, bot: number, move: MaterialMove): number => {
-  if (!isMoveItem(move) || move.position.location?.type === LocationType.AstralPlane) {
+  if (!isMoveItem(move) || move.location.type === LocationType.AstralPlane) {
     return 0
   }
   let score = 0
-  const space = move.position.location as XYCoordinates
+  const space = move.location as XYCoordinates
   const cardIndex = rules.material(MaterialType.FactionCard).location(location =>
     location.type === LocationType.Battlefield && location.x === space.x && location.y === space.y
   ).getIndex()

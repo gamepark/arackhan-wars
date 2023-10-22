@@ -38,7 +38,7 @@ export class SolvePerforationsRule extends MaterialRulesPart<PlayerId, MaterialT
       if (attacker.someEffectPreventsAttacking(targetIndex) || defender.isInvalidAttackersGroup([perforation.attacker])) continue
       if (perforation.attackValue > defender.defense) {
         if (!attacker.isSpell && defender.canRegenerate) {
-          moves.push(this.material(MaterialType.FactionToken).parent(targetIndex).moveItem({ rotation: { y: 1 } }))
+          moves.push(this.material(MaterialType.FactionToken).parent(targetIndex).rotateItem(true))
         } else {
           moves.push(...new AttackRule(this.game).onSuccessfulAttack(targetIndex))
         }

@@ -15,7 +15,7 @@ export class BattlefieldLocator extends ItemLocator<PlayerId, MaterialType, Loca
   }
 
   isHidden(item: MaterialItem<PlayerId, LocationType>): boolean {
-    return item.rotation?.y === 1
+    return item.location.rotation
   }
 }
 
