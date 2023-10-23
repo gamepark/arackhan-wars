@@ -9,10 +9,12 @@ import {
   MaterialRulesPart,
   XYCoordinates
 } from '@gamepark/rules-api'
+import sumBy from 'lodash/sumBy'
 import { PlayerId } from '../ArackhanWarsOptions'
-import { MaterialType } from '../material/MaterialType'
-import { LocationType } from '../material/LocationType'
-import { FactionCard, FactionCardsCharacteristics } from '../material/FactionCard'
+import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
+import { Ability } from '../material/cards/Ability'
+import { getAttackConstraint } from '../material/cards/AttackLimitation'
+import { Attribute, AttributeType, isMovement } from '../material/cards/Attribute'
 import { Creature, isCreature } from '../material/cards/Creature'
 import {
   AttackerConstraint,
@@ -29,17 +31,15 @@ import {
   TriggerAction,
   TriggerCondition
 } from '../material/cards/Effect'
-import { Ability } from '../material/cards/Ability'
 import { FactionCardCharacteristics } from '../material/cards/FactionCardCharacteristics'
-import { TurnEffect } from './action/TurnEffect'
-import { Memory } from './Memory'
-import { getAttackConstraint } from '../material/cards/AttackLimitation'
-import { isSpell, Spell } from '../material/cards/Spell'
-import sumBy from 'lodash/sumBy'
 import { Land } from '../material/cards/Land'
-import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
+import { isSpell, Spell } from '../material/cards/Spell'
+import { FactionCard, FactionCardsCharacteristics } from '../material/FactionCard'
+import { LocationType } from '../material/LocationType'
+import { MaterialType } from '../material/MaterialType'
+import { TurnEffect } from './action/TurnEffect'
 import { Attack } from './AttackRule'
-import { Attribute, AttributeType, isMovement } from '../material/cards/Attribute'
+import { Memory } from './Memory'
 
 export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
   private effectsCache: Effect[] | undefined = undefined
@@ -161,9 +161,12 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   canAttackTarget(opponent: number) {
-    return this.isInRange(opponent)
-      && !this.effects.some(effect => isAttackerConstraint(effect) && this.isPreventingAttack(effect, opponent))
-      && !getCardRule(this.game, opponent).effects.some(effect => isDefenderConstraint(effect) && this.isPreventingAttack(effect, opponent))
+    return this.isInRange(opponent) && !this.someEffectPreventsAttacking(opponent)
+  }
+
+  someEffectPreventsAttacking(opponent: number) {
+    return this.effects.some(effect => isAttackerConstraint(effect) && this.isPreventingAttack(effect, opponent))
+      || getCardRule(this.game, opponent).effects.some(effect => isDefenderConstraint(effect) && this.isPreventingAttack(effect, opponent))
   }
 
   private isPreventingAttack(effect: AttackerConstraint | DefenderConstraint, opponent: number) {
