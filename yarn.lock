@@ -1573,10 +1573,10 @@
     pusher-js "^7.0.0"
     redux "^4.2.1"
 
-"@gamepark/react-game@~6.10.1":
-  version "6.10.1"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-game/-/react-game-6.10.1.tgz#d972b45fd5d7b0cf7d9175d00879d211359298a2"
-  integrity sha512-kLu6nJ9NmUX7Y9kgSarjr7AqqJOfS3BnwHLKiz+qzRD7UcOAz6+wBspHPS55v2bRq+tZ45sOzBwFxyp+7ulZLg==
+"@gamepark/react-game@~6.10.2":
+  version "6.10.2"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-game/-/react-game-6.10.2.tgz#c0defca61bccb29c869fac8aebdf5e2616dcbac7"
+  integrity sha512-W2I3wZt6UN7E33QVbksv2ANyFiaYwq0h+SkYt3LLsHA5wysUEO+/w2zn03ntRms51uogqC/a+BU8jYTjjkAhkw==
   dependencies:
     "@apollo/client" "^3.5.0"
     "@datadog/browser-logs" "^4.42.0"
@@ -1587,7 +1587,7 @@
     "@fortawesome/react-fontawesome" "^0.2.0"
     "@gamepark/avataaars" "^2.2.0"
     "@gamepark/react-client" "^6.10.0"
-    "@gamepark/rules-api" "^6.10.0"
+    "@gamepark/rules-api" "^6.10.1"
     dayjs "^1.11.7"
     emotion-normalize "^11.0.1"
     fscreen "^1.2.0"
@@ -1600,15 +1600,15 @@
     o9n "^2.1.1"
     react-infinite-scroller "^1.2.6"
     react-merge-refs "^2.0.2"
-    react-zoom-pan-pinch "^3.1.0"
+    react-zoom-pan-pinch "3.1.0"
     stylis "^4.2.0"
     supports-webp "^3.0.0"
     use-long-press "^3.1.3"
 
-"@gamepark/rules-api@^6.10.0", "@gamepark/rules-api@~6.10.0":
-  version "6.10.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-6.10.0.tgz#b4de11b6160cae43e04ef654457a795ddbf4fc15"
-  integrity sha512-a9PPQD7Y8BWM2DgGHtKBlqcpyCZc48QZ8igY3fk3HoKEK8Q9Niooz9Pd2tlPW5mLshCRqshQ/qhPrpVsQb9KYg==
+"@gamepark/rules-api@^6.10.1", "@gamepark/rules-api@~6.10.1":
+  version "6.10.1"
+  resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-6.10.1.tgz#58b4f8359c7e446dc4f313db49d9fdf86a75470a"
+  integrity sha512-t2JOihj3aR6TN0ETETM82p/E9DljHwjVzuP6nh1cpkLKerT6Kcl0sZmJ5XaeFG6AD2c+dkAGR2IPLL4tPj+FoQ==
   dependencies:
     fast-deep-equal "^3.1.3"
     lodash "^4.17.21"
@@ -11660,10 +11660,10 @@ react-scripts@5.0.0:
   optionalDependencies:
     fsevents "^2.3.2"
 
-react-zoom-pan-pinch@^3.1.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/react-zoom-pan-pinch/-/react-zoom-pan-pinch-3.2.0.tgz#6ce7d014a8dc4aa62ce83ca57f85e76cf2e934b8"
-  integrity sha512-7MS0wYWoXjr6PrmpgHOVpVyNQr9gj7LEr4xIvq6lBy62nuNwjdI1r+XxahQ0SDHhWrLuSF11e2PTL/YLengYyg==
+react-zoom-pan-pinch@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-zoom-pan-pinch/-/react-zoom-pan-pinch-3.1.0.tgz#d87a66fd22a97f5dd56b54076411a9dce1f448cd"
+  integrity sha512-a3LlP8QPgTikvteCNkZ3X6wIWC0lrg1geP5WkUJyx2MXXAhHQek3r17N1nT/esOiWGuPIECnsd9AGoK8jOeGcg==
 
 react@^17.0.2:
   version "17.0.2"
