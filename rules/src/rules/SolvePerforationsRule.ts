@@ -34,6 +34,7 @@ export class SolvePerforationsRule extends MaterialRulesPart<PlayerId, MaterialT
         .filter((_, index) => !isSpell(getCardRule(this.game, index).characteristics))
       if (!target.length) continue
       const targetIndex = target.getIndex()
+      if (!attacker.canAttackTarget(targetIndex)) continue
       const defender = getCardRule(this.game, targetIndex)
       if (perforation.attackValue > defender.defense) {
         if (!attacker.isSpell && defender.canRegenerate) {
@@ -52,8 +53,8 @@ export class SolvePerforationsRule extends MaterialRulesPart<PlayerId, MaterialT
       } else {
         moves.push(...attacker.triggerFailAttackEffects())
       }
-
     }
+
     if (nextPerforations.length > 0) {
       this.memorize(Memory.Perforations, nextPerforations)
       moves.push(this.rules().startRule(RuleId.SolvePerforations))
@@ -61,6 +62,7 @@ export class SolvePerforationsRule extends MaterialRulesPart<PlayerId, MaterialT
       this.forget(Memory.Perforations)
       moves.push(this.rules().startRule(RuleId.ActivationRule))
     }
+
     return moves
   }
 }
