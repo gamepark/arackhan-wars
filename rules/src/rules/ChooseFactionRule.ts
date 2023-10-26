@@ -36,6 +36,7 @@ export class ChooseFactionRule extends SimultaneousRule {
   }
 
   onRuleEnd() {
+    console.trace('onRuleEnd')
     this.provideFactionTokens()
     return this.game.players.map(player =>
       this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(player).shuffle()

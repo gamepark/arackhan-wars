@@ -68,7 +68,7 @@ const rulesCss = css`
 
 const factionListCss = css`
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 2em;
   list-style-type: none;
   padding: 0;
@@ -77,7 +77,7 @@ const factionListCss = css`
   > li {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
   }
   
   button {

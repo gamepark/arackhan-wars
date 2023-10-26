@@ -15,7 +15,6 @@ export class ArackhanWarsSetup extends MaterialGameSetup<number, MaterialType, L
 
   setupMaterial() {
     this.placeRoundTracker()
-    this.start()
   }
 
   draw(player: number, quantity = START_HAND) {
@@ -33,6 +32,7 @@ export class ArackhanWarsSetup extends MaterialGameSetup<number, MaterialType, L
   }
 
   start() {
+    console.log(this.game.rule?.id)
     this.startSimultaneousRule(RuleId.ChooseFaction)
   }
 }
