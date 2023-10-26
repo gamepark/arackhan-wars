@@ -1,4 +1,4 @@
 export enum Memory {
-  Token, StartPlayer, IsInitiativeSequence, Attacks, MovedCards, ActionCard, TargetCard, Location, TurnEffects,
-  Perforations,
+  PlayerFaction = 1, PlayerFactionToken, StartPlayer,
+  IsInitiativeSequence, Attacks, MovedCards, ActionCard, TargetCard, Location, TurnEffects, Perforations,
 }

@@ -1,13 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { LocationDescription } from '@gamepark/react-game'
-import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { factionCardDescription } from '../material/FactionCardDescription'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
-import { PlayerDiscardRules } from './PlayerDiscardRules'
 import discard from '../images/locations/discard.png'
+import { factionCardDescription } from '../material/FactionCardDescription'
+import { PlayerDiscardRules } from './PlayerDiscardRules'
 
-export class PlayerDiscardDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
+export class PlayerDiscardDescription extends LocationDescription {
   width = factionCardDescription.width + 0.2
   ratio = 790 / 1102
   borderRadius = 0.4

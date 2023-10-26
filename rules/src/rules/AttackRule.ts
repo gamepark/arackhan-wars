@@ -2,7 +2,6 @@ import { CustomMove, MaterialMove, PlayerTurnRule, XYCoordinates } from '@gamepa
 import mapValues from 'lodash/mapValues'
 import partition from 'lodash/partition'
 import uniq from 'lodash/uniq'
-import { PlayerId } from '../ArackhanWarsOptions'
 import { onBattlefieldAndAstralPlane } from '../material/Board'
 import { isLand } from '../material/cards/Land'
 import { CustomMoveType } from '../material/CustomMoveType'
@@ -23,8 +22,8 @@ export type Perforation = {
   attackValue: number
 } & XYCoordinates
 
-export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
-  getPlayerMoves(): MaterialMove[] {
+export class AttackRule extends PlayerTurnRule {
+  getPlayerMoves() {
     const moves: MaterialMove[] = []
 
     const cardsAlreadyAttacked = this.cardsAlreadyAttacked
@@ -75,7 +74,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
     return uniq(attacks.flatMap(attacks => attacks.targets))
   }
 
-  onCustomMove(move: CustomMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
+  onCustomMove(move: CustomMove) {
     if (move.type === CustomMoveType.Attack) {
       delete this.game.droppedItem
       const targets = move.data.target !== undefined ? [move.data.target] : getCardRule(this.game, move.data.card).omnistrikeTargets
@@ -88,7 +87,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
     return []
   }
 
-  solveAttack(): MaterialMove[] {
+  solveAttack() {
     const moves: MaterialMove[] = []
     const attacks = this.remind<Attack[]>(Memory.Attacks)
     const perforations: Perforation[] = []
@@ -151,7 +150,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
    * @return values of all the attacks declared, excluding perforations
    * When attacks cannot be grouped, only the best value is kept
    */
-  get attackValues(): Record<number, number> {
+  get attackValues() {
     const attackedBy: Record<number, number[]> = {}
     const attacks = this.remind<Attack[]>(Memory.Attacks)
     for (const attack of attacks) {
@@ -175,14 +174,14 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
     }
   }
 
-  conquerLand(opponentIndex: number): MaterialMove[] {
+  conquerLand(opponentIndex: number) {
     const opponentCard = this.material(MaterialType.FactionCard).index(opponentIndex).getItem()!
     opponentCard.location.player = this.player
 
     return [
       this.material(MaterialType.FactionToken).parent(opponentIndex).deleteItem(),
       this.material(MaterialType.FactionToken).parent(opponentIndex).createItem({
-        id: this.remind(Memory.Token, this.player),
+        id: this.remind(Memory.PlayerFactionToken, this.player),
         location: { parent: opponentIndex, type: LocationType.FactionTokenSpace, player: this.player }
       })
 

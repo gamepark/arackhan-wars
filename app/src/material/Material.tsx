@@ -1,15 +1,13 @@
-import { MaterialDescription } from '@gamepark/react-game'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
+import { MaterialDescription } from '@gamepark/react-game'
 import { battleMatDescription } from './BattleMatDescription'
 import { factionCardDescription } from './FactionCardDescription'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
+import { factionCardFrenchDescription } from './FactionCardFrenchDescription'
 import { factionTokenDescription } from './FactionTokenDescription'
 import { roundTrackerDescription } from './RoundTrackerDescription'
 import { roundTrackerTokenDescription } from './RoundTrackerTokenDescription'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
-import { factionCardFrenchDescription } from './FactionCardFrenchDescription'
 
-export const Material: Record<MaterialType, MaterialDescription<PlayerId, MaterialType, LocationType>> = {
+export const Material: Partial<Record<MaterialType, MaterialDescription>> = {
   [MaterialType.BattleMat]: battleMatDescription,
   [MaterialType.FactionCard]: factionCardDescription,
   [MaterialType.FactionToken]: factionTokenDescription,
@@ -19,7 +17,7 @@ export const Material: Record<MaterialType, MaterialDescription<PlayerId, Materi
 
 export const materialI18n: Record<string, Partial<Record<MaterialType, MaterialDescription>>> = {
   'fr': {
-    [MaterialType.FactionCard]: factionCardFrenchDescription,
+    [MaterialType.FactionCard]: factionCardFrenchDescription
   }
 }
 

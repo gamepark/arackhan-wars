@@ -1,5 +1,4 @@
 import { areAdjacentSquares, MaterialItem, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { PlayerId } from '../ArackhanWarsOptions'
 import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
 import { isSpell } from '../material/cards/Spell'
 import { FactionCardsCharacteristics } from '../material/FactionCard'
@@ -8,8 +7,8 @@ import { MaterialType } from '../material/MaterialType'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 
-export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
-  getPlayerMoves(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
+export class PlacementRule extends PlayerTurnRule {
+  getPlayerMoves() {
     const placedCards = this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
       .player(this.player)
@@ -20,7 +19,7 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
 
     const moves: MaterialMove[] = []
     const factionCards = this.material(MaterialType.FactionCard)
-    const playerHand = factionCards.location(LocationType.Hand).player(this.player)
+    const playerHand = factionCards.location(LocationType.PlayerHand).player(this.player)
     const astralCards = playerHand.filter(this.isAstral)
     const otherCards = playerHand.filter(item => !this.isAstral(item))
 

@@ -1,5 +1,4 @@
 import { MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
-import { PlayerId } from '../ArackhanWarsOptions'
 import { onBattlefieldAndAstralPlane } from '../material/Board'
 import { DiscardTiming } from '../material/cards/FactionCardCharacteristics'
 import { Spell } from '../material/cards/Spell'
@@ -11,9 +10,9 @@ import { RuleId } from './RuleId'
 
 export const NUMBER_OF_ROUNDS = 9
 
-export class EndPhaseRules extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
+export class EndPhaseRules extends MaterialRulesPart {
 
-  getAutomaticMoves(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
+  onRuleStart() {
     const moves: MaterialMove[] = []
 
     for (const player of this.game.players) {

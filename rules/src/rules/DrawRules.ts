@@ -1,24 +1,15 @@
-import { MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
-import { PlayerId } from '../ArackhanWarsOptions'
+import { MaterialRulesPart } from '@gamepark/rules-api'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { RuleId } from './RuleId'
 
-export class DrawRules extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
+export class DrawRules extends MaterialRulesPart {
 
-  getAutomaticMoves(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
-    const drawCards = this.game.players.flatMap((player) => (
-      this
-        .material(MaterialType.FactionCard)
-        .location(LocationType.PlayerDeck)
-        .player(player)
-        .sort(card => -card.location.x!)
-        .limit(2)
-        .moveItems({ type: LocationType.Hand, player })
-    ))
-
+  onRuleStart() {
     return [
-      ...drawCards,
+      ...this.game.players.flatMap(player =>
+        this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(player)
+          .deck().deal({ type: LocationType.PlayerHand, player }, 2)),
       this.rules().startRule(RuleId.PlacementRule)
     ]
   }

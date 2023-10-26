@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import board from '../images/boards/core-box-battle-mat.jpg'
-import { BoardDescription, MaterialContext } from '@gamepark/react-game'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { BattleMatRules } from './BattleMatRules'
 import { battlefieldCoordinates } from '@gamepark/arackhan-wars/material/Board'
-import { Location, MaterialItem } from '@gamepark/rules-api'
+import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
+import { BoardDescription, MaterialContext } from '@gamepark/react-game'
+import { MaterialItem } from '@gamepark/rules-api'
+import board from '../images/boards/core-box-battle-mat.jpg'
+import { BattleMatRules } from './BattleMatRules'
 
 export const platMatSize = 57.6
 
@@ -15,7 +15,7 @@ export class BattleMatDescription extends BoardDescription {
 
   staticItem = { location: { type: LocationType.Table } }
 
-  getLocations(_item: MaterialItem, context: MaterialContext): Location[] {
+  getLocations(_item: MaterialItem, context: MaterialContext) {
     return [
       ...this.getBattlefieldSpaces(),
       ...this.getAstralPlanes(context),

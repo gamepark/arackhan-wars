@@ -18,7 +18,7 @@ export class TeleportationActionRule extends CardActionRule {
     })
   }
 
-  afterItemMove(move: ItemMove<number, number, number>) {
+  afterItemMove(move: ItemMove) {
     if (isMoveItem(move) && move.itemType === MaterialType.FactionCard && move.location.type === LocationType.Battlefield) {
       return super.afterCardAction()
     }

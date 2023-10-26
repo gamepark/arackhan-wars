@@ -1,5 +1,4 @@
 import { ItemMove, ItemMoveType, MaterialRulesPart, MoveKind } from '@gamepark/rules-api'
-import { PlayerId } from '../ArackhanWarsOptions'
 import { onBattlefieldAndAstralPlane } from '../material/Board'
 import { isSpell } from '../material/cards/Spell'
 import { LocationType } from '../material/LocationType'
@@ -8,21 +7,16 @@ import { getCardRule } from './CardRule'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 
-export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
+export class RevealRule extends MaterialRulesPart {
 
-  getAutomaticMoves() {
-    const revealCards = this.material(MaterialType.FactionCard)
-      .location(onBattlefieldAndAstralPlane)
-      .rotation(true)
-      .rotateItems(false)
-
+  onRuleStart() {
     return [
-      ...revealCards,
+      ...this.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane).rotation(true).rotateItems(false),
       this.rules().startPlayerTurn(RuleId.ActivationRule, this.remind(Memory.StartPlayer))
     ]
   }
 
-  afterItemMove(move: ItemMove<PlayerId, MaterialType, LocationType>) {
+  afterItemMove(move: ItemMove) {
     if (move.kind === MoveKind.ItemMove && move.type === ItemMoveType.Move) {
       const revealedCard = this.material(move.itemType).getItem(move.itemIndex)!
       if (isSpell(getCardRule(this.game, move.itemIndex).characteristics)) return []
@@ -31,7 +25,7 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
         this.material(MaterialType.FactionToken)
           .player(revealedCard.location.player)
           .createItem({
-            id: this.remind(Memory.Token, revealedCard.location.player),
+            id: this.remind(Memory.PlayerFactionToken, revealedCard.location.player),
             location: { parent: move.itemIndex, type: LocationType.FactionTokenSpace, player: revealedCard.location.player }
           })
       ]

@@ -9,6 +9,7 @@ import { HorseOfAvalonActionHeader } from './headers/actions/HorseOfAvalonAction
 import { MimicryActionHeader } from './headers/actions/MimicryActionHeader'
 import { MoveCreatureActionHeader } from './headers/actions/MoveCreatureActionHeader'
 import { ActivationHeader } from './headers/ActivationHeader'
+import { ChooseFactionHeader } from './headers/ChooseFactionHeader'
 import { ChooseStartPlayerHeader } from './headers/ChooseStartPlayerHeader'
 import { DrawHeader } from './headers/DrawHeader'
 import { EndPhaseHeader } from './headers/EndPhaseHeader'
@@ -39,6 +40,7 @@ export default function App() {
 }
 
 const RulesHeaders: Record<RuleId, () => ReactJSXElement> = {
+  [RuleId.ChooseFaction]: ChooseFactionHeader,
   [RuleId.ChooseStartPlayer]: ChooseStartPlayerHeader,
   [RuleId.Mulligan]: MulliganHeader,
   [RuleId.DrawRule]: DrawHeader,

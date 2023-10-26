@@ -1,7 +1,7 @@
 export enum LocationType {
   Table = 1, // The table
   PlayerDeck, // The player deck
-  Hand, // The player hand
+  PlayerHand, // The player hand
   Battlefield, // The battlefield Space
   PlayerTokenStock, // The player area
   RoundTracker, // The round tracker location

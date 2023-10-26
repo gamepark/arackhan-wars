@@ -1,13 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { ItemContext, ItemLocator } from '@gamepark/react-game'
-import { Coordinates, MaterialItem } from '@gamepark/rules-api'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
+import { ItemContext, ItemLocator } from '@gamepark/react-game'
+import { MaterialItem } from '@gamepark/rules-api'
 
-export class TableLocator extends ItemLocator<PlayerId, MaterialType, LocationType> {
+export class TableLocator extends ItemLocator {
 
-  getPosition(item: MaterialItem<PlayerId, LocationType>, context: ItemContext): Coordinates {
+  getPosition(item: MaterialItem, context: ItemContext) {
     switch (context.type) {
       case MaterialType.BattleMat:
         return { x: 0, y: 0, z: 0 }

@@ -1,5 +1,4 @@
 import { CustomMove, isCustomMove, isMoveItem, isStartPlayerTurn, isStartRule, ItemMove, MaterialMove, PlayerTurnRule, RuleMove } from '@gamepark/rules-api'
-import { PlayerId } from '../ArackhanWarsOptions'
 import { onBattlefieldAndAstralPlane } from '../material/Board'
 import { DiscardTiming } from '../material/cards/FactionCardCharacteristics'
 import { Spell } from '../material/cards/Spell'
@@ -13,7 +12,7 @@ import { Memory } from './Memory'
 import { MoveRules } from './MoveRules'
 import { RuleId } from './RuleId'
 
-export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
+export class ActivationRule extends PlayerTurnRule {
 
   onRuleStart(move: RuleMove) {
     if (isStartPlayerTurn(move)) {
@@ -22,7 +21,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
       this.memorize(Memory.TurnEffects, [])
 
       // If we know all the cards in the player's hand, we know all the legal moves. If there is only 1 legal move (pass), automatically play it.
-      const playerCards = this.material(MaterialType.FactionCard).location(LocationType.Hand).player(this.player).getItems()
+      const playerCards = this.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(this.player).getItems()
       if (playerCards.every(card => card.id.front !== undefined)) {
         const moves = this.getPlayerMoves()
         if (moves.length === 1) {
@@ -33,6 +32,7 @@ export class ActivationRule extends PlayerTurnRule<PlayerId, MaterialType, Locat
     return []
   }
 
+  // Automatically Solve attacks & Movements if nothing else can be done
   getAutomaticMoves() {
     const moves = this.getPlayerMoves()
     if (moves.length === 1 && (

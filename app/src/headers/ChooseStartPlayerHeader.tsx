@@ -1,16 +1,13 @@
 /** @jsxImportSource @emotion/react */
-import { Trans, useTranslation } from 'react-i18next'
+import { css } from '@emotion/react'
 import { PlayMoveButton, RulesDialog, ThemeButton, useGame, useLegalMoves, usePlayerId, usePlayerName } from '@gamepark/react-game'
-import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { CustomMove, isCustomMove, MaterialGame } from '@gamepark/rules-api'
 import { useState } from 'react'
-import { css } from '@emotion/react'
+import { Trans, useTranslation } from 'react-i18next'
 
 export const ChooseStartPlayerHeader = () => {
   const { t } = useTranslation()
-  const game = useGame<MaterialGame<PlayerId, MaterialType, LocationType>>()!
+  const game = useGame<MaterialGame>()!
   const player = usePlayerId()
   const legalMoves = useLegalMoves<CustomMove>(isCustomMove)
   const playerName = usePlayerName(game.rule!.player!)
@@ -38,7 +35,9 @@ export const ChooseStartPlayerHeader = () => {
   )
 }
 
-const ChoosePlayerButton = ({ move }: { move: CustomMove }) => {
+const ChoosePlayerButton = ({ move }: {
+  move: CustomMove
+}) => {
   const { t } = useTranslation()
   const playerName = usePlayerName(move.data)
   return <PlayMoveButton move={move}>{t('rules.start.choose.player', { player: playerName })}</PlayMoveButton>

@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
@@ -9,7 +8,7 @@ import { LocationDescription, MaterialContext } from '@gamepark/react-game'
 import { isCustomMove, isMoveItem, Location, MaterialMove } from '@gamepark/rules-api'
 import { factionCardDescription } from '../material/FactionCardDescription'
 
-export class FactionCardLocationDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
+export class FactionCardLocationDescription extends LocationDescription {
   width = factionCardDescription.width
   ratio = factionCardDescription.ratio
   alwaysVisible = false

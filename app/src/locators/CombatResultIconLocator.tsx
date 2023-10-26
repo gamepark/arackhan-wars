@@ -1,26 +1,24 @@
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { ItemLocator, LocationDescription } from '@gamepark/react-game'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
+import { Location } from '@gamepark/rules-api'
+import regeneration from '../images/icons/attributes/regeneration.png'
 import defense from '../images/icons/defense.png'
 import skull from '../images/icons/skull.png'
-import regeneration from '../images/icons/attributes/regeneration.png'
-import { css } from '@emotion/react'
-import { Location } from '@gamepark/rules-api'
 
 export enum CombatResult {
   Defense, Dead, Regeneration
 }
 
-export class CombatResultIconLocator extends ItemLocator<PlayerId, MaterialType, LocationType> {
+export class CombatResultIconLocator extends ItemLocator {
   locationDescription = new CombatResultIconDescription()
   parentItemType = MaterialType.FactionCard
   positionOnParent = { x: 50, y: 38 }
 }
 
-export class CombatResultIconDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
-  getSize(location: Location<PlayerId, LocationType>) {
+export class CombatResultIconDescription extends LocationDescription {
+  getSize(location: Location) {
     switch (location.id) {
       case CombatResult.Dead:
         return { width: 2.5, height: 2.5 * 496 / 478 }
@@ -38,7 +36,7 @@ export class CombatResultIconDescription extends LocationDescription<PlayerId, M
     [CombatResult.Regeneration]: regeneration
   }
 
-  getExtraCss(location: Location<PlayerId, LocationType>) {
+  getExtraCss(location: Location) {
     const extraCss = [css`
       pointer-events: none;
       filter: drop-shadow(0 0 0.1em black);

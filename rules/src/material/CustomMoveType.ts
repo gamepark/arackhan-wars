@@ -1,5 +1,6 @@
 export enum CustomMoveType {
-  ChoosePlayer = 1,
+  ChooseFaction = 1,
+  ChoosePlayer,
   Mulligan,
   Attack,
   SolveAttack,

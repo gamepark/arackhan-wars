@@ -1,27 +1,25 @@
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { ItemLocator, LocationDescription } from '@gamepark/react-game'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
+import { Location } from '@gamepark/rules-api'
 import attackIcon from '../images/icons/attack.png'
 import defenseIcon from '../images/icons/defense.png'
-import { css } from '@emotion/react'
-import { Location } from '@gamepark/rules-api'
 
 export enum CombatIcon {
   Attack = 1, Defense
 }
 
-export class CombatIconLocator extends ItemLocator<PlayerId, MaterialType, LocationType> {
+export class CombatIconLocator extends ItemLocator {
   locationDescription = combatIconDescription
   parentItemType = MaterialType.FactionCard
 
-  getPositionOnParent(location: Location<PlayerId, LocationType>) {
+  getPositionOnParent(location: Location) {
     return location.id === CombatIcon.Attack ? { x: 18.5, y: 66.6 } : { x: 81.8, y: 66.6 }
   }
 }
 
-class CombatIconDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
+class CombatIconDescription extends LocationDescription {
   width = 1.75
   ratio = 272 / 236
   borderRadius = 0.4
@@ -31,11 +29,11 @@ class CombatIconDescription extends LocationDescription<PlayerId, MaterialType, 
     [CombatIcon.Defense]: defenseIcon
   }
 
-  getImage(location: Location<PlayerId, LocationType>): string | undefined {
+  getImage(location: Location) {
     return location.x !== undefined ? this.images[location.id] : undefined
   }
 
-  getExtraCss(location: Location<PlayerId, LocationType>) {
+  getExtraCss(location: Location) {
     return css`
       pointer-events: none;
 

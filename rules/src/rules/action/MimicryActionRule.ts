@@ -30,7 +30,7 @@ export class MimicryActionRule extends CardActionRule {
     return this.remind<number | undefined>(Memory.TargetCard)
   }
 
-  onCustomMove(move: CustomMove): MaterialMove[] {
+  onCustomMove(move: CustomMove) {
     const moves: MaterialMove[] = []
     if (move.type === CustomMoveType.ChooseCard) {
       const target = this.target

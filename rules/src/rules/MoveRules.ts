@@ -1,13 +1,12 @@
-import { isMoveItem, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { PlayerId } from '../ArackhanWarsOptions'
+import { isMoveItem, ItemMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { Attack } from './AttackRule'
 import { getCardRule } from './CardRule'
 import { Memory } from './Memory'
 
-export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
-  getPlayerMoves(): MaterialMove[] {
+export class MoveRules extends PlayerTurnRule {
+  getPlayerMoves() {
     const movedCards = this.remind<number[]>(Memory.MovedCards)
     if (movedCards.length) {
       return [this.material(MaterialType.FactionToken).parent(movedCards[0]).rotateItem(true)]
@@ -21,7 +20,7 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
       .flatMap(index => getCardRule(this.game, index).legalMovements)
   }
 
-  beforeItemMove(move: ItemMove): MaterialMove[] {
+  beforeItemMove(move: ItemMove) {
     if (isMoveItem(move)) {
       if (move.itemType === MaterialType.FactionCard && move.location.type === LocationType.Battlefield) {
         this.memorize(Memory.MovedCards, movedCards => [...movedCards, move.itemIndex])

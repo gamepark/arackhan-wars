@@ -1,21 +1,27 @@
 import { CustomMove, MaterialMove, SimultaneousRule } from '@gamepark/rules-api'
-import { PlayerId } from '../ArackhanWarsOptions'
-import { START_HAND } from '../ArackhanWarsSetup'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 
-export class MulliganRule extends SimultaneousRule<PlayerId, MaterialType, LocationType> {
+export const START_HAND = 7
 
-  getLegalMoves(player: PlayerId): MaterialMove<PlayerId, MaterialType, LocationType>[] {
+export class MulliganRule extends SimultaneousRule {
+  onRuleStart() {
+    return this.game.players.flatMap(player =>
+      this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(player)
+        .deck().deal({ type: LocationType.PlayerHand, player }, START_HAND)
+    )
+  }
+
+  getLegalMoves(player: number) {
 
     if (!this.isTurnToPlay(player)) {
       return []
     }
 
-    const cardsInHand = this.material(MaterialType.FactionCard).location(LocationType.Hand).player(player)
+    const cardsInHand = this.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(player)
 
 
     const moves: MaterialMove[] = cardsInHand.moveItems({ type: LocationType.PlayerDeck, player })
@@ -46,7 +52,7 @@ export class MulliganRule extends SimultaneousRule<PlayerId, MaterialType, Locat
 
     const cardsInHand = this
       .material(MaterialType.FactionCard)
-      .location(LocationType.Hand)
+      .location(LocationType.PlayerHand)
       .player(player)
       .length
 
@@ -54,7 +60,7 @@ export class MulliganRule extends SimultaneousRule<PlayerId, MaterialType, Locat
       ...cardsInDeck
         .sort(card => -card.location.x!)
         .limit(START_HAND - cardsInHand)
-        .moveItems({ type: LocationType.Hand, player })
+        .moveItems({ type: LocationType.PlayerHand, player })
     )
 
     return moves

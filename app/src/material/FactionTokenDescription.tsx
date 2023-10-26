@@ -13,30 +13,30 @@ import { MaterialContext, RoundTokenDescription } from '@gamepark/react-game'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialItem } from '@gamepark/rules-api'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
-import { TokenFaction } from '@gamepark/arackhan-wars/material/TokenFaction'
+import { FactionToken } from '@gamepark/arackhan-wars/material/FactionToken'
 
 export class FactionTokenDescription extends RoundTokenDescription {
   diameter = 1.4
 
   images = {
-    [TokenFaction.Whitelands]: WhitelandToken,
-    [TokenFaction.Nakka]: NakkaToken,
-    [TokenFaction.GreyOrder]: GreyOrderToken,
-    [TokenFaction.Blight]: BlightToken,
-    [TokenFaction.Neutral]: NeutralToken
+    [FactionToken.Whitelands]: WhitelandToken,
+    [FactionToken.Nakka]: NakkaToken,
+    [FactionToken.GreyOrder]: GreyOrderToken,
+    [FactionToken.Blight]: BlightToken,
+    [FactionToken.Neutral]: NeutralToken
   }
 
   backImages = {
-    [TokenFaction.Whitelands]: WhitelandTokenBack,
-    [TokenFaction.Nakka]: NakkaTokenBack,
-    [TokenFaction.GreyOrder]: GreyOrderTokenBack,
-    [TokenFaction.Blight]: BlightTokenBack,
-    [TokenFaction.Neutral]: NeutralTokenBack
+    [FactionToken.Whitelands]: WhitelandTokenBack,
+    [FactionToken.Nakka]: NakkaTokenBack,
+    [FactionToken.GreyOrder]: GreyOrderTokenBack,
+    [FactionToken.Blight]: BlightTokenBack,
+    [FactionToken.Neutral]: NeutralTokenBack
   }
 
   getStaticItems = ({ rules }: MaterialContext) =>
     rules.players.map((player) => ({
-      id: rules.remind(Memory.Token, player),
+      id: rules.remind(Memory.PlayerFactionToken, player),
       quantity: 34,
       location: { type: LocationType.PlayerTokenStock, player }
     }))

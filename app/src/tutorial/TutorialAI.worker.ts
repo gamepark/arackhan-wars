@@ -42,16 +42,20 @@ self.onmessage = (e: MessageEvent<string>) => {
 }
 
 export function tutorialAI(game: MaterialGame, bot: number): MaterialMove[] {
-  switch (game.rule?.id) {
-    case RuleId.ChooseStartPlayer:
-      return [{ kind: MoveKind.CustomMove, type: CustomMoveType.ChoosePlayer, data: bot }]
-    case RuleId.Mulligan:
-      return [{ kind: MoveKind.RulesMove, type: RuleMoveType.EndPlayerTurn, player: bot }]
-    case RuleId.PlacementRule:
-      return placementAi(game, bot)
-    default:
-      return getActivationNegamax(new ArackhanWarsRules(game), bot).moves
+  if (game.tutorialStep) {
+    switch (game.rule?.id) {
+      case RuleId.ChooseStartPlayer:
+        return [{ kind: MoveKind.CustomMove, type: CustomMoveType.ChoosePlayer, data: bot }]
+      case RuleId.Mulligan:
+        return [{ kind: MoveKind.RulesMove, type: RuleMoveType.EndPlayerTurn, player: bot }]
+      case RuleId.PlacementRule:
+        return placementAi(game, bot)
+      case RuleId.ActivationRule:
+        return getActivationNegamax(new ArackhanWarsRules(game), bot).moves
+    }
   }
+  const legalMoves = new ArackhanWarsRules(game).getLegalMoves(bot)
+  return [legalMoves[Math.floor(Math.random() * legalMoves.length)]]
 }
 
 type Negamax = {
@@ -69,7 +73,7 @@ const placementAi = (game: MaterialGame, bot: number) => {
   const rules = new ArackhanWarsRules(game)
   const opponentPlacedCards = rules.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane).filter(item => !item.id.front).getIndexes()
   const battlefieldSpaces = new PlacementRule(game).battlefieldLegalSpaces
-  const cards = rules.material(MaterialType.FactionCard).location(LocationType.Hand).player(bot).getIndexes()
+  const cards = rules.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(bot).getIndexes()
   const [astralCards, battlefieldCards] = partition(cards, card =>
     (FactionCardsCharacteristics[rules.material(MaterialType.FactionCard).getItem(card)!.id.front as FactionCard] as Spell).astral
   )
@@ -123,7 +127,7 @@ const placementAi = (game: MaterialGame, bot: number) => {
     const opponent = rules.players.find(p => p !== bot)!
     for (const placement of placements) {
       for (let i = 0; i < 2; i++) {
-        playMove(placement.rules, placement.rules.material(MaterialType.FactionCard).location(LocationType.Hand).player(opponent)
+        playMove(placement.rules, placement.rules.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(opponent)
           .moveItem({ type: LocationType.AstralPlane }))
       }
     }
@@ -310,7 +314,7 @@ const getPotential = (rules: ArackhanWarsRules, player: number) => {
 }
 
 const getRemainingCards = (rules: ArackhanWarsRules, player: number): FactionCard[] => {
-  const faction = rules.material(MaterialType.FactionCard).location(LocationType.Hand).player(player).getItem()!.id.back
+  const faction = rules.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(player).getItem()!.id.back
   const played = rules.material(MaterialType.FactionCard)
     .location(location => location.type === LocationType.Battlefield || location.type === LocationType.PlayerDiscard)
     .getItems().map(item => item.id.front).filter(card => card !== undefined) as FactionCard[]

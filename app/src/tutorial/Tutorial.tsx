@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
-import { Faction } from '@gamepark/arackhan-wars/material/Faction'
 import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
@@ -20,9 +19,9 @@ import { battleMatDescription } from '../material/BattleMatDescription'
 import { roundTrackerDescription } from '../material/RoundTrackerDescription'
 import { TutorialSetup } from './TutorialSetup'
 
-export class Tutorial extends MaterialTutorial<number, MaterialType, LocationType> {
+export class Tutorial extends MaterialTutorial {
   version = 3
-  options = { players: [{ faction: Faction.Whitelands }, { faction: Faction.Blight }] }
+  options = { players: 2 }
   setup = new TutorialSetup()
 
   players = [
@@ -46,7 +45,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
     }
   ]
 
-  steps: TutorialStep<number, MaterialType, LocationType>[] = [
+  steps: TutorialStep[] = [
     {
       popup: { text: () => <Trans defaults="tuto.welcome"><strong/><em/></Trans> }
     },
@@ -65,7 +64,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
         text: (t: TFunction) => t('tuto.hand'),
         position: { x: 0, y: -30 }
       },
-      focus: (game: MaterialGame) => this.material(game, MaterialType.FactionCard).location(LocationType.Hand).player(1)
+      focus: (game: MaterialGame) => this.material(game, MaterialType.FactionCard).location(LocationType.PlayerHand).player(1)
     },
     {
       popup: {
@@ -490,7 +489,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
   }
 
   getHandCard(game: MaterialGame, card: FactionCard) {
-    return this.material(game, MaterialType.FactionCard).location(LocationType.Hand).filter(item => item.id.front === card)
+    return this.material(game, MaterialType.FactionCard).location(LocationType.PlayerHand).filter(item => item.id.front === card)
   }
 
   getBattlefieldCard(game: MaterialGame, card: FactionCard) {

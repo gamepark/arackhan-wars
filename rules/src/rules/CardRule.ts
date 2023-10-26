@@ -10,7 +10,6 @@ import {
   XYCoordinates
 } from '@gamepark/rules-api'
 import sumBy from 'lodash/sumBy'
-import { PlayerId } from '../ArackhanWarsOptions'
 import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
 import { Ability } from '../material/cards/Ability'
 import { getAttackConstraint } from '../material/cards/AttackLimitation'
@@ -41,10 +40,10 @@ import { TurnEffect } from './action/TurnEffect'
 import { Attack } from './AttackRule'
 import { Memory } from './Memory'
 
-export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
+export class CardRule extends MaterialRulesPart {
   private effectsCache: Effect[] | undefined = undefined
 
-  constructor(game: MaterialGame<PlayerId, MaterialType, LocationType>, public index: number) {
+  constructor(game: MaterialGame, public index: number) {
     super(game)
   }
 
@@ -380,11 +379,11 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
 }
 
 let cardsRulesCache: {
-  game: MaterialGame<PlayerId, MaterialType, LocationType>,
+  game: MaterialGame,
   rules: Record<number, CardRule>
 } | undefined
 
-export function getCardRule(game: MaterialGame<PlayerId, MaterialType, LocationType>, cardIndex: number) {
+export function getCardRule(game: MaterialGame, cardIndex: number) {
   if (cardsRulesCache?.game !== game) {
     cardsRulesCache = { game, rules: {} }
   }

@@ -1,10 +1,7 @@
 import { MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
-import { PlayerId } from '../../ArackhanWarsOptions'
-import { MaterialType } from '../MaterialType'
-import { LocationType } from '../LocationType'
-import { Memory } from '../../rules/Memory'
-import { getCardRule } from '../../rules/CardRule'
 import { Attack } from '../../rules/AttackRule'
+import { getCardRule } from '../../rules/CardRule'
+import { Memory } from '../../rules/Memory'
 import { AttackerConstraint, DefenderConstraint, EffectType } from './Effect'
 
 export enum AttackLimitation {
@@ -15,7 +12,7 @@ export enum AttackCondition {
   ByCreaturesInGroup = 1, EvenValueCards
 }
 
-export abstract class AttackConstraintRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
+export abstract class AttackConstraintRule extends MaterialRulesPart {
   abstract preventAttack(attacker: number, defender: number): boolean
 
   isInvalidAttackGroup(_attackers: number[], _defender: number): boolean {

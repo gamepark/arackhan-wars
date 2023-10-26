@@ -1,14 +1,22 @@
 export enum RuleId {
-  ChooseStartPlayer = 1,
+  // Setup phases
+  ChooseFaction = 1,
+  ChooseStartPlayer = 8,
   Mulligan,
-  DrawRule,
+
+  // Round phases
+  DrawRule = 10,
   PlacementRule,
   RevealRule,
   ActivationRule,
   EndPhaseRule,
-  ForcedExileActionRule,
+
+  // Special phases
+  SolvePerforations = 20,
+
+  // Action cards S1
+  ForcedExileActionRule = 100,
   HorseOfAvalonActionRule,
   TeleportationActionRule,
-  MimicryActionRule,
-  SolvePerforations
+  MimicryActionRule
 }

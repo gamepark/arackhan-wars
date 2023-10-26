@@ -3,17 +3,19 @@ import {
   hideFront,
   hideFrontToOthers,
   HidingStrategy,
+  isCustomMove,
   MaterialGame,
   MaterialItem,
   MaterialMove,
+  MaterialMoveRandomized,
   PositiveSequenceStrategy,
   SecretMaterialRules,
   TimeLimit
 } from '@gamepark/rules-api'
 import sumBy from 'lodash/sumBy'
-import { PlayerId } from './ArackhanWarsOptions'
 import { isCreature } from './material/cards/Creature'
 import { isSpell } from './material/cards/Spell'
+import { CustomMoveType } from './material/CustomMoveType'
 import { Faction } from './material/Faction'
 import { FactionCard, FactionCardsCharacteristics } from './material/FactionCard'
 import { LocationType } from './material/LocationType'
@@ -24,6 +26,7 @@ import { MimicryActionRule } from './rules/action/MimicryActionRule'
 import { TeleportationActionRule } from './rules/action/TeleportationActionRule'
 import { ActivationRule } from './rules/ActivationRule'
 import { getCardRule, resetCardsRulesCache } from './rules/CardRule'
+import { ChooseFactionRule } from './rules/ChooseFactionRule'
 import { ChooseStartPlayerRule } from './rules/ChooseStartPlayerRule'
 import { DrawRules } from './rules/DrawRules'
 import { EndPhaseRules } from './rules/EndPhaseRules'
@@ -38,11 +41,12 @@ import { SolvePerforationsRule } from './rules/SolvePerforationsRule'
  * This class implements the rules of the board game.
  * It must follow Game Park "Rules" API so that the Game Park server can enforce the rules.
  */
-export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialType, LocationType>
-  implements CompetitiveScore<MaterialGame<PlayerId, MaterialType, LocationType>, MaterialMove<PlayerId, MaterialType, LocationType>, PlayerId>,
-    TimeLimit<MaterialGame<PlayerId, MaterialType, LocationType>, MaterialMove<PlayerId, MaterialType, LocationType>, PlayerId> {
+export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType, LocationType>
+  implements CompetitiveScore<MaterialGame<number, MaterialType, LocationType>, MaterialMove<number, MaterialType, LocationType>, number>,
+    TimeLimit<MaterialGame<number, MaterialType, LocationType>, MaterialMove<number, MaterialType, LocationType>, number> {
 
   rules = {
+    [RuleId.ChooseFaction]: ChooseFactionRule,
     [RuleId.ChooseStartPlayer]: ChooseStartPlayerRule,
     [RuleId.Mulligan]: MulliganRule,
     [RuleId.DrawRule]: DrawRules,
@@ -61,20 +65,20 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
     [MaterialType.FactionCard]: {
       [LocationType.PlayerDeck]: new PositiveSequenceStrategy(),
       [LocationType.PlayerDiscard]: new PositiveSequenceStrategy(),
-      [LocationType.Hand]: new PositiveSequenceStrategy()
+      [LocationType.PlayerHand]: new PositiveSequenceStrategy()
     }
   }
 
   hidingStrategies = {
     [MaterialType.FactionCard]: {
       [LocationType.PlayerDeck]: hideFront,
-      [LocationType.Hand]: hideFrontToOthers,
+      [LocationType.PlayerHand]: hideFrontToOthers,
       [LocationType.Battlefield]: hideRotatedCardToOthers,
       [LocationType.AstralPlane]: hideRotatedCardToOthers
     }
   }
 
-  giveTime(): number {
+  giveTime() {
     return 60
   }
 
@@ -83,7 +87,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
     return super.play(move)
   }
 
-  getScore(playerId: PlayerId) {
+  getScore(playerId: number) {
     const cardsOnBattlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
       .player(playerId).id<{ front?: FactionCard, back: Faction }>(id => id?.front !== undefined).getItems()
     return sumBy(cardsOnBattlefield, card => {
@@ -92,7 +96,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
     })
   }
 
-  getTieBreaker(tieBreaker: number, playerId: PlayerId) {
+  getTieBreaker(tieBreaker: number, playerId: number) {
     if (tieBreaker === 1) {
       return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).player(playerId).length
     } else if (tieBreaker === 2) {
@@ -105,9 +109,17 @@ export class ArackhanWarsRules extends SecretMaterialRules<PlayerId, MaterialTyp
   get round() {
     return this.material(MaterialType.RoundTrackerToken).getItem()!.location.x!
   }
+
+  getMoveView(move: MaterialMoveRandomized, player?: number) {
+    if (isCustomMove(move) && move.type === CustomMoveType.ChooseFaction && move.data.player !== player) {
+      return { ...move, data: { player: move.data.player } } // Hide chosen faction
+    } else {
+      return super.getMoveView(move, player)
+    }
+  }
 }
 
-export const hideRotatedCardToOthers: HidingStrategy = (item: MaterialItem<PlayerId, LocationType>, player?: PlayerId) =>
+export const hideRotatedCardToOthers: HidingStrategy = (item: MaterialItem<number, LocationType>, player?: number) =>
   item.location.rotation && item.location.player !== player ? ['id.front'] : []
 
 

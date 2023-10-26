@@ -1,5 +1,4 @@
 import { MaterialMove, MaterialRulesPart, XYCoordinates } from '@gamepark/rules-api'
-import { PlayerId } from '../ArackhanWarsOptions'
 import { isSpell } from '../material/cards/Spell'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
@@ -19,8 +18,8 @@ export type Perforation = {
   attackValue: number
 } & XYCoordinates
 
-export class SolvePerforationsRule extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
-  onRuleStart(): MaterialMove<PlayerId, MaterialType, LocationType>[] {
+export class SolvePerforationsRule extends MaterialRulesPart {
+  onRuleStart() {
     const moves: MaterialMove[] = []
     const perforations = this.remind<Perforation[]>(Memory.Perforations)
     const nextPerforations: Perforation[] = []

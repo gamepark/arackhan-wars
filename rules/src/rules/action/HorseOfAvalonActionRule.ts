@@ -1,4 +1,4 @@
-import { isMoveItem, ItemMove, MaterialMove } from '@gamepark/rules-api'
+import { isMoveItem, ItemMove } from '@gamepark/rules-api'
 import { isCreature } from '../../material/cards/Creature'
 import { FactionCardsCharacteristics } from '../../material/FactionCard'
 import { LocationType } from '../../material/LocationType'
@@ -7,7 +7,7 @@ import { Memory } from '../Memory'
 import { CardActionRule } from './CardActionRule'
 
 export class HorseOfAvalonActionRule extends CardActionRule {
-  onRuleStart(): MaterialMove[] {
+  onRuleStart() {
     this.memorize(Memory.Location, this.actionCard.location)
     return [this.discardActionCard()]
   }
@@ -15,7 +15,7 @@ export class HorseOfAvalonActionRule extends CardActionRule {
   getPlayerMoves() {
     const location = this.remind(Memory.Location)
     return this.material(MaterialType.FactionCard)
-      .location(LocationType.Hand)
+      .location(LocationType.PlayerHand)
       .player(this.player)
       .filter(item => isCreature(FactionCardsCharacteristics[item.id.front]))
       .moveItems(location)
@@ -27,7 +27,7 @@ export class HorseOfAvalonActionRule extends CardActionRule {
         this.material(MaterialType.FactionToken)
           .player(this.player)
           .createItem({
-            id: this.remind(Memory.Token, this.player),
+            id: this.remind(Memory.PlayerFactionToken, this.player),
             location: { parent: move.itemIndex, type: LocationType.FactionTokenSpace, player: this.player }
           }),
         ...super.afterCardAction()
