@@ -38,7 +38,6 @@ export class FactionTokenDescription extends RoundTokenDescription {
     const items: MaterialItem[] = []
     for (const player of rules.players) {
       const factionToken = rules.remind(Memory.PlayerFactionToken, player)
-      console.log(factionToken)
       if (factionToken !== undefined) {
         items.push({ id: factionToken, quantity: 34, location: { type: LocationType.PlayerTokenStock, player } })
       }
