@@ -98,7 +98,7 @@ export class AttackRule extends PlayerTurnRule {
 
     const attackValues = this.attackValues
     const defeatedEnemies = Object.keys(attackValues).map(key => parseInt(key))
-      .filter(enemy => attackValues[enemy] > getCardRule(this.game, enemy).defense)
+      .filter(enemy => (attackValues[enemy] ?? 0) > getCardRule(this.game, enemy).defense)
     const [regeneratingEnemies, killedEnemies] = partition(defeatedEnemies, enemy =>
       getCardRule(this.game, enemy).canRegenerate && !attacks.some(attack => attack.targets.includes(enemy) && getCardRule(this.game, attack.card).isSpell)
     )
@@ -126,7 +126,7 @@ export class AttackRule extends PlayerTurnRule {
         }
       }
 
-      if (attack.targets.some(target => !defeatedEnemies.includes(target))) {
+      if (attack.targets.some(target => attackValues[target] !== undefined && !defeatedEnemies.includes(target))) {
         moves.push(...cardRule.triggerFailAttackEffects())
       }
     }
@@ -168,7 +168,7 @@ export class AttackRule extends PlayerTurnRule {
     } else {
       const card = this.material(MaterialType.FactionCard).index(enemy)
       return [
-        this.material(MaterialType.FactionToken).parent(enemy).deleteItem(),
+        ...this.material(MaterialType.FactionToken).parent(enemy).deleteItems(),
         card.moveItem({ type: LocationType.PlayerDiscard, player: card.getItem()?.location.player })
       ]
     }

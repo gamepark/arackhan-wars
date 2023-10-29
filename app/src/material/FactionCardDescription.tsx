@@ -151,7 +151,7 @@ export class FactionCardDescription extends CardDescription {
     const attacks = (rules.remind<Attack[]>(Memory.Attacks) ?? []).filter(attack => attack.targets.includes(index))
     if (attacks.length) {
       const attackValue = cardRule.getDamagesInflicted(attacks.map(attack => attack.card))
-      const icon = cardRule.defense >= attackValue ? CombatResult.Defense : cardRule.canRegenerate ? CombatResult.Regeneration : CombatResult.Dead
+      const icon = cardRule.defense >= (attackValue ?? 0) ? CombatResult.Defense : cardRule.canRegenerate ? CombatResult.Regeneration : CombatResult.Dead
       locations.push({ type: LocationType.CombatResultIcon, parent: index, id: icon, x: attackValue })
     }
     locations.push({ type: LocationType.FactionCard, parent: index })

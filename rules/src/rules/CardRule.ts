@@ -9,6 +9,7 @@ import {
   MaterialRulesPart,
   XYCoordinates
 } from '@gamepark/rules-api'
+import max from 'lodash/max'
 import sumBy from 'lodash/sumBy'
 import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
 import { Ability } from '../material/cards/Ability'
@@ -191,11 +192,11 @@ export class CardRule extends MaterialRulesPart {
     return this.characteristics?.action && this.canBeActivated
   }
 
-  getDamagesInflicted(attackers: number[]): number {
-    if (attackers.length === 0) return 0
+  getDamagesInflicted(attackers: number[]): number | undefined {
+    if (attackers.length === 0) return undefined
     if (this.isInvalidAttackersGroup(attackers)) {
       // We recursively try all attack groups made of all attackers but one, and keep the best value
-      return Math.max(...attackers.map(excludedAttacker => this.getDamagesInflicted(attackers.filter(attacker => attacker !== excludedAttacker))))
+      return max(attackers.map(excludedAttacker => this.getDamagesInflicted(attackers.filter(attacker => attacker !== excludedAttacker))))
     }
     return sumBy(attackers, attacker => getCardRule(this.game, attacker).attack)
   }
