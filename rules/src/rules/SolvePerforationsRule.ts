@@ -7,12 +7,6 @@ import { getCardRule } from './CardRule'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 
-export type Attack = {
-  card: number
-  targets: number[]
-  omnistrike?: boolean
-}
-
 export type Perforation = {
   attacker: number
   attackValue: number
