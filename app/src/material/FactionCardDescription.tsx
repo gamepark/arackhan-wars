@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
 import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
 import { EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
@@ -8,7 +9,7 @@ import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { Attack } from '@gamepark/arackhan-wars/rules/AttackRule'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
-import { CardDescription, ItemContext } from '@gamepark/react-game'
+import { CardDescription, ItemContext, MaterialContext } from '@gamepark/react-game'
 import { isCustomMove, isCustomMoveType, Location, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { differenceBy } from 'lodash'
 import BlightBack from '../images/cards/blight/blight-card-back.jpg'
@@ -75,7 +76,7 @@ import WhitelandsBack from '../images/cards/whitelands/whitelands-card-back.jpg'
 import { CombatIcon } from '../locators/CombatIconLocator'
 import { CombatResult } from '../locators/CombatResultIconLocator'
 
-import { FactionCardRules } from './FactionCardRules'
+import { FactionCardHelp } from './FactionCardHelp'
 
 export class FactionCardDescription extends CardDescription {
   images = {
@@ -177,7 +178,15 @@ export class FactionCardDescription extends CardDescription {
     return this.canDrag(move, context)
   }
 
-  rules = FactionCardRules
+  isFlipped(item: Partial<MaterialItem>, context: MaterialContext) {
+    if (item.location && onBattlefieldAndAstralPlane(item.location)) {
+      return item.location.rotation === true
+    } else {
+      return super.isFlipped(item, context)
+    }
+  }
+
+  help = FactionCardHelp
 }
 
 export const factionCardDescription = new FactionCardDescription()

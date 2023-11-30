@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
-import { LocationRulesProps, MaterialComponent, pointerCursorCss, usePlay, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
-import { useTranslation } from 'react-i18next'
-import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
-import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { displayMaterialRules } from '@gamepark/rules-api'
 import { css } from '@emotion/react'
+import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
+import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
+import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
+import { LocationHelpProps, MaterialComponent, pointerCursorCss, usePlay, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
+import { displayMaterialHelp } from '@gamepark/rules-api'
+import { useTranslation } from 'react-i18next'
 
-export const PlayerDiscardRules = ({ location }: LocationRulesProps) => {
+export const PlayerDiscardHelp = ({ location }: LocationHelpProps) => {
   const { t } = useTranslation()
   const playerId = usePlayerId()
   const player = usePlayerName(location.player)
@@ -24,7 +24,7 @@ export const PlayerDiscardRules = ({ location }: LocationRulesProps) => {
       {cards?.entries.map(([index, card]) =>
         <li key={index}>
           <MaterialComponent type={MaterialType.FactionCard} itemId={card.id} css={pointerCursorCss}
-                             onClick={() => play(displayMaterialRules(MaterialType.FactionCard, card, index), { local: true })}/>
+                             onClick={() => play(displayMaterialHelp(MaterialType.FactionCard, card, index), { local: true })}/>
         </li>
       )}
     </ol>

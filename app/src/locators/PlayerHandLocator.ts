@@ -2,10 +2,6 @@ import { HandLocator, ItemContext } from '@gamepark/react-game'
 import { Location, MaterialItem } from '@gamepark/rules-api'
 
 export class PlayerHandLocator extends HandLocator {
-  isHidden(item: MaterialItem, context: ItemContext) {
-    return item.location.player !== context.player
-  }
-
   getCoordinates(location: Location, { player, rules }: ItemContext) {
     if (location.player === (player ?? rules.players[0])) {
       return { x: 50, y: 12, z: 10 }

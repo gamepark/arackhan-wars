@@ -4,7 +4,7 @@ import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { BoardDescription, MaterialContext } from '@gamepark/react-game'
 import { MaterialItem } from '@gamepark/rules-api'
 import board from '../images/boards/core-box-battle-mat.jpg'
-import { BattleMatRules } from './BattleMatRules'
+import { BattleMatHelp } from './BattleMatHelp'
 
 export const platMatSize = 57.6
 
@@ -24,7 +24,7 @@ export class BattleMatDescription extends BoardDescription {
     ]
   }
 
-  rules = BattleMatRules
+  help = BattleMatHelp
 
   private getBattlefieldSpaces = () => {
     return battlefieldCoordinates.map((space) => ({

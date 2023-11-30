@@ -7,7 +7,6 @@ import { PlayerDiscardDescription } from './PlayerDiscardDescription'
 export class PlayerDiscardLocator extends DeckLocator {
   locationDescription = new PlayerDiscardDescription()
   parentItemType = MaterialType.BattleMat
-  hidden = false
 
   getPositionOnParent(location: Location, context: MaterialContext) {
     const bottomPlayerId = context.player ?? 1

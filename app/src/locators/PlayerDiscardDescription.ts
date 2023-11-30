@@ -2,7 +2,7 @@
 import { LocationDescription } from '@gamepark/react-game'
 import discard from '../images/locations/discard.png'
 import { factionCardDescription } from '../material/FactionCardDescription'
-import { PlayerDiscardRules } from './PlayerDiscardRules'
+import { PlayerDiscardHelp } from './PlayerDiscardHelp'
 
 export class PlayerDiscardDescription extends LocationDescription {
   width = factionCardDescription.width + 0.2
@@ -11,6 +11,6 @@ export class PlayerDiscardDescription extends LocationDescription {
   alwaysVisible = true
   coordinates = { x: 0, y: 0, z: 10 }
 
-  rules = PlayerDiscardRules
-  rulesImage = discard
+  help = PlayerDiscardHelp
+  helpImage = discard
 }

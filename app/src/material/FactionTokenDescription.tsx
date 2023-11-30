@@ -13,7 +13,7 @@ import NeutralTokenBack from '../images/tokens/neutral-token-back.jpg'
 import NeutralToken from '../images/tokens/neutral-token-front.jpg'
 import WhitelandTokenBack from '../images/tokens/whitelands-token-back.jpg'
 import WhitelandToken from '../images/tokens/whitelands-token-front.jpg'
-import { FactionTokenRules } from './FactionTokenRules'
+import { FactionTokenHelp } from './FactionTokenHelp'
 
 export class FactionTokenDescription extends RoundTokenDescription {
   diameter = 1.4
@@ -50,7 +50,7 @@ export class FactionTokenDescription extends RoundTokenDescription {
     player: item.location.player
   })
 
-  rules = FactionTokenRules
+  help = FactionTokenHelp
 }
 
 export const factionTokenDescription = new FactionTokenDescription()

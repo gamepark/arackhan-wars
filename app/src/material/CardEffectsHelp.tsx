@@ -11,7 +11,7 @@ import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { CombatIcon, combatIconDescription } from '../locators/CombatIconLocator'
 import { skillLostIconDescription } from '../locators/SkillLostIconLocator'
 
-export const CardEffectsRules = ({ index }: { index: number }) => {
+export const CardEffectsHelp = ({ index }: { index: number }) => {
   const { t } = useTranslation()
   const rules = useRules<ArackhanWarsRules>()!
   const locations = getCardBattlefieldModifierLocations(rules.game, index)

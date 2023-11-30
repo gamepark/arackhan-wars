@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { FactionToken } from '@gamepark/arackhan-wars/material/FactionToken'
-import { MaterialRulesProps } from '@gamepark/react-game'
+import { MaterialHelpProps } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
 
-export const FactionTokenRules = (props: MaterialRulesProps) => {
+export const FactionTokenHelp = (props: MaterialHelpProps) => {
   const { item } = props
   const { t } = useTranslation()
   return <>

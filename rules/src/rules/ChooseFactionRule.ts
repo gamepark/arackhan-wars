@@ -17,7 +17,9 @@ export class ChooseFactionRule extends SimultaneousRule {
 
   onCustomMove(move: CustomMove) {
     if (move.type !== CustomMoveType.ChooseFaction) return []
-    this.memorize(Memory.PlayerFaction, move.data.faction, move.data.player)
+    if (move.data.faction !== undefined) {
+      this.memorize(Memory.PlayerFaction, move.data.faction, move.data.player)
+    }
     return [this.rules().endPlayerTurn(move.data.player)]
   }
 

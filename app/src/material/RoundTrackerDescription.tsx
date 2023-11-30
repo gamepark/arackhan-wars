@@ -2,7 +2,7 @@
 import roundTrack from '../images/boards/round-track.jpg'
 import { BoardDescription } from '@gamepark/react-game'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { RoundTrackerRules } from './RoundTrackerRules'
+import { RoundTrackerHelp } from './RoundTrackerHelp'
 
 export const trackerRatio = 264 / 36
 
@@ -11,7 +11,7 @@ export class RoundTrackerDescription extends BoardDescription {
   height = 3.6
   ratio = trackerRatio
   staticItem = { location: { type: LocationType.Table } }
-  rules = RoundTrackerRules
+  help = RoundTrackerHelp
 }
 
 export const roundTrackerDescription = new RoundTrackerDescription()
