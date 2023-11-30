@@ -90,13 +90,13 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
 
   getView(player?: number): MaterialGame {
     const view = super.getView(player)
-    if (this.game.rule?.id === RuleId.ChooseFaction && view.memory.hasOwnProperty(Memory.PlayerFaction)) {
+    if (this.game.rule?.id === RuleId.ChooseFaction && Memory.PlayerFaction in view.memory) {
       const { [Memory.PlayerFaction]: playerFactionMemory, ...memory } = view.memory
-      if (player === undefined || !playerFactionMemory.hasOwnProperty(player)) {
-        return { ...view, memory }
-      } else {
+      if (player !== undefined && player in playerFactionMemory) {
         const factionMemory = { [player]: view.memory[Memory.PlayerFaction][player] }
         return { ...view, memory: { ...memory, [Memory.PlayerFaction]: factionMemory } }
+      } else {
+        return { ...view, memory }
       }
     }
     return view
