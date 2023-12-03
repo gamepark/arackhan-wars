@@ -50,6 +50,10 @@ export class FactionTokenDescription extends RoundTokenDescription {
     player: item.location.player
   })
 
+  isFlipped(item: Partial<MaterialItem>) {
+    return item.location?.rotation === true
+  }
+
   help = FactionTokenHelp
 }
 
