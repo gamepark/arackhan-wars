@@ -3,20 +3,18 @@ import { FactionToken } from '@gamepark/arackhan-wars/material/FactionToken'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { MaterialContext, RoundTokenDescription } from '@gamepark/react-game'
-import { MaterialItem, MaterialRules } from '../../../../workshop/packages/rules-api'
-import BlightToken from '../images/tokens/blight-token-front.jpg'
-import GreyOrderToken from '../images/tokens/greyorder-token-front.jpg'
-import NakkaToken from '../images/tokens/nakka-token-front.jpg'
+import { MaterialItem, MaterialRules } from '@gamepark/rules-api'
+import BlightToken from '../images/tokens/blight-round-token.jpg'
+import GreyOrderToken from '../images/tokens/greyorder-round-token.jpg'
+import NakkaToken from '../images/tokens/nakka-round-token.jpg'
 import NeutralToken from '../images/tokens/neutral-token-front.jpg'
-import roundTrackToken from '../images/tokens/round-token-front.jpg'
-import WhitelandsToken from '../images/tokens/whitelands-token-front.jpg'
+import WhitelandsToken from '../images/tokens/whitelands-round-token.jpg'
 import { RoundTrackerHelp } from './RoundTrackerHelp'
 
 export const trackerRatio = 25 / 25
 
 export class RoundTrackerTokenDescription extends RoundTokenDescription {
   images = {
-    0: roundTrackToken,
     [FactionToken.Whitelands]: WhitelandsToken,
     [FactionToken.Nakka]: NakkaToken,
     [FactionToken.GreyOrder]: GreyOrderToken,
@@ -32,13 +30,11 @@ export class RoundTrackerTokenDescription extends RoundTokenDescription {
     return !item.id && item.location?.rotation
   }
 
-  protected getFrontId(itemId: 1 | undefined, { rules }: MaterialContext) {
-    if (itemId === 1) return 0 // Retro-compatibility
+  protected getFrontId(_itemId: never, { rules }: MaterialContext) {
     return this.getPlayerFactionToken(rules, this.getFirstPlayer(rules))
   }
 
-  protected getBackId(itemId: 1 | undefined, { rules }: MaterialContext) {
-    if (itemId === 1) return 0 // Retro-compatibility
+  protected getBackId(_itemId: never, { rules }: MaterialContext) {
     return this.getPlayerFactionToken(rules, this.opponent(this.getFirstPlayer(rules)))
   }
 
