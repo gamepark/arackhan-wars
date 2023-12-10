@@ -122,7 +122,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
   }
 
   get round() {
-    return this.material(MaterialType.RoundTrackerToken).getItem()!.location.x!
+    return this.material(MaterialType.RoundTrackerToken).getItem()?.location.x ?? 0
   }
 
   getMoveView(move: MaterialMoveRandomized, player?: number) {

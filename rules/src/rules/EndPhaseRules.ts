@@ -30,7 +30,9 @@ export class EndPhaseRules extends MaterialRulesPart {
     if (round === NUMBER_OF_ROUNDS) {
       moves.push(this.rules().endGame())
     } else {
-      moves.push(this.material(MaterialType.RoundTrackerToken).moveItem({ type: LocationType.RoundTracker, x: round + 1 }))
+      moves.push(this.material(MaterialType.RoundTrackerToken).moveItem(item => (
+        { type: LocationType.RoundTracker, x: round + 1, rotation: !item.location.rotation }
+      )))
       moves.push(this.rules().startRule(RuleId.DrawRule))
     }
 

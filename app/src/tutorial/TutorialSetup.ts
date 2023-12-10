@@ -18,6 +18,7 @@ export class TutorialSetup extends ArackhanWarsSetup {
     this.setupPlayer(1, Faction.Whitelands)
     this.setupPlayer(2, Faction.Blight)
     super.setupMaterial()
+    this.placeRoundTracker()
   }
 
   setupPlayer(player: number, faction: Faction) {
@@ -48,6 +49,11 @@ export class TutorialSetup extends ArackhanWarsSetup {
       .player(player)
       .deck()
       .deal({ type: LocationType.PlayerHand, player }, quantity)
+  }
+
+  placeRoundTracker() {
+    this.material(MaterialType.RoundTrackerToken)
+      .createItem({ location: { type: LocationType.RoundTracker, x: 1 } })
   }
 
   start() {

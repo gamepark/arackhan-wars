@@ -9,10 +9,14 @@ export const START_HAND = 7
 
 export class MulliganRule extends SimultaneousRule {
   onRuleStart() {
-    return this.game.players.flatMap(player =>
+    const moves: MaterialMove[] = this.game.players.flatMap(player =>
       this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(player)
         .deck().deal({ type: LocationType.PlayerHand, player }, START_HAND)
     )
+    if (!this.material(MaterialType.RoundTrackerToken).length) {
+      moves.push(this.material(MaterialType.RoundTrackerToken).createItem({ location: { type: LocationType.RoundTracker, x: 1 } }))
+    }
+    return moves
   }
 
   getLegalMoves(player: number) {
