@@ -36,7 +36,7 @@ export class ActivationRule extends PlayerTurnRule {
   getAutomaticMoves() {
     const moves = this.getPlayerMoves()
     if (moves.length === 1 && (
-      (isCustomMove(moves[0]) && moves[0].type === CustomMoveType.SolveAttack)
+      (isCustomMove(moves[0]) && (moves[0].type === CustomMoveType.SolveAttack))
       || (isMoveItem(moves[0]) && moves[0].itemType === MaterialType.FactionToken)
     )) {
       return moves
@@ -85,6 +85,8 @@ export class ActivationRule extends PlayerTurnRule {
       case CustomMoveType.Attack:
       case CustomMoveType.SolveAttack:
         return new AttackRule(this.game).onCustomMove(move)
+      case CustomMoveType.Deactivate:
+        return new MoveRules(this.game).onCustomMove(move)
       case CustomMoveType.PerformAction:
         this.memorize(Memory.ActionCard, move.data)
         return [this.rules().startRule(getCardRule(this.game, move.data).characteristics!.action!)]

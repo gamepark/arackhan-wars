@@ -57,8 +57,6 @@ export class AttackRule extends PlayerTurnRule {
   }
 
   get potentialAttackers() {
-    const movedCards = this.remind<number[]>(Memory.MovedCards)
-    if (movedCards.length) return [movedCards[0]]
     const attacks = this.remind<Attack[]>(Memory.Attacks)
     return this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)

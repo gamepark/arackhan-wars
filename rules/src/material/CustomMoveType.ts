@@ -6,5 +6,6 @@ export enum CustomMoveType {
   SolveAttack,
   PerformAction,
   ChooseCard,
-  Pass
+  Pass,
+  Deactivate
 }
