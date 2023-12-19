@@ -1,4 +1,4 @@
-import { isMoveItem, ItemMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { isMoveItem, ItemMove, MoveItem, PlayerTurnRule } from '@gamepark/rules-api'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { Attack } from './AttackRule'
@@ -23,19 +23,28 @@ export class MoveRules extends PlayerTurnRule {
   beforeItemMove(move: ItemMove) {
     if (isMoveItem(move)) {
       if (move.itemType === MaterialType.FactionCard && move.location.type === LocationType.Battlefield) {
-        this.memorize(Memory.MovedCards, movedCards => [...movedCards, move.itemIndex])
-        const cardToSwap = this.material(MaterialType.FactionCard)
-          .location(location => location.type === LocationType.Battlefield && location.x === move.location.x && location.y === move.location.y)
-        if (cardToSwap.length) {
-          const swapLocation = this.material(MaterialType.FactionCard).getItem(move.itemIndex)!.location
-          return [cardToSwap.moveItem({ ...swapLocation })]
-        }
+        return this.onMoveCardOnBattlefield(move)
       }
       if (move.itemType === MaterialType.FactionToken) {
-        const token = this.material(MaterialType.FactionToken).getItem(move.itemIndex)
-        this.memorize<number[]>(Memory.MovedCards, movedCards => movedCards.filter(card => card !== token?.location.parent))
+        this.onFlipFactionToken(move)
       }
     }
     return []
+  }
+
+  onMoveCardOnBattlefield(move: MoveItem) {
+    this.memorize<number[]>(Memory.MovedCards, movedCards => [...movedCards, move.itemIndex])
+    const cardToSwap = this.material(MaterialType.FactionCard)
+      .location(location => location.type === LocationType.Battlefield && location.x === move.location.x && location.y === move.location.y)
+    if (cardToSwap.length) {
+      const swapLocation = this.material(MaterialType.FactionCard).getItem(move.itemIndex)!.location
+      return [cardToSwap.moveItem({ ...swapLocation })]
+    }
+    return []
+  }
+
+  onFlipFactionToken(move: MoveItem) {
+    const token = this.material(MaterialType.FactionToken).getItem(move.itemIndex)
+    this.memorize<number[]>(Memory.MovedCards, movedCards => movedCards.filter(card => card !== token?.location.parent))
   }
 }
