@@ -34,13 +34,9 @@ export class EndPhaseRules extends MaterialRulesPart {
         { type: LocationType.RoundTracker, x: round + 1, rotation: !item.location.rotation }
       )))
       moves.push(this.rules().startRule(RuleId.DrawRule))
+      this.memorize<number>(Memory.StartPlayer, player => this.game.players[(this.game.players.indexOf(player) + 1) % this.game.players.length])
     }
 
     return moves
-  }
-
-  onRuleEnd() {
-    this.memorize(Memory.StartPlayer, player => this.game.players[(this.game.players.indexOf(player) + 1) % this.game.players.length])
-    return []
   }
 }
