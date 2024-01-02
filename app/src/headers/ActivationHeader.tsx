@@ -45,15 +45,9 @@ const MyActivationHeader = () => {
   }
 
   const pass = legalMoves.find(isCustomMoveType(CustomMoveType.Pass))
-  if (legalMoves.length === 1) {
-    return <Trans defaults="header.activation.pass"><PlayMoveButton move={pass}/></Trans>
-  }
-
-  if (rules.remind(Memory.IsInitiativeSequence)) {
-    return <Trans defaults="header.initiative.me"><PlayMoveButton move={legalMoves.find(isCustomMoveType(CustomMoveType.Pass))}/></Trans>
-  }
-
-  return <Trans defaults="header.activation.me"><PlayMoveButton move={pass}/></Trans>
+  const sequence = rules.remind(Memory.IsInitiativeSequence) ? 'initiative' : 'activation'
+  const options = legalMoves.length === 1 ? 'pass' : 'me'
+  return <Trans defaults={`header.${sequence}.${options}`}><PlayMoveButton move={pass}/></Trans>
 }
 
 const OtherPlayerActivationHeader = () => {
