@@ -5,7 +5,7 @@ import { ArackhanWarsSetup } from '@gamepark/arackhan-wars/ArackhanWarsSetup'
 import { addStylesheetUrl, GameProvider, setupTranslation } from '@gamepark/react-game'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
-import { ArackhanWarsAnimations } from './animations/ArackhanWarsAnimations'
+import { arackhanWarsAnimations } from './animations/ArackhanWarsAnimations'
 import App from './App'
 import background from './images/background.jpg'
 import { Locators } from './locators/Locators'
@@ -20,7 +20,7 @@ addStylesheetUrl('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&displ
 ReactDOM.render(
   <StrictMode>
     <GameProvider game="arackhan-wars" GameSetup={ArackhanWarsSetup} Rules={ArackhanWarsRules} optionsSpec={ArackhanWarsOptionsSpec}
-                  material={Material} locators={Locators} materialI18n={materialI18n} animations={new ArackhanWarsAnimations()}
+                  material={Material} locators={Locators} materialI18n={materialI18n} animations={arackhanWarsAnimations}
                   tutorial={new Tutorial()} ai={window.Worker ? tutorialAI : undefined} version={2}
                   theme={{
                     root: {
