@@ -14,3 +14,8 @@ arackhanWarsAnimations.when()
     isMoveItemType(MaterialType.FactionCard)(move) && move.location.type === LocationType.PlayerHand
   )
   .duration(0.2)
+
+arackhanWarsAnimations.when()
+  .rule(RuleId.EndPhaseRule)
+  .move(move => isMoveItemType(MaterialType.FactionToken)(move))
+  .duration(0.3)
