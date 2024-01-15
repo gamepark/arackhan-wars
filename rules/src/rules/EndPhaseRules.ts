@@ -1,4 +1,4 @@
-import { MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
+import { MaterialMove, MaterialRulesPart, RuleMove, RuleMoveType } from '@gamepark/rules-api'
 import { onBattlefieldAndAstralPlane } from '../material/Board'
 import { DiscardTiming } from '../material/cards/FactionCardCharacteristics'
 import { Spell } from '../material/cards/Spell'
@@ -39,8 +39,10 @@ export class EndPhaseRules extends MaterialRulesPart {
     return moves
   }
 
-  onRuleEnd() {
-    this.memorize(Memory.StartPlayer, player => this.game.players[(this.game.players.indexOf(player) + 1) % this.game.players.length])
+  onRuleEnd(move: RuleMove) {
+    if (move.type !== RuleMoveType.EndGame) {
+      this.memorize(Memory.StartPlayer, player => this.game.players[(this.game.players.indexOf(player) + 1) % this.game.players.length])
+    }
     return []
   }
 }
