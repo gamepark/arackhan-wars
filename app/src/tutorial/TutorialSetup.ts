@@ -2,6 +2,7 @@ import { ArackhanWarsSetup } from '@gamepark/arackhan-wars/ArackhanWarsSetup'
 import { PreBuildDecks } from '@gamepark/arackhan-wars/material/cards/PreBuildDecks'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
 import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
+import { FactionToken } from '@gamepark/arackhan-wars/material/FactionToken'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
@@ -53,7 +54,7 @@ export class TutorialSetup extends ArackhanWarsSetup {
 
   placeRoundTracker() {
     this.material(MaterialType.RoundTrackerToken)
-      .createItem({ location: { type: LocationType.RoundTracker, x: 1 } })
+      .createItem({ id: { front: FactionToken.Whitelands, back: FactionToken.Blight }, location: { type: LocationType.RoundTracker, x: 1 } })
   }
 
   start() {

@@ -1,9 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { FactionToken } from '@gamepark/arackhan-wars/material/FactionToken'
-import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
-import { MaterialContext, RoundTokenDescription } from '@gamepark/react-game'
-import { MaterialItem, MaterialRules } from '@gamepark/rules-api'
+import { RoundTokenDescription } from '@gamepark/react-game'
+import { MaterialItem } from '@gamepark/rules-api'
 import BlightToken from '../images/tokens/blight-round-token.jpg'
 import GreyOrderToken from '../images/tokens/greyorder-round-token.jpg'
 import NakkaToken from '../images/tokens/nakka-round-token.jpg'
@@ -27,32 +25,15 @@ export class RoundTrackerTokenDescription extends RoundTokenDescription {
   help = RoundTrackerHelp
 
   isFlipped(item: Partial<MaterialItem>) {
-    return !item.id && item.location?.rotation
+    return item.location?.rotation
   }
 
-  protected getFrontId(_itemId: never, { rules }: MaterialContext) {
-    return this.getPlayerFactionToken(rules, this.getFirstPlayer(rules))
+  protected getFrontId(itemId: never) {
+    return super.getFrontId(itemId) ?? FactionToken.Neutral
   }
 
-  protected getBackId(_itemId: never, { rules }: MaterialContext) {
-    return this.getPlayerFactionToken(rules, this.opponent(this.getFirstPlayer(rules)))
-  }
-
-  getFirstPlayer(rules: MaterialRules) {
-    const startPlayer = rules.remind(Memory.StartPlayer)
-    return this.getRound(rules) % 2 === 1 ? startPlayer : this.opponent(startPlayer)
-  }
-
-  getRound(rules: MaterialRules) {
-    return rules.material(MaterialType.RoundTrackerToken).getItem()?.location.x ?? 0
-  }
-
-  opponent(player: number) {
-    return player === 1 ? 2 : 1
-  }
-
-  getPlayerFactionToken(rules: MaterialRules, player: number) {
-    return rules.remind<FactionToken>(Memory.PlayerFactionToken, player) ?? FactionToken.Neutral
+  protected getBackId(itemId: never) {
+    return super.getBackId(itemId) ?? FactionToken.Neutral
   }
 }
 

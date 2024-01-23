@@ -1,5 +1,6 @@
 import { CustomMove, MaterialMove, SimultaneousRule } from '@gamepark/rules-api'
 import { CustomMoveType } from '../material/CustomMoveType'
+import { FactionToken } from '../material/FactionToken'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { Memory } from './Memory'
@@ -14,9 +15,22 @@ export class MulliganRule extends SimultaneousRule {
         .deck().deal({ type: LocationType.PlayerHand, player }, START_HAND)
     )
     if (!this.material(MaterialType.RoundTrackerToken).length) {
-      moves.push(this.material(MaterialType.RoundTrackerToken).createItem({ location: { type: LocationType.RoundTracker, x: 1 } }))
+      const firstPlayer = this.remind(Memory.StartPlayer)
+      moves.push(this.material(MaterialType.RoundTrackerToken).createItem(
+        {
+          id: {
+            front: this.getPlayerFactionToken(firstPlayer),
+            back: this.getPlayerFactionToken(firstPlayer === 1 ? 2 : 1)
+          },
+          location: { type: LocationType.RoundTracker, x: 1 }
+        }
+      ))
     }
     return moves
+  }
+
+  getPlayerFactionToken(player: number) {
+    return this.remind<FactionToken>(Memory.PlayerFactionToken, player)
   }
 
   getLegalMoves(player: number) {
