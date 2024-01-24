@@ -160,4 +160,5 @@ const movementCancelIcon = ({ x, y }: XYCoordinates) => css`
   background-image: url(${movementCancel});
   background-size: cover;
   transform: translate(-50%, -50%) translate3d(${(x - 50) * platMatSize / 100}em, ${(y - 52) * platMatSize / 100}em, 20em);
+  filter: drop-shadow(0 0 0.1em black) drop-shadow(0 0 0.1em black) drop-shadow(0 0 0.1em black);
 `
