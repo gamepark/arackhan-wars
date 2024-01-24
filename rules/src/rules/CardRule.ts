@@ -11,6 +11,7 @@ import {
 } from '@gamepark/rules-api'
 import max from 'lodash/max'
 import sumBy from 'lodash/sumBy'
+import { ArackhanWarsRules } from '../ArackhanWarsRules'
 import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
 import { Ability } from '../material/cards/Ability'
 import { getAttackConstraint } from '../material/cards/AttackLimitation'
@@ -328,7 +329,7 @@ export class CardRule extends MaterialRulesPart {
     for (const { x, y } of adjacentLocations) {
       if (y >= 0 && y < paths.length && x >= 0 && x < paths[y].length && paths[y][x] === Path.Unknown) {
         paths[y][x] = this.getPath({ x, y }, distance)
-        if (paths[y][x] !== Path.Blocked && distance < this.movement) {
+        if (paths[y][x] !== Path.Blocked && !this.locationCancelsMovement(x, y) && distance < this.movement) {
           this.buildMovementPaths(paths, { x, y }, distance + 1)
         }
       }
@@ -349,6 +350,22 @@ export class CardRule extends MaterialRulesPart {
   public thereIsAnotherCardAdjacentTo(location: XYCoordinates) {
     return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).filter((_, index) => index !== this.index).getItems()
       .some(card => areAdjacentSquares(card.location, location))
+  }
+
+  private locationCancelsMovement(x: number, y: number) {
+    const gameCopy: MaterialGame = JSON.parse(JSON.stringify(this.game))
+    const cardCopy = new ArackhanWarsRules(gameCopy).material(MaterialType.FactionCard).index(this.index)
+    cardCopy.getItem()!.location.x = x
+    cardCopy.getItem()!.location.y = y
+    const effects = this.battleFieldCardsRules.flatMap(rule =>
+      rule.abilities.filter(ability => ability.isApplicable(gameCopy, rule.cardMaterial, cardCopy))
+        .flatMap(ability => ability.effects)
+        .concat(...this.turnEffects)
+    )
+    return effects.some(effect =>
+      effect.type === EffectType.Deactivated
+      || (effect.type === EffectType.LoseAttributes && (!effect.attributes || effect.attributes.includes(AttributeType.Movement)))
+    )
   }
 
   getCardAt({ x, y }: XYCoordinates) {

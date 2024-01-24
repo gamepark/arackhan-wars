@@ -2,13 +2,13 @@
 import { pointerWithin } from '@dnd-kit/core'
 import { css } from '@emotion/react'
 import { GameTable, GameTableNavigation } from '@gamepark/react-game'
-import AttacksDisplay from './AttacksDisplay'
+import { BattlefieldHelp } from './BattlefieldHelp'
 import { PlayerPanels } from './panels/PlayerPanels'
 
 export default function GameDisplay() {
   return <>
     <GameTable xMin={-29} xMax={73} yMin={-29} yMax={29} collisionAlgorithm={pointerWithin}>
-      <AttacksDisplay/>
+      <BattlefieldHelp/>
       <GameTableNavigation css={navigationCss}/>
     </GameTable>
     <PlayerPanels/>
