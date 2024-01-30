@@ -5,6 +5,7 @@ import { css } from '@emotion/react'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { AttributeType } from '@gamepark/arackhan-wars/material/cards/Attribute'
 import { EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
+import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { Attack } from '@gamepark/arackhan-wars/rules/AttackRule'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
@@ -53,30 +54,30 @@ function MovementHelp() {
   const ref = useRef<HTMLCanvasElement>(null)
   useDndMonitor({
     onDragStart(event) {
-      if (event.active.data.current?.type === MaterialType.FactionCard) {
-        const cardIndex = event.active.data.current.index
-        const cardRules = getCardRule(rules!.game, cardIndex)
-        const legalMovements = cardRules.legalMovements
-        const movementBlocks: MovementBlock[] = []
-        for (const legalMovement of legalMovements) {
-          const gameCopy: MaterialGame = JSON.parse(JSON.stringify(rules!.game))
-          const cardCopy = new ArackhanWarsRules(gameCopy).material(MaterialType.FactionCard).index(cardIndex)
-          cardCopy.getItem()!.location.x = legalMovement.location.x
-          cardCopy.getItem()!.location.y = legalMovement.location.y
-          for (const rule of cardRules.battleFieldCardsRules) {
-            if (rule.abilities.some(ability =>
-                ability.isApplicable(gameCopy, rule.cardMaterial, cardCopy)
-                && ability.effects.some(effect =>
-                  effect.type === EffectType.Deactivated
-                  || (effect.type === EffectType.LoseAttributes && (!effect.attributes || effect.attributes.includes(AttributeType.Movement)))
-                )
-            )) {
-              movementBlocks.push({ card: rule.item, location: legalMovement.location as Location })
-            }
+      if (event.active.data.current?.type !== MaterialType.FactionCard) return
+      const cardIndex = event.active.data.current.index
+      const cardRules = getCardRule(rules!.game, cardIndex)
+      if (cardRules.item.location.type !== LocationType.Battlefield || cardRules.canFly) return
+      const legalMovements = cardRules.legalMovements
+      const movementBlocks: MovementBlock[] = []
+      for (const legalMovement of legalMovements) {
+        const gameCopy: MaterialGame = JSON.parse(JSON.stringify(rules!.game))
+        const cardCopy = new ArackhanWarsRules(gameCopy).material(MaterialType.FactionCard).index(cardIndex)
+        cardCopy.getItem()!.location.x = legalMovement.location.x
+        cardCopy.getItem()!.location.y = legalMovement.location.y
+        for (const rule of cardRules.battleFieldCardsRules) {
+          if (rule.abilities.some(ability =>
+              ability.isApplicable(gameCopy, rule.cardMaterial, cardCopy)
+              && ability.effects.some(effect =>
+                effect.type === EffectType.Deactivated
+                || (effect.type === EffectType.LoseAttributes && (!effect.attributes || effect.attributes.includes(AttributeType.Movement)))
+              )
+          )) {
+            movementBlocks.push({ card: rule.item, location: legalMovement.location as Location })
           }
         }
-        setMovementBlocks(movementBlocks)
       }
+      setMovementBlocks(movementBlocks)
     },
     onDragEnd() {
       setMovementBlocks([])
