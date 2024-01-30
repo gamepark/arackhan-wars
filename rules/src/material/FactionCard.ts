@@ -55,6 +55,7 @@ import { Firestorm } from './cards/blight/Firestorm'
 import { TheFear } from './cards/blight/TheFear'
 import { ForcedExile } from './cards/blight/ForcedExile'
 import { FactionCardCharacteristics } from './cards/FactionCardCharacteristics'
+import { Faction } from './Faction'
 
 export enum FactionCard {
   Eagle = 1003,
@@ -113,6 +114,11 @@ export enum FactionCard {
   Firestorm,
   ForcedExile,
   TheFear = 1191
+}
+
+export type CardId = {
+  front: FactionCard
+  back: Faction
 }
 
 export const FactionCardsCharacteristics: Record<FactionCard, FactionCardCharacteristics> = {
