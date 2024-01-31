@@ -18,7 +18,6 @@ export class TutorialSetup extends ArackhanWarsSetup {
   setupMaterial() {
     this.setupPlayer(1, Faction.Whitelands)
     this.setupPlayer(2, Faction.Blight)
-    super.setupMaterial()
     this.placeRoundTracker()
   }
 

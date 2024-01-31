@@ -39,7 +39,7 @@ export default function App() {
   )
 }
 
-const RulesHeaders: Record<RuleId, () => ReactJSXElement> = {
+const RulesHeaders: Partial<Record<RuleId, () => ReactJSXElement>> = {
   [RuleId.ChooseFaction]: ChooseFactionHeader,
   [RuleId.ChooseStartPlayer]: ChooseStartPlayerHeader,
   [RuleId.Mulligan]: MulliganHeader,

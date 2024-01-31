@@ -1,4 +1,6 @@
 export enum RuleId {
+  DeckBuilding = 0,
+
   // Setup phases
   ChooseFaction = 1,
   ChooseStartPlayer = 8,
