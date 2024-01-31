@@ -1,4 +1,7 @@
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { ItemLocator } from '@gamepark/react-game'
+import { DeckbuildingBookLocator } from './DeckbuildingBookLocator'
 
-export const DeckbuildingLocators: Partial<Record<LocationType, ItemLocator>> = {}
+export const DeckbuildingLocators: Partial<Record<LocationType, ItemLocator>> = {
+  [LocationType.DeckbuildingBook]: new DeckbuildingBookLocator()
+}

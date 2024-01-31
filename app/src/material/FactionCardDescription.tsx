@@ -10,8 +10,9 @@ import { Attack } from '@gamepark/arackhan-wars/rules/AttackRule'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { CardDescription, ItemContext, MaterialContext } from '@gamepark/react-game'
-import { isCustomMove, isCustomMoveType, Location, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { isCustomMove, isCustomMoveType, isEnumValue, Location, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { differenceBy } from 'lodash'
+import { isDeckbuilding } from '../deckbuilding/deckbuilding.util'
 import BlightBack from '../images/cards/blight/blight-card-back.jpg'
 import AbominableHydra from '../images/cards/blight/en/s1-aw1-144-en-abominable-hydra.jpg'
 import Berserker from '../images/cards/blight/en/s1-aw1-146-en-berserker.jpg'
@@ -144,6 +145,13 @@ export class FactionCardDescription extends CardDescription {
     [Faction.Blight]: BlightBack
   }
 
+  getStaticItems() {
+    if (!isDeckbuilding) return []
+    return Object.values(FactionCard).filter(isEnumValue).map((card, index) => ({
+      id: { front: card }, location: { type: LocationType.DeckbuildingBook, x: index }
+    }))
+  }
+
   getLocations(item: MaterialItem, { index, rules }: ItemContext) {
     if (item.location.type !== LocationType.Battlefield || item.id.front === undefined) return []
 
@@ -196,6 +204,8 @@ export class FactionCardDescription extends CardDescription {
 
 export const factionCardDescription = new FactionCardDescription()
 
+export const cardWidth = factionCardDescription.width
+export const cardHeight = factionCardDescription.width / factionCardDescription.ratio
 
 export function getCardBattlefieldModifierLocations(game: MaterialGame, index: number) {
   const locations: Location[] = []

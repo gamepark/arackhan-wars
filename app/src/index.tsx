@@ -7,6 +7,7 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
 import { arackhanWarsAnimations } from './animations/ArackhanWarsAnimations'
 import App from './App'
+import { isDeckbuilding } from './deckbuilding/deckbuilding.util'
 import { DeckbuildingProvider } from './deckbuilding/DeckbuildingProvider'
 import { Locators } from './locators/Locators'
 import { Material, materialI18n } from './material/Material'
@@ -17,12 +18,10 @@ import { tutorialAI } from './tutorial/TutorialAI'
 
 setupTranslation(translations, { debug: false })
 addStylesheetUrl('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap')
-const query = new URLSearchParams(window.location.search)
-const deckbuilding = query.get('mode') === 'deckbuilding'
 
 ReactDOM.render(
   <StrictMode>
-    {deckbuilding ?
+    {isDeckbuilding ?
       <DeckbuildingProvider/>
       :
       <GameProvider game="arackhan-wars" GameSetup={ArackhanWarsSetup} Rules={ArackhanWarsRules} optionsSpec={ArackhanWarsOptionsSpec}

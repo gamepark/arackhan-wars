@@ -5,7 +5,7 @@ import { GameTable, GameTableNavigation } from '@gamepark/react-game'
 
 export default function DeckbuildingGameDisplay() {
   return <>
-    <GameTable xMin={-29} xMax={73} yMin={-29} yMax={29} collisionAlgorithm={pointerWithin}>
+    <GameTable xMin={-5} xMax={40} yMin={-5} yMax={100} collisionAlgorithm={pointerWithin}>
       <GameTableNavigation css={navigationCss}/>
     </GameTable>
   </>
