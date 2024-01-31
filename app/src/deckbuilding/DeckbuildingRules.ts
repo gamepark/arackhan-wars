@@ -1,11 +1,16 @@
+import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
-import { MaterialGameSetup, MaterialRules, PlayerTurnRule } from '@gamepark/rules-api'
+import { isEnumValue, MaterialGameSetup, MaterialRules, PlayerTurnRule } from '@gamepark/rules-api'
 
 export class DeckbuildingRules extends MaterialRules<number, MaterialType, LocationType> {
   rules = {
     [RuleId.DeckBuilding]: DeckbuildingRule
+  }
+
+  get displayedCards() {
+    return Object.values(FactionCard).filter(isEnumValue).slice(0, 18)
   }
 }
 
