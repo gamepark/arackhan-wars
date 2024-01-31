@@ -110,7 +110,7 @@ export class CardRule extends MaterialRulesPart {
     return this.effectsCache
   }
 
-  private get turnEffects(): Effect[] {
+  get turnEffects(): Effect[] {
     return this.remind<TurnEffect[]>(Memory.TurnEffects)
       ?.filter(turnEffect => turnEffect.targets.includes(this.index))
       .map(turnEffect => turnEffect.effect) ?? []

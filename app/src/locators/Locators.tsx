@@ -3,6 +3,7 @@ import { ItemLocator } from '@gamepark/react-game'
 import { AstralPlaneLocator } from './AstralPlaneLocator'
 import { AttributesIconsLocator } from './AttributesIconsLocator'
 import { battleFieldLocator } from './BattlefieldLocator'
+import { CardTurnEffectLocator } from './CardTurnEffectLocator'
 import { CardValueLocator } from './CardValueLocator'
 import { CombatIconLocator } from './CombatIconLocator'
 import { CombatResultIconLocator } from './CombatResultIconLocator'
@@ -31,5 +32,6 @@ export const Locators: Partial<Record<LocationType, ItemLocator>> = {
   [LocationType.AttributesIcons]: new AttributesIconsLocator(),
   [LocationType.SkillLostIcon]: new SkillLostIconLocator(),
   [LocationType.CombatResultIcon]: new CombatResultIconLocator(),
-  [LocationType.CardValue]: new CardValueLocator()
+  [LocationType.CardValue]: new CardValueLocator(),
+  [LocationType.CardTurnEffect]: new CardTurnEffectLocator()
 }

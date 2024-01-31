@@ -156,6 +156,11 @@ export class FactionCardDescription extends CardDescription {
       locations.push({ type: LocationType.CombatResultIcon, parent: index, id: icon, x: attackValue })
     }
     locations.push({ type: LocationType.FactionCard, parent: index })
+    for (const turnEffect of cardRule.turnEffects) {
+      if (turnEffect.type === EffectType.Mimic) {
+        locations.unshift({ type: LocationType.CardTurnEffect, parent: index, id: turnEffect })
+      }
+    }
     return locations
   }
 

@@ -13,5 +13,6 @@ export enum LocationType {
   AttributesIcons,
   SkillLostIcon,
   CombatResultIcon,
-  CardValue
+  CardValue,
+  CardTurnEffect
 }
