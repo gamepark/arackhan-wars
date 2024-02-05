@@ -8,7 +8,13 @@ import difference from 'lodash/difference'
 import range from 'lodash/range'
 import { DeckbuildingFilter, deckbuildingFilters } from './DeckbuildingFilter'
 
-const ChangeFilter = 1
+const Page = 100
+const PageSize = 18
+const DeckSize = 23
+
+export enum DeckbuildingMove {
+  ChangeFilter = 1, ChangePage
+}
 
 export class DeckbuildingRules extends MaterialRules<number, MaterialType, LocationType> {
   locationsStrategies = {
@@ -22,7 +28,19 @@ export class DeckbuildingRules extends MaterialRules<number, MaterialType, Locat
   }
 
   changeFilter(filter: DeckbuildingFilter) {
-    return new DeckbuildingRule(this.game).rules().customMove(ChangeFilter, filter)
+    return new DeckbuildingRule(this.game).rules().customMove(DeckbuildingMove.ChangeFilter, filter)
+  }
+
+  changePage(page: number) {
+    return new DeckbuildingRule(this.game).rules().customMove(DeckbuildingMove.ChangePage, page)
+  }
+
+  get page() {
+    return new DeckbuildingRule(this.game).page
+  }
+
+  get maxPage() {
+    return new DeckbuildingRule(this.game).maxPage
   }
 }
 
@@ -31,9 +49,18 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
     const bookCards = this.material(MaterialType.FactionCard).location(LocationType.DeckbuildingBook)
     const deckX = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).getItems().map(i => i.location.x!)
     return [
-      ...difference(range(0, 23), deckX).flatMap(x => bookCards.moveItems({ type: LocationType.PlayerDeck, x })),
-      ...deckbuildingFilters.map(filter => this.rules().customMove(ChangeFilter, filter))
+      ...difference(range(0, DeckSize), deckX).flatMap(x => bookCards.moveItems({ type: LocationType.PlayerDeck, x })),
+      ...deckbuildingFilters.map(filter => this.rules().customMove(DeckbuildingMove.ChangeFilter, filter)),
+      ...difference(range(1, this.maxPage + 1), [this.page]).map(page => this.rules().customMove(DeckbuildingMove.ChangePage, page))
     ]
+  }
+
+  get page() {
+    return this.remind(Page) ?? 1
+  }
+
+  get maxPage() {
+    return Math.floor(new DeckbuildingRule(this.game).cards.length / PageSize) + 1
   }
 
   beforeItemMove(move: ItemMove) {
@@ -46,16 +73,22 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
   }
 
   onCustomMove(move: CustomMove) {
-    if (move.type === ChangeFilter) {
-      this.memorize(move.data, value => !value)
-      return [
-        this.material(MaterialType.FactionCard).location(LocationType.DeckbuildingBook).deleteItemsAtOnce(),
-        this.material(MaterialType.FactionCard).createItemsAtOnce(allCards.filter(card => this.filterCard(card)).slice(0, 18).map(card => (
-          { id: { front: card }, location: { type: LocationType.DeckbuildingBook } }
-        )))
-      ]
+    if (move.type === DeckbuildingMove.ChangeFilter) {
+      this.memorize<boolean>(move.data, value => !value)
+    } else if (move.type === DeckbuildingMove.ChangePage) {
+      this.memorize<boolean>(Page, move.data)
     }
-    return []
+    const page = this.page
+    return [
+      this.material(MaterialType.FactionCard).location(LocationType.DeckbuildingBook).deleteItemsAtOnce(),
+      this.material(MaterialType.FactionCard).createItemsAtOnce(this.cards.slice((page - 1) * PageSize, page * PageSize).map(card => (
+        { id: { front: card }, location: { type: LocationType.DeckbuildingBook } }
+      )))
+    ]
+  }
+
+  get cards() {
+    return allCards.filter(card => this.filterCard(card))
   }
 
   filterCard(card: FactionCard) {
