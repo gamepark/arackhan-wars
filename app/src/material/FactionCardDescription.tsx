@@ -12,6 +12,7 @@ import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { CardDescription, ItemContext, MaterialContext } from '@gamepark/react-game'
 import { isCustomMove, isCustomMoveType, Location, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { differenceBy } from 'lodash'
+import { isDeckbuilding } from '../deckbuilding/deckbuilding.util'
 import BlightBack from '../images/cards/blight/blight-card-back.jpg'
 import AbominableHydra from '../images/cards/blight/en/s1-aw1-144-en-abominable-hydra.jpg'
 import Berserker from '../images/cards/blight/en/s1-aw1-146-en-berserker.jpg'
@@ -192,6 +193,10 @@ export class FactionCardDescription extends CardDescription {
   }
 
   help = FactionCardHelp
+
+  highlight() {
+    return isDeckbuilding ? false : undefined
+  }
 }
 
 export const factionCardDescription = new FactionCardDescription()
