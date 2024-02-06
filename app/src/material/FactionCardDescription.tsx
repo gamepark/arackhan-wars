@@ -13,67 +13,66 @@ import { CardDescription, ItemContext, MaterialContext } from '@gamepark/react-g
 import { isCustomMove, isCustomMoveType, Location, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { differenceBy } from 'lodash'
 import { isDeckbuilding } from '../deckbuilding/deckbuilding.util'
-import BlightBack from '../images/cards/blight/blight-card-back.jpg'
-import AbominableHydra from '../images/cards/blight/en/s1-aw1-144-en-abominable-hydra.jpg'
-import Berserker from '../images/cards/blight/en/s1-aw1-146-en-berserker.jpg'
-import ChildEater from '../images/cards/blight/en/s1-aw1-147-en-child-eater.jpg'
-import ForgePatriarch from '../images/cards/blight/en/s1-aw1-156-en-forge-patriarch.jpg'
-import PlagueCollector from '../images/cards/blight/en/s1-aw1-165-en-plague-collector.jpg'
-import ScuttleJaw from '../images/cards/blight/en/s1-aw1-171-en-scuttle-jaw.jpg'
-import Slayer from '../images/cards/blight/en/s1-aw1-172-en-slayer.jpg'
-import SwampOgre from '../images/cards/blight/en/s1-aw1-175-en-swamp-ogre.jpg'
-import SwampTroll from '../images/cards/blight/en/s1-aw1-176-en-swamp-troll.jpg'
-import WesternForge from '../images/cards/blight/en/s1-aw1-179-en-western-forge.jpg'
-import FireLighning from '../images/cards/blight/en/s1-aw1-184-en-fire-lightning.jpg'
-import Firestorm from '../images/cards/blight/en/s1-aw1-185-en-firestorm.jpg'
-import ForcedExile from '../images/cards/blight/en/s1-aw1-186-en-forced-exile.jpg'
-import TheFear from '../images/cards/blight/en/s1-aw1-191-en-the-fear.jpg'
-import Ballista from '../images/cards/greyorder/en/s1-aw1-096-en-ballista.jpg'
-import Champion from '../images/cards/greyorder/en/s1-aw1-100-en-champion.jpg'
-import DrunkKnight from '../images/cards/greyorder/en/s1-aw1-102-en-drunk-knight.jpg'
-import GreyHorseman from '../images/cards/greyorder/en/s1-aw1-105-en-grey-horseman.jpg'
-import HeroOfTheBattleOfNerz from '../images/cards/greyorder/en/s1-aw1-110-en-hero-of-the-battle-of-nerz.jpg'
-import Infantryman from '../images/cards/greyorder/en/s1-aw1-111-en-infantryman.jpg'
-import Phalanx from '../images/cards/greyorder/en/s1-aw1-113-en-phalanx.jpg'
-import SiegeTower from '../images/cards/greyorder/en/s1-aw1-116-en-siege-tower.jpg'
-import TheSeneschal from '../images/cards/greyorder/en/s1-aw1-119-en-the-seneschal.jpg'
-import AvalonFortress from '../images/cards/greyorder/en/s1-aw1-127-en-avalon-fortress.jpg'
-import HorseOfAvalon from '../images/cards/greyorder/en/s1-aw1-134-en-horse-of-avalon.jpg'
-import ShieldWall from '../images/cards/greyorder/en/s1-aw1-139-en-shield-wall.jpg'
-import Warcry from '../images/cards/greyorder/en/s1-aw1-142-en-warcry.jpg'
-import GreyOrderBack from '../images/cards/greyorder/greyorder-card-back.jpg'
-import Behemoth from '../images/cards/nakka/en/s1-aw1-048-en-behemoth.jpg'
-import CarnivorousPlant from '../images/cards/nakka/en/s1-aw1-050-en-carnivorous-plant.jpg'
-import DeathCrawler from '../images/cards/nakka/en/s1-aw1-052-en-death-crawler.jpg'
-import Hexacarias from '../images/cards/nakka/en/s1-aw1-056-en-hexacarias.jpg'
-import MountedBanshee from '../images/cards/nakka/en/s1-aw1-060-en-mounted-banshee.jpg'
-import NakkaArcher from '../images/cards/nakka/en/s1-aw1-061-en-nakka-archer.jpg'
-import Banshee from '../images/cards/nakka/en/s1-aw1-062-en-banshee.jpg'
-import SenileYhdorian from '../images/cards/nakka/en/s1-aw1-073-en-senile-yhdorian.jpg'
-import WrathOfTheForest from '../images/cards/nakka/en/s1-aw1-076-en-wrath-of-the-forest.jpg'
-import Xenodon from '../images/cards/nakka/en/s1-aw1-077-en-xenodon.jpg'
-import ThreeOfLife from '../images/cards/nakka/en/s1-aw1-081-en-tree-of-life.jpg'
-import EarthQuake from '../images/cards/nakka/en/s1-aw1-084-en-earthquake.jpg'
-import Mimicry from '../images/cards/nakka/en/s1-aw1-087-en-mimicry.jpg'
-import NaturalCamouflage from '../images/cards/nakka/en/s1-aw1-089-en-natural-camouflage.jpg'
-import UnstableGrowth from '../images/cards/nakka/en/s1-aw1-090-en-unstable-growth.jpg'
-import NakkaBack from '../images/cards/nakka/nakka-card-back.jpg'
-import Eagle from '../images/cards/whitelands/en/s1-aw1-003-en-eagle.jpg'
-import Gabriel from '../images/cards/whitelands/en/s1-aw1-005-en-gabriel.jpg'
-import IceGolem from '../images/cards/whitelands/en/s1-aw1-011-en-ice-golem.jpg'
-import IcePaladin from '../images/cards/whitelands/en/s1-aw1-015-en-ice-paladin.jpg'
-import LunarWendigo from '../images/cards/whitelands/en/s1-aw1-019-en-lunar-wendigo.jpg'
-
-import NihilistPenguin from '../images/cards/whitelands/en/s1-aw1-022-en-nihilist-penguin.jpg'
-import PaladinOfTheGuard from '../images/cards/whitelands/en/s1-aw1-024-en-paladin-of-the-guard.jpg'
-import ShieldOfDawn from '../images/cards/whitelands/en/s1-aw1-027-en-shield-of-dawn.jpg'
-import SnowGriffin from '../images/cards/whitelands/en/s1-aw1-029-en-snow-griffin.jpg'
-import FortressOfMyjir from '../images/cards/whitelands/en/s1-aw1-033-en-fortress-of-myjir.jpg'
-import Blizzard from '../images/cards/whitelands/en/s1-aw1-038-en-blizzard.jpg'
-import IceMeteor from '../images/cards/whitelands/en/s1-aw1-043-en-ice-meteor.jpg'
-import Teleportation from '../images/cards/whitelands/en/s1-aw1-046-en-teleportation.jpg'
-import WinterProtects from '../images/cards/whitelands/en/s1-aw1-047-en-winter-protects.jpg'
-import WhitelandsBack from '../images/cards/whitelands/whitelands-card-back.jpg'
+import BlightCardBack from '../images/cards/blight/BlightCardBack.jpg'
+import EN1144AbominableHydra from '../images/cards/blight/en/EN1144AbominableHydra.jpg'
+import EN1146Berserker from '../images/cards/blight/en/EN1146Berserker.jpg'
+import EN1147ChildEater from '../images/cards/blight/en/EN1147ChildEater.jpg'
+import EN1156ForgePatriarch from '../images/cards/blight/en/EN1156ForgePatriarch.jpg'
+import EN1165PlagueCollector from '../images/cards/blight/en/EN1165PlagueCollector.jpg'
+import EN1171ScuttleJaw from '../images/cards/blight/en/EN1171ScuttleJaw.jpg'
+import EN1172Slayer from '../images/cards/blight/en/EN1172Slayer.jpg'
+import EN1175SwampOgre from '../images/cards/blight/en/EN1175SwampOgre.jpg'
+import EN1176SwampTroll from '../images/cards/blight/en/EN1176SwampTroll.jpg'
+import EN1179WesternForge from '../images/cards/blight/en/EN1179WesternForge.jpg'
+import EN1184FireLightning from '../images/cards/blight/en/EN1184FireLightning.jpg'
+import EN1185Firestorm from '../images/cards/blight/en/EN1185Firestorm.jpg'
+import EN1186ForcedExile from '../images/cards/blight/en/EN1186ForcedExile.jpg'
+import EN1191TheFear from '../images/cards/blight/en/EN1191TheFear.jpg'
+import EN1096Ballista from '../images/cards/greyorder/en/EN1096Ballista.jpg'
+import EN1100Champion from '../images/cards/greyorder/en/EN1100Champion.jpg'
+import EN1102DrunkKnight from '../images/cards/greyorder/en/EN1102DrunkKnight.jpg'
+import EN1105GreyHorseman from '../images/cards/greyorder/en/EN1105GreyHorseman.jpg'
+import EN1110HeroOfTheBattleOfNerz from '../images/cards/greyorder/en/EN1110HeroOfTheBattleOfNerz.jpg'
+import EN1111Infantryman from '../images/cards/greyorder/en/EN1111Infantryman.jpg'
+import EN1113Phalanx from '../images/cards/greyorder/en/EN1113Phalanx.jpg'
+import EN1116SiegeTower from '../images/cards/greyorder/en/EN1116SiegeTower.jpg'
+import EN1119TheSeneschal from '../images/cards/greyorder/en/EN1119TheSeneschal.jpg'
+import EN1127AvalonFortress from '../images/cards/greyorder/en/EN1127AvalonFortress.jpg'
+import EN1134HorseOfAvalon from '../images/cards/greyorder/en/EN1134HorseOfAvalon.jpg'
+import EN1139ShieldWall from '../images/cards/greyorder/en/EN1139ShieldWall.jpg'
+import EN1142Warcry from '../images/cards/greyorder/en/EN1142Warcry.jpg'
+import GreyOrderCardBack from '../images/cards/greyorder/GreyOrderCardBack.jpg'
+import EN1048Behemoth from '../images/cards/nakka/en/EN1048Behemoth.jpg'
+import EN1050CarnivorousPlant from '../images/cards/nakka/en/EN1050CarnivorousPlant.jpg'
+import EN1052DeathCrawler from '../images/cards/nakka/en/EN1052DeathCrawler.jpg'
+import EN1056Hexacarias from '../images/cards/nakka/en/EN1056Hexacarias.jpg'
+import EN1060MountedBanshee from '../images/cards/nakka/en/EN1060MountedBanshee.jpg'
+import EN1061NakkaArcher from '../images/cards/nakka/en/EN1061NakkaArcher.jpg'
+import EN1062Banshee from '../images/cards/nakka/en/EN1062Banshee.jpg'
+import EN1073SenileYhdorian from '../images/cards/nakka/en/EN1073SenileYhdorian.jpg'
+import EN1076WrathOfTheForest from '../images/cards/nakka/en/EN1076WrathOfTheForest.jpg'
+import EN1077Xenodon from '../images/cards/nakka/en/EN1077Xenodon.jpg'
+import EN1081TreeOfLife from '../images/cards/nakka/en/EN1081TreeOfLife.jpg'
+import EN1084Earthquake from '../images/cards/nakka/en/EN1084Earthquake.jpg'
+import EN1087Mimicry from '../images/cards/nakka/en/EN1087Mimicry.jpg'
+import EN1089NaturalCamouflage from '../images/cards/nakka/en/EN1089NaturalCamouflage.jpg'
+import EN1090UnstableGrowth from '../images/cards/nakka/en/EN1090UnstableGrowth.jpg'
+import NakkaCardBack from '../images/cards/nakka/NakkaCardBack.jpg'
+import EN1003Eagle from '../images/cards/whitelands/en/EN1003Eagle.jpg'
+import EN1005Gabriel from '../images/cards/whitelands/en/EN1005Gabriel.jpg'
+import EN1011IceGolem from '../images/cards/whitelands/en/EN1011IceGolem.jpg'
+import EN1015IcePaladin from '../images/cards/whitelands/en/EN1015IcePaladin.jpg'
+import EN1019LunarWendigo from '../images/cards/whitelands/en/EN1019LunarWendigo.jpg'
+import EN1022NihilistPenguin from '../images/cards/whitelands/en/EN1022NihilistPenguin.jpg'
+import EN1024PaladinOfTheGuard from '../images/cards/whitelands/en/EN1024PaladinOfTheGuard.jpg'
+import EN1027ShieldOfDawn from '../images/cards/whitelands/en/EN1027ShieldOfDawn.jpg'
+import EN1029SnowGriffin from '../images/cards/whitelands/en/EN1029SnowGriffin.jpg'
+import EN1033FortressOfMyjir from '../images/cards/whitelands/en/EN1033FortressOfMyjir.jpg'
+import EN1038Blizzard from '../images/cards/whitelands/en/EN1038Blizzard.jpg'
+import EN1043IceMeteor from '../images/cards/whitelands/en/EN1043IceMeteor.jpg'
+import EN1046Teleportation from '../images/cards/whitelands/en/EN1046Teleportation.jpg'
+import EN1047WinterProtects from '../images/cards/whitelands/en/EN1047WinterProtects.jpg'
+import WhitelandsCardBack from '../images/cards/whitelands/WhitelandsCardBack.jpg'
 import { CombatIcon } from '../locators/CombatIconLocator'
 import { CombatResult } from '../locators/CombatResultIconLocator'
 
@@ -81,68 +80,68 @@ import { FactionCardHelp } from './FactionCardHelp'
 
 export class FactionCardDescription extends CardDescription {
   images = {
-    [FactionCard.NihilistPenguin]: NihilistPenguin,
-    [FactionCard.LunarWendigo]: LunarWendigo,
-    [FactionCard.ShieldOfDawn]: ShieldOfDawn,
-    [FactionCard.IcePaladin]: IcePaladin,
-    [FactionCard.Eagle]: Eagle,
-    [FactionCard.PaladinOfTheGuard]: PaladinOfTheGuard,
-    [FactionCard.SnowGriffin]: SnowGriffin,
-    [FactionCard.Gabriel]: Gabriel,
-    [FactionCard.IceGolem]: IceGolem,
-    [FactionCard.FortressOfMyjir]: FortressOfMyjir,
-    [FactionCard.IceMeteor]: IceMeteor,
-    [FactionCard.WinterProtects]: WinterProtects,
-    [FactionCard.Teleportation]: Teleportation,
-    [FactionCard.Blizzard]: Blizzard,
-    [FactionCard.DeathCrawler]: DeathCrawler,
-    [FactionCard.Xenodon]: Xenodon,
-    [FactionCard.NakkaArcher]: NakkaArcher,
-    [FactionCard.SenileYhdorian]: SenileYhdorian,
-    [FactionCard.Hexacarias]: Hexacarias,
-    [FactionCard.CarnivorousPlant]: CarnivorousPlant,
-    [FactionCard.Banshee]: Banshee,
-    [FactionCard.Behemoth]: Behemoth,
-    [FactionCard.MountedBanshee]: MountedBanshee,
-    [FactionCard.WrathOfTheForest]: WrathOfTheForest,
-    [FactionCard.TreeOfLife]: ThreeOfLife,
-    [FactionCard.Earthquake]: EarthQuake,
-    [FactionCard.UnstableGrowth]: UnstableGrowth,
-    [FactionCard.NaturalCamouflage]: NaturalCamouflage,
-    [FactionCard.Mimicry]: Mimicry,
-    [FactionCard.DrunkKnight]: DrunkKnight,
-    [FactionCard.Infantryman]: Infantryman,
-    [FactionCard.Phalanx]: Phalanx,
-    [FactionCard.Ballista]: Ballista,
-    [FactionCard.Champion]: Champion,
-    [FactionCard.GreyHorseman]: GreyHorseman,
-    [FactionCard.SiegeTower]: SiegeTower,
-    [FactionCard.HeroOfTheBattleOfNerz]: HeroOfTheBattleOfNerz,
-    [FactionCard.TheSeneschal]: TheSeneschal,
-    [FactionCard.AvalonFortress]: AvalonFortress,
-    [FactionCard.Warcry]: Warcry,
-    [FactionCard.ShieldWall]: ShieldWall,
-    [FactionCard.HorseOfAvalon]: HorseOfAvalon,
-    [FactionCard.ScuttleJaw]: ScuttleJaw,
-    [FactionCard.SwampOgre]: SwampOgre,
-    [FactionCard.SwampTroll]: SwampTroll,
-    [FactionCard.Berserker]: Berserker,
-    [FactionCard.PlagueCollector]: PlagueCollector,
-    [FactionCard.Slayer]: Slayer,
-    [FactionCard.ForgePatriarch]: ForgePatriarch,
-    [FactionCard.AbominableHydra]: AbominableHydra,
-    [FactionCard.ChildEater]: ChildEater,
-    [FactionCard.WesternForge]: WesternForge,
-    [FactionCard.FireLightning]: FireLighning,
-    [FactionCard.Firestorm]: Firestorm,
-    [FactionCard.TheFear]: TheFear,
-    [FactionCard.ForcedExile]: ForcedExile
+    [FactionCard.NihilistPenguin]: EN1022NihilistPenguin,
+    [FactionCard.LunarWendigo]: EN1019LunarWendigo,
+    [FactionCard.ShieldOfDawn]: EN1027ShieldOfDawn,
+    [FactionCard.IcePaladin]: EN1015IcePaladin,
+    [FactionCard.Eagle]: EN1003Eagle,
+    [FactionCard.PaladinOfTheGuard]: EN1024PaladinOfTheGuard,
+    [FactionCard.SnowGriffin]: EN1029SnowGriffin,
+    [FactionCard.Gabriel]: EN1005Gabriel,
+    [FactionCard.IceGolem]: EN1011IceGolem,
+    [FactionCard.FortressOfMyjir]: EN1033FortressOfMyjir,
+    [FactionCard.IceMeteor]: EN1043IceMeteor,
+    [FactionCard.WinterProtects]: EN1047WinterProtects,
+    [FactionCard.Teleportation]: EN1046Teleportation,
+    [FactionCard.Blizzard]: EN1038Blizzard,
+    [FactionCard.DeathCrawler]: EN1052DeathCrawler,
+    [FactionCard.Xenodon]: EN1077Xenodon,
+    [FactionCard.NakkaArcher]: EN1061NakkaArcher,
+    [FactionCard.SenileYhdorian]: EN1073SenileYhdorian,
+    [FactionCard.Hexacarias]: EN1056Hexacarias,
+    [FactionCard.CarnivorousPlant]: EN1050CarnivorousPlant,
+    [FactionCard.Banshee]: EN1062Banshee,
+    [FactionCard.Behemoth]: EN1048Behemoth,
+    [FactionCard.MountedBanshee]: EN1060MountedBanshee,
+    [FactionCard.WrathOfTheForest]: EN1076WrathOfTheForest,
+    [FactionCard.TreeOfLife]: EN1081TreeOfLife,
+    [FactionCard.Earthquake]: EN1084Earthquake,
+    [FactionCard.UnstableGrowth]: EN1090UnstableGrowth,
+    [FactionCard.NaturalCamouflage]: EN1089NaturalCamouflage,
+    [FactionCard.Mimicry]: EN1087Mimicry,
+    [FactionCard.DrunkKnight]: EN1102DrunkKnight,
+    [FactionCard.Infantryman]: EN1111Infantryman,
+    [FactionCard.Phalanx]: EN1113Phalanx,
+    [FactionCard.Ballista]: EN1096Ballista,
+    [FactionCard.Champion]: EN1100Champion,
+    [FactionCard.GreyHorseman]: EN1105GreyHorseman,
+    [FactionCard.SiegeTower]: EN1116SiegeTower,
+    [FactionCard.HeroOfTheBattleOfNerz]: EN1110HeroOfTheBattleOfNerz,
+    [FactionCard.TheSeneschal]: EN1119TheSeneschal,
+    [FactionCard.AvalonFortress]: EN1127AvalonFortress,
+    [FactionCard.Warcry]: EN1142Warcry,
+    [FactionCard.ShieldWall]: EN1139ShieldWall,
+    [FactionCard.HorseOfAvalon]: EN1134HorseOfAvalon,
+    [FactionCard.ScuttleJaw]: EN1171ScuttleJaw,
+    [FactionCard.SwampOgre]: EN1175SwampOgre,
+    [FactionCard.SwampTroll]: EN1176SwampTroll,
+    [FactionCard.Berserker]: EN1146Berserker,
+    [FactionCard.PlagueCollector]: EN1165PlagueCollector,
+    [FactionCard.Slayer]: EN1172Slayer,
+    [FactionCard.ForgePatriarch]: EN1156ForgePatriarch,
+    [FactionCard.AbominableHydra]: EN1144AbominableHydra,
+    [FactionCard.ChildEater]: EN1147ChildEater,
+    [FactionCard.WesternForge]: EN1179WesternForge,
+    [FactionCard.FireLightning]: EN1184FireLightning,
+    [FactionCard.Firestorm]: EN1185Firestorm,
+    [FactionCard.TheFear]: EN1191TheFear,
+    [FactionCard.ForcedExile]: EN1186ForcedExile
   }
   backImages = {
-    [Faction.Whitelands]: WhitelandsBack,
-    [Faction.Nakka]: NakkaBack,
-    [Faction.GreyOrder]: GreyOrderBack,
-    [Faction.Blight]: BlightBack
+    [Faction.Whitelands]: WhitelandsCardBack,
+    [Faction.Nakka]: NakkaCardBack,
+    [Faction.GreyOrder]: GreyOrderCardBack,
+    [Faction.Blight]: BlightCardBack
   }
 
   getLocations(item: MaterialItem, { index, rules }: ItemContext) {
