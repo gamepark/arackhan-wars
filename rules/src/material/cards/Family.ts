@@ -1,11 +1,14 @@
 export enum Family {
-  Blacksmith = 1,
-  Troll,
-  SixthLegion,
-  Artillery,
+  IceFairy = 1,
+  Elemental,
+  IceFangs,
+  Nihilist,
+  IceGuard,
+  ChildrenOfDawn,
   Yhdorian,
   Sentinel,
-  ChildrenOfDawn,
-  IceGuard,
-  Nihilist
+  SixthLegion,
+  Artillery,
+  Blacksmith,
+  Troll,
 }

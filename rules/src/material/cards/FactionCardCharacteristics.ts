@@ -1,7 +1,8 @@
+import { RuleId } from '../../rules/RuleId'
 import { Faction } from '../Faction'
+import { FactionCard } from '../FactionCard'
 import { Ability } from './Ability'
 import { Attribute } from './Attribute'
-import { RuleId } from '../../rules/RuleId'
 
 export enum FactionCardKind {
   Creature = 1,
@@ -22,6 +23,15 @@ export abstract class FactionCardCharacteristics {
   limit?: number
   legendary = false
   action?: RuleId
+  altOf?: FactionCard
+  fullArt = false
+  holo = false
+
+  constructor({ fullArtOf, altArtOf, holo }: { fullArtOf?: FactionCard, altArtOf?: FactionCard, holo?: boolean } = {}) {
+    this.altOf = fullArtOf ?? altArtOf
+    this.fullArt = fullArtOf !== undefined
+    this.holo = holo ?? false
+  }
 
   protected attribute?: Attribute
   protected attributes: Attribute[] = []

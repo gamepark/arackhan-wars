@@ -58,18 +58,51 @@ import EN1087Mimicry from '../images/cards/nakka/en/EN1087Mimicry.jpg'
 import EN1089NaturalCamouflage from '../images/cards/nakka/en/EN1089NaturalCamouflage.jpg'
 import EN1090UnstableGrowth from '../images/cards/nakka/en/EN1090UnstableGrowth.jpg'
 import NakkaCardBack from '../images/cards/nakka/NakkaCardBack.jpg'
+import EN1001AdrielleFullArt from '../images/cards/whitelands/en/EN1001AdrielleFullArt.jpg'
+import EN1002Dreki from '../images/cards/whitelands/en/EN1002Dreki.jpg'
 import EN1003Eagle from '../images/cards/whitelands/en/EN1003Eagle.jpg'
+import EN1004FrostMaiden from '../images/cards/whitelands/en/EN1004FrostMaiden.jpg'
 import EN1005Gabriel from '../images/cards/whitelands/en/EN1005Gabriel.jpg'
+import EN1006GabrielFullArtHolo from '../images/cards/whitelands/en/EN1006GabrielFullArtHolo.jpg'
+import EN1007GabrielFullArt from '../images/cards/whitelands/en/EN1007GabrielFullArt.jpg'
+import EN1008IceElemental from '../images/cards/whitelands/en/EN1008IceElemental.jpg'
+import EN1009NoviceFairy from '../images/cards/whitelands/en/EN1009NoviceFairy.jpg'
+import EN1010NoviceFairyFullArt from '../images/cards/whitelands/en/EN1010NoviceFairyFullArt.jpg'
 import EN1011IceGolem from '../images/cards/whitelands/en/EN1011IceGolem.jpg'
+import EN1012IceGolemFullArt from '../images/cards/whitelands/en/EN1012IceGolemFullArt.jpg'
+import EN1013IceMoleg from '../images/cards/whitelands/en/EN1013IceMoleg.jpg'
+import EN1014IceMolegFullArt from '../images/cards/whitelands/en/EN1014IceMolegFullArt.jpg'
 import EN1015IcePaladin from '../images/cards/whitelands/en/EN1015IcePaladin.jpg'
+import EN1016IcePaladinFullArt from '../images/cards/whitelands/en/EN1016IcePaladinFullArt.jpg'
+import EN1017IceProtector from '../images/cards/whitelands/en/EN1017IceProtector.jpg'
+import EN1018IceWolf from '../images/cards/whitelands/en/EN1018IceWolf.jpg'
 import EN1019LunarWendigo from '../images/cards/whitelands/en/EN1019LunarWendigo.jpg'
+import EN1020NemesioFullArt from '../images/cards/whitelands/en/EN1020NemesioFullArt.jpg'
+import EN1021NihilistMorgon from '../images/cards/whitelands/en/EN1021NihilistMorgon.jpg'
 import EN1022NihilistPenguin from '../images/cards/whitelands/en/EN1022NihilistPenguin.jpg'
+import EN1023NihilistPenguinFullArt from '../images/cards/whitelands/en/EN1023NihilistPenguinFullArt.jpg'
 import EN1024PaladinOfTheGuard from '../images/cards/whitelands/en/EN1024PaladinOfTheGuard.jpg'
+import EN1025PaladinOfTheGuardFullArt from '../images/cards/whitelands/en/EN1025PaladinOfTheGuardFullArt.jpg'
+import EN1026QueensJester from '../images/cards/whitelands/en/EN1026QueensJester.jpg'
 import EN1027ShieldOfDawn from '../images/cards/whitelands/en/EN1027ShieldOfDawn.jpg'
+import EN1028ShieldOfDawnFullArt from '../images/cards/whitelands/en/EN1028ShieldOfDawnFullArt.jpg'
 import EN1029SnowGriffin from '../images/cards/whitelands/en/EN1029SnowGriffin.jpg'
+import EN1030VindictiveBear from '../images/cards/whitelands/en/EN1030VindictiveBear.jpg'
+import EN1031Yeti from '../images/cards/whitelands/en/EN1031Yeti.jpg'
+import EN1032AncestralLibrary from '../images/cards/whitelands/en/EN1032AncestralLibrary.jpg'
 import EN1033FortressOfMyjir from '../images/cards/whitelands/en/EN1033FortressOfMyjir.jpg'
+import EN1034FortressOfMyjirFullArtHolo from '../images/cards/whitelands/en/EN1034FortressOfMyjirFullArtHolo.jpg'
+import EN1035FortressOfMyjirFullArt from '../images/cards/whitelands/en/EN1035FortressOfMyjirFullArt.jpg'
+import EN1036TheWhiteGatesFullArt from '../images/cards/whitelands/en/EN1036TheWhiteGatesFullArt.jpg'
+import EN1037ArmorOfDawnHolo from '../images/cards/whitelands/en/EN1037ArmorOfDawnHolo.jpg'
 import EN1038Blizzard from '../images/cards/whitelands/en/EN1038Blizzard.jpg'
+import EN1039CoriolisWind from '../images/cards/whitelands/en/EN1039CoriolisWind.jpg'
+import EN1040EsotericWinter from '../images/cards/whitelands/en/EN1040EsotericWinter.jpg'
+import EN1041FairyMadness from '../images/cards/whitelands/en/EN1041FairyMadness.jpg'
+import EN1042FrozenLightning from '../images/cards/whitelands/en/EN1042FrozenLightning.jpg'
 import EN1043IceMeteor from '../images/cards/whitelands/en/EN1043IceMeteor.jpg'
+import EN1044IceWings from '../images/cards/whitelands/en/EN1044IceWings.jpg'
+import EN1045SecretIncantation from '../images/cards/whitelands/en/EN1045SecretIncantation.jpg'
 import EN1046Teleportation from '../images/cards/whitelands/en/EN1046Teleportation.jpg'
 import EN1047WinterProtects from '../images/cards/whitelands/en/EN1047WinterProtects.jpg'
 import WhitelandsCardBack from '../images/cards/whitelands/WhitelandsCardBack.jpg'
@@ -80,20 +113,53 @@ import { FactionCardHelp } from './FactionCardHelp'
 
 export class FactionCardDescription extends CardDescription {
   images = {
-    [FactionCard.NihilistPenguin]: EN1022NihilistPenguin,
-    [FactionCard.LunarWendigo]: EN1019LunarWendigo,
-    [FactionCard.ShieldOfDawn]: EN1027ShieldOfDawn,
-    [FactionCard.IcePaladin]: EN1015IcePaladin,
+    [FactionCard.Adrielle]: EN1001AdrielleFullArt,
+    [FactionCard.Dreki]: EN1002Dreki,
     [FactionCard.Eagle]: EN1003Eagle,
-    [FactionCard.PaladinOfTheGuard]: EN1024PaladinOfTheGuard,
-    [FactionCard.SnowGriffin]: EN1029SnowGriffin,
+    [FactionCard.FrostMaiden]: EN1004FrostMaiden,
     [FactionCard.Gabriel]: EN1005Gabriel,
+    [FactionCard.GabrielFullArtHolo]: EN1006GabrielFullArtHolo,
+    [FactionCard.GabrielFullArt]: EN1007GabrielFullArt,
+    [FactionCard.IceElemental]: EN1008IceElemental,
+    [FactionCard.NoviceFairy]: EN1009NoviceFairy,
+    [FactionCard.NoviceFairyFullArt]: EN1010NoviceFairyFullArt,
     [FactionCard.IceGolem]: EN1011IceGolem,
+    [FactionCard.IceGolemFullArt]: EN1012IceGolemFullArt,
+    [FactionCard.IceMoleg]: EN1013IceMoleg,
+    [FactionCard.IceMolegFullArt]: EN1014IceMolegFullArt,
+    [FactionCard.IcePaladin]: EN1015IcePaladin,
+    [FactionCard.IcePaladinFullArt]: EN1016IcePaladinFullArt,
+    [FactionCard.IceProtector]: EN1017IceProtector,
+    [FactionCard.IceWolf]: EN1018IceWolf,
+    [FactionCard.LunarWendigo]: EN1019LunarWendigo,
+    [FactionCard.NemesioWhitelands]: EN1020NemesioFullArt,
+    [FactionCard.NihilistMorgon]: EN1021NihilistMorgon,
+    [FactionCard.NihilistPenguin]: EN1022NihilistPenguin,
+    [FactionCard.NihilistPenguinFullArt]: EN1023NihilistPenguinFullArt,
+    [FactionCard.PaladinOfTheGuard]: EN1024PaladinOfTheGuard,
+    [FactionCard.PaladinOfTheGuardFullArt]: EN1025PaladinOfTheGuardFullArt,
+    [FactionCard.QueensJester]: EN1026QueensJester,
+    [FactionCard.ShieldOfDawn]: EN1027ShieldOfDawn,
+    [FactionCard.ShieldOfDawnFullArt]: EN1028ShieldOfDawnFullArt,
+    [FactionCard.SnowGriffin]: EN1029SnowGriffin,
+    [FactionCard.VindictiveBear]: EN1030VindictiveBear,
+    [FactionCard.Yeti]: EN1031Yeti,
+    [FactionCard.AncestralLibrary]: EN1032AncestralLibrary,
     [FactionCard.FortressOfMyjir]: EN1033FortressOfMyjir,
-    [FactionCard.IceMeteor]: EN1043IceMeteor,
-    [FactionCard.WinterProtects]: EN1047WinterProtects,
-    [FactionCard.Teleportation]: EN1046Teleportation,
+    [FactionCard.FortressOfMyjirFullArtHolo]: EN1034FortressOfMyjirFullArtHolo,
+    [FactionCard.FortressOfMyjirFullArt]: EN1035FortressOfMyjirFullArt,
+    [FactionCard.TheWhiteGates]: EN1036TheWhiteGatesFullArt,
+    [FactionCard.ArmorOfDawn]: EN1037ArmorOfDawnHolo,
     [FactionCard.Blizzard]: EN1038Blizzard,
+    [FactionCard.CoriolisWind]: EN1039CoriolisWind,
+    [FactionCard.EsotericWinter]: EN1040EsotericWinter,
+    [FactionCard.FairyMadness]: EN1041FairyMadness,
+    [FactionCard.FrozenLightning]: EN1042FrozenLightning,
+    [FactionCard.IceMeteor]: EN1043IceMeteor,
+    [FactionCard.IceWings]: EN1044IceWings,
+    [FactionCard.SecretIncantation]: EN1045SecretIncantation,
+    [FactionCard.Teleportation]: EN1046Teleportation,
+    [FactionCard.WinterProtects]: EN1047WinterProtects,
     [FactionCard.DeathCrawler]: EN1052DeathCrawler,
     [FactionCard.Xenodon]: EN1077Xenodon,
     [FactionCard.NakkaArcher]: EN1061NakkaArcher,
