@@ -1,17 +1,37 @@
 import { AbominableHydra } from './cards/blight/AbominableHydra'
 import { Berserker } from './cards/blight/Berserker'
 import { ChildEater } from './cards/blight/ChildEater'
+import { ColossusRat } from './cards/blight/ColossusRat'
+import { CorruptBlacksmith } from './cards/blight/CorruptBlacksmith'
+import { DarkTunnel } from './cards/blight/DarkTunnel'
+import { DragonBreath } from './cards/blight/DragonBreath'
+import { EssenceAbsorption } from './cards/blight/EssenceAbsorption'
+import { Feyr } from './cards/blight/Feyr'
 import { FireLightning } from './cards/blight/FireLightning'
 import { Firestorm } from './cards/blight/Firestorm'
+import { Flail } from './cards/blight/Flail'
 import { ForcedExile } from './cards/blight/ForcedExile'
+import { ForgeBeetle } from './cards/blight/ForgeBeetle'
 import { ForgePatriarch } from './cards/blight/ForgePatriarch'
+import { GiantTroll } from './cards/blight/GiantTroll'
+import { Lucy } from './cards/blight/Lucy'
+import { NegativeSorcery } from './cards/blight/NegativeSorcery'
+import { NemesioBlight } from './cards/blight/NemesioBlight'
 import { PlagueCollector } from './cards/blight/PlagueCollector'
+import { PlagueWagon } from './cards/blight/PlagueWagon'
+import { Possession } from './cards/blight/Possession'
+import { Ratman } from './cards/blight/Ratman'
+import { ScorpionFly } from './cards/blight/ScorpionFly'
 import { ScuttleJaw } from './cards/blight/ScuttleJaw'
 import { Slayer } from './cards/blight/Slayer'
+import { SwampHound } from './cards/blight/SwampHound'
 import { SwampOgre } from './cards/blight/SwampOgre'
 import { SwampTroll } from './cards/blight/SwampTroll'
 import { TheFear } from './cards/blight/TheFear'
+import { TheFog } from './cards/blight/TheFog'
+import { TitanRat } from './cards/blight/TitanRat'
 import { WesternForge } from './cards/blight/WesternForge'
+import { WingedTerror } from './cards/blight/WingedTerror'
 import { FactionCardCharacteristics } from './cards/FactionCardCharacteristics'
 import { AngryPeasant } from './cards/greyorder/AngryPeasant'
 import { Archer } from './cards/greyorder/Archer'
@@ -268,19 +288,56 @@ export enum FactionCard {
   YhdilBlast = 1143,
 
   AbominableHydra = 1144,
+  AbominableHydraFullArt = 1145,
   Berserker = 1146,
-  ChildEater,
+  ChildEater = 1147,
+  ColossusRat = 1148,
+  ColossusRatFullArt = 1149,
+  CorruptBlacksmith = 1150,
+  Feyr = 1151,
+  FeyrFullArtHolo = 1152,
+  FeyrFullArt = 1153,
+  Flail = 1154,
+  ForgeBeetle = 1155,
   ForgePatriarch = 1156,
+  ForgePatriarchFullArt = 1157,
+  GiantTroll = 1158,
+  WingedTerror = 1159,
+  WingedTerrorFullArt = 1160,
+  Lucy = 1161,
+  LucyFullArtHolo = 1162,
+  LucyFullArt = 1163,
+  NemesioBlight = 1164,
   PlagueCollector = 1165,
+  PlagueCollectorFullArt = 1166,
+  PlagueWagon = 1167,
+  Ratman = 1168,
+  RatmanFullArt = 1169,
+  ScorpionFly = 1170,
   ScuttleJaw = 1171,
-  Slayer,
+  Slayer = 1172,
+  SlayerFullArt = 1173,
+  SwampHound = 1174,
   SwampOgre = 1175,
-  SwampTroll,
+  SwampTroll = 1176,
+  TitanRat = 1177,
+  DarkTunnel = 1178,
   WesternForge = 1179,
+  WesternForgeFullArtHolo = 1180,
+  WesternForgeFullArt = 1181,
+  DragonBreath = 1182,
+  EssenceAbsorption = 1183,
   FireLightning = 1184,
-  Firestorm,
-  ForcedExile,
-  TheFear = 1191
+  Firestorm = 1185,
+  ForcedExile = 1186,
+  ForcedExileFullArtHolo = 1187,
+  ForcedExileFullArt = 1188,
+  NegativeSorcery = 1189,
+  Possession = 1190,
+  TheFear = 1191,
+  TheFearFullArtHolo = 1192,
+  TheFearFullArt = 1193,
+  TheFog = 1194
 }
 
 export type CardId = {
@@ -436,18 +493,55 @@ export const FactionCardsCharacteristics: Record<FactionCard, FactionCardCharact
   [FactionCard.YhdilBlast]: new YhdilBlast(),
 
   // BLIGHTS
+  [FactionCard.AbominableHydra]: new AbominableHydra(),
+  [FactionCard.AbominableHydraFullArt]: new AbominableHydra({ fullArtOf: FactionCard.AbominableHydra }),
+  [FactionCard.Berserker]: new Berserker(),
+  [FactionCard.ChildEater]: new ChildEater(),
+  [FactionCard.ColossusRat]: new ColossusRat(),
+  [FactionCard.ColossusRatFullArt]: new ColossusRat({ fullArtOf: FactionCard.ColossusRat }),
+  [FactionCard.CorruptBlacksmith]: new CorruptBlacksmith(),
+  [FactionCard.Feyr]: new Feyr(),
+  [FactionCard.FeyrFullArtHolo]: new Feyr({ fullArtOf: FactionCard.Feyr, holo: true }),
+  [FactionCard.FeyrFullArt]: new Feyr({ fullArtOf: FactionCard.Feyr }),
+  [FactionCard.Flail]: new Flail(),
+  [FactionCard.ForgeBeetle]: new ForgeBeetle(),
+  [FactionCard.ForgePatriarch]: new ForgePatriarch(),
+  [FactionCard.ForgePatriarchFullArt]: new ForgePatriarch({ fullArtOf: FactionCard.ForgePatriarch }),
+  [FactionCard.GiantTroll]: new GiantTroll(),
+  [FactionCard.WingedTerror]: new WingedTerror(),
+  [FactionCard.WingedTerrorFullArt]: new WingedTerror({ fullArtOf: FactionCard.WingedTerror }),
+  [FactionCard.Lucy]: new Lucy(),
+  [FactionCard.LucyFullArtHolo]: new Lucy({ fullArtOf: FactionCard.Lucy, holo: true }),
+  [FactionCard.LucyFullArt]: new Lucy({ fullArtOf: FactionCard.Lucy }),
+  [FactionCard.NemesioBlight]: new NemesioBlight(),
+  [FactionCard.PlagueCollector]: new PlagueCollector(),
+  [FactionCard.PlagueCollectorFullArt]: new PlagueCollector({ fullArtOf: FactionCard.PlagueCollector }),
+  [FactionCard.PlagueWagon]: new PlagueWagon(),
+  [FactionCard.Ratman]: new Ratman(),
+  [FactionCard.RatmanFullArt]: new Ratman({ fullArtOf: FactionCard.Ratman }),
+  [FactionCard.ScorpionFly]: new ScorpionFly(),
   [FactionCard.ScuttleJaw]: new ScuttleJaw(),
+  [FactionCard.Slayer]: new Slayer(),
+  [FactionCard.SlayerFullArt]: new Slayer({ fullArtOf: FactionCard.Slayer }),
+  [FactionCard.SwampHound]: new SwampHound(),
   [FactionCard.SwampOgre]: new SwampOgre(),
   [FactionCard.SwampTroll]: new SwampTroll(),
-  [FactionCard.Berserker]: new Berserker(),
-  [FactionCard.PlagueCollector]: new PlagueCollector(),
-  [FactionCard.Slayer]: new Slayer(),
-  [FactionCard.ForgePatriarch]: new ForgePatriarch(),
-  [FactionCard.AbominableHydra]: new AbominableHydra(),
-  [FactionCard.ChildEater]: new ChildEater(),
+  [FactionCard.TitanRat]: new TitanRat(),
+  [FactionCard.DarkTunnel]: new DarkTunnel(),
   [FactionCard.WesternForge]: new WesternForge(),
+  [FactionCard.WesternForgeFullArtHolo]: new WesternForge({ fullArtOf: FactionCard.WesternForge, holo: true }),
+  [FactionCard.WesternForgeFullArt]: new WesternForge({ fullArtOf: FactionCard.WesternForge }),
+  [FactionCard.DragonBreath]: new DragonBreath(),
+  [FactionCard.EssenceAbsorption]: new EssenceAbsorption(),
   [FactionCard.FireLightning]: new FireLightning(),
   [FactionCard.Firestorm]: new Firestorm(),
+  [FactionCard.ForcedExile]: new ForcedExile(),
+  [FactionCard.ForcedExileFullArtHolo]: new ForcedExile({ fullArtOf: FactionCard.ForcedExile, holo: true }),
+  [FactionCard.ForcedExileFullArt]: new ForcedExile({ fullArtOf: FactionCard.ForcedExile }),
+  [FactionCard.NegativeSorcery]: new NegativeSorcery(),
+  [FactionCard.Possession]: new Possession(),
   [FactionCard.TheFear]: new TheFear(),
-  [FactionCard.ForcedExile]: new ForcedExile()
+  [FactionCard.TheFearFullArtHolo]: new TheFear({ fullArtOf: FactionCard.TheFear, holo: true }),
+  [FactionCard.TheFearFullArt]: new TheFear({ fullArtOf: FactionCard.TheFear }),
+  [FactionCard.TheFog]: new TheFog()
 }

@@ -3,19 +3,56 @@
 
 import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import FR1144HydreAbominable from '../images/cards/blight/fr/FR1144HydreAbominable.jpg'
+import FR1145HydreAbominableFullArt from '../images/cards/blight/fr/FR1145HydreAbominableFullArt.jpg'
 import FR1146Berserker from '../images/cards/blight/fr/FR1146Berserker.jpg'
 import FR1147MangeurDEnfants from '../images/cards/blight/fr/FR1147MangeurDEnfants.jpg'
+import FR1148RatColosse from '../images/cards/blight/fr/FR1148RatColosse.jpg'
+import FR1149RatColosseFullArt from '../images/cards/blight/fr/FR1149RatColosseFullArt.jpg'
+import FR1150ForgeronRenegat from '../images/cards/blight/fr/FR1150ForgeronRenegat.jpg'
+import FR1151Feyr from '../images/cards/blight/fr/FR1151Feyr.jpg'
+import FR1152FeyrFullArtHolo from '../images/cards/blight/fr/FR1152FeyrFullArtHolo.jpg'
+import FR1153FeyrFullArt from '../images/cards/blight/fr/FR1153FeyrFullArt.jpg'
+import FR1154FleauDuMarais from '../images/cards/blight/fr/FR1154FleauDuMarais.jpg'
+import FR1155ColeoptereDeLaForge from '../images/cards/blight/fr/FR1155ColeoptereDeLaForge.jpg'
 import FR1156PatriarcheDeLaForge from '../images/cards/blight/fr/FR1156PatriarcheDeLaForge.jpg'
+import FR1157PatriarcheDeLaForgeFullArt from '../images/cards/blight/fr/FR1157PatriarcheDeLaForgeFullArt.jpg'
+import FR1158TrollGeant from '../images/cards/blight/fr/FR1158TrollGeant.jpg'
+import FR1159AilesDuTourment from '../images/cards/blight/fr/FR1159AilesDuTourment.jpg'
+import FR1160AilesDuTourmentFullArt from '../images/cards/blight/fr/FR1160AilesDuTourmentFullArt.jpg'
+import FR1161Lucy from '../images/cards/blight/fr/FR1161Lucy.jpg'
+import FR1162LucyFullArtHolo from '../images/cards/blight/fr/FR1162LucyFullArtHolo.jpg'
+import FR1163LucyFullArt from '../images/cards/blight/fr/FR1163LucyFullArt.jpg'
+import FR1164NemesioFullArt from '../images/cards/blight/fr/FR1164NemesioFullArt.jpg'
 import FR1165CollecteurDePeste from '../images/cards/blight/fr/FR1165CollecteurDePeste.jpg'
+import FR1166CollecteurDePesteFullArt from '../images/cards/blight/fr/FR1166CollecteurDePesteFullArt.jpg'
+import FR1167CarriolePestilentielleHolo from '../images/cards/blight/fr/FR1167CarriolePestilentielleHolo.jpg'
+import FR1168RatHomme from '../images/cards/blight/fr/FR1168RatHomme.jpg'
+import FR1169RatHommeFullArt from '../images/cards/blight/fr/FR1169RatHommeFullArt.jpg'
+import FR1170MoucheScorpion from '../images/cards/blight/fr/FR1170MoucheScorpion.jpg'
 import FR1171BlatteMalsaine from '../images/cards/blight/fr/FR1171BlatteMalsaine.jpg'
 import FR1172Pourfendeur from '../images/cards/blight/fr/FR1172Pourfendeur.jpg'
+import FR1173PourfendeurFullArt from '../images/cards/blight/fr/FR1173PourfendeurFullArt.jpg'
+import FR1174MolosseDesMarais from '../images/cards/blight/fr/FR1174MolosseDesMarais.jpg'
 import FR1175OgreDuMarais from '../images/cards/blight/fr/FR1175OgreDuMarais.jpg'
 import FR1176TrollDesMarais from '../images/cards/blight/fr/FR1176TrollDesMarais.jpg'
+import FR1177RatTitanFullArt from '../images/cards/blight/fr/FR1177RatTitanFullArt.jpg'
+import FR1178TunnelSombre from '../images/cards/blight/fr/FR1178TunnelSombre.jpg'
 import FR1179ForgesOccidentales from '../images/cards/blight/fr/FR1179ForgesOccidentales.jpg'
+import FR1180ForgesOccidentalesFullArtHolo from '../images/cards/blight/fr/FR1180ForgesOccidentalesFullArtHolo.jpg'
+import FR1181ForgesOccidentalesFullArt from '../images/cards/blight/fr/FR1181ForgesOccidentalesFullArt.jpg'
+import FR1182SouffleDuDragonFullArt from '../images/cards/blight/fr/FR1182SouffleDuDragonFullArt.jpg'
+import FR1183AbsorptionDEssence from '../images/cards/blight/fr/FR1183AbsorptionDEssence.jpg'
 import FR1184FoudreDeFeu from '../images/cards/blight/fr/FR1184FoudreDeFeu.jpg'
 import FR1185TempeteDeFeu from '../images/cards/blight/fr/FR1185TempeteDeFeu.jpg'
 import FR1186ExilMaudit from '../images/cards/blight/fr/FR1186ExilMaudit.jpg'
+import FR1187ExilMauditFullArtHolo from '../images/cards/blight/fr/FR1187ExilMauditFullArtHolo.jpg'
+import FR1188ExilMauditFullArt from '../images/cards/blight/fr/FR1188ExilMauditFullArt.jpg'
+import FR1189SorcellerieImpure from '../images/cards/blight/fr/FR1189SorcellerieImpure.jpg'
+import FR1190Possession from '../images/cards/blight/fr/FR1190Possession.jpg'
 import FR1191LaPeur from '../images/cards/blight/fr/FR1191LaPeur.jpg'
+import FR1192LaPeurFullArtHolo from '../images/cards/blight/fr/FR1192LaPeurFullArtHolo.jpg'
+import FR1193LaPeurFullArt from '../images/cards/blight/fr/FR1193LaPeurFullArt.jpg'
+import FR1194BrumeMalefique from '../images/cards/blight/fr/FR1194BrumeMalefique.jpg'
 import FR1092GueuxDesChamps from '../images/cards/greyorder/fr/FR1092GueuxDesChamps.jpg'
 import FR1093Archer from '../images/cards/greyorder/fr/FR1093ArcherFullArt.jpg'
 import FR1094LArmurier from '../images/cards/greyorder/fr/FR1094LArmurier.jpg'
@@ -303,20 +340,57 @@ export class FactionCardFrenchDescription extends FactionCardDescription {
     [FactionCard.Warcry]: FR1142ForceEtHonneur,
     [FactionCard.YhdilBlast]: FR1143ExplosionDYhdil,
 
+    [FactionCard.AbominableHydra]: FR1144HydreAbominable,
+    [FactionCard.AbominableHydraFullArt]: FR1145HydreAbominableFullArt,
+    [FactionCard.Berserker]: FR1146Berserker,
+    [FactionCard.ChildEater]: FR1147MangeurDEnfants,
+    [FactionCard.ColossusRat]: FR1148RatColosse,
+    [FactionCard.ColossusRatFullArt]: FR1149RatColosseFullArt,
+    [FactionCard.CorruptBlacksmith]: FR1150ForgeronRenegat,
+    [FactionCard.Feyr]: FR1151Feyr,
+    [FactionCard.FeyrFullArtHolo]: FR1152FeyrFullArtHolo,
+    [FactionCard.FeyrFullArt]: FR1153FeyrFullArt,
+    [FactionCard.Flail]: FR1154FleauDuMarais,
+    [FactionCard.ForgeBeetle]: FR1155ColeoptereDeLaForge,
+    [FactionCard.ForgePatriarch]: FR1156PatriarcheDeLaForge,
+    [FactionCard.ForgePatriarchFullArt]: FR1157PatriarcheDeLaForgeFullArt,
+    [FactionCard.GiantTroll]: FR1158TrollGeant,
+    [FactionCard.WingedTerror]: FR1159AilesDuTourment,
+    [FactionCard.WingedTerrorFullArt]: FR1160AilesDuTourmentFullArt,
+    [FactionCard.Lucy]: FR1161Lucy,
+    [FactionCard.LucyFullArtHolo]: FR1162LucyFullArtHolo,
+    [FactionCard.LucyFullArt]: FR1163LucyFullArt,
+    [FactionCard.NemesioBlight]: FR1164NemesioFullArt,
+    [FactionCard.PlagueCollector]: FR1165CollecteurDePeste,
+    [FactionCard.PlagueCollectorFullArt]: FR1166CollecteurDePesteFullArt,
+    [FactionCard.PlagueWagon]: FR1167CarriolePestilentielleHolo,
+    [FactionCard.Ratman]: FR1168RatHomme,
+    [FactionCard.RatmanFullArt]: FR1169RatHommeFullArt,
+    [FactionCard.ScorpionFly]: FR1170MoucheScorpion,
     [FactionCard.ScuttleJaw]: FR1171BlatteMalsaine,
+    [FactionCard.Slayer]: FR1172Pourfendeur,
+    [FactionCard.SlayerFullArt]: FR1173PourfendeurFullArt,
+    [FactionCard.SwampHound]: FR1174MolosseDesMarais,
     [FactionCard.SwampOgre]: FR1175OgreDuMarais,
     [FactionCard.SwampTroll]: FR1176TrollDesMarais,
-    [FactionCard.Berserker]: FR1146Berserker,
-    [FactionCard.PlagueCollector]: FR1165CollecteurDePeste,
-    [FactionCard.Slayer]: FR1172Pourfendeur,
-    [FactionCard.ForgePatriarch]: FR1156PatriarcheDeLaForge,
-    [FactionCard.AbominableHydra]: FR1144HydreAbominable,
-    [FactionCard.ChildEater]: FR1147MangeurDEnfants,
+    [FactionCard.TitanRat]: FR1177RatTitanFullArt,
+    [FactionCard.DarkTunnel]: FR1178TunnelSombre,
     [FactionCard.WesternForge]: FR1179ForgesOccidentales,
+    [FactionCard.WesternForgeFullArtHolo]: FR1180ForgesOccidentalesFullArtHolo,
+    [FactionCard.WesternForgeFullArt]: FR1181ForgesOccidentalesFullArt,
+    [FactionCard.DragonBreath]: FR1182SouffleDuDragonFullArt,
+    [FactionCard.EssenceAbsorption]: FR1183AbsorptionDEssence,
     [FactionCard.FireLightning]: FR1184FoudreDeFeu,
     [FactionCard.Firestorm]: FR1185TempeteDeFeu,
+    [FactionCard.ForcedExile]: FR1186ExilMaudit,
+    [FactionCard.ForcedExileFullArtHolo]: FR1187ExilMauditFullArtHolo,
+    [FactionCard.ForcedExileFullArt]: FR1188ExilMauditFullArt,
+    [FactionCard.NegativeSorcery]: FR1189SorcellerieImpure,
+    [FactionCard.Possession]: FR1190Possession,
     [FactionCard.TheFear]: FR1191LaPeur,
-    [FactionCard.ForcedExile]: FR1186ExilMaudit
+    [FactionCard.TheFearFullArtHolo]: FR1192LaPeurFullArtHolo,
+    [FactionCard.TheFearFullArt]: FR1193LaPeurFullArt,
+    [FactionCard.TheFog]: FR1194BrumeMalefique
   }
 }
 

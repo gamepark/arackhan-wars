@@ -15,19 +15,56 @@ import { differenceBy } from 'lodash'
 import { isDeckbuilding } from '../deckbuilding/deckbuilding.util'
 import BlightCardBack from '../images/cards/blight/BlightCardBack.jpg'
 import EN1144AbominableHydra from '../images/cards/blight/en/EN1144AbominableHydra.jpg'
+import EN1145AbominableHydraFullArt from '../images/cards/blight/en/EN1145AbominableHydraFullArt.jpg'
 import EN1146Berserker from '../images/cards/blight/en/EN1146Berserker.jpg'
 import EN1147ChildEater from '../images/cards/blight/en/EN1147ChildEater.jpg'
+import EN1148ColossusRat from '../images/cards/blight/en/EN1148ColossusRat.jpg'
+import EN1149ColossusRatFullArt from '../images/cards/blight/en/EN1149ColossusRatFullArt.jpg'
+import EN1150CorruptBlacksmith from '../images/cards/blight/en/EN1150CorruptBlacksmith.jpg'
+import EN1151Feyr from '../images/cards/blight/en/EN1151Feyr.jpg'
+import EN1152FeyrFullArtHolo from '../images/cards/blight/en/EN1152FeyrFullArtHolo.jpg'
+import EN1153FeyrFullArt from '../images/cards/blight/en/EN1153FeyrFullArt.jpg'
+import EN1154Flail from '../images/cards/blight/en/EN1154Flail.jpg'
+import EN1155ForgeBeetle from '../images/cards/blight/en/EN1155ForgeBeetle.jpg'
 import EN1156ForgePatriarch from '../images/cards/blight/en/EN1156ForgePatriarch.jpg'
+import EN1157ForgePatriarchFullArt from '../images/cards/blight/en/EN1157ForgePatriarchFullArt.jpg'
+import EN1158GiantTroll from '../images/cards/blight/en/EN1158GiantTroll.jpg'
+import EN1159WingedTerror from '../images/cards/blight/en/EN1159WingedTerror.jpg'
+import EN1160WingedTerrorFullArt from '../images/cards/blight/en/EN1160WingedTerrorFullArt.jpg'
+import EN1161Lucy from '../images/cards/blight/en/EN1161Lucy.jpg'
+import EN1162LucyFullArtHolo from '../images/cards/blight/en/EN1162LucyFullArtHolo.jpg'
+import EN1163LucyFullArt from '../images/cards/blight/en/EN1163LucyFullArt.jpg'
+import EN1164NemesioFullArt from '../images/cards/blight/en/EN1164NemesioFullArt.jpg'
 import EN1165PlagueCollector from '../images/cards/blight/en/EN1165PlagueCollector.jpg'
+import EN1166PlagueCollectorFullArt from '../images/cards/blight/en/EN1166PlagueCollectorFullArt.jpg'
+import EN1167PlagueWagon from '../images/cards/blight/en/EN1167PlagueWagonHolo.jpg'
+import EN1168Ratman from '../images/cards/blight/en/EN1168Ratman.jpg'
+import EN1169RatmanFullArt from '../images/cards/blight/en/EN1169RatmanFullArt.jpg'
+import EN1170ScorpionFly from '../images/cards/blight/en/EN1170ScorpionFly.jpg'
 import EN1171ScuttleJaw from '../images/cards/blight/en/EN1171ScuttleJaw.jpg'
 import EN1172Slayer from '../images/cards/blight/en/EN1172Slayer.jpg'
+import EN1173SlayerFullArt from '../images/cards/blight/en/EN1173SlayerFullArt.jpg'
+import EN1174SwampHound from '../images/cards/blight/en/EN1174SwampHound.jpg'
 import EN1175SwampOgre from '../images/cards/blight/en/EN1175SwampOgre.jpg'
 import EN1176SwampTroll from '../images/cards/blight/en/EN1176SwampTroll.jpg'
+import EN1177TitanRatFullArt from '../images/cards/blight/en/EN1177TitanRatFullArt.jpg'
+import EN1178DarkTunnel from '../images/cards/blight/en/EN1178DarkTunnel.jpg'
 import EN1179WesternForge from '../images/cards/blight/en/EN1179WesternForge.jpg'
+import EN1180WesternForgeFullArtHolo from '../images/cards/blight/en/EN1180WesternForgeFullArtHolo.jpg'
+import EN1181WesternForgeFullArt from '../images/cards/blight/en/EN1181WesternForgeFullArt.jpg'
+import EN1182DragonBreath from '../images/cards/blight/en/EN1182DragonBreathFullArt.jpg'
+import EN1183EssenceAbsorption from '../images/cards/blight/en/EN1183EssenceAbsorption.jpg'
 import EN1184FireLightning from '../images/cards/blight/en/EN1184FireLightning.jpg'
 import EN1185Firestorm from '../images/cards/blight/en/EN1185Firestorm.jpg'
 import EN1186ForcedExile from '../images/cards/blight/en/EN1186ForcedExile.jpg'
+import EN1187ForcedExileFullArtHolo from '../images/cards/blight/en/EN1187ForcedExileFullArtHolo.jpg'
+import EN1188ForcedExileFullArt from '../images/cards/blight/en/EN1188ForcedExileFullArt.jpg'
+import EN1189NegativeSorcery from '../images/cards/blight/en/EN1189NegativeSorcery.jpg'
+import EN1190Possession from '../images/cards/blight/en/EN1190Possession.jpg'
 import EN1191TheFear from '../images/cards/blight/en/EN1191TheFear.jpg'
+import EN1192TheFearFullArtHolo from '../images/cards/blight/en/EN1192TheFearFullArtHolo.jpg'
+import EN1193TheFearFullArt from '../images/cards/blight/en/EN1193TheFearFullArt.jpg'
+import EN1194TheFog from '../images/cards/blight/en/EN1194TheFog.jpg'
 import EN1092AngryPeasant from '../images/cards/greyorder/en/EN1092AngryPeasant.jpg'
 import EN1093Archer from '../images/cards/greyorder/en/EN1093ArcherFullArt.jpg'
 import EN1094Armorer from '../images/cards/greyorder/en/EN1094Armorer.jpg'
@@ -321,22 +358,57 @@ export class FactionCardDescription extends CardDescription {
     [FactionCard.Warcry]: EN1142Warcry,
     [FactionCard.YhdilBlast]: EN1143YhdilBlast,
 
-    [FactionCard.ShieldWall]: EN1139ShieldWall,
-    [FactionCard.HorseOfAvalon]: EN1134HorseOfAvalon,
+    [FactionCard.AbominableHydra]: EN1144AbominableHydra,
+    [FactionCard.AbominableHydraFullArt]: EN1145AbominableHydraFullArt,
+    [FactionCard.Berserker]: EN1146Berserker,
+    [FactionCard.ChildEater]: EN1147ChildEater,
+    [FactionCard.ColossusRat]: EN1148ColossusRat,
+    [FactionCard.ColossusRatFullArt]: EN1149ColossusRatFullArt,
+    [FactionCard.CorruptBlacksmith]: EN1150CorruptBlacksmith,
+    [FactionCard.Feyr]: EN1151Feyr,
+    [FactionCard.FeyrFullArtHolo]: EN1152FeyrFullArtHolo,
+    [FactionCard.FeyrFullArt]: EN1153FeyrFullArt,
+    [FactionCard.Flail]: EN1154Flail,
+    [FactionCard.ForgeBeetle]: EN1155ForgeBeetle,
+    [FactionCard.ForgePatriarch]: EN1156ForgePatriarch,
+    [FactionCard.ForgePatriarchFullArt]: EN1157ForgePatriarchFullArt,
+    [FactionCard.GiantTroll]: EN1158GiantTroll,
+    [FactionCard.WingedTerror]: EN1159WingedTerror,
+    [FactionCard.WingedTerrorFullArt]: EN1160WingedTerrorFullArt,
+    [FactionCard.Lucy]: EN1161Lucy,
+    [FactionCard.LucyFullArtHolo]: EN1162LucyFullArtHolo,
+    [FactionCard.LucyFullArt]: EN1163LucyFullArt,
+    [FactionCard.NemesioBlight]: EN1164NemesioFullArt,
+    [FactionCard.PlagueCollector]: EN1165PlagueCollector,
+    [FactionCard.PlagueCollectorFullArt]: EN1166PlagueCollectorFullArt,
+    [FactionCard.PlagueWagon]: EN1167PlagueWagon,
+    [FactionCard.Ratman]: EN1168Ratman,
+    [FactionCard.RatmanFullArt]: EN1169RatmanFullArt,
+    [FactionCard.ScorpionFly]: EN1170ScorpionFly,
     [FactionCard.ScuttleJaw]: EN1171ScuttleJaw,
+    [FactionCard.Slayer]: EN1172Slayer,
+    [FactionCard.SlayerFullArt]: EN1173SlayerFullArt,
+    [FactionCard.SwampHound]: EN1174SwampHound,
     [FactionCard.SwampOgre]: EN1175SwampOgre,
     [FactionCard.SwampTroll]: EN1176SwampTroll,
-    [FactionCard.Berserker]: EN1146Berserker,
-    [FactionCard.PlagueCollector]: EN1165PlagueCollector,
-    [FactionCard.Slayer]: EN1172Slayer,
-    [FactionCard.ForgePatriarch]: EN1156ForgePatriarch,
-    [FactionCard.AbominableHydra]: EN1144AbominableHydra,
-    [FactionCard.ChildEater]: EN1147ChildEater,
+    [FactionCard.TitanRat]: EN1177TitanRatFullArt,
+    [FactionCard.DarkTunnel]: EN1178DarkTunnel,
     [FactionCard.WesternForge]: EN1179WesternForge,
+    [FactionCard.WesternForgeFullArtHolo]: EN1180WesternForgeFullArtHolo,
+    [FactionCard.WesternForgeFullArt]: EN1181WesternForgeFullArt,
+    [FactionCard.DragonBreath]: EN1182DragonBreath,
+    [FactionCard.EssenceAbsorption]: EN1183EssenceAbsorption,
     [FactionCard.FireLightning]: EN1184FireLightning,
     [FactionCard.Firestorm]: EN1185Firestorm,
+    [FactionCard.ForcedExile]: EN1186ForcedExile,
+    [FactionCard.ForcedExileFullArtHolo]: EN1187ForcedExileFullArtHolo,
+    [FactionCard.ForcedExileFullArt]: EN1188ForcedExileFullArt,
+    [FactionCard.NegativeSorcery]: EN1189NegativeSorcery,
+    [FactionCard.Possession]: EN1190Possession,
     [FactionCard.TheFear]: EN1191TheFear,
-    [FactionCard.ForcedExile]: EN1186ForcedExile
+    [FactionCard.TheFearFullArtHolo]: EN1192TheFearFullArtHolo,
+    [FactionCard.TheFearFullArt]: EN1193TheFearFullArt,
+    [FactionCard.TheFog]: EN1194TheFog
   }
   backImages = {
     [Faction.Whitelands]: WhitelandsCardBack,

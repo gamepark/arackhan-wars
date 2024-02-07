@@ -14,6 +14,8 @@ export enum Family {
   Artillery,
   Legion6,
   Mercenary,
+  Rat,
   Blacksmith,
   Troll,
+  Harpy,
 }
