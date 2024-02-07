@@ -26,4 +26,4 @@ export abstract class Spell extends FactionCardCharacteristics {
   }
 }
 
-export const isSpell = (detail?: FactionCardCharacteristics): detail is Spell => detail?.kind === FactionCardKind.Spell
+export const isSpell = (characteristics?: FactionCardCharacteristics): characteristics is Spell => characteristics?.kind === FactionCardKind.Spell

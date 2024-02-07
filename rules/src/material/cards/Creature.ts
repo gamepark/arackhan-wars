@@ -35,4 +35,4 @@ export abstract class Creature extends FactionCardCharacteristics {
   }
 }
 
-export const isCreature = (detail?: FactionCardCharacteristics): detail is Creature => detail?.kind === FactionCardKind.Creature
+export const isCreature = (characteristics?: FactionCardCharacteristics): characteristics is Creature => characteristics?.kind === FactionCardKind.Creature

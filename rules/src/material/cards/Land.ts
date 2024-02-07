@@ -19,4 +19,4 @@ export abstract class Land extends FactionCardCharacteristics {
   }
 }
 
-export const isLand = (detail?: FactionCardCharacteristics): detail is Land => detail?.kind === FactionCardKind.Land
+export const isLand = (characteristics?: FactionCardCharacteristics): characteristics is Land => characteristics?.kind === FactionCardKind.Land

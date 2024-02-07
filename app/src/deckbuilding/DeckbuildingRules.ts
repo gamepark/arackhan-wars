@@ -1,3 +1,7 @@
+import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
+import { FactionCardCharacteristics } from '@gamepark/arackhan-wars/material/cards/FactionCardCharacteristics'
+import { isLand } from '@gamepark/arackhan-wars/material/cards/Land'
+import { isSpell } from '@gamepark/arackhan-wars/material/cards/Spell'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
 import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
@@ -98,6 +102,7 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
   filterCard(card: FactionCard) {
     const characteristics = FactionCardsCharacteristics[card]
     return this.factionFilter(characteristics.faction)
+      && this.typeFilter(characteristics)
   }
 
   factionFilter(faction: Faction) {
@@ -116,6 +121,16 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
       case Faction.Blight:
         return blight
     }
+  }
+
+  typeFilter(characteristics: FactionCardCharacteristics) {
+    const creature = this.remind(DeckbuildingFilter.Creature)
+    const land = this.remind(DeckbuildingFilter.Land)
+    const spell = this.remind(DeckbuildingFilter.Spell)
+    if (!creature && !land && !spell) return true
+    if (!creature && isCreature(characteristics)) return false
+    if (!land && isLand(characteristics)) return false
+    return !(!spell && isSpell(characteristics))
   }
 }
 
