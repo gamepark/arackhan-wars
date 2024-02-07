@@ -29,16 +29,33 @@ import { Warcry } from './cards/greyorder/Warcry'
 import { Banshee } from './cards/nakka/Banshee'
 import { Behemoth } from './cards/nakka/Behemoth'
 import { CarnivorousPlant } from './cards/nakka/CarnivorousPlant'
+import { CrawlingRoots } from './cards/nakka/CrawlingRoots'
 import { DeathCrawler } from './cards/nakka/DeathCrawler'
+import { DeathWhisperer } from './cards/nakka/DeathWhisperer'
 import { EarthQuake } from './cards/nakka/EarthQuake'
+import { EternalRoots } from './cards/nakka/EternalRoots'
+import { ForestBlast } from './cards/nakka/ForestBlast'
+import { GroundStomper } from './cards/nakka/GroundStomper'
 import { Hexacarias } from './cards/nakka/Hexacarias'
+import { LightningBird } from './cards/nakka/LightningBird'
+import { LightningDragon } from './cards/nakka/LightningDragon'
+import { LostInTheForest } from './cards/nakka/LostInTheForest'
 import { Mimicry } from './cards/nakka/Mimicry'
 import { MountedBanshee } from './cards/nakka/MountedBanshee'
+import { MusicalTrance } from './cards/nakka/MusicalTrance'
 import { NakkaArcher } from './cards/nakka/NakkaArcher'
 import { NaturalCamouflage } from './cards/nakka/NaturalCamouflage'
+import { NemesioNakka } from './cards/nakka/NemesioNakka'
+import { OneEyedHog } from './cards/nakka/OneEyedHog'
+import { Protector } from './cards/nakka/Protector'
+import { ReptilianBeast } from './cards/nakka/ReptilianBeast'
+import { RuinsOfSylv } from './cards/nakka/RuinsOfSylv'
 import { SenileYhdorian } from './cards/nakka/SenileYhdorian'
 import { TreeOfLife } from './cards/nakka/TreeOfLife'
 import { UnstableGrowth } from './cards/nakka/UnstableGrowth'
+import { UnstableHydra } from './cards/nakka/UnstableHydra'
+import { Walker } from './cards/nakka/Walker'
+import { WarpPath } from './cards/nakka/WarpPath'
 import { WrathOfTheForest } from './cards/nakka/WrathOfTheForest'
 import { Xenodon } from './cards/nakka/Xenodon'
 import { Adrielle } from './cards/whitelands/Adrielle'
@@ -128,20 +145,46 @@ export enum FactionCard {
   Teleportation = 1046,
   WinterProtects = 1047,
   Behemoth = 1048,
+  BehemothFullArt = 1049,
   CarnivorousPlant = 1050,
+  CrawlingRoots = 1051,
   DeathCrawler = 1052,
   Hexacarias = 1056,
+  LightningBird = 1057,
+  LightningBirdFullArt = 1058,
+  LightningDragon = 1059,
   MountedBanshee = 1060,
-  NakkaArcher,
-  Banshee,
+  NakkaArcher = 1061,
+  Banshee = 1062,
+  GroundStomper = 1063,
+  GroundStomperFullArt = 1064,
+  DeathWhisperer = 1065,
+  DeathWhispererFullArt = 1066,
+  NemesioNakka = 1067,
+  OneEyedHog = 1068,
+  OneEyedHogFullArt = 1069,
+  Protector = 1070,
+  ProtectorFullArt = 1071,
+  ReptilianBeast = 1072,
   SenileYhdorian = 1073,
+  UnstableHydra = 1074,
+  Walker = 1075,
   WrathOfTheForest = 1076,
-  Xenodon,
+  Xenodon = 1077,
+  XenodonAltArt = 1078,
+  EternalRoots = 1079,
+  RuinsOfSylv = 1080,
   TreeOfLife = 1081,
+  TreeOfLifeFullArtHolo = 1082,
+  TreeOfLifeFullArt = 1083,
   Earthquake = 1084,
+  ForestBlast = 1085,
+  LostInTheForest = 1086,
   Mimicry = 1087,
+  MusicalTrance = 1088,
   NaturalCamouflage = 1089,
-  UnstableGrowth,
+  UnstableGrowth = 1090,
+  WarpPath = 1091,
   Ballista = 1096,
   Champion = 1100,
   DrunkKnight = 1102,
@@ -227,21 +270,47 @@ export const FactionCardsCharacteristics: Record<FactionCard, FactionCardCharact
   [FactionCard.WinterProtects]: new WinterProtects(),
 
   // NAKKA
-  [FactionCard.DeathCrawler]: new DeathCrawler(),
-  [FactionCard.Xenodon]: new Xenodon(),
-  [FactionCard.NakkaArcher]: new NakkaArcher(),
-  [FactionCard.SenileYhdorian]: new SenileYhdorian(),
-  [FactionCard.Hexacarias]: new Hexacarias(),
-  [FactionCard.CarnivorousPlant]: new CarnivorousPlant(),
-  [FactionCard.Banshee]: new Banshee(),
   [FactionCard.Behemoth]: new Behemoth(),
+  [FactionCard.BehemothFullArt]: new Behemoth({ fullArtOf: FactionCard.Behemoth }),
+  [FactionCard.CarnivorousPlant]: new CarnivorousPlant(),
+  [FactionCard.CrawlingRoots]: new CrawlingRoots(),
+  [FactionCard.DeathCrawler]: new DeathCrawler(),
+  [FactionCard.Hexacarias]: new Hexacarias(),
+  [FactionCard.LightningBird]: new LightningBird(),
+  [FactionCard.LightningBirdFullArt]: new LightningBird({ fullArtOf: FactionCard.LightningBird }),
+  [FactionCard.LightningDragon]: new LightningDragon(),
   [FactionCard.MountedBanshee]: new MountedBanshee(),
+  [FactionCard.NakkaArcher]: new NakkaArcher(),
+  [FactionCard.Banshee]: new Banshee(),
+  [FactionCard.GroundStomper]: new GroundStomper(),
+  [FactionCard.GroundStomperFullArt]: new GroundStomper({ fullArtOf: FactionCard.GroundStomper }),
+  [FactionCard.DeathWhisperer]: new DeathWhisperer(),
+  [FactionCard.DeathWhispererFullArt]: new DeathWhisperer({ fullArtOf: FactionCard.DeathWhisperer }),
+  [FactionCard.NemesioNakka]: new NemesioNakka(),
+  [FactionCard.OneEyedHog]: new OneEyedHog(),
+  [FactionCard.OneEyedHogFullArt]: new OneEyedHog({ fullArtOf: FactionCard.OneEyedHog }),
+  [FactionCard.Protector]: new Protector(),
+  [FactionCard.ProtectorFullArt]: new Protector({ fullArtOf: FactionCard.Protector }),
+  [FactionCard.ReptilianBeast]: new ReptilianBeast(),
+  [FactionCard.SenileYhdorian]: new SenileYhdorian(),
+  [FactionCard.UnstableHydra]: new UnstableHydra(),
+  [FactionCard.Walker]: new Walker(),
   [FactionCard.WrathOfTheForest]: new WrathOfTheForest(),
+  [FactionCard.Xenodon]: new Xenodon(),
+  [FactionCard.XenodonAltArt]: new Xenodon({ altArtOf: FactionCard.Xenodon }),
+  [FactionCard.EternalRoots]: new EternalRoots(),
+  [FactionCard.RuinsOfSylv]: new RuinsOfSylv(),
   [FactionCard.TreeOfLife]: new TreeOfLife(),
+  [FactionCard.TreeOfLifeFullArtHolo]: new TreeOfLife({ fullArtOf: FactionCard.TreeOfLife, holo: true }),
+  [FactionCard.TreeOfLifeFullArt]: new TreeOfLife({ fullArtOf: FactionCard.TreeOfLife }),
   [FactionCard.Earthquake]: new EarthQuake(),
-  [FactionCard.UnstableGrowth]: new UnstableGrowth(),
-  [FactionCard.NaturalCamouflage]: new NaturalCamouflage(),
+  [FactionCard.ForestBlast]: new ForestBlast(),
+  [FactionCard.LostInTheForest]: new LostInTheForest(),
   [FactionCard.Mimicry]: new Mimicry(),
+  [FactionCard.MusicalTrance]: new MusicalTrance(),
+  [FactionCard.NaturalCamouflage]: new NaturalCamouflage(),
+  [FactionCard.UnstableGrowth]: new UnstableGrowth(),
+  [FactionCard.WarpPath]: new WarpPath(),
 
   // GREY ORDER
   [FactionCard.DrunkKnight]: new DrunkKnight(),

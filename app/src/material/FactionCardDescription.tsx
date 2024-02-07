@@ -43,20 +43,46 @@ import EN1139ShieldWall from '../images/cards/greyorder/en/EN1139ShieldWall.jpg'
 import EN1142Warcry from '../images/cards/greyorder/en/EN1142Warcry.jpg'
 import GreyOrderCardBack from '../images/cards/greyorder/GreyOrderCardBack.jpg'
 import EN1048Behemoth from '../images/cards/nakka/en/EN1048Behemoth.jpg'
+import EN1049BehemothFullArt from '../images/cards/nakka/en/EN1049BehemothFullArt.jpg'
 import EN1050CarnivorousPlant from '../images/cards/nakka/en/EN1050CarnivorousPlant.jpg'
+import EN1051CrawlingRoots from '../images/cards/nakka/en/EN1051CrawlingRoots.jpg'
 import EN1052DeathCrawler from '../images/cards/nakka/en/EN1052DeathCrawler.jpg'
 import EN1056Hexacarias from '../images/cards/nakka/en/EN1056Hexacarias.jpg'
+import EN1057LightningBird from '../images/cards/nakka/en/EN1057LightningBird.jpg'
+import EN1058LightningBirdFullArt from '../images/cards/nakka/en/EN1058LightningBirdFullArt.jpg'
+import EN1059LightningDragon from '../images/cards/nakka/en/EN1059LightningDragon.jpg'
 import EN1060MountedBanshee from '../images/cards/nakka/en/EN1060MountedBanshee.jpg'
 import EN1061NakkaArcher from '../images/cards/nakka/en/EN1061NakkaArcher.jpg'
 import EN1062Banshee from '../images/cards/nakka/en/EN1062Banshee.jpg'
+import EN1063GroundStomper from '../images/cards/nakka/en/EN1063GroundStomper.jpg'
+import EN1064GroundStomperFullArt from '../images/cards/nakka/en/EN1064GroundStomperFullArt.jpg'
+import EN1065DeathWhisperer from '../images/cards/nakka/en/EN1065DeathWhisperer.jpg'
+import EN1066DeathWhispererFullArt from '../images/cards/nakka/en/EN1066DeathWhispererFullArt.jpg'
+import EN1067NemesioNakka from '../images/cards/nakka/en/EN1067NemesioFullArt.jpg'
+import EN1068OneEyedHog from '../images/cards/nakka/en/EN1068OneEyedHog.jpg'
+import EN1069OneEyedHogFullArt from '../images/cards/nakka/en/EN1069OneEyedHogFullArt.jpg'
+import EN1070Protector from '../images/cards/nakka/en/EN1070Protector.jpg'
+import EN1071ProtectorFullArt from '../images/cards/nakka/en/EN1071ProtectorFullArt.jpg'
+import EN1072ReptilianBeast from '../images/cards/nakka/en/EN1072ReptilianBeast.jpg'
 import EN1073SenileYhdorian from '../images/cards/nakka/en/EN1073SenileYhdorian.jpg'
+import EN1074UnstableHydra from '../images/cards/nakka/en/EN1074UnstableHydraHolo.jpg'
+import EN1075Walker from '../images/cards/nakka/en/EN1075Walker.jpg'
 import EN1076WrathOfTheForest from '../images/cards/nakka/en/EN1076WrathOfTheForest.jpg'
 import EN1077Xenodon from '../images/cards/nakka/en/EN1077Xenodon.jpg'
+import EN1078XenodonAltArt from '../images/cards/nakka/en/EN1078XenodonIllustrationAlt.jpg'
+import EN1079EternalRoots from '../images/cards/nakka/en/EN1079EternalRootsFullArt.jpg'
+import EN1080RuinsOfSylv from '../images/cards/nakka/en/EN1080RuinsOfSylv.jpg'
 import EN1081TreeOfLife from '../images/cards/nakka/en/EN1081TreeOfLife.jpg'
+import EN1082TreeOfLifeFullArtHolo from '../images/cards/nakka/en/EN1082TreeOfLifeFullArtHolo.jpg'
+import EN1083TreeOfLifeFullArt from '../images/cards/nakka/en/EN1083TreeOfLifeFullArt.jpg'
 import EN1084Earthquake from '../images/cards/nakka/en/EN1084Earthquake.jpg'
+import EN1085ForestBlast from '../images/cards/nakka/en/EN1085ForestBlast.jpg'
+import EN1086LostInTheForest from '../images/cards/nakka/en/EN1086LostInTheForest.jpg'
 import EN1087Mimicry from '../images/cards/nakka/en/EN1087Mimicry.jpg'
+import EN1088MusicalTrance from '../images/cards/nakka/en/EN1088MusicalTranceFullArt.jpg'
 import EN1089NaturalCamouflage from '../images/cards/nakka/en/EN1089NaturalCamouflage.jpg'
 import EN1090UnstableGrowth from '../images/cards/nakka/en/EN1090UnstableGrowth.jpg'
+import EN1091WarpPath from '../images/cards/nakka/en/EN1091WarpPath.jpg'
 import NakkaCardBack from '../images/cards/nakka/NakkaCardBack.jpg'
 import EN1001AdrielleFullArt from '../images/cards/whitelands/en/EN1001AdrielleFullArt.jpg'
 import EN1002Dreki from '../images/cards/whitelands/en/EN1002Dreki.jpg'
@@ -160,21 +186,49 @@ export class FactionCardDescription extends CardDescription {
     [FactionCard.SecretIncantation]: EN1045SecretIncantation,
     [FactionCard.Teleportation]: EN1046Teleportation,
     [FactionCard.WinterProtects]: EN1047WinterProtects,
-    [FactionCard.DeathCrawler]: EN1052DeathCrawler,
-    [FactionCard.Xenodon]: EN1077Xenodon,
-    [FactionCard.NakkaArcher]: EN1061NakkaArcher,
-    [FactionCard.SenileYhdorian]: EN1073SenileYhdorian,
-    [FactionCard.Hexacarias]: EN1056Hexacarias,
-    [FactionCard.CarnivorousPlant]: EN1050CarnivorousPlant,
-    [FactionCard.Banshee]: EN1062Banshee,
+
     [FactionCard.Behemoth]: EN1048Behemoth,
+    [FactionCard.BehemothFullArt]: EN1049BehemothFullArt,
+    [FactionCard.CarnivorousPlant]: EN1050CarnivorousPlant,
+    [FactionCard.CrawlingRoots]: EN1051CrawlingRoots,
+    [FactionCard.DeathCrawler]: EN1052DeathCrawler,
+    [FactionCard.Hexacarias]: EN1056Hexacarias,
+    [FactionCard.LightningBird]: EN1057LightningBird,
+    [FactionCard.LightningBirdFullArt]: EN1058LightningBirdFullArt,
+    [FactionCard.LightningDragon]: EN1059LightningDragon,
     [FactionCard.MountedBanshee]: EN1060MountedBanshee,
+    [FactionCard.NakkaArcher]: EN1061NakkaArcher,
+    [FactionCard.Banshee]: EN1062Banshee,
+    [FactionCard.GroundStomper]: EN1063GroundStomper,
+    [FactionCard.GroundStomperFullArt]: EN1064GroundStomperFullArt,
+    [FactionCard.DeathWhisperer]: EN1065DeathWhisperer,
+    [FactionCard.DeathWhispererFullArt]: EN1066DeathWhispererFullArt,
+    [FactionCard.NemesioNakka]: EN1067NemesioNakka,
+    [FactionCard.OneEyedHog]: EN1068OneEyedHog,
+    [FactionCard.OneEyedHogFullArt]: EN1069OneEyedHogFullArt,
+    [FactionCard.Protector]: EN1070Protector,
+    [FactionCard.ProtectorFullArt]: EN1071ProtectorFullArt,
+    [FactionCard.ReptilianBeast]: EN1072ReptilianBeast,
+    [FactionCard.SenileYhdorian]: EN1073SenileYhdorian,
+    [FactionCard.UnstableHydra]: EN1074UnstableHydra,
+    [FactionCard.Walker]: EN1075Walker,
     [FactionCard.WrathOfTheForest]: EN1076WrathOfTheForest,
+    [FactionCard.Xenodon]: EN1077Xenodon,
+    [FactionCard.XenodonAltArt]: EN1078XenodonAltArt,
+    [FactionCard.EternalRoots]: EN1079EternalRoots,
+    [FactionCard.RuinsOfSylv]: EN1080RuinsOfSylv,
     [FactionCard.TreeOfLife]: EN1081TreeOfLife,
+    [FactionCard.TreeOfLifeFullArtHolo]: EN1082TreeOfLifeFullArtHolo,
+    [FactionCard.TreeOfLifeFullArt]: EN1083TreeOfLifeFullArt,
     [FactionCard.Earthquake]: EN1084Earthquake,
-    [FactionCard.UnstableGrowth]: EN1090UnstableGrowth,
-    [FactionCard.NaturalCamouflage]: EN1089NaturalCamouflage,
+    [FactionCard.ForestBlast]: EN1085ForestBlast,
+    [FactionCard.LostInTheForest]: EN1086LostInTheForest,
     [FactionCard.Mimicry]: EN1087Mimicry,
+    [FactionCard.MusicalTrance]: EN1088MusicalTrance,
+    [FactionCard.NaturalCamouflage]: EN1089NaturalCamouflage,
+    [FactionCard.UnstableGrowth]: EN1090UnstableGrowth,
+    [FactionCard.WarpPath]: EN1091WarpPath,
+
     [FactionCard.DrunkKnight]: EN1102DrunkKnight,
     [FactionCard.Infantryman]: EN1111Infantryman,
     [FactionCard.Phalanx]: EN1113Phalanx,
