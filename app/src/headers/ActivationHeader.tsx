@@ -1,5 +1,6 @@
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
+import { getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { PlayMoveButton, useLegalMoves, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
@@ -27,7 +28,7 @@ const MyActivationHeader = () => {
   if (movedCards.length === 1) {
     const movedCardId = rules.material(MaterialType.FactionCard).getItem(movedCards[0])!.id.front
     const deactivate = legalMoves.find(isMoveItemType(MaterialType.FactionToken))!
-    return <Trans defaults="header.move.you" values={{ card: t(`card.name.${movedCardId}`) }}>
+    return <Trans defaults="header.move.you" values={{ card: t(`card.name.${getUniqueCard(movedCardId)}`) }}>
       <PlayMoveButton move={deactivate}/>
     </Trans>
   } else if (movedCards.length > 1) {
@@ -59,7 +60,7 @@ const OtherPlayerActivationHeader = () => {
 
   if (movedCards.length === 1) {
     const movedCardId = rules.material(MaterialType.FactionCard).getItem(movedCards[0])?.id.front
-    return <>{t('header.move', { card: t(`card.name.${movedCardId}`), player: playerName })}</>
+    return <>{t('header.move', { card: t(`card.name.${getUniqueCard(movedCardId)}`), player: playerName })}</>
   } else if (movedCards.length > 1) {
     return <>{t('header.moves', { x: movedCards.length, player: playerName })}</>
   }

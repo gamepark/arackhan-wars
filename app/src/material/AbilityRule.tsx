@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import { Ability } from '@gamepark/arackhan-wars/material/cards/Ability'
 import { AttackCondition, AttackLimitation } from '@gamepark/arackhan-wars/material/cards/AttackLimitation'
 import { Effect, EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
-import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
+import { FactionCard, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { TFunction } from 'i18next'
 import { merge } from 'lodash'
 import { Trans, TransProps, useTranslation } from 'react-i18next'
@@ -55,7 +55,7 @@ const getAbilityText = (effect: Effect, targets: string, t: TFunction, card: Fac
     case EffectType.Deactivated:
       return { defaults: 'ability.deactivate' }
     case EffectType.Trigger:
-      return { defaults: 'ability.trigger.fail-attack.destroy', values: { card: t(`card.name.${card}`) } }
+      return { defaults: 'ability.trigger.fail-attack.destroy', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
     case EffectType.CannotAttack:
       return {
         defaults: effect.limitation ?
@@ -69,12 +69,12 @@ const getAbilityText = (effect: Effect, targets: string, t: TFunction, card: Fac
         defaults: effect.limitation ?
           `ability.attacked.limit.${attackLimitationText[effect.limitation]}`
           : 'ability.attacked.limit',
-        values: { targets, card: t(`card.name.${card}`) }
+        values: { targets, card: t(`card.name.${getUniqueCard(card)}`) }
       }
     case EffectType.CanOnlyBeAttacked:
       return {
         defaults: `ability.attacked.condition.${attackConditionText[effect.condition]}`,
-        values: { targets, card: t(`card.name.${card}`) }
+        values: { targets, card: t(`card.name.${getUniqueCard(card)}`) }
       }
     default:
       return {}

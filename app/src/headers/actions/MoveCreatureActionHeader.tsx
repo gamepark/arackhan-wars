@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import { useTranslation } from 'react-i18next'
-import { usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
-import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
+import { getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
+import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
+import { usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
+import { useTranslation } from 'react-i18next'
 
 export const MoveCreatureActionHeader = () => {
   const { t } = useTranslation()
@@ -13,8 +14,8 @@ export const MoveCreatureActionHeader = () => {
   const activePlayer = rules.getActivePlayer()
   const player = usePlayerName(activePlayer)
   if (playerId === activePlayer) {
-    return <>{t('action.move.creature', { card: t(`card.name.${actionCard}`) })}</>
+    return <>{t('action.move.creature', { card: t(`card.name.${getUniqueCard(actionCard)}`) })}</>
   } else {
-    return <>{t('action.move.creature.player', { card: t(`card.name.${actionCard}`), player })}</>
+    return <>{t('action.move.creature.player', { card: t(`card.name.${getUniqueCard(actionCard)}`), player })}</>
   }
 }

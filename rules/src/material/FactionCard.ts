@@ -545,3 +545,5 @@ export const FactionCardsCharacteristics: Record<FactionCard, FactionCardCharact
   [FactionCard.TheFearFullArt]: new TheFear({ fullArtOf: FactionCard.TheFear }),
   [FactionCard.TheFog]: new TheFog()
 }
+
+export const getUniqueCard = (card: FactionCard): FactionCard => FactionCardsCharacteristics[card].altOf ?? card
