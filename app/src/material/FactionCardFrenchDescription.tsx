@@ -16,19 +16,58 @@ import FR1184FoudreDeFeu from '../images/cards/blight/fr/FR1184FoudreDeFeu.jpg'
 import FR1185TempeteDeFeu from '../images/cards/blight/fr/FR1185TempeteDeFeu.jpg'
 import FR1186ExilMaudit from '../images/cards/blight/fr/FR1186ExilMaudit.jpg'
 import FR1191LaPeur from '../images/cards/blight/fr/FR1191LaPeur.jpg'
+import FR1092GueuxDesChamps from '../images/cards/greyorder/fr/FR1092GueuxDesChamps.jpg'
+import FR1093Archer from '../images/cards/greyorder/fr/FR1093ArcherFullArt.jpg'
+import FR1094LArmurier from '../images/cards/greyorder/fr/FR1094LArmurier.jpg'
+import FR1095Assassin from '../images/cards/greyorder/fr/FR1095Assassin.jpg'
 import FR1096Baliste from '../images/cards/greyorder/fr/FR1096Baliste.jpg'
+import FR1097BalisteFullArt from '../images/cards/greyorder/fr/FR1097BalisteFullArt.jpg'
+import FR1098CatanolitheHolo from '../images/cards/greyorder/fr/FR1098CatanolitheHolo.jpg'
+import FR1099Catapulte from '../images/cards/greyorder/fr/FR1099Catapulte.jpg'
 import FR1100Champion from '../images/cards/greyorder/fr/FR1100Champion.jpg'
+import FR1101ChasseurDeDragons from '../images/cards/greyorder/fr/FR1101ChasseurDeDragons.jpg'
 import FR1102SoldatIvre from '../images/cards/greyorder/fr/FR1102SoldatIvre.jpg'
+import FR1103SoldatIvreFullArt from '../images/cards/greyorder/fr/FR1103SoldatIvreFullArt.jpg'
+import FR1104Fanatique from '../images/cards/greyorder/fr/FR1104Fanatique.jpg'
 import FR1105CavalierGris from '../images/cards/greyorder/fr/FR1105CavalierGris.jpg'
+import FR1106CavalierGrisFullArt from '../images/cards/greyorder/fr/FR1106CavalierGrisFullArt.jpg'
+import FR1107ChevalierGrisHolo from '../images/cards/greyorder/fr/FR1107ChevalierGrisHolo.jpg'
+import FR1108MissionnaireGris from '../images/cards/greyorder/fr/FR1108MissionnaireGris.jpg'
+import FR1109PretreGris from '../images/cards/greyorder/fr/FR1109PretreGris.jpg'
 import FR1110HerosDeLaBatailleDeNerz from '../images/cards/greyorder/fr/FR1110HerosDeLaBatailleDeNerz.jpg'
 import FR1111Fantassin from '../images/cards/greyorder/fr/FR1111Fantassin.jpg'
+import FR1112NemesioFullArt from '../images/cards/greyorder/fr/FR1112NemesioFullArt.jpg'
 import FR1113Phalange from '../images/cards/greyorder/fr/FR1113Phalange.jpg'
+import FR1114PhalangeFullArt from '../images/cards/greyorder/fr/FR1114PhalangeFullArt.jpg'
+import FR1115MercenaireAguerri from '../images/cards/greyorder/fr/FR1115MercenaireAguerri.jpg'
 import FR1116TourelleDAttaque from '../images/cards/greyorder/fr/FR1116TourelleDAttaque.jpg'
+import FR1117SoldatSobre from '../images/cards/greyorder/fr/FR1117SoldatSobre.jpg'
+import FR1118PorteEtendard from '../images/cards/greyorder/fr/FR1118PorteEtendard.jpg'
 import FR1119LeSenechal from '../images/cards/greyorder/fr/FR1119LeSenechal.jpg'
+import FR1120LeSenechalFullArtHolo from '../images/cards/greyorder/fr/FR1120LeSenechalFullArtHolo.jpg'
+import FR1121LeSenechalFullArt from '../images/cards/greyorder/fr/FR1121LeSenechalFullArt.jpg'
+import FR1122Titan from '../images/cards/greyorder/fr/FR1122Titan.jpg'
+import FR1123TitanFullArt from '../images/cards/greyorder/fr/FR1123TitanFullArt.jpg'
+import FR1124DisqueDuTomourFullArt from '../images/cards/greyorder/fr/FR1124DisqueDuTomourFullArt.jpg'
+import FR1125MercenaireDesNeiges from '../images/cards/greyorder/fr/FR1125MercenaireDesNeiges.jpg'
+import FR1126MercenaireDesNeigesFullArt from '../images/cards/greyorder/fr/FR1126MercenaireDesNeigesFullArt.jpg'
 import FR1127FortAvalon from '../images/cards/greyorder/fr/FR1127FortAvalon.jpg'
+import FR1128FortAvalonFullArtHolo from '../images/cards/greyorder/fr/FR1128FortAvalonFullArtHolo.jpg'
+import FR1129FortAvalonFullArt from '../images/cards/greyorder/fr/FR1129FortAvalonFullArt.jpg'
+import FR1130MonolitheDAcierFantome from '../images/cards/greyorder/fr/FR1130MonolitheDAcierFantome.jpg'
+import FR1131MaitresDAracKhanHolo from '../images/cards/greyorder/fr/FR1131MaitresDAracKhanHolo.jpg'
+import FR1132ConvoiFortifie from '../images/cards/greyorder/fr/FR1132ConvoiFortifie.jpg'
+import FR1133Renforts from '../images/cards/greyorder/fr/FR1133Renforts.jpg'
 import FR1134ChevalDAvalon from '../images/cards/greyorder/fr/FR1134ChevalDAvalon.jpg'
+import FR1135ChevalDAvalonFullArtHolo from '../images/cards/greyorder/fr/FR1135ChevalDAvalonFullArtHolo.jpg'
+import FR1136ChevalDAvalonFullArt from '../images/cards/greyorder/fr/FR1136ChevalDAvalonFullArt.jpg'
+import FR1137OrdreDeMarche from '../images/cards/greyorder/fr/FR1137OrdreDeMarche.jpg'
+import FR1138EnPermission from '../images/cards/greyorder/fr/FR1138EnPermission.jpg'
 import FR1139LeveeDeBoucliers from '../images/cards/greyorder/fr/FR1139LeveeDeBoucliers.jpg'
+import FR1140LEveilDeLOrdreGris from '../images/cards/greyorder/fr/FR1140LEveilDeLOrdreGris.jpg'
+import FR1141TreveFullArt from '../images/cards/greyorder/fr/FR1141TreveFullArt.jpg'
 import FR1142ForceEtHonneur from '../images/cards/greyorder/fr/FR1142ForceEtHonneur.jpg'
+import FR1143ExplosionDYhdil from '../images/cards/greyorder/fr/FR1143ExplosionDYhdil.jpg'
 import FR1048Behemoth from '../images/cards/nakka/fr/FR1048Behemoth.jpg'
 import FR1049BehemothFullArt from '../images/cards/nakka/fr/FR1049BehemothFullArt.jpg'
 import FR1050PlanteCarnivore from '../images/cards/nakka/fr/FR1050PlanteCarnivore.jpg'
@@ -211,19 +250,59 @@ export class FactionCardFrenchDescription extends FactionCardDescription {
     [FactionCard.UnstableGrowth]: FR1090PuissanceDevorante,
     [FactionCard.WarpPath]: FR1091ManifestationSurnaturelle,
 
-    [FactionCard.DrunkKnight]: FR1102SoldatIvre,
-    [FactionCard.Infantryman]: FR1111Fantassin,
-    [FactionCard.Phalanx]: FR1113Phalange,
+    [FactionCard.AngryPeasant]: FR1092GueuxDesChamps,
+    [FactionCard.Archer]: FR1093Archer,
+    [FactionCard.Armorer]: FR1094LArmurier,
+    [FactionCard.Assassin]: FR1095Assassin,
     [FactionCard.Ballista]: FR1096Baliste,
+    [FactionCard.BallistaFullArt]: FR1097BalisteFullArt,
+    [FactionCard.Catanolith]: FR1098CatanolitheHolo,
+    [FactionCard.Catapult]: FR1099Catapulte,
     [FactionCard.Champion]: FR1100Champion,
+    [FactionCard.DragonSlayer]: FR1101ChasseurDeDragons,
+    [FactionCard.DrunkKnight]: FR1102SoldatIvre,
+    [FactionCard.DrunkKnightFullArt]: FR1103SoldatIvreFullArt,
+    [FactionCard.Fanatic]: FR1104Fanatique,
     [FactionCard.GreyHorseman]: FR1105CavalierGris,
-    [FactionCard.SiegeTower]: FR1116TourelleDAttaque,
+    [FactionCard.GreyHorsemanFullArt]: FR1106CavalierGrisFullArt,
+    [FactionCard.GreyKnight]: FR1107ChevalierGrisHolo,
+    [FactionCard.GreyMissionary]: FR1108MissionnaireGris,
+    [FactionCard.GreyPriest]: FR1109PretreGris,
     [FactionCard.HeroOfTheBattleOfNerz]: FR1110HerosDeLaBatailleDeNerz,
+    [FactionCard.Infantryman]: FR1111Fantassin,
+    [FactionCard.NemesioGreyOrder]: FR1112NemesioFullArt,
+    [FactionCard.Phalanx]: FR1113Phalange,
+    [FactionCard.PhalanxFullArt]: FR1114PhalangeFullArt,
+    [FactionCard.SeniorMercenary]: FR1115MercenaireAguerri,
+    [FactionCard.SiegeTower]: FR1116TourelleDAttaque,
+    [FactionCard.SoberKnight]: FR1117SoldatSobre,
+    [FactionCard.StandardBearer]: FR1118PorteEtendard,
     [FactionCard.TheSeneschal]: FR1119LeSenechal,
+    [FactionCard.TheSeneschalFullArtHolo]: FR1120LeSenechalFullArtHolo,
+    [FactionCard.TheSeneschalFullArt]: FR1121LeSenechalFullArt,
+    [FactionCard.Titan]: FR1122Titan,
+    [FactionCard.TitanFullArt]: FR1123TitanFullArt,
+    [FactionCard.TomurDisc]: FR1124DisqueDuTomourFullArt,
+    [FactionCard.WhitePlainsMercenary]: FR1125MercenaireDesNeiges,
+    [FactionCard.WhitePlainsMercenaryFullArt]: FR1126MercenaireDesNeigesFullArt,
     [FactionCard.AvalonFortress]: FR1127FortAvalon,
-    [FactionCard.Warcry]: FR1142ForceEtHonneur,
-    [FactionCard.ShieldWall]: FR1139LeveeDeBoucliers,
+    [FactionCard.AvalonFortressFullArtHolo]: FR1128FortAvalonFullArtHolo,
+    [FactionCard.AvalonFortressFullArt]: FR1129FortAvalonFullArt,
+    [FactionCard.GhostMetalMonolith]: FR1130MonolitheDAcierFantome,
+    [FactionCard.MastersOfAracKhan]: FR1131MaitresDAracKhanHolo,
+    [FactionCard.ArmouredConvoy]: FR1132ConvoiFortifie,
+    [FactionCard.Backup]: FR1133Renforts,
     [FactionCard.HorseOfAvalon]: FR1134ChevalDAvalon,
+    [FactionCard.HorseOfAvalonFullArtHolo]: FR1135ChevalDAvalonFullArtHolo,
+    [FactionCard.HorseOfAvalonFullArt]: FR1136ChevalDAvalonFullArt,
+    [FactionCard.MarchingOrder]: FR1137OrdreDeMarche,
+    [FactionCard.OnLeave]: FR1138EnPermission,
+    [FactionCard.ShieldWall]: FR1139LeveeDeBoucliers,
+    [FactionCard.TheGreyOrderRises]: FR1140LEveilDeLOrdreGris,
+    [FactionCard.Truce]: FR1141TreveFullArt,
+    [FactionCard.Warcry]: FR1142ForceEtHonneur,
+    [FactionCard.YhdilBlast]: FR1143ExplosionDYhdil,
+
     [FactionCard.ScuttleJaw]: FR1171BlatteMalsaine,
     [FactionCard.SwampOgre]: FR1175OgreDuMarais,
     [FactionCard.SwampTroll]: FR1176TrollDesMarais,

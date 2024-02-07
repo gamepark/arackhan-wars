@@ -9,8 +9,11 @@ export enum Family {
   Dancer,
   Musician,
   Yhdorian,
-  SixthLegion,
+  Peasant,
+  Legion4,
   Artillery,
+  Legion6,
+  Mercenary,
   Blacksmith,
   Troll,
 }

@@ -13,19 +13,46 @@ import { SwampTroll } from './cards/blight/SwampTroll'
 import { TheFear } from './cards/blight/TheFear'
 import { WesternForge } from './cards/blight/WesternForge'
 import { FactionCardCharacteristics } from './cards/FactionCardCharacteristics'
+import { AngryPeasant } from './cards/greyorder/AngryPeasant'
+import { Archer } from './cards/greyorder/Archer'
+import { Armorer } from './cards/greyorder/Armorer'
+import { ArmouredConvoy } from './cards/greyorder/ArmouredConvoy'
+import { Assassin } from './cards/greyorder/Assassin'
 import { AvalonFortress } from './cards/greyorder/AvalonFortress'
+import { Backup } from './cards/greyorder/Backup'
 import { Ballista } from './cards/greyorder/Ballista'
+import { Catanolith } from './cards/greyorder/Catanolith'
+import { Catapult } from './cards/greyorder/Catapult'
 import { Champion } from './cards/greyorder/Champion'
+import { DragonSlayer } from './cards/greyorder/DragonSlayer'
 import { DrunkKnight } from './cards/greyorder/DrunkKnight'
+import { Fanatic } from './cards/greyorder/Fanatic'
+import { GhostMetalMonolith } from './cards/greyorder/GhostMetalMonolith'
 import { GreyHorseman } from './cards/greyorder/GreyHorseman'
+import { GreyKnight } from './cards/greyorder/GreyKnight'
+import { GreyMissionary } from './cards/greyorder/GreyMissionary'
+import { GreyPriest } from './cards/greyorder/GreyPriest'
 import { HeroOfTheBattleOfNerz } from './cards/greyorder/HeroOfTheBattleOfNerz'
 import { HorseOfAvalon } from './cards/greyorder/HorseOfAvalon'
 import { Infantryman } from './cards/greyorder/Infantryman'
+import { MarchingOrder } from './cards/greyorder/MarchingOrder'
+import { MastersOfAracKhan } from './cards/greyorder/MastersOfAracKhan'
+import { NemesioGreyOrder } from './cards/greyorder/NemesioGreyOrder'
+import { OnLeave } from './cards/greyorder/OnLeave'
 import { Phalanx } from './cards/greyorder/Phalanx'
+import { SeniorMercenary } from './cards/greyorder/SeniorMercenary'
 import { ShieldWall } from './cards/greyorder/ShieldWall'
 import { SiegeTower } from './cards/greyorder/SiegeTower'
+import { SoberKnight } from './cards/greyorder/SoberKnight'
+import { StandardBearer } from './cards/greyorder/StandardBearer'
+import { TheGreyOrderRises } from './cards/greyorder/TheGreyOrderRises'
 import { TheSeneschal } from './cards/greyorder/TheSeneschal'
+import { Titan } from './cards/greyorder/Titan'
+import { TomurDisc } from './cards/greyorder/TomurDisc'
+import { Truce } from './cards/greyorder/Truce'
 import { Warcry } from './cards/greyorder/Warcry'
+import { WhitePlainsMercenary } from './cards/greyorder/WhitePlainsMercenary'
+import { YhdilBlast } from './cards/greyorder/YhdilBlast'
 import { Banshee } from './cards/nakka/Banshee'
 import { Behemoth } from './cards/nakka/Behemoth'
 import { CarnivorousPlant } from './cards/nakka/CarnivorousPlant'
@@ -144,6 +171,7 @@ export enum FactionCard {
   SecretIncantation = 1045,
   Teleportation = 1046,
   WinterProtects = 1047,
+
   Behemoth = 1048,
   BehemothFullArt = 1049,
   CarnivorousPlant = 1050,
@@ -185,19 +213,60 @@ export enum FactionCard {
   NaturalCamouflage = 1089,
   UnstableGrowth = 1090,
   WarpPath = 1091,
+
+  AngryPeasant = 1092,
+  Archer = 1093,
+  Armorer = 1094,
+  Assassin = 1095,
   Ballista = 1096,
+  BallistaFullArt = 1097,
+  Catanolith = 1098,
+  Catapult = 1099,
   Champion = 1100,
+  DragonSlayer = 1101,
   DrunkKnight = 1102,
+  DrunkKnightFullArt = 1103,
+  Fanatic = 1104,
   GreyHorseman = 1105,
+  GreyHorsemanFullArt = 1106,
+  GreyKnight = 1107,
+  GreyMissionary = 1108,
+  GreyPriest = 1109,
   HeroOfTheBattleOfNerz = 1110,
-  Infantryman,
+  Infantryman = 1111,
+  NemesioGreyOrder = 1112,
   Phalanx = 1113,
+  PhalanxFullArt = 1114,
+  SeniorMercenary = 1115,
   SiegeTower = 1116,
+  SoberKnight = 1117,
+  StandardBearer = 1118,
   TheSeneschal = 1119,
+  TheSeneschalFullArtHolo = 1120,
+  TheSeneschalFullArt = 1121,
+  Titan = 1122,
+  TitanFullArt = 1123,
+  TomurDisc = 1124,
+  WhitePlainsMercenary = 1125,
+  WhitePlainsMercenaryFullArt = 1126,
   AvalonFortress = 1127,
+  AvalonFortressFullArtHolo = 1128,
+  AvalonFortressFullArt = 1129,
+  GhostMetalMonolith = 1130,
+  MastersOfAracKhan = 1131,
+  ArmouredConvoy = 1132,
+  Backup = 1133,
   HorseOfAvalon = 1134,
+  HorseOfAvalonFullArtHolo = 1135,
+  HorseOfAvalonFullArt = 1136,
+  MarchingOrder = 1137,
+  OnLeave = 1138,
   ShieldWall = 1139,
+  TheGreyOrderRises = 1140,
+  Truce = 1141,
   Warcry = 1142,
+  YhdilBlast = 1143,
+
   AbominableHydra = 1144,
   Berserker = 1146,
   ChildEater,
@@ -313,19 +382,58 @@ export const FactionCardsCharacteristics: Record<FactionCard, FactionCardCharact
   [FactionCard.WarpPath]: new WarpPath(),
 
   // GREY ORDER
-  [FactionCard.DrunkKnight]: new DrunkKnight(),
-  [FactionCard.Infantryman]: new Infantryman(),
-  [FactionCard.Phalanx]: new Phalanx(),
+  [FactionCard.AngryPeasant]: new AngryPeasant(),
+  [FactionCard.Archer]: new Archer(),
+  [FactionCard.Armorer]: new Armorer(),
+  [FactionCard.Assassin]: new Assassin(),
   [FactionCard.Ballista]: new Ballista(),
+  [FactionCard.BallistaFullArt]: new Ballista({ fullArtOf: FactionCard.Ballista }),
+  [FactionCard.Catanolith]: new Catanolith(),
+  [FactionCard.Catapult]: new Catapult(),
   [FactionCard.Champion]: new Champion(),
+  [FactionCard.DragonSlayer]: new DragonSlayer(),
+  [FactionCard.DrunkKnight]: new DrunkKnight(),
+  [FactionCard.DrunkKnightFullArt]: new DrunkKnight({ fullArtOf: FactionCard.DrunkKnight }),
+  [FactionCard.Fanatic]: new Fanatic(),
   [FactionCard.GreyHorseman]: new GreyHorseman(),
-  [FactionCard.SiegeTower]: new SiegeTower(),
+  [FactionCard.GreyHorsemanFullArt]: new GreyHorseman({ fullArtOf: FactionCard.GreyHorseman }),
+  [FactionCard.GreyKnight]: new GreyKnight(),
+  [FactionCard.GreyMissionary]: new GreyMissionary(),
+  [FactionCard.GreyPriest]: new GreyPriest(),
   [FactionCard.HeroOfTheBattleOfNerz]: new HeroOfTheBattleOfNerz(),
+  [FactionCard.Infantryman]: new Infantryman(),
+  [FactionCard.NemesioGreyOrder]: new NemesioGreyOrder(),
+  [FactionCard.Phalanx]: new Phalanx(),
+  [FactionCard.PhalanxFullArt]: new Phalanx({ fullArtOf: FactionCard.Phalanx }),
+  [FactionCard.SeniorMercenary]: new SeniorMercenary(),
+  [FactionCard.SiegeTower]: new SiegeTower(),
+  [FactionCard.SoberKnight]: new SoberKnight(),
+  [FactionCard.StandardBearer]: new StandardBearer(),
   [FactionCard.TheSeneschal]: new TheSeneschal(),
+  [FactionCard.TheSeneschalFullArtHolo]: new TheSeneschal({ fullArtOf: FactionCard.TheSeneschal, holo: true }),
+  [FactionCard.TheSeneschalFullArt]: new TheSeneschal({ fullArtOf: FactionCard.TheSeneschal }),
+  [FactionCard.Titan]: new Titan(),
+  [FactionCard.TitanFullArt]: new Titan({ fullArtOf: FactionCard.Titan }),
+  [FactionCard.TomurDisc]: new TomurDisc(),
+  [FactionCard.WhitePlainsMercenary]: new WhitePlainsMercenary(),
+  [FactionCard.WhitePlainsMercenaryFullArt]: new WhitePlainsMercenary({ fullArtOf: FactionCard.WhitePlainsMercenary }),
   [FactionCard.AvalonFortress]: new AvalonFortress(),
-  [FactionCard.Warcry]: new Warcry(),
-  [FactionCard.ShieldWall]: new ShieldWall(),
+  [FactionCard.AvalonFortressFullArtHolo]: new AvalonFortress({ fullArtOf: FactionCard.AvalonFortress, holo: true }),
+  [FactionCard.AvalonFortressFullArt]: new AvalonFortress({ fullArtOf: FactionCard.AvalonFortress }),
+  [FactionCard.GhostMetalMonolith]: new GhostMetalMonolith(),
+  [FactionCard.MastersOfAracKhan]: new MastersOfAracKhan(),
+  [FactionCard.ArmouredConvoy]: new ArmouredConvoy(),
+  [FactionCard.Backup]: new Backup(),
   [FactionCard.HorseOfAvalon]: new HorseOfAvalon(),
+  [FactionCard.HorseOfAvalonFullArtHolo]: new HorseOfAvalon({ fullArtOf: FactionCard.HorseOfAvalon, holo: true }),
+  [FactionCard.HorseOfAvalonFullArt]: new HorseOfAvalon({ fullArtOf: FactionCard.HorseOfAvalon }),
+  [FactionCard.MarchingOrder]: new MarchingOrder(),
+  [FactionCard.OnLeave]: new OnLeave(),
+  [FactionCard.ShieldWall]: new ShieldWall(),
+  [FactionCard.TheGreyOrderRises]: new TheGreyOrderRises(),
+  [FactionCard.Truce]: new Truce(),
+  [FactionCard.Warcry]: new Warcry(),
+  [FactionCard.YhdilBlast]: new YhdilBlast(),
 
   // BLIGHTS
   [FactionCard.ScuttleJaw]: new ScuttleJaw(),

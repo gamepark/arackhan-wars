@@ -10,5 +10,5 @@ export class Warcry extends Spell {
 
   astral = true
 
-  effect = attack(+1).to(allied, family(Family.SixthLegion), creature)
+  effect = attack(+1).to(allied, family(Family.Legion6), creature)
 }

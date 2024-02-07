@@ -10,5 +10,5 @@ export class ShieldWall extends Spell {
 
   astral = true
 
-  effect = defense(+2).to(allied, family(Family.SixthLegion), creature).cannotAttack()
+  effect = defense(+2).to(allied, family(Family.Legion6), creature).cannotAttack()
 }

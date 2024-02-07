@@ -28,19 +28,58 @@ import EN1184FireLightning from '../images/cards/blight/en/EN1184FireLightning.j
 import EN1185Firestorm from '../images/cards/blight/en/EN1185Firestorm.jpg'
 import EN1186ForcedExile from '../images/cards/blight/en/EN1186ForcedExile.jpg'
 import EN1191TheFear from '../images/cards/blight/en/EN1191TheFear.jpg'
+import EN1092AngryPeasant from '../images/cards/greyorder/en/EN1092AngryPeasant.jpg'
+import EN1093Archer from '../images/cards/greyorder/en/EN1093ArcherFullArt.jpg'
+import EN1094Armorer from '../images/cards/greyorder/en/EN1094Armorer.jpg'
+import EN1095Assassin from '../images/cards/greyorder/en/EN1095Assassin.jpg'
 import EN1096Ballista from '../images/cards/greyorder/en/EN1096Ballista.jpg'
+import EN1097BallistaFullArt from '../images/cards/greyorder/en/EN1097BallistaFullArt.jpg'
+import EN1098Catanolith from '../images/cards/greyorder/en/EN1098CatanolithHolo.jpg'
+import EN1099Catapult from '../images/cards/greyorder/en/EN1099Catapult.jpg'
 import EN1100Champion from '../images/cards/greyorder/en/EN1100Champion.jpg'
+import EN1101DragonSlayer from '../images/cards/greyorder/en/EN1101DragonSlayer.jpg'
 import EN1102DrunkKnight from '../images/cards/greyorder/en/EN1102DrunkKnight.jpg'
+import EN1103DrunkKnightFullArt from '../images/cards/greyorder/en/EN1103DrunkKnightFullArt.jpg'
+import EN1104Fanatic from '../images/cards/greyorder/en/EN1104Fanatic.jpg'
 import EN1105GreyHorseman from '../images/cards/greyorder/en/EN1105GreyHorseman.jpg'
+import EN1106GreyHorsemanFullArt from '../images/cards/greyorder/en/EN1106GreyHorsemanFullArt.jpg'
+import EN1107GreyKnight from '../images/cards/greyorder/en/EN1107GreyKnightHolo.jpg'
+import EN1108GreyMissionary from '../images/cards/greyorder/en/EN1108GreyMissionary.jpg'
+import EN1109GreyPriest from '../images/cards/greyorder/en/EN1109GreyPriest.jpg'
 import EN1110HeroOfTheBattleOfNerz from '../images/cards/greyorder/en/EN1110HeroOfTheBattleOfNerz.jpg'
 import EN1111Infantryman from '../images/cards/greyorder/en/EN1111Infantryman.jpg'
+import EN1112NemesioGreyOrder from '../images/cards/greyorder/en/EN1112NemesioFullArt.jpg'
 import EN1113Phalanx from '../images/cards/greyorder/en/EN1113Phalanx.jpg'
+import EN1114PhalanxFullArt from '../images/cards/greyorder/en/EN1114PhalanxFullArt.jpg'
+import EN1115SeniorMercenary from '../images/cards/greyorder/en/EN1115SeniorMercenary.jpg'
 import EN1116SiegeTower from '../images/cards/greyorder/en/EN1116SiegeTower.jpg'
+import EN1117SoberKnight from '../images/cards/greyorder/en/EN1117SoberKnight.jpg'
+import EN1118StandardBearer from '../images/cards/greyorder/en/EN1118StandardBearer.jpg'
 import EN1119TheSeneschal from '../images/cards/greyorder/en/EN1119TheSeneschal.jpg'
+import EN1120TheSeneschalFullArtHolo from '../images/cards/greyorder/en/EN1120TheSeneschalFullArtHolo.jpg'
+import EN1121TheSeneschalFullArt from '../images/cards/greyorder/en/EN1121TheSeneschalFullArt.jpg'
+import EN1122Titan from '../images/cards/greyorder/en/EN1122Titan.jpg'
+import EN1123TitanFullArt from '../images/cards/greyorder/en/EN1123TitanFullArt.jpg'
+import EN1124TomurDiscFullArt from '../images/cards/greyorder/en/EN1124TomurDiscFullArt.jpg'
+import EN1125WhitePlainsMercenary from '../images/cards/greyorder/en/EN1125WhitePlainsMercenary.jpg'
+import EN1126WhitePlainsMercenaryFullArt from '../images/cards/greyorder/en/EN1126WhitePlainsMercenaryFullArt.jpg'
 import EN1127AvalonFortress from '../images/cards/greyorder/en/EN1127AvalonFortress.jpg'
+import EN1128AvalonFortressFullArtHolo from '../images/cards/greyorder/en/EN1128AvalonFortressFullArtHolo.jpg'
+import EN1129AvalonFortressFullArt from '../images/cards/greyorder/en/EN1129AvalonFortressFullArt.jpg'
+import EN1130GhostMetalMonolith from '../images/cards/greyorder/en/EN1130GhostMetalMonolith.jpg'
+import EN1131MastersOfAracKhan from '../images/cards/greyorder/en/EN1131MastersOfAracKhanHolo.jpg'
+import EN1132ArmouredConvoy from '../images/cards/greyorder/en/EN1132ArmouredConvoy.jpg'
+import EN1133Backup from '../images/cards/greyorder/en/EN1133Backup.jpg'
 import EN1134HorseOfAvalon from '../images/cards/greyorder/en/EN1134HorseOfAvalon.jpg'
+import EN1135HorseOfAvalonFullArtHolo from '../images/cards/greyorder/en/EN1135HorseOfAvalonFullArtHolo.jpg'
+import EN1136HorseOfAvalonFullArt from '../images/cards/greyorder/en/EN1136HorseOfAvalonFullArt.jpg'
+import EN1137MarchingOrder from '../images/cards/greyorder/en/EN1137MarchingOrder.jpg'
+import EN1138OnLeave from '../images/cards/greyorder/en/EN1138OnLeave.jpg'
 import EN1139ShieldWall from '../images/cards/greyorder/en/EN1139ShieldWall.jpg'
+import EN1140TheGreyOrderRises from '../images/cards/greyorder/en/EN1140TheGreyOrderRises.jpg'
+import EN1141Truce from '../images/cards/greyorder/en/EN1141TruceFullArt.jpg'
 import EN1142Warcry from '../images/cards/greyorder/en/EN1142Warcry.jpg'
+import EN1143YhdilBlast from '../images/cards/greyorder/en/EN1143YhdilBlast.jpg'
 import GreyOrderCardBack from '../images/cards/greyorder/GreyOrderCardBack.jpg'
 import EN1048Behemoth from '../images/cards/nakka/en/EN1048Behemoth.jpg'
 import EN1049BehemothFullArt from '../images/cards/nakka/en/EN1049BehemothFullArt.jpg'
@@ -229,17 +268,59 @@ export class FactionCardDescription extends CardDescription {
     [FactionCard.UnstableGrowth]: EN1090UnstableGrowth,
     [FactionCard.WarpPath]: EN1091WarpPath,
 
-    [FactionCard.DrunkKnight]: EN1102DrunkKnight,
-    [FactionCard.Infantryman]: EN1111Infantryman,
-    [FactionCard.Phalanx]: EN1113Phalanx,
+    [FactionCard.AngryPeasant]: EN1092AngryPeasant,
+    [FactionCard.Archer]: EN1093Archer,
+    [FactionCard.Armorer]: EN1094Armorer,
+    [FactionCard.Assassin]: EN1095Assassin,
     [FactionCard.Ballista]: EN1096Ballista,
+    [FactionCard.BallistaFullArt]: EN1097BallistaFullArt,
+    [FactionCard.Catanolith]: EN1098Catanolith,
+    [FactionCard.Catapult]: EN1099Catapult,
     [FactionCard.Champion]: EN1100Champion,
+    [FactionCard.DragonSlayer]: EN1101DragonSlayer,
+    [FactionCard.DrunkKnight]: EN1102DrunkKnight,
+    [FactionCard.DrunkKnightFullArt]: EN1103DrunkKnightFullArt,
+    [FactionCard.Fanatic]: EN1104Fanatic,
     [FactionCard.GreyHorseman]: EN1105GreyHorseman,
-    [FactionCard.SiegeTower]: EN1116SiegeTower,
+    [FactionCard.GreyHorsemanFullArt]: EN1106GreyHorsemanFullArt,
+    [FactionCard.GreyKnight]: EN1107GreyKnight,
+    [FactionCard.GreyMissionary]: EN1108GreyMissionary,
+    [FactionCard.GreyPriest]: EN1109GreyPriest,
     [FactionCard.HeroOfTheBattleOfNerz]: EN1110HeroOfTheBattleOfNerz,
+    [FactionCard.Infantryman]: EN1111Infantryman,
+    [FactionCard.NemesioGreyOrder]: EN1112NemesioGreyOrder,
+    [FactionCard.Phalanx]: EN1113Phalanx,
+    [FactionCard.PhalanxFullArt]: EN1114PhalanxFullArt,
+    [FactionCard.SeniorMercenary]: EN1115SeniorMercenary,
+    [FactionCard.SiegeTower]: EN1116SiegeTower,
+    [FactionCard.SoberKnight]: EN1117SoberKnight,
+    [FactionCard.StandardBearer]: EN1118StandardBearer,
     [FactionCard.TheSeneschal]: EN1119TheSeneschal,
+    [FactionCard.TheSeneschalFullArtHolo]: EN1120TheSeneschalFullArtHolo,
+    [FactionCard.TheSeneschalFullArt]: EN1121TheSeneschalFullArt,
+    [FactionCard.Titan]: EN1122Titan,
+    [FactionCard.TitanFullArt]: EN1123TitanFullArt,
+    [FactionCard.TomurDisc]: EN1124TomurDiscFullArt,
+    [FactionCard.WhitePlainsMercenary]: EN1125WhitePlainsMercenary,
+    [FactionCard.WhitePlainsMercenaryFullArt]: EN1126WhitePlainsMercenaryFullArt,
     [FactionCard.AvalonFortress]: EN1127AvalonFortress,
+    [FactionCard.AvalonFortressFullArtHolo]: EN1128AvalonFortressFullArtHolo,
+    [FactionCard.AvalonFortressFullArt]: EN1129AvalonFortressFullArt,
+    [FactionCard.GhostMetalMonolith]: EN1130GhostMetalMonolith,
+    [FactionCard.MastersOfAracKhan]: EN1131MastersOfAracKhan,
+    [FactionCard.ArmouredConvoy]: EN1132ArmouredConvoy,
+    [FactionCard.Backup]: EN1133Backup,
+    [FactionCard.HorseOfAvalon]: EN1134HorseOfAvalon,
+    [FactionCard.HorseOfAvalonFullArtHolo]: EN1135HorseOfAvalonFullArtHolo,
+    [FactionCard.HorseOfAvalonFullArt]: EN1136HorseOfAvalonFullArt,
+    [FactionCard.MarchingOrder]: EN1137MarchingOrder,
+    [FactionCard.OnLeave]: EN1138OnLeave,
+    [FactionCard.ShieldWall]: EN1139ShieldWall,
+    [FactionCard.TheGreyOrderRises]: EN1140TheGreyOrderRises,
+    [FactionCard.Truce]: EN1141Truce,
     [FactionCard.Warcry]: EN1142Warcry,
+    [FactionCard.YhdilBlast]: EN1143YhdilBlast,
+
     [FactionCard.ShieldWall]: EN1139ShieldWall,
     [FactionCard.HorseOfAvalon]: EN1134HorseOfAvalon,
     [FactionCard.ScuttleJaw]: EN1171ScuttleJaw,
