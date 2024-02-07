@@ -110,6 +110,9 @@ import FR1049BehemothFullArt from '../images/cards/nakka/fr/FR1049BehemothFullAr
 import FR1050PlanteCarnivore from '../images/cards/nakka/fr/FR1050PlanteCarnivore.jpg'
 import FR1051RacinesRampantes from '../images/cards/nakka/fr/FR1051RacinesRampantes.jpg'
 import FR1052PhasmeVenimeux from '../images/cards/nakka/fr/FR1052PhasmeVenimeux.jpg'
+import FR1053PhasmeVenimeuxFullArt from '../images/cards/nakka/fr/FR1053PhasmeVenimeuxFullArt.jpg'
+import FR1054Chasseresse from '../images/cards/nakka/fr/FR1054Chasseresse.jpg'
+import FR1055CentipedeExplosif from '../images/cards/nakka/fr/FR1055CentipedeExplosif.jpg'
 import FR1056Hexacarias from '../images/cards/nakka/fr/FR1056Hexacarias.jpg'
 import FR1057PerroquetProvocateur from '../images/cards/nakka/fr/FR1057PerroquetProvocateur.jpg'
 import FR1058PerroquetProvocateurFullArt from '../images/cards/nakka/fr/FR1058PerroquetProvocateurFullArt.jpg'
@@ -250,6 +253,9 @@ export class FactionCardFrenchDescription extends FactionCardDescription {
     [FactionCard.CarnivorousPlant]: FR1050PlanteCarnivore,
     [FactionCard.CrawlingRoots]: FR1051RacinesRampantes,
     [FactionCard.DeathCrawler]: FR1052PhasmeVenimeux,
+    [FactionCard.DeathCrawlerFullArt]: FR1053PhasmeVenimeuxFullArt,
+    [FactionCard.Huntress]: FR1054Chasseresse,
+    [FactionCard.ExplosiveCentipede]: FR1055CentipedeExplosif,
     [FactionCard.Hexacarias]: FR1056Hexacarias,
     [FactionCard.LightningBird]: FR1057PerroquetProvocateur,
     [FactionCard.LightningBirdFullArt]: FR1058PerroquetProvocateurFullArt,

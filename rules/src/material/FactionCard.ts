@@ -81,9 +81,11 @@ import { DeathCrawler } from './cards/nakka/DeathCrawler'
 import { DeathWhisperer } from './cards/nakka/DeathWhisperer'
 import { EarthQuake } from './cards/nakka/EarthQuake'
 import { EternalRoots } from './cards/nakka/EternalRoots'
+import { ExplosiveCentipede } from './cards/nakka/ExplosiveCentipede'
 import { ForestBlast } from './cards/nakka/ForestBlast'
 import { GroundStomper } from './cards/nakka/GroundStomper'
 import { Hexacarias } from './cards/nakka/Hexacarias'
+import { Huntress } from './cards/nakka/Huntress'
 import { LightningBird } from './cards/nakka/LightningBird'
 import { LightningDragon } from './cards/nakka/LightningDragon'
 import { LostInTheForest } from './cards/nakka/LostInTheForest'
@@ -197,6 +199,9 @@ export enum FactionCard {
   CarnivorousPlant = 1050,
   CrawlingRoots = 1051,
   DeathCrawler = 1052,
+  DeathCrawlerFullArt = 1053,
+  Huntress = 1054,
+  ExplosiveCentipede = 1054,
   Hexacarias = 1056,
   LightningBird = 1057,
   LightningBirdFullArt = 1058,
@@ -401,6 +406,9 @@ export const FactionCardsCharacteristics: Record<FactionCard, FactionCardCharact
   [FactionCard.CarnivorousPlant]: new CarnivorousPlant(),
   [FactionCard.CrawlingRoots]: new CrawlingRoots(),
   [FactionCard.DeathCrawler]: new DeathCrawler(),
+  [FactionCard.DeathCrawlerFullArt]: new DeathCrawler({ fullArtOf: FactionCard.DeathCrawler }),
+  [FactionCard.Huntress]: new Huntress(),
+  [FactionCard.ExplosiveCentipede]: new ExplosiveCentipede(),
   [FactionCard.Hexacarias]: new Hexacarias(),
   [FactionCard.LightningBird]: new LightningBird(),
   [FactionCard.LightningBirdFullArt]: new LightningBird({ fullArtOf: FactionCard.LightningBird }),

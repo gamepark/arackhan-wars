@@ -123,6 +123,9 @@ import EN1049BehemothFullArt from '../images/cards/nakka/en/EN1049BehemothFullAr
 import EN1050CarnivorousPlant from '../images/cards/nakka/en/EN1050CarnivorousPlant.jpg'
 import EN1051CrawlingRoots from '../images/cards/nakka/en/EN1051CrawlingRoots.jpg'
 import EN1052DeathCrawler from '../images/cards/nakka/en/EN1052DeathCrawler.jpg'
+import EN1053DeathCrawlerFullArt from '../images/cards/nakka/en/EN1053DeathCrawlerFullArt.jpg'
+import EN1054Huntress from '../images/cards/nakka/en/EN1054Huntress.jpg'
+import EN1055ExplosiveCentipede from '../images/cards/nakka/en/EN1055ExplosiveCentipede.jpg'
 import EN1056Hexacarias from '../images/cards/nakka/en/EN1056Hexacarias.jpg'
 import EN1057LightningBird from '../images/cards/nakka/en/EN1057LightningBird.jpg'
 import EN1058LightningBirdFullArt from '../images/cards/nakka/en/EN1058LightningBirdFullArt.jpg'
@@ -268,6 +271,9 @@ export class FactionCardDescription extends CardDescription {
     [FactionCard.CarnivorousPlant]: EN1050CarnivorousPlant,
     [FactionCard.CrawlingRoots]: EN1051CrawlingRoots,
     [FactionCard.DeathCrawler]: EN1052DeathCrawler,
+    [FactionCard.DeathCrawlerFullArt]: EN1053DeathCrawlerFullArt,
+    [FactionCard.Huntress]: EN1054Huntress,
+    [FactionCard.ExplosiveCentipede]: EN1055ExplosiveCentipede,
     [FactionCard.Hexacarias]: EN1056Hexacarias,
     [FactionCard.LightningBird]: EN1057LightningBird,
     [FactionCard.LightningBirdFullArt]: EN1058LightningBirdFullArt,
