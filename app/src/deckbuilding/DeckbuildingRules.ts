@@ -75,8 +75,9 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
   onCustomMove(move: CustomMove) {
     if (move.type === DeckbuildingMove.ChangeFilter) {
       this.memorize<boolean>(move.data, value => !value)
+      this.memorize<number>(Page, 1)
     } else if (move.type === DeckbuildingMove.ChangePage) {
-      this.memorize<boolean>(Page, move.data)
+      this.memorize<number>(Page, move.data)
     }
     const page = this.page
     return [
