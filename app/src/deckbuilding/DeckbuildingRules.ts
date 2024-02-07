@@ -17,6 +17,9 @@ export enum DeckbuildingMove {
 }
 
 export class DeckbuildingRules extends MaterialRules<number, MaterialType, LocationType> {
+
+  static local = true
+
   locationsStrategies = {
     [MaterialType.FactionCard]: {
       [LocationType.DeckbuildingBook]: new FillGapStrategy()
