@@ -2,6 +2,7 @@
 import { css } from '@emotion/react'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
 import { usePlay, useRules } from '@gamepark/react-game'
+import astral from '../images/icons/astral.png'
 import creature from '../images/icons/creature.png'
 import land from '../images/icons/land.png'
 import spell from '../images/icons/spell.png'
@@ -27,6 +28,8 @@ export default function DeckbuildingFilters() {
          onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Land))}/>
     <div css={[filterButton, spellButton, rules?.remind(DeckbuildingFilter.Spell) || inactive]}
          onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Spell))}/>
+    <div css={[filterButton, astralButton, rules?.remind(DeckbuildingFilter.Astral) || inactive]}
+         onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Astral))}/>
   </div>
 }
 
@@ -40,15 +43,17 @@ const filters = css`
 `
 
 const filterButton = css`
+  filter: drop-shadow(0 0 0.5em black);
   width: 3em;
   height: 3em;
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   cursor: pointer;
 `
 
 const factionButton = (faction: Faction) => css`
   border-radius: 50%;
-  box-shadow: 0 0 0.5em black, 0 0 0.5em black;
   background-image: url("${factionTokenDescription.images[faction]}");
 `
 
@@ -64,6 +69,10 @@ const spellButton = css`
   background-image: url("${spell}");
 `
 
+const astralButton = css`
+  background-image: url("${astral}");
+`
+
 const inactive = css`
-  filter: brightness(0.5);
+  filter: drop-shadow(0 0 0.5em black) brightness(0.5);
 `

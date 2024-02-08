@@ -83,6 +83,11 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
     if (move.type === DeckbuildingMove.ChangeFilter) {
       this.memorize<boolean>(move.data, value => !value)
       this.memorize<number>(Page, 1)
+      if (move.data === DeckbuildingFilter.Spell && !this.remind(DeckbuildingFilter.Spell)) {
+        this.memorize(DeckbuildingFilter.Astral, false)
+      } else if (move.data === DeckbuildingFilter.Astral && this.remind(DeckbuildingFilter.Astral)) {
+        this.memorize(DeckbuildingFilter.Spell, true)
+      }
     } else if (move.type === DeckbuildingMove.ChangePage) {
       this.memorize<number>(Page, move.data)
     }
@@ -130,7 +135,8 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
     if (!creature && !land && !spell) return true
     if (!creature && isCreature(characteristics)) return false
     if (!land && isLand(characteristics)) return false
-    return !(!spell && isSpell(characteristics))
+    if (!spell && isSpell(characteristics)) return false
+    return !this.remind(DeckbuildingFilter.Astral) || (isSpell(characteristics) && characteristics.astral)
   }
 }
 
