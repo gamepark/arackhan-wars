@@ -1,11 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { AttributeType, attributeTypes } from '@gamepark/arackhan-wars/material/cards/Attribute'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
 import { usePlay, useRules } from '@gamepark/react-game'
 import astral from '../images/icons/astral.png'
 import creature from '../images/icons/creature.png'
 import land from '../images/icons/land.png'
 import spell from '../images/icons/spell.png'
+import { attributesIconDescription } from '../locators/AttributesIconsLocator'
 import { factionTokenDescription } from '../material/FactionTokenDescription'
 import { DeckbuildingFilter } from './DeckbuildingFilter'
 import { DeckbuildingRules } from './DeckbuildingRules'
@@ -30,13 +32,19 @@ export default function DeckbuildingFilters() {
          onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Spell))}/>
     <div css={[filterButton, astralButton, rules?.remind(DeckbuildingFilter.Astral) || inactive]}
          onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Astral))}/>
+    <div/>
+    <div/>
+    {attributeTypes.map(attributeType =>
+      <div css={[filterButton, attributeButton(attributeType), rules?.remind(attributeType + 10) || inactive]}
+           onClick={() => play(rules!.changeFilter(attributeType + 10))}/>
+    )}
   </div>
 }
 
 const filters = css`
   position: absolute;
-  top: 1em;
-  left: 1em;
+  top: 0.5em;
+  left: 0.5em;
   display: grid;
   grid-gap: 0.5em;
   grid-template-columns: repeat(10, 1fr);
@@ -71,6 +79,11 @@ const spellButton = css`
 
 const astralButton = css`
   background-image: url("${astral}");
+`
+
+const attributeButton = (attributeType: AttributeType) => css`
+  border-radius: 50%;
+  background-image: url("${attributesIconDescription.attributeImages[attributeType]}");
 `
 
 const inactive = css`

@@ -1,3 +1,4 @@
+import { attributeTypes } from '@gamepark/arackhan-wars/material/cards/Attribute'
 import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
 import { FactionCardCharacteristics } from '@gamepark/arackhan-wars/material/cards/FactionCardCharacteristics'
 import { isLand } from '@gamepark/arackhan-wars/material/cards/Land'
@@ -108,6 +109,7 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
     const characteristics = FactionCardsCharacteristics[card]
     return this.factionFilter(characteristics.faction)
       && this.typeFilter(characteristics)
+      && this.attributesFilter(characteristics)
   }
 
   factionFilter(faction: Faction) {
@@ -137,6 +139,16 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
     if (!land && isLand(characteristics)) return false
     if (!spell && isSpell(characteristics)) return false
     return !this.remind(DeckbuildingFilter.Astral) || (isSpell(characteristics) && characteristics.astral)
+  }
+
+  attributesFilter(characteristics: FactionCardCharacteristics) {
+    if (!attributeTypes.some(attributeType => this.remind(attributeType + 10))) return true
+    for (const attributeType of attributeTypes) {
+      if (this.remind(attributeType + 10) && characteristics.getAttributes().some(attribute => attribute.type === attributeType)) {
+        return true
+      }
+    }
+    return false
   }
 }
 

@@ -1,3 +1,5 @@
+import { isEnumValue } from '@gamepark/rules-api'
+
 export type Attribute = Initiative | Movement | Flight | Omnistrike | RangedAttack | Swarm | Regeneration | Stealth | Perforation
 
 export enum AttributeType {
@@ -11,6 +13,8 @@ export enum AttributeType {
   Stealth,
   Perforation
 }
+
+export const attributeTypes = Object.values(AttributeType).filter(isEnumValue)
 
 export type Initiative = { type: AttributeType.Initiative }
 export const initiative: Initiative = { type: AttributeType.Initiative }

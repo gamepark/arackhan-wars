@@ -24,17 +24,17 @@ const pagination = css`
   position: absolute;
   height: fit-content;
   top: auto;
-  bottom: 1em;
-  left: 18.5em;
+  bottom: 0.5em;
+  left: 19.5em;
   display: grid;
   gap: 0.5em;
   grid-template-columns: repeat(2, 1fr);
 `
 
 const paginationButton = [buttonResetCss, css`
-  font-size: 1.8em;
-  height: 1.8em;
-  width: 1.8em;
+  font-size: 1.6em;
+  height: 1.6em;
+  width: 1.6em;
   border-radius: 2em;
   transition: transform 0.1s ease-in-out;
   border: 0.1em solid white;
