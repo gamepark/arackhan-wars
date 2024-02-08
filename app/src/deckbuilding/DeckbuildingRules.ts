@@ -32,7 +32,7 @@ export class DeckbuildingRules extends MaterialRules<number, MaterialType, Locat
   }
 
   rules = {
-    [RuleId.DeckBuilding]: DeckbuildingRule
+    [RuleId.Deckbuilding]: DeckbuildingRule
   }
 
   changeFilter(filter: DeckbuildingFilter) {
@@ -164,7 +164,7 @@ export class DeckBuildingSetup extends MaterialGameSetup<number, MaterialType, L
   }
 
   start() {
-    this.startPlayerTurn(RuleId.DeckBuilding, 1)
+    this.startPlayerTurn(RuleId.Deckbuilding, 1)
   }
 }
 

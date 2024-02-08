@@ -1,5 +1,5 @@
 export enum RuleId {
-  DeckBuilding = 0,
+  Deckbuilding = 0,
 
   // Setup phases
   ChooseFaction = 1,

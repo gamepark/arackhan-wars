@@ -47,7 +47,7 @@ export abstract class FactionCardCharacteristics {
   }
 
   getLimit() {
-    return this.legendary ? 1 : this.limit ?? Infinity
+    return this.legendary ? 1 : this.limit ?? (this.getDeckBuildingValue() >= 6 ? 6 : Infinity)
   }
 
   getDeckBuildingValue() {
