@@ -8,7 +8,17 @@ import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-war
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
-import { CustomMove, FillGapStrategy, isEnumValue, isMoveItemType, ItemMove, MaterialGameSetup, MaterialRules, PlayerTurnRule } from '@gamepark/rules-api'
+import {
+  CustomMove,
+  FillGapStrategy,
+  isEnumValue,
+  isMoveItemType,
+  ItemMove,
+  MaterialGameSetup,
+  MaterialMove,
+  MaterialRules,
+  PlayerTurnRule
+} from '@gamepark/rules-api'
 import difference from 'lodash/difference'
 import range from 'lodash/range'
 import { DeckbuildingFilter, deckbuildingFilters } from './DeckbuildingFilter'
@@ -55,9 +65,8 @@ export class DeckbuildingRules extends MaterialRules<number, MaterialType, Locat
 class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType> {
   getPlayerMoves() {
     const bookCards = this.material(MaterialType.FactionCard).location(LocationType.DeckbuildingBook)
-    const deckX = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).getItems().map(i => i.location.x!)
     return [
-      ...difference(range(0, DeckSize), deckX).flatMap(x => bookCards.moveItems({ type: LocationType.PlayerDeck, x })),
+      ...range(0, DeckSize).flatMap(x => bookCards.moveItems({ type: LocationType.PlayerDeck, x })),
       ...deckbuildingFilters.map(filter => this.rules().customMove(DeckbuildingMove.ChangeFilter, filter)),
       ...difference(range(1, this.maxPage + 1), [this.page]).map(page => this.rules().customMove(DeckbuildingMove.ChangePage, page))
     ]
@@ -72,12 +81,17 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
   }
 
   beforeItemMove(move: ItemMove) {
+    const moves: MaterialMove[] = []
     if (!isMoveItemType(MaterialType.FactionCard)(move)) return []
     const movedCard = this.material(MaterialType.FactionCard).getItem(move.itemIndex)
     if (movedCard?.location.type === LocationType.DeckbuildingBook) {
-      return [this.material(MaterialType.FactionCard).createItem(movedCard)]
+      moves.push(this.material(MaterialType.FactionCard).createItem(movedCard))
     }
-    return []
+    const replacedCard = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).location(l => l.x === move.location.x)
+    if (replacedCard.length) {
+      moves.push(replacedCard.deleteItem())
+    }
+    return moves
   }
 
   onCustomMove(move: CustomMove) {
