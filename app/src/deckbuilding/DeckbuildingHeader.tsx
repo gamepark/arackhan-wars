@@ -8,9 +8,9 @@ import { DeckbuildingRules } from './DeckbuildingRules'
 
 export const DeckbuildingHeader = () => {
   const { t } = useTranslation()
-  const rules = useRules<DeckbuildingRules>()
-  const deck = rules?.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).getItems<CardId>().map(item => item.id!.front) ?? []
-  const validator = new DeckValidator(deck)
+    const rules = useRules<DeckbuildingRules>()
+    const deck = rules?.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).getItems<CardId>().map(item => item.id!.front) ?? []
+    const validator = new DeckValidator(deck)
   if (validator.isValid) {
     return <>{t('header.deck.valid')}</>
   } else {
