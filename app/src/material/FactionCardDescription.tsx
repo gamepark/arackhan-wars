@@ -6,12 +6,13 @@ import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
 import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
+import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { Attack } from '@gamepark/arackhan-wars/rules/AttackRule'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { CardDescription, ItemContext, MaterialContext } from '@gamepark/react-game'
-import { isCustomMove, isCustomMoveType, Location, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
-import { differenceBy } from 'lodash'
+import { isCustomMove, isCustomMoveType, isMoveItemType, Location, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { differenceBy, range } from 'lodash'
 import { isDeckbuilding } from '../deckbuilding/deckbuilding.util'
 import BlightCardBack from '../images/cards/blight/BlightCardBack.jpg'
 import EN1144AbominableHydra from '../images/cards/blight/en/EN1144AbominableHydra.jpg'
@@ -453,14 +454,28 @@ export class FactionCardDescription extends CardDescription {
   }
 
   canLongClick(move: MaterialMove, context: ItemContext) {
+    if (isDeckbuilding) {
+      const { rules, index } = context
+      if (isMoveItemType(MaterialType.FactionCard)(move) && move.itemIndex === index) {
+        const card = rules.material(MaterialType.FactionCard).getItem(index)
+        if (card?.location.type === LocationType.DeckbuildingBook) {
+          const cardsX = rules.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).getItems().map(item => item.location.x)
+          const x = range(0, 23).find(x => !cardsX.includes(x))
+          return move.location.x === x
+        }
+      }
+      return false
+    }
     if (isCustomMove(move)) {
       switch (move.type) {
         case CustomMoveType.PerformAction:
         case CustomMoveType.ChooseCard:
           return move.data === context.index
+        case CustomMoveType.Attack:
+          return move.data.card === context.index
       }
     }
-    return this.canDrag(move, context)
+    return super.canLongClick(move, context)
   }
 
   isFlipped(item: Partial<MaterialItem>, context: MaterialContext) {
