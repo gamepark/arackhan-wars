@@ -424,6 +424,7 @@ export class FactionCardDescription extends CardDescription {
   }
 
   getLocations(item: MaterialItem, { index, rules }: ItemContext) {
+    if (isDeckbuilding && item.location.type === LocationType.PlayerDeck) return [{ type: LocationType.FactionCard, parent: index }]
     if (item.location.type !== LocationType.Battlefield || item.id.front === undefined) return []
 
     const locations: Location[] = getCardBattlefieldModifierLocations(rules.game, index)

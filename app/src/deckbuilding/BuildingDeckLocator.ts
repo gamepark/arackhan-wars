@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { GridLocator, LocationDescription } from '@gamepark/react-game'
-import { range } from 'lodash'
+import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
+import { GridLocator, LocationDescription, MaterialContext } from '@gamepark/react-game'
 import { Location } from '@gamepark/rules-api'
+import { range } from 'lodash'
+import difference from 'lodash/difference'
 import { cardHeight, cardWidth, factionCardDescription } from '../material/FactionCardDescription'
 
 export class BuildingDeckLocator extends GridLocator {
@@ -34,7 +36,8 @@ class BuildingDeckDescription extends LocationDescription {
     border: 1px solid white;
   `
 
-  getLocations() {
-    return range(0, 23).map(x => ({ type: LocationType.PlayerDeck, x }))
+  getLocations({ rules }: MaterialContext) {
+    const xWithCard = rules.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).getItems().map(item => item.location.x)
+    return difference(range(0, 23), xWithCard).map(x => ({ type: LocationType.PlayerDeck, x }))
   }
 }

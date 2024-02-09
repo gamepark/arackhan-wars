@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { LocationDescription, MaterialContext } from '@gamepark/react-game'
-import { isCustomMove, isMoveItem, Location, MaterialMove } from '@gamepark/rules-api'
+import { isLocationSubset } from '@gamepark/react-game/dist/components/material/utils'
+import { isCustomMove, isMoveItemType, Location, MaterialMove } from '@gamepark/rules-api'
 import { factionCardDescription } from '../material/FactionCardDescription'
 
 export class FactionCardLocationDescription extends LocationDescription {
@@ -29,9 +29,9 @@ export class FactionCardLocationDescription extends LocationDescription {
       }
     }
 
-    if (isMoveItem(move) && move.itemType === MaterialType.FactionCard && move.location.type === LocationType.Battlefield) {
+    if (isMoveItemType(MaterialType.FactionCard)(move)) {
       const parentCardLocation = rules.material(MaterialType.FactionCard).getItem(location.parent!)?.location
-      return move.location.x === parentCardLocation?.x && move.location.y === parentCardLocation?.y
+      return parentCardLocation !== undefined && isLocationSubset(parentCardLocation, move.location as Location)
     }
 
     return super.isMoveToLocation(move, location, context)

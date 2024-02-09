@@ -35,7 +35,7 @@ export default function DeckbuildingFilters() {
     <div/>
     <div/>
     {attributeTypes.map(attributeType =>
-      <div css={[filterButton, attributeButton(attributeType), rules?.remind(attributeType + 10) || inactive]}
+      <div key={attributeType} css={[filterButton, attributeButton(attributeType), rules?.remind(attributeType + 10) || inactive]}
            onClick={() => play(rules!.changeFilter(attributeType + 10))}/>
     )}
   </div>

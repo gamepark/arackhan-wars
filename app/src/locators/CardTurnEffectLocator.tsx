@@ -4,7 +4,7 @@ import { isMimic } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { ItemLocator, LocationDescription } from '@gamepark/react-game'
 import { LocationContext } from '@gamepark/react-game/dist/locators'
-import { Location } from '../../../../workshop/packages/rules-api'
+import { Location } from '@gamepark/rules-api'
 import { FactionCardDescription, factionCardDescription } from '../material/FactionCardDescription'
 
 export class CardTurnEffectLocator extends ItemLocator {

@@ -45,6 +45,10 @@ export class DeckbuildingRules extends MaterialRules<number, MaterialType, Locat
     [RuleId.Deckbuilding]: DeckbuildingRule
   }
 
+  itemsCanMerge() {
+    return false
+  }
+
   changeFilter(filter: DeckbuildingFilter) {
     return new DeckbuildingRule(this.game).rules().customMove(DeckbuildingMove.ChangeFilter, filter)
   }
@@ -65,10 +69,16 @@ export class DeckbuildingRules extends MaterialRules<number, MaterialType, Locat
 class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType> {
   getPlayerMoves() {
     const bookCards = this.material(MaterialType.FactionCard).location(LocationType.DeckbuildingBook)
+    const deckCards = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck)
     return [
       ...range(0, DeckSize).flatMap(x => bookCards.moveItems({ type: LocationType.PlayerDeck, x })),
       ...deckbuildingFilters.map(filter => this.rules().customMove(DeckbuildingMove.ChangeFilter, filter)),
-      ...difference(range(1, this.maxPage + 1), [this.page]).map(page => this.rules().customMove(DeckbuildingMove.ChangePage, page))
+      ...difference(range(1, this.maxPage + 1), [this.page]).map(page => this.rules().customMove(DeckbuildingMove.ChangePage, page)),
+      ...range(0, DeckSize).flatMap(x => {
+        const cardAtX = deckCards.location(l => l.x === x)
+        if (!cardAtX.length) return []
+        return range(0, DeckSize).filter(i => i !== x).map(x => cardAtX.moveItem({ type: LocationType.PlayerDeck, x }))
+      })
     ]
   }
 
@@ -84,12 +94,14 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
     const moves: MaterialMove[] = []
     if (!isMoveItemType(MaterialType.FactionCard)(move)) return []
     const movedCard = this.material(MaterialType.FactionCard).getItem(move.itemIndex)
+    const replacedCard = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).location(l => l.x === move.location.x)
     if (movedCard?.location.type === LocationType.DeckbuildingBook) {
       moves.push(this.material(MaterialType.FactionCard).createItem(movedCard))
-    }
-    const replacedCard = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).location(l => l.x === move.location.x)
-    if (replacedCard.length) {
-      moves.push(replacedCard.deleteItem())
+      if (replacedCard.length) {
+        moves.push(replacedCard.deleteItem())
+      }
+    } else if (replacedCard.length) {
+      moves.push(replacedCard.moveItem({ type: LocationType.PlayerDeck, x: movedCard?.location.x }))
     }
     return moves
   }
@@ -108,10 +120,10 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
     }
     const page = this.page
     return [
-      this.material(MaterialType.FactionCard).location(LocationType.DeckbuildingBook).deleteItemsAtOnce(),
-      this.material(MaterialType.FactionCard).createItemsAtOnce(this.cards.slice((page - 1) * PageSize, page * PageSize).map(card => (
-        { id: { front: card }, location: { type: LocationType.DeckbuildingBook } }
-      )))
+      this.material(MaterialType.FactionCard).createItemsAtOnce(this.cards.slice((page - 1) * PageSize, page * PageSize).map((card, x) => (
+        { id: { front: card }, location: { type: LocationType.DeckbuildingBook, x } }
+      ))),
+      this.material(MaterialType.FactionCard).location(LocationType.DeckbuildingBook).deleteItemsAtOnce()
     ]
   }
 
