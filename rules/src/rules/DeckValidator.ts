@@ -3,7 +3,7 @@ import sumBy from 'lodash/sumBy'
 import { AttributeType } from '../material/cards/Attribute'
 import { FactionCardCharacteristics } from '../material/cards/FactionCardCharacteristics'
 import { DeckListing } from '../material/cards/PreBuildDecks'
-import { FactionCard, FactionCardsCharacteristics } from '../material/FactionCard'
+import { FactionCard, FactionCardsCharacteristics, getUniqueCard } from '../material/FactionCard'
 
 export class DeckValidator {
   characteristics: FactionCardCharacteristics[]
@@ -11,7 +11,7 @@ export class DeckValidator {
 
   constructor(public deck: FactionCard[]) {
     this.characteristics = deck.map(card => FactionCardsCharacteristics[card])
-    this.listing = listToListing(deck)
+    this.listing = listToListing(deck.map(getUniqueCard))
   }
 
   get isValid() {
