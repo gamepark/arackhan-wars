@@ -14,11 +14,16 @@ export default function DeckbuildingApp() {
     setTimeout(() => setJustDisplayed(false), 2000)
   }, [])
   const loading = !game || isJustDisplayed || isImagesLoading
+  useEffect(() => {
+    const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
+    storage.state = game
+    localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
+  }, [game])
   return (
     <>
       <DeckbuildingGameDisplay/>
       <LoadingScreen display={loading} author={['Robert Palmer', 'Mickaël Bour']} artist="Robert Palmer" publisher="Nothing But Games" developer="Game Park"/>
-      <MaterialHeader rulesStepsHeaders={{[RuleId.Deckbuilding]: DeckbuildingHeader}} loading={loading}/>
+      <MaterialHeader rulesStepsHeaders={{ [RuleId.Deckbuilding]: DeckbuildingHeader }} loading={loading}/>
       <MaterialImageLoader onImagesLoad={() => setImagesLoading(false)}/>
       <Menu/>
       <FailuresDialog/>

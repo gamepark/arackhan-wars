@@ -14,6 +14,7 @@ import {
   isEnumValue,
   isMoveItemType,
   ItemMove,
+  Location,
   MaterialGameSetup,
   MaterialMove,
   MaterialRules,
@@ -120,9 +121,9 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
     }
     const page = this.page
     return [
-      this.material(MaterialType.FactionCard).createItemsAtOnce(this.cards.slice((page - 1) * PageSize, page * PageSize).map((card, x) => (
-        { id: { front: card }, location: { type: LocationType.DeckbuildingBook, x } }
-      ))),
+      this.material(MaterialType.FactionCard).createItemsAtOnce(this.cards.slice((page - 1) * PageSize, page * PageSize).map((card, x) =>
+        cardToItem(card, { type: LocationType.DeckbuildingBook, x })
+      )),
       this.material(MaterialType.FactionCard).location(LocationType.DeckbuildingBook).deleteItemsAtOnce()
     ]
   }
@@ -182,11 +183,9 @@ export class DeckBuildingSetup extends MaterialGameSetup<number, MaterialType, L
   Rules = DeckbuildingRules
 
   setupMaterial(_options: any) {
-    this.material(MaterialType.FactionCard).createItemsAtOnce(
-      allCards.slice(0, 18).map(card => (
-        { id: { front: card }, location: { type: LocationType.DeckbuildingBook } }
-      ))
-    )
+    this.material(MaterialType.FactionCard).createItemsAtOnce(allCards.slice(0, 18).map(card =>
+      cardToItem(card, { type: LocationType.DeckbuildingBook })
+    ))
   }
 
   start() {
@@ -195,3 +194,5 @@ export class DeckBuildingSetup extends MaterialGameSetup<number, MaterialType, L
 }
 
 const allCards = Object.values(FactionCard).filter(isEnumValue)
+
+export const cardToItem = (card: FactionCard, location: Location) => ({ id: { front: card, back: FactionCardsCharacteristics[card].faction }, location })
