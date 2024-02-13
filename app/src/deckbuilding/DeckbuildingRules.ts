@@ -25,11 +25,12 @@ import range from 'lodash/range'
 import { DeckbuildingFilter, deckbuildingFilters } from './DeckbuildingFilter'
 
 const Page = 100
+const Name = 101
 const PageSize = 18
 const DeckSize = 23
 
 export enum DeckbuildingMove {
-  ChangeFilter = 1, ChangePage
+  ChangeFilter = 1, ChangePage, Rename
 }
 
 export class DeckbuildingRules extends MaterialRules<number, MaterialType, LocationType> {
@@ -56,6 +57,14 @@ export class DeckbuildingRules extends MaterialRules<number, MaterialType, Locat
 
   changePage(page: number) {
     return new DeckbuildingRule(this.game).rules().customMove(DeckbuildingMove.ChangePage, page)
+  }
+
+  get name() {
+    return this.remind(Name)
+  }
+
+  rename(name: string) {
+    return new DeckbuildingRule(this.game).rules().customMove(DeckbuildingMove.Rename, name)
   }
 
   get page() {
@@ -108,17 +117,31 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
   }
 
   onCustomMove(move: CustomMove) {
-    if (move.type === DeckbuildingMove.ChangeFilter) {
-      this.memorize<boolean>(move.data, value => !value)
-      this.memorize<number>(Page, 1)
-      if (move.data === DeckbuildingFilter.Spell && !this.remind(DeckbuildingFilter.Spell)) {
-        this.memorize(DeckbuildingFilter.Astral, false)
-      } else if (move.data === DeckbuildingFilter.Astral && this.remind(DeckbuildingFilter.Astral)) {
-        this.memorize(DeckbuildingFilter.Spell, true)
-      }
-    } else if (move.type === DeckbuildingMove.ChangePage) {
-      this.memorize<number>(Page, move.data)
+    switch (move.type) {
+      case DeckbuildingMove.ChangeFilter:
+        return this.onChangeFilter(move.data)
+      case DeckbuildingMove.ChangePage:
+        this.memorize<number>(Page, move.data)
+        return this.displayNewPage()
+      case DeckbuildingMove.Rename:
+        this.memorize(Name, move.data)
+        return []
     }
+    return []
+  }
+
+  onChangeFilter(filter: DeckbuildingFilter) {
+    this.memorize<boolean>(filter, value => !value)
+    this.memorize<number>(Page, 1)
+    if (filter === DeckbuildingFilter.Spell && !this.remind(DeckbuildingFilter.Spell)) {
+      this.memorize(DeckbuildingFilter.Astral, false)
+    } else if (filter === DeckbuildingFilter.Astral && this.remind(DeckbuildingFilter.Astral)) {
+      this.memorize(DeckbuildingFilter.Spell, true)
+    }
+    return this.displayNewPage()
+  }
+
+  displayNewPage() {
     const page = this.page
     return [
       this.material(MaterialType.FactionCard).createItemsAtOnce(this.cards.slice((page - 1) * PageSize, page * PageSize).map((card, x) =>

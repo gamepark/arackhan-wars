@@ -1,19 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { faEye } from '@fortawesome/free-solid-svg-icons/faEye'
+import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload'
+import { faListCheck } from '@fortawesome/free-solid-svg-icons/faListCheck'
+import { faPen } from '@fortawesome/free-solid-svg-icons/faPen'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Faction } from '@gamepark/arackhan-wars/material/Faction'
-import { CardId, FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
+import { CardId } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { DeckValidator } from '@gamepark/arackhan-wars/rules/DeckValidator'
-import { Deck, useMyDecks, useSaveDeck } from '@gamepark/react-client'
-import { RulesDialog, ThemeButton, usePlay, useRules } from '@gamepark/react-game'
-import { useCallback, useState } from 'react'
+import { useSaveDeck } from '@gamepark/react-client'
+import { DialogProps, RulesDialog, ThemeButton, usePlay, useRules } from '@gamepark/react-game'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { shallowEqual } from 'react-redux'
-import { cardToItem, DeckbuildingRules } from './DeckbuildingRules'
-import { publisherDecks } from './decks/PublisherDecks'
+import { DeckbuildingRules } from './DeckbuildingRules'
+import { DeckList } from './DeckList'
 
 export const DeckbuildingHeader = () => {
   const { t } = useTranslation()
@@ -25,6 +26,8 @@ export const DeckbuildingHeader = () => {
     {' '}
     <SaveButton/>
     {' '}
+    <DeckName/>
+    {' ~ '}
     {validator.isValid ? t('header.deck.valid') : t('header.deck.invalid')}
   </>
 }
@@ -36,57 +39,31 @@ const SaveButton = () => {
     .location(LocationType.PlayerDeck).sort(item => item.location.x!)
     .getItems<CardId>().map(item => item.id!.front)
   const [saveDeck] = useSaveDeck()
-  const [storedDeck, setStoredDeck] = useState(() => JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!).deck?.cards)
+  const [deck, setDeck] = useState(() => JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!).deck)
   const save = useCallback(() => {
     const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
-    saveDeck({ variables: { id: storage.deck?.id, boardGame: 'arackhan-wars', name: 'test', cards } }).then(({ data: { saveDeck: deck } }) => {
+    saveDeck({ variables: { id: storage.deck?.id, boardGame: 'arackhan-wars', name: rules?.name, cards } }).then(({ data: { saveDeck: deck } }) => {
       storage.deck = deck
       localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
-      setStoredDeck(deck.cards)
+      setDeck(deck)
     })
-  }, [saveDeck, rules?.game, cards])
+  }, [saveDeck, rules, cards])
   return <>
-    <ThemeButton onClick={save} disabled={shallowEqual(storedDeck, cards)}>{t('deck.save')}</ThemeButton>
+    <ThemeButton onClick={save} disabled={deck?.name === rules?.name && shallowEqual(deck.cards, cards)} title={t('deck.save')!}>
+      <FontAwesomeIcon icon={faDownload}/>
+    </ThemeButton>
   </>
 }
 
 const DeckListButton = () => {
   const { t } = useTranslation()
-  const rules = useRules<DeckbuildingRules>()
-  const play = usePlay()
   const [open, setOpen] = useState(false)
-  const openNewDeck = useCallback((cards: FactionCard[]) => {
-    play(rules!.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).deleteItemsAtOnce())
-    play(rules!.material(MaterialType.FactionCard).createItemsAtOnce(cards.map((card, x) => cardToItem(card, { type: LocationType.PlayerDeck, x }))))
-    const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
-    storage.deck = { cards }
-    localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
-    setOpen(false)
-  }, [rules])
-  const { data } = useMyDecks('arackhan-wars')
-  if (data === undefined) return null // TODO handle no connexion to server
-  const decks: Deck[] = data.myDecks
   return <>
-    <ThemeButton onClick={() => setOpen(true)}>{t('deck.list')}</ThemeButton>
+    <ThemeButton onClick={() => setOpen(true)} title={t('deck.list')!}><FontAwesomeIcon icon={faListCheck}/></ThemeButton>
     <RulesDialog open={open} close={() => setOpen(false)}>
       <div css={decksCss}>
         <h2>{t('deck.list')}</h2>
-        <ul css={deckList}>
-          {decks.map((deck, i) =>
-            <li key={i}>
-              <h3 css={deckNameCss(getFaction(deck.cards))}>{deck.name}</h3>
-            </li>
-          )}
-          <hr/>
-          {publisherDecks.map((cards, i) =>
-            <li key={i}>
-              <h3 css={deckNameCss(FactionCardsCharacteristics[cards[0]].faction)}>{t(`deck.${i}`)}</h3>
-              <div>
-                <FontAwesomeIcon css={iconButton} icon={faEye} onClick={() => openNewDeck(cards)}/>
-              </div>
-            </li>
-          )}
-        </ul>
+        <DeckList close={() => setOpen(false)}/>
       </div>
     </RulesDialog>
   </>
@@ -101,39 +78,61 @@ const decksCss = css`
   }
 `
 
-const deckList = css`
-  list-style: none;
-  padding: 0;
-  margin-bottom: 1em;
-
-  > li {
-    margin-top: 0.2em;
-    display: flex;
-    justify-content: space-between;
-  }
-`
-
-const deckNameCss = (faction?: Faction) => css`
-  margin: 0 1em 0 0;
-  font-size: 1em;
-  font-weight: normal;
-  color: ${faction ? factionColor[faction] : '#6B4135'}
-`
-
-const factionColor: Record<Faction, string> = {
-  [Faction.Whitelands]: '#0063af',
-  [Faction.Nakka]: '#015426',
-  [Faction.GreyOrder]: '#454746',
-  [Faction.Blight]: '#e4122d'
+const DeckName = () => {
+  const { t } = useTranslation()
+  const rules = useRules<DeckbuildingRules>()
+  const play = usePlay()
+  const [open, setOpen] = useState(false)
+  const rename = useCallback((name: string) => {
+    play(rules!.rename(name))
+    setOpen(false)
+  }, [rules, play])
+  return <>
+    <ThemeButton onClick={() => setOpen(true)} title={t('deck.rename')!}><FontAwesomeIcon icon={faPen}/></ThemeButton>
+    {' ~ '}
+    {rules?.name}
+    <NameDeckDialog open={open} submit={rename} cancel={() => setOpen(false)}/>
+  </>
 }
 
-const getFaction = (cards: FactionCard[]) => {
-  if (!cards.length) return
-  const faction = FactionCardsCharacteristics[cards[0]].faction
-  if (cards.some(card => faction !== FactionCardsCharacteristics[card].faction)) return undefined
-  return faction
+type NameDeckDialogProps = {
+  submit: (name: string) => void
+  cancel: () => void
+} & DialogProps
+
+const NameDeckDialog = ({ submit, cancel, ...props }: NameDeckDialogProps) => {
+  const { t } = useTranslation()
+  const rules = useRules<DeckbuildingRules>()
+  const [name, setName] = useState(rules?.name)
+  useEffect(() => {
+    setName(rules?.name)
+  }, [rules?.name])
+  return (
+    <RulesDialog {...props} css={nameDialogCss}>
+      <h2 css={css`margin: 0.5em 0;`}>{t('deck.name')}</h2>
+      <input type="text" css={nameInput} onChange={event => setName(event.target.value)}/>
+      <div css={nameDialogButtons}>
+        <ThemeButton onClick={cancel}>{t('Cancel')}</ThemeButton>
+        <ThemeButton onClick={() => submit(name)}>{t('Validate')}</ThemeButton>
+      </div>
+    </RulesDialog>
+  )
 }
 
-const iconButton = css`
-  cursor: pointer;
+const nameDialogCss = css`
+  min-width: 25em;
+  font-size: 3em;
+  padding: 1em;
+`
+
+const nameInput = css`
+  border-radius: 1em;
+  width: 100%;
+  padding: 0 0.5em
+`
+
+const nameDialogButtons = css`
+  margin-top: 1em;
+  display: flex;
+  justify-content: space-between;
 `
