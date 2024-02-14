@@ -17,15 +17,17 @@ export const DeckList = ({ close }: { close: () => void }) => {
   const { t } = useTranslation()
   const rules = useRules<DeckbuildingRules>()
   const play = usePlay()
-  const openNewDeck = useCallback((cards: FactionCard[], name: string) => {
+
+  const openDeck = useCallback((deck: Deck) => {
     play(rules!.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).deleteItemsAtOnce())
-    play(rules!.material(MaterialType.FactionCard).createItemsAtOnce(cards.map((card, x) => cardToItem(card, { type: LocationType.PlayerDeck, x }))))
-    play(rules!.rename(name))
+    play(rules!.material(MaterialType.FactionCard).createItemsAtOnce(deck.cards.map((card, x) => cardToItem(card, { type: LocationType.PlayerDeck, x }))))
+    play(rules!.rename(deck.name))
     const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
-    storage.deck = {}
+    storage.deck = deck
     localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
     close()
   }, [rules])
+
   const { data } = useMyDecks('arackhan-wars')
   if (data === undefined) return null // TODO handle no connexion to server
   const decks: Deck[] = data.myDecks
@@ -34,6 +36,9 @@ export const DeckList = ({ close }: { close: () => void }) => {
       {decks.map((deck, i) =>
         <li key={i}>
           <h3 css={deckNameCss(getFaction(deck.cards))}>{deck.name}</h3>
+          <div>
+            <FontAwesomeIcon css={iconButton} icon={faEye} onClick={() => openDeck(deck)}/>
+          </div>
         </li>
       )}
       <hr/>
@@ -41,7 +46,7 @@ export const DeckList = ({ close }: { close: () => void }) => {
         <li key={i}>
           <h3 css={deckNameCss(FactionCardsCharacteristics[cards[0]].faction)}>{t(`deck.${i}`)}</h3>
           <div>
-            <FontAwesomeIcon css={iconButton} icon={faEye} onClick={() => openNewDeck(cards, t(`deck.${i}`))}/>
+            <FontAwesomeIcon css={iconButton} icon={faEye} onClick={() => openDeck({ cards, name: t(`deck.${i}`) })}/>
           </div>
         </li>
       )}
