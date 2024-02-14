@@ -201,7 +201,7 @@ export enum FactionCard {
   DeathCrawler = 1052,
   DeathCrawlerFullArt = 1053,
   Huntress = 1054,
-  ExplosiveCentipede = 1054,
+  ExplosiveCentipede = 1055,
   Hexacarias = 1056,
   LightningBird = 1057,
   LightningBirdFullArt = 1058,

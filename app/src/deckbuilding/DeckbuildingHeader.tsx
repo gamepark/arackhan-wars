@@ -87,6 +87,8 @@ const DeckListButton = () => {
 const decksCss = css`
   font-size: 3em;
   padding: 0 1em;
+  overflow: auto;
+  max-height: inherit;
 
   > h2 {
     margin-right: 1em;
