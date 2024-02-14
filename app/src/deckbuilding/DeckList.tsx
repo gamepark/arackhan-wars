@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons/faCircleExclamation'
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons/faTrashCan'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -7,6 +8,7 @@ import { Faction } from '@gamepark/arackhan-wars/material/Faction'
 import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
+import { DeckValidator } from '@gamepark/arackhan-wars/rules/DeckValidator'
 import { Deck, useDeleteDeck, useMyDecks } from '@gamepark/react-client'
 import { RulesDialog, ThemeButton, usePlay, useRules } from '@gamepark/react-game'
 import { useCallback, useState } from 'react'
@@ -49,7 +51,9 @@ export const DeckList = ({ close }: { close: () => void }) => {
       <ul css={deckList}>
         {decks.map((deck, i) =>
           <li key={i}>
-            <h3 css={deckNameCss(getFaction(deck.cards))}>{deck.name}</h3>
+            <h3 css={deckNameCss(getFaction(deck.cards))}>{deck.name}
+              {!new DeckValidator(deck.cards).isValid && <FontAwesomeIcon icon={faCircleExclamation} css={invalidDeckWarning}/>}
+            </h3>
             <div>
               <FontAwesomeIcon css={iconButton} icon={faEye} onClick={() => openDeck(deck)} title={t('deck.open')!}/>
               <FontAwesomeIcon css={iconButton} icon={faTrashCan} onClick={() => setDeckToDelete(deck)} title={t('deck.delete')!}/>
@@ -112,6 +116,11 @@ const getFaction = (cards: FactionCard[]) => {
   if (cards.some(card => faction !== FactionCardsCharacteristics[card].faction)) return undefined
   return faction
 }
+
+const invalidDeckWarning = css`
+  margin-left: 0.3em;
+  color: darkred;
+`
 
 const iconButton = css`
   margin-left: 0.5em;
