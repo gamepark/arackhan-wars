@@ -88,7 +88,8 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
         const cardAtX = deckCards.location(l => l.x === x)
         if (!cardAtX.length) return []
         return range(0, DeckSize).filter(i => i !== x).map(x => cardAtX.moveItem({ type: LocationType.PlayerDeck, x }))
-      })
+      }),
+      ...deckCards.deleteItems()
     ]
   }
 

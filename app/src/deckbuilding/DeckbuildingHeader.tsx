@@ -63,7 +63,7 @@ const SaveButton = () => {
   }, [rules])
 
   return <>
-    <ThemeButton onClick={() => save(rules?.name)} disabled={deck.id && deck?.name === rules?.name && shallowEqual(deck?.cards, cards)} title={t('deck.save')!}>
+    <ThemeButton onClick={() => save(rules?.name)} disabled={deck?.id && deck?.name === rules?.name && shallowEqual(deck?.cards, cards)} title={t('deck.save')!}>
       <FontAwesomeIcon icon={faDownload}/>
     </ThemeButton>
     <NameDeckDialog open={open} submit={rename} cancel={() => setOpen(false)}/>

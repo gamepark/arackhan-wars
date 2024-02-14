@@ -24,6 +24,7 @@ export default function DeckbuildingFilters() {
          onClick={() => play(rules!.changeFilter(DeckbuildingFilter.GreyOrder))}/>
     <div css={[filterButton, factionButton(Faction.Blight), rules?.remind(DeckbuildingFilter.Blight) || inactive]}
          onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Blight))}/>
+    <div/>
     <div css={[filterButton, creatureButton, rules?.remind(DeckbuildingFilter.Creature) || inactive]}
          onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Creature))}/>
     <div css={[filterButton, landButton, rules?.remind(DeckbuildingFilter.Land) || inactive]}
@@ -32,8 +33,6 @@ export default function DeckbuildingFilters() {
          onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Spell))}/>
     <div css={[filterButton, astralButton, rules?.remind(DeckbuildingFilter.Astral) || inactive]}
          onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Astral))}/>
-    <div/>
-    <div/>
     {attributeTypes.map(attributeType =>
       <div key={attributeType} css={[filterButton, attributeButton(attributeType), rules?.remind(attributeType + 10) || inactive]}
            onClick={() => play(rules!.changeFilter(attributeType + 10))}/>
@@ -47,7 +46,7 @@ const filters = css`
   left: 0.5em;
   display: grid;
   grid-gap: 0.5em;
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(9, 1fr);
 `
 
 const filterButton = css`

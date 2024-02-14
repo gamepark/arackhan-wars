@@ -491,6 +491,8 @@ export class FactionCardDescription extends CardDescription {
   highlight() {
     return isDeckbuilding ? false : undefined
   }
+
+  stockLocation = { type: LocationType.DeckbuildingBook }
 }
 
 export const factionCardDescription = new FactionCardDescription()
