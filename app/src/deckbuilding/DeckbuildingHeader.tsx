@@ -40,18 +40,33 @@ const SaveButton = () => {
     .getItems<CardId>().map(item => item.id!.front)
   const [saveDeck] = useSaveDeck()
   const [deck, setDeck] = useState(() => JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!).deck)
-  const save = useCallback(() => {
+  const [open, setOpen] = useState(false)
+  const play = usePlay()
+
+  const save = useCallback((name: string) => {
+    if (!name) {
+      setOpen(true)
+      return
+    }
     const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
-    saveDeck({ variables: { id: storage.deck?.id, boardGame: 'arackhan-wars', name: rules?.name, cards } }).then(({ data: { saveDeck: deck } }) => {
+    saveDeck({ variables: { id: storage.deck?.id, boardGame: 'arackhan-wars', name, cards } }).then(({ data: { saveDeck: deck } }) => {
       storage.deck = deck
       localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
       setDeck(deck)
     })
-  }, [saveDeck, rules, cards])
+  }, [saveDeck, cards])
+
+  const rename = useCallback((name: string) => {
+    play(rules!.rename(name))
+    save(name)
+    setOpen(false)
+  }, [rules])
+
   return <>
-    <ThemeButton onClick={save} disabled={deck?.name === rules?.name && shallowEqual(deck.cards, cards)} title={t('deck.save')!}>
+    <ThemeButton onClick={() => save(rules?.name)} disabled={deck?.name === rules?.name && shallowEqual(deck?.cards, cards)} title={t('deck.save')!}>
       <FontAwesomeIcon icon={faDownload}/>
     </ThemeButton>
+    <NameDeckDialog open={open} submit={rename} cancel={() => setOpen(false)}/>
   </>
 }
 
