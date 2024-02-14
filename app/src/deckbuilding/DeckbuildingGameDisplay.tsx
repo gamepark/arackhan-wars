@@ -8,7 +8,7 @@ import { Pagination } from './Pagination'
 
 export default function DeckbuildingGameDisplay() {
   return <>
-    <GameTable xMin={-4} xMax={86} yMin={-5} yMax={35} collisionAlgorithm={pointerWithin} css={css`border: 1px solid white`}>
+    <GameTable xMin={-4} xMax={86} yMin={-5} yMax={35} collisionAlgorithm={pointerWithin}>
       <GameTableNavigation css={navigationCss}/>
       <DeckbuildingFilters/>
       <Pagination/>

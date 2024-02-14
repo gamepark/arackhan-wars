@@ -63,7 +63,7 @@ const SaveButton = () => {
   }, [rules])
 
   return <>
-    <ThemeButton onClick={() => save(rules?.name)} disabled={deck?.name === rules?.name && shallowEqual(deck?.cards, cards)} title={t('deck.save')!}>
+    <ThemeButton onClick={() => save(rules?.name)} disabled={deck.id && deck?.name === rules?.name && shallowEqual(deck?.cards, cards)} title={t('deck.save')!}>
       <FontAwesomeIcon icon={faDownload}/>
     </ThemeButton>
     <NameDeckDialog open={open} submit={rename} cancel={() => setOpen(false)}/>
@@ -72,12 +72,25 @@ const SaveButton = () => {
 
 const DeckListButton = () => {
   const { t } = useTranslation()
+  const rules = useRules<DeckbuildingRules>()
+  const play = usePlay()
   const [open, setOpen] = useState(false)
+
+  const createNewDeck = useCallback(() => {
+    play(rules!.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).deleteItemsAtOnce())
+    play(rules!.rename(''))
+    const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
+    storage.deck = {}
+    localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
+    setOpen(false)
+  }, [rules])
+
   return <>
     <ThemeButton onClick={() => setOpen(true)} title={t('deck.list')!}><FontAwesomeIcon icon={faListCheck}/></ThemeButton>
     <RulesDialog open={open} close={() => setOpen(false)}>
       <div css={decksCss}>
         <h2>{t('deck.list')}</h2>
+        <ThemeButton onClick={createNewDeck}>{t('deck.create')!}</ThemeButton>
         <DeckList close={() => setOpen(false)}/>
       </div>
     </RulesDialog>
@@ -127,7 +140,7 @@ const NameDeckDialog = ({ submit, cancel, ...props }: NameDeckDialogProps) => {
   return (
     <RulesDialog {...props} css={nameDialogCss}>
       <h2 css={css`margin: 0.5em 0;`}>{t('deck.name')}</h2>
-      <input type="text" css={nameInput} onChange={event => setName(event.target.value)}/>
+      <input type="text" css={nameInput} maxLength={50} onChange={event => setName(event.target.value)}/>
       <div css={nameDialogButtons}>
         <ThemeButton onClick={cancel}>{t('Cancel')}</ThemeButton>
         <ThemeButton onClick={() => submit(name)}>{t('Validate')}</ThemeButton>
@@ -145,7 +158,7 @@ const nameDialogCss = css`
 const nameInput = css`
   border-radius: 1em;
   width: 100%;
-  padding: 0 0.5em
+  padding: 0.2em 0.5em
 `
 
 const nameDialogButtons = css`

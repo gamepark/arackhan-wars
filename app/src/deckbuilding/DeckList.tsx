@@ -42,6 +42,7 @@ export const DeckList = ({ close }: { close: () => void }) => {
         </li>
       )}
       <hr/>
+      <p css={css`font-weight: bold;`}>{t('deck.publisher')}</p>
       {publisherDecks.map((cards, i) =>
         <li key={i}>
           <h3 css={deckNameCss(FactionCardsCharacteristics[cards[0]].faction)}>{t(`deck.${i}`)}</h3>
@@ -60,7 +61,7 @@ const deckList = css`
   margin-bottom: 1em;
 
   > li {
-    margin-top: 0.2em;
+    margin-top: 0.3em;
     display: flex;
     justify-content: space-between;
   }
