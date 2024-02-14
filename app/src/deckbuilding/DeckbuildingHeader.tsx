@@ -140,7 +140,7 @@ const NameDeckDialog = ({ submit, cancel, ...props }: NameDeckDialogProps) => {
   return (
     <RulesDialog {...props} css={nameDialogCss}>
       <h2 css={css`margin: 0.5em 0;`}>{t('deck.name')}</h2>
-      <input type="text" css={nameInput} maxLength={50} onChange={event => setName(event.target.value)}/>
+      <input type="text" css={nameInput} maxLength={50} value={name} onChange={event => setName(event.target.value)}/>
       <div css={nameDialogButtons}>
         <ThemeButton onClick={cancel}>{t('Cancel')}</ThemeButton>
         <ThemeButton onClick={() => submit(name)}>{t('Validate')}</ThemeButton>
