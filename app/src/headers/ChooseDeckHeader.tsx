@@ -6,7 +6,7 @@ import { FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/Fa
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { Deck } from '@gamepark/react-client'
 import { MaterialComponent, RulesDialog, ThemeButton, usePlay, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
-import { MoveKind } from '@gamepark/rules-api'
+import { displayMaterialHelp, MoveKind } from '@gamepark/rules-api'
 import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { DeckList } from '../deckbuilding/DeckList'
@@ -79,7 +79,10 @@ const DeckDisplay = ({ deck, cancel }: { deck: Deck, cancel: () => void }) => {
       </div>
       <ul css={grid}>
         {cards.map((card, index) => <li key={index}>
-          <MaterialComponent type={MaterialType.FactionCard} itemId={{ front: card, back: FactionCardsCharacteristics[card].faction }}/>
+          <MaterialComponent type={MaterialType.FactionCard} itemId={{ front: card, back: FactionCardsCharacteristics[card].faction }}
+                             onClick={() => play(displayMaterialHelp(MaterialType.FactionCard, {
+                               id: { front: card, back: FactionCardsCharacteristics[card].faction }
+                             }), { local: true })}/>
         </li>)}
       </ul>
     </>
