@@ -26,6 +26,7 @@ import { MimicryActionRule } from './rules/action/MimicryActionRule'
 import { TeleportationActionRule } from './rules/action/TeleportationActionRule'
 import { ActivationRule } from './rules/ActivationRule'
 import { getCardRule, resetCardsRulesCache } from './rules/CardRule'
+import { ChooseDeckRule } from './rules/ChooseDeckRule'
 import { ChooseFactionRule } from './rules/ChooseFactionRule'
 import { ChooseStartPlayerRule } from './rules/ChooseStartPlayerRule'
 import { DrawRules } from './rules/DrawRules'
@@ -48,6 +49,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
 
   rules = {
     [RuleId.ChooseFaction]: ChooseFactionRule,
+    [RuleId.ChooseDeck]: ChooseDeckRule,
     [RuleId.ChooseStartPlayer]: ChooseStartPlayerRule,
     [RuleId.Mulligan]: MulliganRule,
     [RuleId.DrawRule]: DrawRules,
@@ -131,6 +133,10 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     } else {
       return super.getMoveView(move, player)
     }
+  }
+
+  keepMoveSecret() {
+    return false // TODO: keep choose deck secret during ChooseDeckRule
   }
 }
 

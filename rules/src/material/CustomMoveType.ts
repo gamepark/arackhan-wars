@@ -7,5 +7,6 @@ export enum CustomMoveType {
   PerformAction,
   ChooseCard,
   Pass,
-  Deactivate
+  Deactivate,
+  ChooseDeck
 }

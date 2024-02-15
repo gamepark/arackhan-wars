@@ -8,12 +8,12 @@ import { CardId } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { DeckValidator } from '@gamepark/arackhan-wars/rules/DeckValidator'
-import { PLATFORM_URI, useMe, useMyDecks, useSaveDeck } from '@gamepark/react-client'
+import { Deck, PLATFORM_URI, useDeleteDeck, useMe, useMyDecks, useSaveDeck } from '@gamepark/react-client'
 import { DialogProps, RulesDialog, ThemeButton, usePlay, useRules } from '@gamepark/react-game'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { shallowEqual } from 'react-redux'
-import { DeckbuildingRules } from './DeckbuildingRules'
+import { cardToItem, DeckbuildingRules } from './DeckbuildingRules'
 import { DeckList } from './DeckList'
 
 const query = new URLSearchParams(window.location.search)
@@ -130,13 +130,45 @@ const DeckListButton = () => {
     setOpen(false)
   }, [rules])
 
+  const [deleteDeck] = useDeleteDeck()
+  const [deckToDelete, setDeckToDelete] = useState<Deck>()
+
+  const openDeck = useCallback((deck: Deck) => {
+    play(rules!.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).deleteItemsAtOnce())
+    play(rules!.material(MaterialType.FactionCard).createItemsAtOnce(deck.cards.map((card, x) => cardToItem(card, { type: LocationType.PlayerDeck, x }))))
+    play(rules!.rename(deck.name))
+    const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
+    storage.deck = deck
+    localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
+    setOpen(false)
+  }, [rules])
+
+  const deleteAndCloseDeck = useCallback(() => {
+    deleteDeck({ variables: { id: deckToDelete!.id } })
+    const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
+    if (storage.deck?.id === deckToDelete!.id) {
+      delete storage.deck.id
+      localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
+    }
+    setDeckToDelete(undefined)
+  }, [deckToDelete])
+
   return <>
     <ThemeButton onClick={() => setOpen(true)} title={t('deck.list')!}><FontAwesomeIcon icon={faListCheck}/></ThemeButton>
     <RulesDialog open={open} close={() => setOpen(false)}>
       <div css={decksCss}>
         <h2>{t('deck.list')} ({data?.myDecks.length ?? '?'}/{isSubscriber ? SUBSCRIBER_MAX_DECKS : DEFAULT_MAX_DECKS})</h2>
         <ThemeButton onClick={createNewDeck}>{t('deck.create')!}</ThemeButton>
-        <DeckList close={() => setOpen(false)}/>
+        <DeckList openDeck={openDeck} deleteDeck={setDeckToDelete}/>
+      </div>
+    </RulesDialog>
+    <RulesDialog open={deckToDelete !== undefined}>
+      <div css={confirmDeleteDialog}>
+        <p>{t('deck.delete.confirm', { name: deckToDelete?.name })}</p>
+        <div css={dialogButtons}>
+          <ThemeButton onClick={() => setDeckToDelete(undefined)}>{t('Cancel')}</ThemeButton>
+          <ThemeButton onClick={deleteAndCloseDeck}>{t('Confirm')}</ThemeButton>
+        </div>
       </div>
     </RulesDialog>
   </>
@@ -151,6 +183,20 @@ const decksCss = css`
   > h2 {
     margin-right: 1em;
   }
+`
+
+const confirmDeleteDialog = css`
+  margin: 0 1em;
+  font-size: 3em;
+  display: flex;
+  flex-direction: column;
+  white-space: break-spaces;
+`
+
+const dialogButtons = css`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1em;
 `
 
 const DeckName = () => {

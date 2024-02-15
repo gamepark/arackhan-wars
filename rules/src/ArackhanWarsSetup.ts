@@ -12,7 +12,7 @@ import { RuleId } from './rules/RuleId'
 export class ArackhanWarsSetup extends MaterialGameSetup<number, MaterialType, LocationType, ArackhanWarsOptions> {
   Rules = ArackhanWarsRules
 
-  start() {
-    this.startSimultaneousRule(RuleId.ChooseFaction)
+  start(options: ArackhanWarsOptions) {
+    this.startSimultaneousRule(options.deckbuilding ? RuleId.ChooseDeck : RuleId.ChooseFaction)
   }
 }

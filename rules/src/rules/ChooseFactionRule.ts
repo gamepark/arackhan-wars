@@ -1,4 +1,4 @@
-import { CustomMove, SimultaneousRule } from '@gamepark/rules-api'
+import { CustomMove, MaterialMove, SimultaneousRule } from '@gamepark/rules-api'
 import { PreBuildDecks } from '../material/cards/PreBuildDecks'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { Faction, factions } from '../material/Faction'
@@ -15,7 +15,7 @@ export class ChooseFactionRule extends SimultaneousRule {
     return factions.map(faction => this.rules().customMove(CustomMoveType.ChooseFaction, { player, faction }))
   }
 
-  onCustomMove(move: CustomMove) {
+  onCustomMove(move: CustomMove): MaterialMove[] {
     if (move.type !== CustomMoveType.ChooseFaction) return []
     if (move.data.faction !== undefined) {
       this.memorize(Memory.PlayerFaction, move.data.faction, move.data.player)
@@ -28,10 +28,9 @@ export class ChooseFactionRule extends SimultaneousRule {
     for (const player of this.game.players) {
       const faction = this.remind<Faction | undefined>(Memory.PlayerFaction, player)
       if (faction === undefined) return [] // Faction choice is hidden to the opponent
-      moves.push(...this.material(MaterialType.FactionCard).createItems(
-          PreBuildDecks[faction].map(card => ({ id: { front: card, back: faction }, location: { type: LocationType.PlayerDeck, player } }))
-        )
-      )
+      moves.push(this.material(MaterialType.FactionCard).createItemsAtOnce(
+        PreBuildDecks[faction].map(card => ({ id: { front: card, back: faction }, location: { type: LocationType.PlayerDeck, player } }))
+      ))
     }
     moves.push(this.rules().startPlayerTurn(RuleId.ChooseStartPlayer, this.game.players[0]))
     return moves

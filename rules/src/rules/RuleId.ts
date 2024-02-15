@@ -3,6 +3,7 @@ export enum RuleId {
 
   // Setup phases
   ChooseFaction = 1,
+  ChooseDeck = 2,
   ChooseStartPlayer = 8,
   Mulligan,
 
