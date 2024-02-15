@@ -9,7 +9,7 @@ import { TFunction } from 'i18next'
 import { merge } from 'lodash'
 import { Trans, TransProps, useTranslation } from 'react-i18next'
 
-export const AbilityRule = ({ type, ability, card }: { type: string, ability: Ability, card: FactionCard }) => {
+export const AbilityHelp = ({ type, ability, card }: { type: string, ability: Ability, card: FactionCard }) => {
   const { t } = useTranslation()
   const targets = ability.filters[0] === itself ? '' : t(`target.${ability.filters.map(filter => filter.text).join('.')}`,
     ability.filters.reduce((values, filter) => merge(values, filter.values?.(t)), {}))

@@ -21,8 +21,8 @@ import { Trans, useTranslation } from 'react-i18next'
 import { isDeckbuilding } from '../deckbuilding/deckbuilding.util'
 import astral from '../images/icons/astral.png'
 import captureFlag from '../images/icons/capture-flag.png'
-import { AbilityRule } from './AbilityRule'
-import { alignIcon, AttributeRule } from './AttributeRule'
+import { AbilityHelp } from './AbilityHelp'
+import { alignIcon, AttributeHelp } from './AttributeHelp'
 import { CardEffectsHelp } from './CardEffectsHelp'
 
 export const FactionCardHelp = (props: MaterialHelpProps) => {
@@ -114,27 +114,27 @@ const CardFrontRule = (props: MaterialHelpProps) => {
         <span><Trans defaults={`rules.card.land`} values={characteristics}><strong/></Trans></span>
       </p>
     }
-    {characteristics.getAttributes().map(attribute => <AttributeRule key={attribute.type} attribute={attribute}/>)}
+    {characteristics.getAttributes().map(attribute => <AttributeHelp key={attribute.type} attribute={attribute}/>)}
     {isCreature(characteristics) && characteristics.getSkills().map((skill, index) =>
-      <AbilityRule key={index} type={t('card.skill')} ability={skill} card={factionCard}/>
+      <AbilityHelp key={index} type={t('card.skill')} ability={skill} card={factionCard}/>
     )}
     {isCreature(characteristics) && characteristics.getWeaknesses().map((weakness, index) =>
-      <AbilityRule key={index} type={t('card.weakness')} ability={weakness} card={factionCard}/>
+      <AbilityHelp key={index} type={t('card.weakness')} ability={weakness} card={factionCard}/>
     )}
     {isSpell(characteristics) && characteristics.getEffects().map((effect, index) =>
-      <AbilityRule key={index} type={t('card.effect')} ability={effect} card={factionCard}/>
+      <AbilityHelp key={index} type={t('card.effect')} ability={effect} card={factionCard}/>
     )}
     {isLand(characteristics) && characteristics.getBenefits().map((benefit, index) =>
-      <AbilityRule key={index} type={t('card.benefit')} ability={benefit} card={factionCard}/>
+      <AbilityHelp key={index} type={t('card.benefit')} ability={benefit} card={factionCard}/>
     )}
     {characteristics.getAbilities().map(ability =>
       ability.effects.map(effect => {
         switch (effect.type) {
           case EffectType.GainAttributes:
-            return effect.attributes.map(attribute => <AttributeRule key={attribute.type} attribute={attribute}/>)
+            return effect.attributes.map(attribute => <AttributeHelp key={attribute.type} attribute={attribute}/>)
           case EffectType.LoseAttributes:
             return effect.attributes?.map(attributeType =>
-              <AttributeRule key={attributeType} attribute={{ type: attributeType } as Attribute}/>
+              <AttributeHelp key={attributeType} attribute={{ type: attributeType } as Attribute}/>
             )
           default:
             return null

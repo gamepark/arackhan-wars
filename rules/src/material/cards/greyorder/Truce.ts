@@ -1,4 +1,6 @@
 import { Faction } from '../../Faction'
+import { cannotAttack, cannotBeAttacked } from '../Ability'
+import { adjacent, creature } from '../AbilityTargetFilter'
 import { Spell } from '../Spell'
 
 export class Truce extends Spell {
@@ -6,5 +8,8 @@ export class Truce extends Spell {
   value = 4
   limit = 2
 
-  // TODO effect
+  effects = [
+    cannotAttack().to(adjacent, creature),
+    cannotBeAttacked().to(adjacent, creature)
+  ]
 }

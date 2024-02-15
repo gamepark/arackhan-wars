@@ -2,7 +2,7 @@
 import { Picture } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
 import astral from '../images/icons/astral.png'
-import { alignIcon } from '../material/AttributeRule'
+import { alignIcon } from '../material/AttributeHelp'
 
 export const AstralPlaneHelp = () => {
   const { t } = useTranslation()

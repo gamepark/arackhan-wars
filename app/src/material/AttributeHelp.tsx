@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { Attribute } from '@gamepark/arackhan-wars/material/cards/Attribute'
 import { Picture } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
-import { css } from '@emotion/react'
 import { attributesIconDescription } from '../locators/AttributesIconsLocator'
 
-export const AttributeRule = ({ attribute }: { attribute: Attribute }) => {
+export const AttributeHelp = ({ attribute }: { attribute: Attribute }) => {
   const { t } = useTranslation()
   return <p css={alignIcon}>
     <Picture src={attributesIconDescription.attributeImages[attribute.type]}/>
