@@ -148,6 +148,8 @@ const scale = 100
 
 const canvasCss = css`
   position: absolute;
+  left: ${29}em;
+  top: ${29}em;
   width: ${platMatSize}em;
   height: ${platMatSize}em;
   transform: translate(-50%, -50%) translateZ(20em);

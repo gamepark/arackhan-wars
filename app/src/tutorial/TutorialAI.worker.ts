@@ -19,8 +19,6 @@ import {
   isMoveItem,
   MaterialGame,
   MaterialMove,
-  MaterialRules,
-  MaterialRulesCreator,
   MoveItem,
   MoveKind,
   playMove,
@@ -271,12 +269,12 @@ const getActivationMoves = (rules: ArackhanWarsRules, player: number): MaterialM
   return moves
 }
 
-const getNegamax = <Rules extends MaterialRules>(
-  rules: Rules,
+const getNegamax = (
+  rules: ArackhanWarsRules,
   bot: number,
-  stop: (rules: Rules, depth: number) => boolean,
-  score: (rules: Rules, bot: number) => number,
-  getMoves = (rules: Rules, player: number): MaterialMove[] => rules.getLegalMoves(player),
+  stop: (rules: ArackhanWarsRules, depth: number) => boolean,
+  score: (rules: ArackhanWarsRules, bot: number) => number,
+  getMoves = (rules: ArackhanWarsRules, player: number): MaterialMove[] => rules.getLegalMoves(player),
   timeLimit = 0, depth = 0
 ): Negamax => {
   const activePlayer = rules.getActivePlayer() ?? rules.players.find(p => rules.isTurnToPlay(p))
@@ -284,8 +282,7 @@ const getNegamax = <Rules extends MaterialRules>(
   let result: Negamax | undefined = undefined
   const moves = getMoves(rules, activePlayer)
   for (const move of moves) {
-    const Rules = rules.constructor as MaterialRulesCreator
-    const rulesCopy = new Rules(JSON.parse(JSON.stringify(rules.game))) as Rules
+    const rulesCopy = new ArackhanWarsRules(JSON.parse(JSON.stringify(rules.game)))
     playMove(rulesCopy, move)
     const test = getNegamax(rulesCopy, bot, stop, score, getMoves, timeLimit, depth + 1)
     if (!result || (activePlayer === bot ? (test.value > result.value) : (test.value < result.value))) {
