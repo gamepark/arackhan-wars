@@ -1,4 +1,7 @@
 import { Faction } from '../../Faction'
+import { gainAttributes, immuneToEnemySpells } from '../Ability'
+import { adjacent, allied, creature, family } from '../AbilityTargetFilter'
+import { initiative } from '../Attribute'
 import { Creature } from '../Creature'
 import { Family } from '../Family'
 
@@ -10,5 +13,8 @@ export class GreyPriest extends Creature {
   attack = 1
   defense = 1
 
-  // TODO skills
+  skills = [
+    immuneToEnemySpells(),
+    gainAttributes(initiative).to(adjacent, allied, family(Family.Legion6), creature)
+  ]
 }

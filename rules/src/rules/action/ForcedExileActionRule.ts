@@ -14,8 +14,8 @@ export class ForcedExileActionRule extends CardActionRule {
       if (battlefield.location(location => location.x === x && location.y === y).length) return []
       return opponents.flatMap(opponent =>
         battlefield.player(opponent).filter((_, index) => {
-          const rule = getCardRule(this.game, index)
-          return rule.isCreature && rule.thereIsAnotherCardAdjacentTo({ x, y })
+          const card = getCardRule(this.game, index)
+          return card.isCreature && !card.isImmuneToEnemySpells && card.thereIsAnotherCardAdjacentTo({ x, y })
         }).moveItems({ type: LocationType.Battlefield, x, y, player: opponent })
       )
     })

@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { Ability } from '@gamepark/arackhan-wars/material/cards/Ability'
+import { itself } from '@gamepark/arackhan-wars/material/cards/AbilityTargetFilter'
 import { AttackCondition, AttackLimitation } from '@gamepark/arackhan-wars/material/cards/AttackLimitation'
 import { Effect, EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { FactionCard, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
@@ -10,7 +11,7 @@ import { Trans, TransProps, useTranslation } from 'react-i18next'
 
 export const AbilityRule = ({ type, ability, card }: { type: string, ability: Ability, card: FactionCard }) => {
   const { t } = useTranslation()
-  const targets = t(`target.${ability.filters.map(filter => filter.text).join('.')}`,
+  const targets = ability.filters[0] === itself ? '' : t(`target.${ability.filters.map(filter => filter.text).join('.')}`,
     ability.filters.reduce((values, filter) => merge(values, filter.values?.(t)), {}))
   return <>
     {ability.effects.map((effect, index) =>
@@ -75,6 +76,12 @@ const getAbilityText = (effect: Effect, targets: string, t: TFunction, card: Fac
       return {
         defaults: `ability.attacked.condition.${attackConditionText[effect.condition]}`,
         values: { targets, card: t(`card.name.${getUniqueCard(card)}`) }
+      }
+    case EffectType.ImmuneToEnemySpells:
+      if (targets) {
+        return { defaults: 'ability.spell-immune.targets', values: { targets } }
+      } else {
+        return { defaults: 'ability.spell-immune' }
       }
     default:
       return {}

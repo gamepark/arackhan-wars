@@ -1,8 +1,8 @@
 import { Material, MaterialGame } from '@gamepark/rules-api'
 import { AbilityTargetFilter, itself } from './AbilityTargetFilter'
-import { Effect, EffectType, LoseAttributes, TriggerAction, TriggerCondition } from './Effect'
 import { AttackCondition, AttackLimitation } from './AttackLimitation'
 import { Attribute, AttributeType } from './Attribute'
+import { Effect, EffectType, LoseAttributes, TriggerAction, TriggerCondition } from './Effect'
 
 export class Ability {
 
@@ -80,6 +80,11 @@ export class Ability {
     this.effects.push({ type: EffectType.Trigger, condition, action })
     return this
   }
+
+  immuneToEnemySpells() {
+    this.effects.push({ type: EffectType.ImmuneToEnemySpells })
+    return this
+  }
 }
 
 export const attack = (modifier: number) => new Ability().attack(modifier)
@@ -92,3 +97,4 @@ export const canOnlyBeAttacked = (condition: AttackCondition) => new Ability().c
 export const cannotBeAttacked = (limitation: AttackLimitation) => new Ability().cannotBeAttacked(limitation)
 export const deactivate = (...applicableFilters: AbilityTargetFilter[]) => new Ability().deactivate().to(...applicableFilters)
 export const trigger = (action: TriggerAction) => ({ when: (condition: TriggerCondition) => new Ability().trigger(condition, action) })
+export const immuneToEnemySpells = () => new Ability().immuneToEnemySpells()

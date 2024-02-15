@@ -44,6 +44,8 @@ import { Memory } from './Memory'
 
 export class CardRule extends MaterialRulesPart {
   private effectsCache: Effect[] | undefined = undefined
+  private immuneToEnemySpellsCache: boolean | undefined = undefined
+  private loseSkillsCache: boolean | undefined = undefined
 
   constructor(game: MaterialGame, public index: number) {
     super(game)
@@ -79,11 +81,14 @@ export class CardRule extends MaterialRulesPart {
   }
 
   private get loseSkills() {
-    return this.battleFieldCardsRules.some(card =>
-      card.characteristics?.getAbilities().some(ability =>
-        ability.effects.some(isLoseSkills) && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
+    if (this.loseSkillsCache === undefined) {
+      this.loseSkillsCache = this.battleFieldCardsRules.some(card =>
+          !this.isImmuneTo(card) && card.characteristics?.getAbilities().some(ability =>
+            ability.effects.some(isLoseSkills) && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
+          )
       )
-    )
+    }
+    return this.loseSkillsCache
   }
 
   get abilities(): Ability[] {
@@ -94,6 +99,22 @@ export class CardRule extends MaterialRulesPart {
     return characteristics?.getAbilities() ?? []
   }
 
+  isImmuneTo(rule: CardRule) {
+    return this.isImmuneToEnemySpells && rule.isSpell && rule.item.location.player !== this.item.location.player
+  }
+
+  get isImmuneToEnemySpells() {
+    if (this.immuneToEnemySpellsCache === undefined) {
+      this.immuneToEnemySpellsCache = this.battleFieldCardsRules.some(rule =>
+        rule.characteristics?.getAbilities().some(ability =>
+          ability.effects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
+          && ability.isApplicable(this.game, rule.cardMaterial, this.cardMaterial)
+        )
+      ) || this.turnEffects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
+    }
+    return this.immuneToEnemySpellsCache
+  }
+
   get battleFieldCardsRules() {
     return this.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane).getIndexes()
       .map(index => getCardRule(this.game, index))
@@ -101,11 +122,11 @@ export class CardRule extends MaterialRulesPart {
 
   get effects(): Effect[] {
     if (!this.effectsCache) {
-      this.effectsCache = this.battleFieldCardsRules.flatMap(rule =>
-        rule.abilities.filter(ability => ability.isApplicable(this.game, rule.cardMaterial, this.cardMaterial))
-          .flatMap(ability => ability.effects)
-          .concat(...this.turnEffects)
-      )
+      this.effectsCache = this.battleFieldCardsRules.flatMap(card =>
+        this.isImmuneTo(card) ? []
+          : card.abilities.filter(ability => ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial))
+            .flatMap(ability => ability.effects)
+      ).concat(...this.turnEffects)
     }
     return this.effectsCache
   }
@@ -167,7 +188,10 @@ export class CardRule extends MaterialRulesPart {
 
   someEffectPreventsAttacking(opponent: number) {
     return this.effects.some(effect => isAttackerConstraint(effect) && this.isPreventingAttack(effect, opponent))
-      || getCardRule(this.game, opponent).effects.some(effect => isDefenderConstraint(effect) && this.isPreventingAttack(effect, opponent))
+      || getCardRule(this.game, opponent).effects.some(effect =>
+        (effect.type === EffectType.ImmuneToEnemySpells && this.isSpell)
+        || (isDefenderConstraint(effect) && this.isPreventingAttack(effect, opponent))
+      )
   }
 
   private isPreventingAttack(effect: AttackerConstraint | DefenderConstraint, opponent: number) {
@@ -357,8 +381,8 @@ export class CardRule extends MaterialRulesPart {
     const cardCopy = new ArackhanWarsRules(gameCopy).material(MaterialType.FactionCard).index(this.index)
     cardCopy.getItem()!.location.x = x
     cardCopy.getItem()!.location.y = y
-    const effects = this.battleFieldCardsRules.flatMap(rule =>
-      rule.abilities.filter(ability => ability.isApplicable(gameCopy, rule.cardMaterial, cardCopy))
+    const effects = this.battleFieldCardsRules.flatMap(card =>
+      card.abilities.filter(ability => ability.isApplicable(gameCopy, card.cardMaterial, cardCopy))
         .flatMap(ability => ability.effects)
         .concat(...this.turnEffects)
     )

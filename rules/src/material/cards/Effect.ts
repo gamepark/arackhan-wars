@@ -5,7 +5,7 @@ import { Attribute, AttributeType } from './Attribute'
 export type Effect = ModifyAttack | ModifyDefense
   | GainAttributes | LoseAttributes | LoseSkills
   | AttackerConstraint | DefenderConstraint
-  | Deactivated | Mimic | Trigger
+  | Deactivated | Mimic | Trigger | ImmuneToEnemySpells
 
 export enum EffectType {
   Attack, Defense,
@@ -14,7 +14,8 @@ export enum EffectType {
   CannotAttack, CanOnlyAttack, CannotBeAttacked, CanOnlyBeAttacked,
   Deactivated,
   Mimic,
-  Trigger
+  Trigger,
+  ImmuneToEnemySpells
 }
 
 export type ModifyAttack = {
@@ -105,4 +106,8 @@ export enum TriggerCondition {
 
 export enum TriggerAction {
   SelfDestroy
+}
+
+export type ImmuneToEnemySpells = {
+  type: EffectType.ImmuneToEnemySpells
 }

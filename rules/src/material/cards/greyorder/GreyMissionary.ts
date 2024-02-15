@@ -1,4 +1,6 @@
 import { Faction } from '../../Faction'
+import { immuneToEnemySpells } from '../Ability'
+import { adjacent, allied, creature, family } from '../AbilityTargetFilter'
 import { Creature } from '../Creature'
 import { Family } from '../Family'
 
@@ -10,5 +12,8 @@ export class GreyMissionary extends Creature {
   attack = 2
   defense = 2
 
-  // TODO skills
+  skills = [
+    immuneToEnemySpells(),
+    immuneToEnemySpells().to(adjacent, allied, family(Family.Legion6), creature)
+  ]
 }

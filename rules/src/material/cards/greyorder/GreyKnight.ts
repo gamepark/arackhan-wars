@@ -1,4 +1,5 @@
 import { Faction } from '../../Faction'
+import { immuneToEnemySpells } from '../Ability'
 import { movement } from '../Attribute'
 import { Creature } from '../Creature'
 import { Family } from '../Family'
@@ -14,5 +15,5 @@ export class GreyKnight extends Creature {
   defense = 2
 
   attribute = movement(2)
-  // TODO skill
+  skill = immuneToEnemySpells()
 }
