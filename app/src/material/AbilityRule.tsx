@@ -95,5 +95,6 @@ const attackConditionText: Record<AttackCondition, string> = {
 
 const attackLimitationText: Record<AttackLimitation, string> = {
   [AttackLimitation.ByCreatures]: 'creatures',
-  [AttackLimitation.ByGroupedCreatures]: 'group-creatures'
+  [AttackLimitation.ByGroupedCreatures]: 'group-creatures',
+  [AttackLimitation.AdjacentCards]: 'adjacent-cards'
 }

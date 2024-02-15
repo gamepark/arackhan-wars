@@ -1,11 +1,11 @@
-import { MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
+import { areAdjacentSquares, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
 import { Attack } from '../../rules/AttackRule'
 import { getCardRule } from '../../rules/CardRule'
 import { Memory } from '../../rules/Memory'
 import { AttackerConstraint, DefenderConstraint, EffectType } from './Effect'
 
 export enum AttackLimitation {
-  ByCreatures = 1, ByGroupedCreatures
+  ByCreatures = 1, ByGroupedCreatures, AdjacentCards
 }
 
 export enum AttackCondition {
@@ -41,6 +41,12 @@ export class NoAttackByGroupedCreatures extends AttackConstraintRule {
   }
 }
 
+export class NoAttackOnAdjacentCard extends AttackConstraintRule {
+  preventAttack(attacker: number, defender: number): boolean {
+    return areAdjacentSquares(getCardRule(this.game, attacker).item.location, getCardRule(this.game, defender).item.location)
+  }
+}
+
 export class AttackByCreaturesOnlyInGroup extends AttackConstraintRule {
   preventAttack(): boolean {
     return false
@@ -67,6 +73,8 @@ export const getAttackConstraint = (effect: AttackerConstraint | DefenderConstra
           return new NoAttackByCreatures(game)
         case AttackLimitation.ByGroupedCreatures:
           return new NoAttackByGroupedCreatures(game)
+        case AttackLimitation.AdjacentCards:
+          return new NoAttackOnAdjacentCard(game)
         default:
           return new NoAttack(game)
       }

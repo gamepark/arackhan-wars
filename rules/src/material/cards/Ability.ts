@@ -51,8 +51,8 @@ export class Ability {
     return this
   }
 
-  cannotAttack() {
-    this.effects.push({ type: EffectType.CannotAttack })
+  cannotAttack(limitation?: AttackLimitation) {
+    this.effects.push({ type: EffectType.CannotAttack, limitation })
     return this
   }
 
@@ -92,6 +92,7 @@ export const defense = (modifier: number) => new Ability().defense(modifier)
 export const gainAttributes = (...attributes: Attribute[]) => new Ability().gainAttributes(...attributes)
 export const loseAttributes = (...attributes: AttributeType[]) => new Ability().loseAttributes(...attributes)
 export const loseAttribute = (attribute: AttributeType) => new Ability().loseAttribute(attribute)
+export const cannotAttack = (limitation: AttackLimitation) => new Ability().cannotAttack(limitation)
 export const canOnlyAttack = (condition: AttackCondition) => new Ability().canOnlyAttack(condition)
 export const canOnlyBeAttacked = (condition: AttackCondition) => new Ability().canOnlyBeAttacked(condition)
 export const cannotBeAttacked = (limitation: AttackLimitation) => new Ability().cannotBeAttacked(limitation)

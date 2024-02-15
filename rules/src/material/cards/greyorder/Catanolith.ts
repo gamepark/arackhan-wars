@@ -1,7 +1,9 @@
-import { Creature } from '../Creature'
 import { Faction } from '../../Faction'
-import { Family } from '../Family'
+import { cannotAttack } from '../Ability'
+import { AttackLimitation } from '../AttackLimitation'
 import { rangedAttack } from '../Attribute'
+import { Creature } from '../Creature'
+import { Family } from '../Family'
 
 export class Catanolith extends Creature {
   faction = Faction.GreyOrder
@@ -14,5 +16,6 @@ export class Catanolith extends Creature {
   defense = 1
 
   attribute = rangedAttack(3)
-  // TODO skills
+  // TODO skill
+  weakness = cannotAttack(AttackLimitation.AdjacentCards)
 }
