@@ -17,9 +17,11 @@ export default function DeckbuildingApp() {
   }, [])
   const loading = !game || isJustDisplayed || isImagesLoading
   useEffect(() => {
-    const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
-    storage.state = game
-    localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
+    if (game) {
+      const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
+      storage.state = game
+      localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
+    }
   }, [game])
 
   if (me && !me.user) {
