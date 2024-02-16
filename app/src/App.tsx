@@ -1,23 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
-import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import { FailuresDialog, FullscreenDialog, LoadingScreen, MaterialHeader, MaterialImageLoader, Menu, useGame } from '@gamepark/react-game'
 import { MaterialGame } from '@gamepark/rules-api'
 import { useEffect, useState } from 'react'
 import GameDisplay from './GameDisplay'
-import { HorseOfAvalonActionHeader } from './headers/actions/HorseOfAvalonActionHeader'
-import { MimicryActionHeader } from './headers/actions/MimicryActionHeader'
-import { MoveCreatureActionHeader } from './headers/actions/MoveCreatureActionHeader'
-import { ActivationHeader } from './headers/ActivationHeader'
-import { ChooseDeckHeader } from './headers/ChooseDeckHeader'
-import { ChooseFactionHeader } from './headers/ChooseFactionHeader'
-import { ChooseStartPlayerHeader } from './headers/ChooseStartPlayerHeader'
-import { DrawHeader } from './headers/DrawHeader'
-import { EndPhaseHeader } from './headers/EndPhaseHeader'
 import { GameOverRule } from './headers/GameOverRule'
-import { MulliganHeader } from './headers/MulliganHeader'
-import { PlacementHeader } from './headers/PlacementHeader'
-import { RevealHeader } from './headers/RevealHeader'
+import { Headers } from './headers/Headers'
 
 export default function App() {
   const game = useGame<MaterialGame>()
@@ -31,28 +18,11 @@ export default function App() {
     <>
       <GameDisplay/>
       <LoadingScreen display={loading} author={['Robert Palmer', 'Mickaël Bour']} artist="Robert Palmer" publisher="Nothing But Games" developer="Game Park"/>
-      <MaterialHeader rulesStepsHeaders={RulesHeaders} GameOverRule={GameOverRule} loading={loading}/>
+      <MaterialHeader rulesStepsHeaders={Headers} GameOverRule={GameOverRule} loading={loading}/>
       <MaterialImageLoader onImagesLoad={() => setImagesLoading(false)}/>
       <Menu/>
       <FailuresDialog/>
       <FullscreenDialog/>
     </>
   )
-}
-
-const RulesHeaders: Partial<Record<RuleId, () => ReactJSXElement>> = {
-  [RuleId.ChooseFaction]: ChooseFactionHeader,
-  [RuleId.ChooseDeck]: ChooseDeckHeader,
-  [RuleId.ChooseStartPlayer]: ChooseStartPlayerHeader,
-  [RuleId.Mulligan]: MulliganHeader,
-  [RuleId.DrawRule]: DrawHeader,
-  [RuleId.PlacementRule]: PlacementHeader,
-  [RuleId.RevealRule]: RevealHeader,
-  [RuleId.ActivationRule]: ActivationHeader,
-  [RuleId.SolvePerforations]: ActivationHeader,
-  [RuleId.EndPhaseRule]: EndPhaseHeader,
-  [RuleId.ForcedExileActionRule]: MoveCreatureActionHeader,
-  [RuleId.HorseOfAvalonActionRule]: HorseOfAvalonActionHeader,
-  [RuleId.TeleportationActionRule]: MoveCreatureActionHeader,
-  [RuleId.MimicryActionRule]: MimicryActionHeader
 }

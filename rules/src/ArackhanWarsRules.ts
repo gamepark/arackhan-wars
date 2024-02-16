@@ -23,6 +23,7 @@ import { MaterialType } from './material/MaterialType'
 import { ForcedExileActionRule } from './rules/action/ForcedExileActionRule'
 import { HorseOfAvalonActionRule } from './rules/action/HorseOfAvalonActionRule'
 import { MimicryActionRule } from './rules/action/MimicryActionRule'
+import { StandardBearerActionRule } from './rules/action/StandardBearerActionRule'
 import { TeleportationActionRule } from './rules/action/TeleportationActionRule'
 import { ActivationRule } from './rules/ActivationRule'
 import { getCardRule, resetCardsRulesCache } from './rules/CardRule'
@@ -61,7 +62,8 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.ForcedExileActionRule]: ForcedExileActionRule,
     [RuleId.HorseOfAvalonActionRule]: HorseOfAvalonActionRule,
     [RuleId.TeleportationActionRule]: TeleportationActionRule,
-    [RuleId.MimicryActionRule]: MimicryActionRule
+    [RuleId.MimicryActionRule]: MimicryActionRule,
+    [RuleId.StandardBearerAction]: StandardBearerActionRule
   }
 
   locationsStrategies = {

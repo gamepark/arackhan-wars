@@ -1,3 +1,4 @@
+import { RuleId } from '../../../rules/RuleId'
 import { Faction } from '../../Faction'
 import { Creature } from '../Creature'
 import { Family } from '../Family'
@@ -10,5 +11,5 @@ export class StandardBearer extends Creature {
   attack = 1
   defense = 1
 
-  // TODO action
+  action = RuleId.StandardBearerAction
 }

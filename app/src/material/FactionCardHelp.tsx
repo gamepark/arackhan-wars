@@ -142,7 +142,7 @@ const CardFrontRule = (props: MaterialHelpProps) => {
       })
     )}
     {characteristics.action && <>
-      <p><strong>{t('card.action')}</strong> - <Trans defaults={`action.${factionCard}`}><strong/><em/></Trans></p>
+      <p><strong>{t('card.action')}</strong> - <Trans defaults={`action.${getUniqueCard(factionCard)}`}><strong/><em/></Trans></p>
       {item.location && item.location.player === playerId && onBattlefieldAndAstralPlane(item.location) && <PerformActionButton {...props}/>}
     </>}
     {item.location?.type === LocationType.Battlefield && <CardEffectsHelp index={itemIndex!}/>}
