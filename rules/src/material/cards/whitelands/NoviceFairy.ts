@@ -5,7 +5,6 @@ import { Family } from '../Family'
 
 export class NoviceFairy extends Creature {
   faction = Faction.Whitelands
-  legendary = true
   value = 5
 
   family = Family.IceFairy
