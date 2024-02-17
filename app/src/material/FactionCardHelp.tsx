@@ -88,7 +88,7 @@ const CardFrontRule = (props: MaterialHelpProps) => {
   const playerId = usePlayerId()
   const factionCard = item.id.front as FactionCard
   const characteristics = FactionCardsCharacteristics[factionCard]
-  const isSubscriber = useMe()?.user.subscriptionSince !== null
+  const isSubscriber = !!useMe()?.user.subscriptionSince
   return <>
     {isCreature(characteristics) && <>
       <p><Trans defaults="rules.card.creature" values={characteristics}><strong/></Trans></p>

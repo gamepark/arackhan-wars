@@ -8,13 +8,16 @@ import { CardId } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { DeckValidator } from '@gamepark/arackhan-wars/rules/DeckValidator'
-import { useSaveDeck } from '@gamepark/react-client'
+import { PLATFORM_URI, useMe, useMyDecks, useSaveDeck } from '@gamepark/react-client'
 import { DialogProps, RulesDialog, ThemeButton, usePlay, useRules } from '@gamepark/react-game'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { shallowEqual } from 'react-redux'
 import { DeckbuildingRules } from './DeckbuildingRules'
 import { DeckList } from './DeckList'
+
+const query = new URLSearchParams(window.location.search)
+const locale = query.get('locale') || 'en'
 
 export const DeckbuildingHeader = () => {
   const { t } = useTranslation()
@@ -40,15 +43,24 @@ const SaveButton = () => {
     .getItems<CardId>().map(item => item.id!.front)
   const [saveDeck] = useSaveDeck()
   const [deck, setDeck] = useState(() => JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!).deck)
-  const [open, setOpen] = useState(false)
+  const [open, setNameDialogOpen] = useState(false)
   const play = usePlay()
+  const { data } = useMyDecks('arackhan-wars')
+  const isSubscriber = !!useMe()?.user.subscriptionSince
+  const max = isSubscriber ? SUBSCRIBER_MAX_DECKS : DEFAULT_MAX_DECKS
+  const hasMaxDecks = (data?.myDecks.length ?? 0) >= max
+  const [maxDeckDialogOpen, setMaxDeckDialogOpen] = useState(false)
 
   const save = useCallback((name: string) => {
-    if (!name) {
-      setOpen(true)
+    const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
+    if (!storage.deck?.id && hasMaxDecks) {
+      setMaxDeckDialogOpen(true)
       return
     }
-    const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
+    if (!name) {
+      setNameDialogOpen(true)
+      return
+    }
     saveDeck({ variables: { id: storage.deck?.id, boardGame: 'arackhan-wars', name, cards } }).then(({ data: { saveDeck: deck } }) => {
       storage.deck = deck
       localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
@@ -59,22 +71,55 @@ const SaveButton = () => {
   const rename = useCallback((name: string) => {
     play(rules!.rename(name))
     save(name)
-    setOpen(false)
+    setNameDialogOpen(false)
   }, [rules])
 
   return <>
-    <ThemeButton onClick={() => save(rules?.name)} disabled={deck?.id && deck?.name === rules?.name && shallowEqual(deck?.cards, cards)} title={t('deck.save')!}>
+    <ThemeButton onClick={() => save(rules?.name)} disabled={deck?.id && deck?.name === rules?.name && shallowEqual(deck?.cards, cards)}
+                 title={t('deck.save')!}>
       <FontAwesomeIcon icon={faDownload}/>
     </ThemeButton>
-    <NameDeckDialog open={open} submit={rename} cancel={() => setOpen(false)}/>
+    <NameDeckDialog open={open} submit={rename} cancel={() => setNameDialogOpen(false)}/>
+    <RulesDialog open={maxDeckDialogOpen} close={() => setMaxDeckDialogOpen(false)}>
+      <div css={maxDeckDialogCss}>
+        <h2>{t('max.deck')}</h2>
+        <p>{t('max.deck.info', { max })}</p>
+        {isSubscriber ?
+          <p>{t('max.deck.delete')}</p>
+          : <p>{t('max.deck.subscribe', { max: SUBSCRIBER_MAX_DECKS })}</p>
+        }
+        <div css={buttonLine}>
+          <ThemeButton onClick={() => setMaxDeckDialogOpen(false)}>{t('OK')}</ThemeButton>
+          {!isSubscriber &&
+              <ThemeButton onClick={() => window.location.href = `${PLATFORM_URI}/${locale}/subscription`}>{t('Subscribe')}</ThemeButton>
+          }
+        </div>
+      </div>
+    </RulesDialog>
   </>
 }
+
+const maxDeckDialogCss = css`
+  min-width: 25em;
+  font-size: 3em;
+  padding: 0 1em 1em;
+`
+
+const buttonLine = css`
+  display: flex;
+  justify-content: space-between;
+`
+
+const SUBSCRIBER_MAX_DECKS = 100
+const DEFAULT_MAX_DECKS = 4
 
 const DeckListButton = () => {
   const { t } = useTranslation()
   const rules = useRules<DeckbuildingRules>()
   const play = usePlay()
   const [open, setOpen] = useState(false)
+  const { data } = useMyDecks('arackhan-wars')
+  const isSubscriber = !!useMe()?.user.subscriptionSince
 
   const createNewDeck = useCallback(() => {
     play(rules!.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).deleteItemsAtOnce())
@@ -89,7 +134,7 @@ const DeckListButton = () => {
     <ThemeButton onClick={() => setOpen(true)} title={t('deck.list')!}><FontAwesomeIcon icon={faListCheck}/></ThemeButton>
     <RulesDialog open={open} close={() => setOpen(false)}>
       <div css={decksCss}>
-        <h2>{t('deck.list')}</h2>
+        <h2>{t('deck.list')} ({data?.myDecks.length ?? '?'}/{isSubscriber ? SUBSCRIBER_MAX_DECKS : DEFAULT_MAX_DECKS})</h2>
         <ThemeButton onClick={createNewDeck}>{t('deck.create')!}</ThemeButton>
         <DeckList close={() => setOpen(false)}/>
       </div>

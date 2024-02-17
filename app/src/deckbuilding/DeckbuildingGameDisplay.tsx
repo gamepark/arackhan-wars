@@ -9,7 +9,7 @@ import { DeckStats } from './DeckStats'
 import { Pagination } from './Pagination'
 
 export default function DeckbuildingGameDisplay() {
-  const isSubscriber = useMe()?.user.subscriptionSince !== null
+  const isSubscriber = !!useMe()?.user.subscriptionSince
   return <>
     <GameTable xMin={-4} xMax={86} yMin={-5} yMax={35} collisionAlgorithm={pointerWithin}>
       <GameTableNavigation css={navigationCss}/>

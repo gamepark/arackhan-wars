@@ -119,6 +119,11 @@
       "rules.card.defense.lost": "{modifier} defense",
       "rules.card.skills-lost": "Loses all skills",
       "alt.subscribers.only": "You must subscribe to play with alternative versions of cards.",
+      "max.deck": "Decks limit!",
+      "max.deck.info": "You cannot save more than {max} decks.",
+      "max.deck.delete": "You can delete one before saving it.",
+      "max.deck.subscribe": "Subscribe to Game Park to register up to {max} decks.",
+      "Subscribe": "Subscribe",
       "tuto.welcome": "Welcome to the <0>AracKhan Wars</0> tutorial!",
       "tuto.hand": "This is your hand of cards with which you can compete against your opponent.",
       "tuto.placement.1": "Each round begins with the placement phase. The first player places 2 cards face down on the battlefield, then the other player does the same.\r\n<0>The first player changes each round.</0>",
@@ -614,6 +619,11 @@
       "rules.card.defense.lost": "{modifier} défense",
       "rules.card.skills-lost": "Perd ses compétences",
       "alt.subscribers.only": "Vous devez être abonné pour utiliser les versions alternative des cartes.",
+      "max.deck": "Limite de decks !",
+      "max.deck.info": "Vous ne pouvez pas enregistrer plus de {max} decks.",
+      "max.deck.delete": "Vous pouvez en supprimer un avant d'enregistrer celui-ci.",
+      "max.deck.subscribe": "Abonnez-vous à Game Park pour enregistrer jusqu'à {max} decks.",
+      "Subscribe": "S’abonner",
       "tuto.welcome": "Bienvenue dans le tutoriel d’<0>AracKhan Wars</0> !",
       "tuto.hand": "Voici votre main de cartes, avec lesquelles vous pouvez affronter votre adversaire.",
       "tuto.placement.1": "Chaque round commence par la phase de placement. Le premier joueur place 2 cartes face cachées sur le champ de bataille, puis l'autre joueur fait de même.\n<0>Le premier joueur change à chaque round.</0>",
@@ -991,6 +1001,7 @@
   },
   "de": {
     "translation": {
+      "Subscribe": "Abonnieren",
       "Menu": "Menü",
       "OK": "OK",
       "Validate": "Bestätigen",
@@ -1058,6 +1069,7 @@
   },
   "ru": {
     "translation": {
+      "Subscribe": "Подписаться",
       "Menu": "Меню",
       "OK": "ОК",
       "Validate": "Подтвердить",
