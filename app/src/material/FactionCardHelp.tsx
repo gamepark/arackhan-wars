@@ -1,4 +1,7 @@
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
+import { faLock } from '@fortawesome/free-solid-svg-icons/faLock'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
 import { Attribute } from '@gamepark/arackhan-wars/material/cards/Attribute'
@@ -11,9 +14,11 @@ import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { FactionCard, FactionCardsCharacteristics, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
+import { useMe } from '@gamepark/react-client'
 import { linkButtonCss, MaterialHelpProps, Picture, PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { displayLocationHelp, isCustomMove } from '@gamepark/rules-api'
 import { Trans, useTranslation } from 'react-i18next'
+import { isDeckbuilding } from '../deckbuilding/deckbuilding.util'
 import astral from '../images/icons/astral.png'
 import captureFlag from '../images/icons/capture-flag.png'
 import { AbilityRule } from './AbilityRule'
@@ -83,6 +88,7 @@ const CardFrontRule = (props: MaterialHelpProps) => {
   const playerId = usePlayerId()
   const factionCard = item.id.front as FactionCard
   const characteristics = FactionCardsCharacteristics[factionCard]
+  const isSubscriber = useMe()?.user.subscriptionSince !== null
   return <>
     {isCreature(characteristics) && <>
       <p><Trans defaults="rules.card.creature" values={characteristics}><strong/></Trans></p>
@@ -149,6 +155,9 @@ const CardFrontRule = (props: MaterialHelpProps) => {
     }
     {characteristics.limit &&
       <p><Trans defaults="rules.card.limit" values={{ limit: characteristics.limit }}><strong/></Trans></p>
+    }
+    {isDeckbuilding && !isSubscriber && characteristics.altOf &&
+      <p css={css`color: darkred`}><FontAwesomeIcon icon={faLock}/> {t('alt.subscribers.only')}</p>
     }
   </>
 }

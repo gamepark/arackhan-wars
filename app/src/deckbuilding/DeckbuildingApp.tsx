@@ -28,6 +28,8 @@ export default function DeckbuildingApp() {
     window.location.replace(`${PLATFORM_URI}/auth/sign-in?callbackUrl=${encodeURIComponent(window.location.href)}`)
   }
 
+  console.log(me?.user)
+
   return (
     <>
       <DeckbuildingGameDisplay/>
