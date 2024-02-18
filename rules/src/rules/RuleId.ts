@@ -23,5 +23,6 @@ export enum RuleId {
   TeleportationActionRule,
   MimicryActionRule,
   StandardBearerAction,
-  BackupAction
+  BackupAction,
+  MarchingOrderAction
 }

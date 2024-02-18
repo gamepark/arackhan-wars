@@ -10,8 +10,8 @@ export const HorseOfAvalonActionHeader = () => {
   const activePlayer = rules.getActivePlayer()
   const player = usePlayerName(activePlayer)
   if (playerId === activePlayer) {
-    return <>{t('horse.of.avalon.choose')}</>
+    return <>{t('horse-of-avalon.choose')}</>
   } else {
-    return <>{t('horse.of.avalon.choice', { player })}</>
+    return <>{t('horse-of-avalon.choice', { player })}</>
   }
 }
