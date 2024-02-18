@@ -73,6 +73,7 @@ export class ActivationRule extends PlayerTurnRule {
   }
 
   onEndOfTurn() {
+    this.memorize(Memory.TurnEffects, [])
     return this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
       .player(this.player)
