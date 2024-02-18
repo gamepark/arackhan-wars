@@ -43,7 +43,7 @@ export class MimicryActionRule extends CardActionRule {
           [...turnEffects, { targets: [target], effect: { type: EffectType.Mimic, target: mimicTarget } }]
         )
         const cardRule = getCardRule(this.game, target)
-        if (cardRule.isTokenFlipped) {
+        if (cardRule.hasFlippedToken) {
           moves.push(cardRule.token.rotateItem(false))
         }
         moves.push(...super.afterCardAction())

@@ -155,11 +155,18 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get isActive() {
-    return !this.isTokenFlipped && !this.effects.some(effect => effect.type === EffectType.Deactivated)
+    return this.isSpell ||
+      (this.hasActiveToken && !this.effects.some(effect => effect.type === EffectType.Deactivated))
   }
 
-  get isTokenFlipped() {
-    return this.token.getItem()?.location.rotation
+  get hasActiveToken() {
+    const token = this.token.getItem()
+    return token !== undefined && !token.location.rotation
+  }
+
+  get hasFlippedToken() {
+    const token = this.token.getItem()
+    return token !== undefined && token.location.rotation
   }
 
   get hasInitiative() {
