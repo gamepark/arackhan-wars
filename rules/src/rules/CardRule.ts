@@ -210,7 +210,10 @@ export class CardRule extends MaterialRulesPart {
     const opponentRule = getCardRule(this.game, opponent)
     const opponentLocation = opponentRule.item.location
     if (!isXYCoordinates(cardLocation) || !isXYCoordinates(opponentLocation)) return false
-    const distance = getDistanceBetweenSquares(cardLocation, opponentLocation) + (opponentRule.hasStealth ? 1 : 0)
+    if (opponentRule.hasStealth && this.isCreature && !this.attributes.some(attribute =>
+      attribute.type === AttributeType.RangedAttack && attribute.distance > 1
+    )) return false
+    const distance = getDistanceBetweenSquares(cardLocation, opponentLocation)
     return distance === 1 || this.attributes.some(attribute =>
       attribute.type === AttributeType.RangedAttack && distance <= attribute.distance
     )
