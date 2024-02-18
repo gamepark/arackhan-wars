@@ -178,10 +178,8 @@ type NameDeckDialogProps = {
 const NameDeckDialog = ({ submit, cancel, ...props }: NameDeckDialogProps) => {
   const { t } = useTranslation()
   const rules = useRules<DeckbuildingRules>()
-  const [name, setName] = useState(rules?.name)
-  useEffect(() => {
-    setName(rules?.name)
-  }, [rules?.name])
+  const [name, setName] = useState<string>(rules?.name ?? '')
+  useEffect(() => setName(rules?.name ?? ''), [rules?.name])
   return (
     <RulesDialog {...props} css={nameDialogCss}>
       <h2 css={css`margin: 0.5em 0;`}>{t('deck.name')}</h2>
