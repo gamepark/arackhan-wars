@@ -22,9 +22,10 @@ import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { BackupActionRule } from './rules/action/BackupActionRule'
 import { ForcedExileActionRule } from './rules/action/ForcedExileActionRule'
-import { HorseOfAvalonActionRule } from './rules/action/HorseOfAvalonActionRule'
 import { MarchingOrderActionRule } from './rules/action/MarchingOrderActionRule'
 import { MimicryActionRule } from './rules/action/MimicryActionRule'
+import { NoviceFairyActionRule } from './rules/action/NoviceFairyActionRule'
+import { ReplaceWithCreatureActionRule } from './rules/action/ReplaceWithCreatureActionRule'
 import { StandardBearerActionRule } from './rules/action/StandardBearerActionRule'
 import { TeleportationActionRule } from './rules/action/TeleportationActionRule'
 import { ActivationRule } from './rules/ActivationRule'
@@ -62,9 +63,11 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.SolvePerforations]: SolvePerforationsRule,
     [RuleId.EndPhaseRule]: EndPhaseRules,
     [RuleId.ForcedExileActionRule]: ForcedExileActionRule,
-    [RuleId.HorseOfAvalonActionRule]: HorseOfAvalonActionRule,
+    [RuleId.HorseOfAvalonActionRule]: ReplaceWithCreatureActionRule,
     [RuleId.TeleportationActionRule]: TeleportationActionRule,
     [RuleId.MimicryActionRule]: MimicryActionRule,
+    [RuleId.AdrielleAction]: ReplaceWithCreatureActionRule,
+    [RuleId.NoviceFairyAction]: NoviceFairyActionRule,
     [RuleId.StandardBearerAction]: StandardBearerActionRule,
     [RuleId.BackupAction]: BackupActionRule,
     [RuleId.MarchingOrderAction]: MarchingOrderActionRule

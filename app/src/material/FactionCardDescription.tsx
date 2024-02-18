@@ -10,6 +10,7 @@ import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { Attack } from '@gamepark/arackhan-wars/rules/AttackRule'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
+import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import { CardDescription, ItemContext, MaterialContext } from '@gamepark/react-game'
 import { isCustomMove, isCustomMoveType, isMoveItemType, Location, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { differenceBy, range } from 'lodash'
@@ -471,9 +472,11 @@ export class FactionCardDescription extends CardDescription {
         case CustomMoveType.PerformAction:
         case CustomMoveType.ChooseCard:
           return move.data === context.index
-        case CustomMoveType.Attack:
-          return move.data.card === context.index
       }
+    }
+    if (context.rules.game.rule?.id === RuleId.ActivationRule
+      && isMoveItemType(MaterialType.FactionCard)(move) && move.location.type === LocationType.Battlefield) {
+      return false
     }
     return super.canLongClick(move, context)
   }

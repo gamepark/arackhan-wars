@@ -22,6 +22,8 @@ export enum RuleId {
   HorseOfAvalonActionRule,
   TeleportationActionRule,
   MimicryActionRule,
+  AdrielleAction,
+  NoviceFairyAction,
   StandardBearerAction,
   BackupAction,
   MarchingOrderAction

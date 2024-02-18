@@ -6,19 +6,21 @@ import { MaterialType } from '../../material/MaterialType'
 import { Memory } from '../Memory'
 import { CardActionRule } from './CardActionRule'
 
-export class HorseOfAvalonActionRule extends CardActionRule {
+export class ReplaceWithCreatureActionRule extends CardActionRule {
   onRuleStart() {
     this.memorize(Memory.Location, this.actionCard.location)
-    return [this.discardActionCard()]
+    return this.discardActionCard()
   }
 
-  getPlayerMoves() {
-    const location = this.remind(Memory.Location)
+  getEligibleCards() {
     return this.material(MaterialType.FactionCard)
       .location(LocationType.PlayerHand)
       .player(this.player)
       .filter(item => isCreature(FactionCardsCharacteristics[item.id.front]))
-      .moveItems(location)
+  }
+
+  getPlayerMoves() {
+    return this.getEligibleCards().moveItems(this.remind(Memory.Location))
   }
 
   afterItemMove(move: ItemMove) {

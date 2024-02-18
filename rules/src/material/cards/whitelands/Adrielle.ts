@@ -1,3 +1,4 @@
+import { RuleId } from '../../../rules/RuleId'
 import { Faction } from '../../Faction'
 import { flight, stealth } from '../Attribute'
 import { Creature } from '../Creature'
@@ -15,5 +16,5 @@ export class Adrielle extends Creature {
   defense = 0
 
   attributes = [stealth, flight]
-  // TODO action
+  action = RuleId.AdrielleAction
 }
