@@ -1,6 +1,6 @@
 import { Effect } from '../../material/cards/Effect'
 
-export type TurnEffect = {
+export type TargetingEffect = {
   targets: number[]
   effect: Effect
 }

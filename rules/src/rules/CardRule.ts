@@ -30,6 +30,7 @@ import {
   isGainAttributes,
   isLoseSkills,
   isMimic,
+  isSetAttackDefense,
   Trigger,
   TriggerAction,
   TriggerCondition
@@ -40,7 +41,7 @@ import { isSpell, Spell } from '../material/cards/Spell'
 import { FactionCard, FactionCardsCharacteristics } from '../material/FactionCard'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import { TurnEffect } from './action/TurnEffect'
+import { TargetingEffect } from './action/TargetingEffect'
 import { Attack } from './AttackRule'
 import { Memory } from './Memory'
 
@@ -70,7 +71,7 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get characteristics(): FactionCardCharacteristics | undefined {
-    const mimic = this.turnEffects.find(isMimic)
+    const mimic = this.targetingEffects.find(isMimic)
     return FactionCardsCharacteristics[mimic?.target ?? this.card]
   }
 
@@ -112,7 +113,7 @@ export class CardRule extends MaterialRulesPart {
           ability.effects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
           && ability.isApplicable(this.game, rule.cardMaterial, this.cardMaterial)
         )
-      ) || this.turnEffects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
+      ) || this.targetingEffects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
     }
     return this.immuneToEnemySpellsCache
   }
@@ -128,15 +129,20 @@ export class CardRule extends MaterialRulesPart {
         this.isImmuneTo(card) ? []
           : card.abilities.filter(ability => ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial))
             .flatMap(ability => ability.effects)
-      ).concat(...this.turnEffects)
+      ).concat(...this.targetingEffects)
+      if (this.effectsCache.some(effect => effect.type === EffectType.IgnoreAttackDefenseModifiers)) {
+        this.effectsCache = this.effectsCache.filter(effect => effect.type !== EffectType.Attack && effect.type !== EffectType.Defense)
+      }
     }
     return this.effectsCache
   }
 
-  get turnEffects(): Effect[] {
-    return this.remind<TurnEffect[]>(Memory.TurnEffects)
-      ?.filter(turnEffect => turnEffect.targets.includes(this.index))
-      .map(turnEffect => turnEffect.effect) ?? []
+  get targetingEffects(): Effect[] {
+    const turnEffects = this.remind<TargetingEffect[]>(Memory.TurnEffects) ?? []
+    const roundEffects = this.remind<TargetingEffect[]>(Memory.RoundEffects) ?? []
+    return turnEffects.concat(roundEffects)
+      .filter(targetingEffect => targetingEffect.targets.includes(this.index))
+      .map(targetingEffect => targetingEffect.effect)
   }
 
   get attributes(): Attribute[] {
@@ -252,13 +258,15 @@ export class CardRule extends MaterialRulesPart {
     return getAttackConstraint(effect, this.game).isInvalidAttackGroup(attackers, this.index)
   }
 
-  get attack() {
-    const baseAttack = (this.characteristics as Creature | Spell)?.attack ?? 0
-    return Math.max(0, baseAttack + this.attackModifier)
+  get attackCharacteristic() {
+    return (this.characteristics as Creature | Spell)?.attack ?? 0
   }
 
-  get attackModifier() {
-    return sumBy(this.effects, effect => effect.type === EffectType.Attack ? effect.modifier : 0) + this.swarmBonus
+  get attack() {
+    const setAttackDefense = this.effects.find(isSetAttackDefense)
+    const baseAttack = setAttackDefense?.attack ?? this.attackCharacteristic
+    const attackModifier = sumBy(this.effects, effect => effect.type === EffectType.Attack ? effect.modifier : 0) + this.swarmBonus
+    return Math.max(0, baseAttack + attackModifier)
   }
 
   get swarmBonus() {
@@ -271,13 +279,15 @@ export class CardRule extends MaterialRulesPart {
     return (this.characteristics as Creature)?.family
   }
 
-  get defense() {
-    const baseDefense = (this.characteristics as Creature | Land)?.defense ?? 0
-    return Math.max(0, baseDefense + this.defenseModifier)
+  get defenseCharacteristic() {
+    return (this.characteristics as Creature | Land)?.defense ?? 0
   }
 
-  get defenseModifier() {
-    return sumBy(this.effects, effect => effect.type === EffectType.Defense ? effect.modifier : 0)
+  get defense() {
+    const setAttackDefense = this.effects.find(isSetAttackDefense)
+    const baseDefense = setAttackDefense?.defense ?? this.defenseCharacteristic
+    const defenseModifier = sumBy(this.effects, effect => effect.type === EffectType.Defense ? effect.modifier : 0)
+    return Math.max(0, baseDefense + defenseModifier)
   }
 
   get hasOmnistrike() {
@@ -396,7 +406,7 @@ export class CardRule extends MaterialRulesPart {
     const effects = this.battleFieldCardsRules.flatMap(card =>
       card.abilities.filter(ability => ability.isApplicable(gameCopy, card.cardMaterial, cardCopy))
         .flatMap(ability => ability.effects)
-        .concat(...this.turnEffects)
+        .concat(...this.targetingEffects)
     )
     return effects.some(effect =>
       effect.type === EffectType.Deactivated

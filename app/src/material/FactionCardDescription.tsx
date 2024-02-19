@@ -438,7 +438,7 @@ export class FactionCardDescription extends CardDescription {
       locations.push({ type: LocationType.CombatResultIcon, parent: index, id: icon, x: attackValue })
     }
     locations.push({ type: LocationType.FactionCard, parent: index })
-    for (const turnEffect of cardRule.turnEffects) {
+    for (const turnEffect of cardRule.targetingEffects) {
       if (turnEffect.type === EffectType.Mimic) {
         locations.unshift({ type: LocationType.CardTurnEffect, parent: index, id: turnEffect })
       }
@@ -506,11 +506,15 @@ export const cardHeight = factionCardDescription.width / factionCardDescription.
 export function getCardBattlefieldModifierLocations(game: MaterialGame, index: number) {
   const locations: Location[] = []
   const cardRule = getCardRule(game, index)
-  if (cardRule.attackModifier) {
-    locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Attack, parent: index, x: cardRule.attack, y: cardRule.attackModifier })
+  const attackCharacteristic = cardRule.attackCharacteristic
+  const attack = cardRule.attack
+  if (attackCharacteristic !== attack) {
+    locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Attack, parent: index, x: cardRule.attack, y: attack - attackCharacteristic })
   }
-  if (cardRule.defenseModifier) {
-    locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Defense, parent: index, x: cardRule.defense, y: cardRule.defenseModifier })
+  const defenseCharacteristic = cardRule.defenseCharacteristic
+  const defense = cardRule.defense
+  if (defenseCharacteristic !== defense) {
+    locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Defense, parent: index, x: cardRule.defense, y: defense - defenseCharacteristic })
   }
   const characteristics = cardRule.characteristics
   const nativeAttributes = characteristics?.getAttributes() ?? []

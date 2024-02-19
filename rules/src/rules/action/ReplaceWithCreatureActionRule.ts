@@ -32,7 +32,7 @@ export class ReplaceWithCreatureActionRule extends CardActionRule {
             id: this.remind(Memory.PlayerFactionToken, this.player),
             location: { parent: move.itemIndex, type: LocationType.FactionTokenSpace, player: this.player }
           }),
-        ...super.afterCardAction()
+        ...this.afterCardAction()
       ]
     }
     return []

@@ -18,9 +18,10 @@ export class ActionRule extends PlayerTurnRule {
 
   get availableCards() {
     if (this.remind<Attack[]>(Memory.Attacks).length > 0 || this.remind<number[]>(Memory.MovedCards).length > 0) return []
+    const oncePerRound = this.remind<number[]>(Memory.OncePerRound) ?? []
     return this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
       .player(this.player)
-      .getIndexes()
+      .getIndexes().filter(index => !oncePerRound.includes(index))
   }
 }

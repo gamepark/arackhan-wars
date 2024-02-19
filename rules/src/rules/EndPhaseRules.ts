@@ -13,6 +13,8 @@ export const NUMBER_OF_ROUNDS = 9
 export class EndPhaseRules extends MaterialRulesPart {
 
   onRuleStart() {
+    this.memorize(Memory.RoundEffects, [])
+    this.memorize(Memory.OncePerRound, [])
     const moves: MaterialMove[] = []
 
     for (const player of this.game.players) {

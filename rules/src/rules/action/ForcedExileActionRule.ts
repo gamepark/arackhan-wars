@@ -23,7 +23,7 @@ export class ForcedExileActionRule extends CardActionRule {
 
   afterItemMove(move: ItemMove) {
     if (isMoveItem(move) && move.itemType === MaterialType.FactionCard && move.location.type === LocationType.Battlefield) {
-      return super.afterCardAction()
+      return this.afterCardAction()
     }
     return []
   }

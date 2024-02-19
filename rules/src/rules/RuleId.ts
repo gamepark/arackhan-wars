@@ -24,6 +24,7 @@ export enum RuleId {
   TeleportationActionRule,
   MimicryActionRule,
   AdrielleAction,
+  IceElementalAction,
   NoviceFairyAction,
   StandardBearerAction,
   BackupAction,

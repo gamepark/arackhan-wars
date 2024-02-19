@@ -1,4 +1,6 @@
+import { RuleId } from '../../../rules/RuleId'
 import { Faction } from '../../Faction'
+import { ignoreAttackDefenseModifiers } from '../Ability'
 import { Creature } from '../Creature'
 import { Family } from '../Family'
 
@@ -10,5 +12,6 @@ export class IceElemental extends Creature {
   attack = 1
   defense = 2
 
-  // TODO skill & action
+  skill = ignoreAttackDefenseModifiers()
+  action = RuleId.IceElementalAction
 }

@@ -8,5 +8,6 @@ export enum CustomMoveType {
   ChooseCard,
   Pass,
   Deactivate,
-  ChooseDeck
+  ChooseDeck,
+  ChooseEffect,
 }

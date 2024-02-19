@@ -85,6 +85,8 @@ const getAbilityText = (effect: Effect, targets: string, t: TFunction, card: Fac
       }
     case EffectType.EndOfTurn:
       return { defaults: 'ability.end-of-turn-move', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
+    case EffectType.IgnoreAttackDefenseModifiers:
+      return { defaults: 'ability.ignore-modifiers', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
     default:
       return {}
   }

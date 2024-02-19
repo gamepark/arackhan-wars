@@ -90,6 +90,11 @@ export class Ability {
     this.effects.push({ type: EffectType.EndOfTurn, action })
     return this
   }
+
+  ignoreAttackDefenseModifiers() {
+    this.effects.push({ type: EffectType.IgnoreAttackDefenseModifiers })
+    return this
+  }
 }
 
 export const attack = (modifier: number) => new Ability().attack(modifier)
@@ -105,3 +110,4 @@ export const deactivate = (...applicableFilters: AbilityTargetFilter[]) => new A
 export const trigger = (action: TriggerAction) => ({ when: (condition: TriggerCondition) => new Ability().trigger(condition, action) })
 export const immuneToEnemySpells = () => new Ability().immuneToEnemySpells()
 export const endOfTurn = (action: EndOfTurnAction) => new Ability().endOfTurn(action)
+export const ignoreAttackDefenseModifiers = () => new Ability().ignoreAttackDefenseModifiers()

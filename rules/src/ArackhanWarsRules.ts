@@ -22,6 +22,7 @@ import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { BackupActionRule } from './rules/action/BackupActionRule'
 import { ForcedExileActionRule } from './rules/action/ForcedExileActionRule'
+import { IceElementalActionRule } from './rules/action/IceElementalActionRule'
 import { MarchingOrderActionRule } from './rules/action/MarchingOrderActionRule'
 import { MimicryActionRule } from './rules/action/MimicryActionRule'
 import { NoviceFairyActionRule } from './rules/action/NoviceFairyActionRule'
@@ -69,6 +70,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.TeleportationActionRule]: TeleportationActionRule,
     [RuleId.MimicryActionRule]: MimicryActionRule,
     [RuleId.AdrielleAction]: ReplaceWithCreatureActionRule,
+    [RuleId.IceElementalAction]: IceElementalActionRule,
     [RuleId.NoviceFairyAction]: NoviceFairyActionRule,
     [RuleId.StandardBearerAction]: StandardBearerActionRule,
     [RuleId.BackupAction]: BackupActionRule,

@@ -8,7 +8,7 @@ import { MaterialType } from '../../material/MaterialType'
 import { getCardRule } from '../CardRule'
 import { Memory } from '../Memory'
 import { CardActionRule } from './CardActionRule'
-import { TurnEffect } from './TurnEffect'
+import { TargetingEffect } from './TargetingEffect'
 
 export class MimicryActionRule extends CardActionRule {
 
@@ -39,14 +39,14 @@ export class MimicryActionRule extends CardActionRule {
       } else {
         this.forget(Memory.TargetCard)
         const mimicTarget = this.material(MaterialType.FactionCard).getItem(move.data)?.id.front as FactionCard
-        this.memorize<TurnEffect[]>(Memory.TurnEffects, turnEffects =>
+        this.memorize<TargetingEffect[]>(Memory.TurnEffects, turnEffects =>
           [...turnEffects, { targets: [target], effect: { type: EffectType.Mimic, target: mimicTarget } }]
         )
         const cardRule = getCardRule(this.game, target)
         if (cardRule.hasFlippedToken) {
           moves.push(cardRule.token.rotateItem(false))
         }
-        moves.push(...super.afterCardAction())
+        moves.push(...this.afterCardAction())
       }
     }
     return moves
