@@ -1,5 +1,5 @@
-import { FactionCardCharacteristics, FactionCardKind } from './FactionCardCharacteristics'
 import { Ability } from './Ability'
+import { FactionCardCharacteristics, FactionCardKind } from './FactionCardCharacteristics'
 import { Family } from './Family'
 
 export abstract class Creature extends FactionCardCharacteristics {
@@ -22,12 +22,8 @@ export abstract class Creature extends FactionCardCharacteristics {
     return this.weakness ? [this.weakness] : this.weaknesses
   }
 
-  getAbilities(isSkillDisabled?: boolean): Ability[] {
-    if (isSkillDisabled) return this.getWeaknesses()
-    return [
-      ...this.getSkills(),
-      ...this.getWeaknesses()
-    ]
+  getAbilities(): Ability[] {
+    return this.getSkills().concat(this.getWeaknesses())
   }
 
   get canAttack() {

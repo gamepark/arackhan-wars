@@ -7,6 +7,7 @@ export type Effect = ModifyAttack | ModifyDefense
   | AttackerConstraint | DefenderConstraint
   | Deactivated | Mimic | Trigger | ImmuneToEnemySpells
   | EndOfTurn | IgnoreAttackDefenseModifiers | SetAttackDefense
+  | SwapSkills
 
 export enum EffectType {
   Attack, Defense,
@@ -18,7 +19,8 @@ export enum EffectType {
   Trigger,
   ImmuneToEnemySpells,
   EndOfTurn,
-  IgnoreAttackDefenseModifiers, SetAttackDefense
+  IgnoreAttackDefenseModifiers, SetAttackDefense,
+  SwapSkills
 }
 
 export type ModifyAttack = {
@@ -136,4 +138,13 @@ export type SetAttackDefense = {
 
 export function isSetAttackDefense(effect: Effect): effect is SetAttackDefense {
   return effect.type === EffectType.SetAttackDefense
+}
+
+export type SwapSkills = {
+  type: EffectType.SwapSkills
+  creatures: number[]
+}
+
+export function isSwapSkills(effect: Effect): effect is SwapSkills {
+  return effect.type === EffectType.SwapSkills
 }

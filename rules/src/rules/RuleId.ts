@@ -26,6 +26,7 @@ export enum RuleId {
   AdrielleAction,
   IceElementalAction,
   NoviceFairyAction,
+  NemesioWhitelandsAction,
   StandardBearerAction,
   BackupAction,
   MarchingOrderAction

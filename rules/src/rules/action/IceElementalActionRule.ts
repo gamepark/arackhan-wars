@@ -4,6 +4,7 @@ import { CustomMoveType } from '../../material/CustomMoveType'
 import { Memory } from '../Memory'
 import { RuleId } from '../RuleId'
 import { CardActionRule } from './CardActionRule'
+import { TargetingEffect } from './TargetingEffect'
 
 export class IceElementalActionRule extends CardActionRule {
   getPlayerMoves() {
@@ -17,8 +18,8 @@ export class IceElementalActionRule extends CardActionRule {
   onCustomMove(move: CustomMove) {
     if (move.type === CustomMoveType.ChooseEffect) {
       const card = this.remind(Memory.ActionCard)
-      this.memorize(Memory.RoundEffects, effects => [...effects, { targets: [card], effect: move.data }])
-      this.memorize(Memory.OncePerRound, cards => [...cards, card])
+      this.memorize<TargetingEffect[]>(Memory.RoundEffects, effects => [...effects, { targets: [card], effect: move.data }])
+      this.memorize<number[]>(Memory.OncePerRound, cards => [...cards, card])
       return [this.rules().startRule(RuleId.ActivationRule)]
     }
     return []

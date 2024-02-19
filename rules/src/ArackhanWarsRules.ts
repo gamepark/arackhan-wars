@@ -25,6 +25,7 @@ import { ForcedExileActionRule } from './rules/action/ForcedExileActionRule'
 import { IceElementalActionRule } from './rules/action/IceElementalActionRule'
 import { MarchingOrderActionRule } from './rules/action/MarchingOrderActionRule'
 import { MimicryActionRule } from './rules/action/MimicryActionRule'
+import { NemesioWhitelandsActionRule } from './rules/action/NemesioWhitelandsActionRule'
 import { NoviceFairyActionRule } from './rules/action/NoviceFairyActionRule'
 import { ReplaceWithCreatureActionRule } from './rules/action/ReplaceWithCreatureActionRule'
 import { StandardBearerActionRule } from './rules/action/StandardBearerActionRule'
@@ -71,6 +72,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.MimicryActionRule]: MimicryActionRule,
     [RuleId.AdrielleAction]: ReplaceWithCreatureActionRule,
     [RuleId.IceElementalAction]: IceElementalActionRule,
+    [RuleId.NemesioWhitelandsAction]: NemesioWhitelandsActionRule,
     [RuleId.NoviceFairyAction]: NoviceFairyActionRule,
     [RuleId.StandardBearerAction]: StandardBearerActionRule,
     [RuleId.BackupAction]: BackupActionRule,

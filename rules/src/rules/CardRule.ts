@@ -31,6 +31,7 @@ import {
   isLoseSkills,
   isMimic,
   isSetAttackDefense,
+  isSwapSkills,
   Trigger,
   TriggerAction,
   TriggerCondition
@@ -38,7 +39,7 @@ import {
 import { FactionCardCharacteristics } from '../material/cards/FactionCardCharacteristics'
 import { Land } from '../material/cards/Land'
 import { isSpell, Spell } from '../material/cards/Spell'
-import { FactionCard, FactionCardsCharacteristics } from '../material/FactionCard'
+import { CardId, FactionCard, FactionCardsCharacteristics } from '../material/FactionCard'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { TargetingEffect } from './action/TargetingEffect'
@@ -96,8 +97,15 @@ export class CardRule extends MaterialRulesPart {
 
   get abilities(): Ability[] {
     const characteristics = this.characteristics
-    if (isCreature(characteristics) && this.loseSkills) {
-      return characteristics.getWeaknesses()
+    const swapSkills = this.targetingEffects.find(isSwapSkills)
+    if (isCreature(characteristics)) {
+      if (this.loseSkills) {
+        return characteristics.getWeaknesses()
+      } else if (swapSkills) {
+        const otherCreatureIndex = swapSkills.creatures.find(index => index !== this.index)!
+        const otherCreature = FactionCardsCharacteristics[this.material(MaterialType.FactionCard).getItem<CardId>(otherCreatureIndex)!.id!.front]
+        return (otherCreature as Creature).getSkills().concat(characteristics.getWeaknesses())
+      }
     }
     return characteristics?.getAbilities() ?? []
   }

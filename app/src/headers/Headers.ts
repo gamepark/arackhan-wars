@@ -7,6 +7,7 @@ import { MimicryActionHeader } from './actions/MimicryActionHeader'
 import { MoveCreatureActionHeader } from './actions/MoveCreatureActionHeader'
 import { PlaceCreatureActionHeader } from './actions/PlaceCreatureActionHeader'
 import { StandardBearerActionHeader } from './actions/StandardBearerActionHeader'
+import { TargetCreatureActionHeader } from './actions/TargetCreatureActionHeader'
 import { ActivationHeader } from './ActivationHeader'
 import { ChooseDeckHeader } from './ChooseDeckHeader'
 import { ChooseFactionHeader } from './ChooseFactionHeader'
@@ -36,6 +37,7 @@ export const Headers: Partial<Record<RuleId, () => ReactJSXElement>> = {
   [RuleId.MimicryActionRule]: MimicryActionHeader,
   [RuleId.AdrielleAction]: PlaceCreatureActionHeader,
   [RuleId.IceElementalAction]: IceElementalActionHeader,
+  [RuleId.NemesioWhitelandsAction]: TargetCreatureActionHeader,
   [RuleId.NoviceFairyAction]: PlaceCreatureActionHeader,
   [RuleId.StandardBearerAction]: StandardBearerActionHeader,
   [RuleId.BackupAction]: BackupActionHeader,
