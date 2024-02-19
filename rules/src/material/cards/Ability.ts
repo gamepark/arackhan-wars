@@ -1,4 +1,8 @@
 import { Material, MaterialGame } from '@gamepark/rules-api'
+import sumBy from 'lodash/sumBy'
+import { ArackhanWarsRules } from '../../ArackhanWarsRules'
+import { LocationType } from '../LocationType'
+import { MaterialType } from '../MaterialType'
 import { AbilityTargetFilter, itself } from './AbilityTargetFilter'
 import { AttackCondition, AttackLimitation } from './AttackLimitation'
 import { Attribute, AttributeType } from './Attribute'
@@ -7,6 +11,7 @@ import { Effect, EffectType, EndOfTurnAction, LoseAttributes, TriggerAction, Tri
 export class Ability {
 
   filters: AbilityTargetFilter[] = [itself]
+  multipliers?: AbilityTargetFilter[]
   effects: Effect[] = []
 
   to(...applicableFilters: AbilityTargetFilter[]) {
@@ -14,10 +19,23 @@ export class Ability {
     return this
   }
 
+  per(...applicableFilters: AbilityTargetFilter[]) {
+    this.multipliers = applicableFilters
+    return this
+  }
+
   isApplicable(game: MaterialGame, source: Material, target: Material) {
     if (!source.getItem() || !target.getItem()) return false
 
     return this.filters.every(filter => filter.filter(source, target, game))
+  }
+
+  getMultiplierFor(card: Material, game: MaterialGame) {
+    if (!this.multipliers) return 1
+    const battlefield = new ArackhanWarsRules(game).material(MaterialType.FactionCard).location(LocationType.Battlefield)
+    return sumBy(battlefield.getIndexes(), index =>
+      this.multipliers!.every(multiplier => multiplier.filter(card, battlefield.index(index), game)) ? 1 : 0
+    )
   }
 
   attack(modifier: number) {

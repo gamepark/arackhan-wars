@@ -128,7 +128,14 @@ export class CardRule extends MaterialRulesPart {
       this.effectsCache = this.battleFieldCardsRules.flatMap(card =>
         this.isImmuneTo(card) ? []
           : card.abilities.filter(ability => ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial))
-            .flatMap(ability => ability.effects)
+            .flatMap(ability => {
+              const effects: Effect[] = []
+              const multiplier = ability.getMultiplierFor(this.cardMaterial, this.game)
+              for (let i = 0; i < multiplier; i++) {
+                effects.push(...ability.effects)
+              }
+              return effects
+            })
       ).concat(...this.targetingEffects)
       if (this.effectsCache.some(effect => effect.type === EffectType.IgnoreAttackDefenseModifiers)) {
         this.effectsCache = this.effectsCache.filter(effect => effect.type !== EffectType.Attack && effect.type !== EffectType.Defense)
@@ -444,10 +451,8 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get endOfTurnMoves(): MaterialMove[] {
-    return this.abilities.flatMap(ability =>
-      ability.effects.flatMap(effect =>
-        effect.type === EffectType.EndOfTurn ? this.getEndOfTurnEffectMoves(effect) : []
-      )
+    return this.effects.flatMap(effect =>
+      effect.type === EffectType.EndOfTurn ? this.getEndOfTurnEffectMoves(effect) : []
     )
   }
 

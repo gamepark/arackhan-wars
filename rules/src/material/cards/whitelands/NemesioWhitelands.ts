@@ -1,4 +1,6 @@
 import { Faction } from '../../Faction'
+import { defense } from '../Ability'
+import { adjacent, allied, creature } from '../AbilityTargetFilter'
 import { movement } from '../Attribute'
 import { Creature } from '../Creature'
 
@@ -13,5 +15,6 @@ export class NemesioWhitelands extends Creature {
   defense = 1
 
   attribute = movement(2)
-  // TODO: skill & action
+  skill = defense(+1).per(adjacent, allied, creature)
+  // TODO: action
 }

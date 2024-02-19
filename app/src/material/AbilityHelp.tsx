@@ -13,18 +13,20 @@ export const AbilityHelp = ({ type, ability, card }: { type: string, ability: Ab
   const { t } = useTranslation()
   const targets = ability.filters[0] === itself ? '' : t(`target.${ability.filters.map(filter => filter.text).join('.')}`,
     ability.filters.reduce((values, filter) => merge(values, filter.values?.(t)), {}))
+  const multipliers = ability.multipliers ? t(`per.${ability.multipliers.map(filter => filter.text).join('.')}`,
+    ability.multipliers.reduce((values, filter) => merge(values, filter.values?.(t)), {})) : ''
   return <>
     {ability.effects.map((effect, index) =>
       <p key={index}>
         <span css={css`text-transform: uppercase`}>{type}</span>
         &nbsp;
-        <Trans values={{ targets }} {...getAbilityText(effect, targets, t, card)}><strong/><em/></Trans>
+        <Trans values={{ targets }} {...getAbilityText(effect, t, card, targets, multipliers)}><strong/><em/></Trans>
       </p>
     )}
   </>
 }
 
-const getAbilityText = (effect: Effect, targets: string, t: TFunction, card: FactionCard): TransProps<any> => {
+const getAbilityText = (effect: Effect, t: TFunction, card: FactionCard, targets: string, multipliers: string): TransProps<any> => {
   switch (effect.type) {
     case EffectType.Attack:
       return {
@@ -32,9 +34,16 @@ const getAbilityText = (effect: Effect, targets: string, t: TFunction, card: Fac
         values: { targets, modifier: effect.modifier }
       }
     case EffectType.Defense:
-      return {
-        defaults: effect.modifier > 0 ? 'ability.defense.gain' : 'ability.defense.lost',
-        values: { targets, modifier: effect.modifier }
+      if (multipliers) {
+        return {
+          defaults: 'ability.defense.per',
+          values: { multipliers, modifier: effect.modifier }
+        }
+      } else {
+        return {
+          defaults: effect.modifier > 0 ? 'ability.defense.gain' : 'ability.defense.lost',
+          values: { targets, modifier: effect.modifier }
+        }
       }
     case EffectType.LoseAttributes:
       if (effect.attributes?.length === 1) {
