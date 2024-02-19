@@ -278,7 +278,7 @@ export class CardRule extends MaterialRulesPart {
 
   get swarmBonus() {
     if (!this.family || !this.attributes.some(attribute => attribute.type === AttributeType.Swarm)) return 0
-    return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).player(this.owner).getIndexes()
+    return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).getIndexes()
       .filter(index => index !== this.index && getCardRule(this.game, index).family === this.family).length
   }
 
