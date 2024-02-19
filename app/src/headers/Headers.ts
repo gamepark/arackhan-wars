@@ -11,6 +11,7 @@ import { ChooseDeckHeader } from './ChooseDeckHeader'
 import { ChooseFactionHeader } from './ChooseFactionHeader'
 import { ChooseStartPlayerHeader } from './ChooseStartPlayerHeader'
 import { DrawHeader } from './DrawHeader'
+import { EndOfTurnHeader } from './EndOfTurnHeader'
 import { EndPhaseHeader } from './EndPhaseHeader'
 import { MulliganHeader } from './MulliganHeader'
 import { PlacementHeader } from './PlacementHeader'
@@ -27,6 +28,7 @@ export const Headers: Partial<Record<RuleId, () => ReactJSXElement>> = {
   [RuleId.ActivationRule]: ActivationHeader,
   [RuleId.SolvePerforations]: ActivationHeader,
   [RuleId.EndPhaseRule]: EndPhaseHeader,
+  [RuleId.EndOfTurn]: EndOfTurnHeader,
   [RuleId.ForcedExileActionRule]: MoveCreatureActionHeader,
   [RuleId.HorseOfAvalonActionRule]: PlaceCreatureActionHeader,
   [RuleId.TeleportationActionRule]: MoveCreatureActionHeader,

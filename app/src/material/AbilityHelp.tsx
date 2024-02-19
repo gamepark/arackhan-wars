@@ -83,6 +83,8 @@ const getAbilityText = (effect: Effect, targets: string, t: TFunction, card: Fac
       } else {
         return { defaults: 'ability.spell-immune' }
       }
+    case EffectType.EndOfTurn:
+      return { defaults: 'ability.end-of-turn-move', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
     default:
       return {}
   }

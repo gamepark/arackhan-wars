@@ -35,6 +35,7 @@ import { ChooseFactionRule } from './rules/ChooseFactionRule'
 import { ChooseStartPlayerRule } from './rules/ChooseStartPlayerRule'
 import { DrawRules } from './rules/DrawRules'
 import { EndPhaseRules } from './rules/EndPhaseRules'
+import { EndOfTurnRule } from './rules/EndOfTurnRule'
 import { Memory } from './rules/Memory'
 import { MulliganRule } from './rules/MulliganRule'
 import { PlacementRule } from './rules/PlacementRule'
@@ -62,6 +63,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.ActivationRule]: ActivationRule,
     [RuleId.SolvePerforations]: SolvePerforationsRule,
     [RuleId.EndPhaseRule]: EndPhaseRules,
+    [RuleId.EndOfTurn]: EndOfTurnRule,
     [RuleId.ForcedExileActionRule]: ForcedExileActionRule,
     [RuleId.HorseOfAvalonActionRule]: ReplaceWithCreatureActionRule,
     [RuleId.TeleportationActionRule]: TeleportationActionRule,

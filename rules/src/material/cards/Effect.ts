@@ -6,6 +6,7 @@ export type Effect = ModifyAttack | ModifyDefense
   | GainAttributes | LoseAttributes | LoseSkills
   | AttackerConstraint | DefenderConstraint
   | Deactivated | Mimic | Trigger | ImmuneToEnemySpells
+  | EndOfTurn
 
 export enum EffectType {
   Attack, Defense,
@@ -15,7 +16,8 @@ export enum EffectType {
   Deactivated,
   Mimic,
   Trigger,
-  ImmuneToEnemySpells
+  ImmuneToEnemySpells,
+  EndOfTurn
 }
 
 export type ModifyAttack = {
@@ -110,4 +112,13 @@ export enum TriggerAction {
 
 export type ImmuneToEnemySpells = {
   type: EffectType.ImmuneToEnemySpells
+}
+
+export type EndOfTurn = {
+  type: EffectType.EndOfTurn
+  action: EndOfTurnAction
+}
+
+export enum EndOfTurnAction {
+  Move
 }

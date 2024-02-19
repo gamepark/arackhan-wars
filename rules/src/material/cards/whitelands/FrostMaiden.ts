@@ -1,5 +1,7 @@
 import { Faction } from '../../Faction'
+import { endOfTurn } from '../Ability'
 import { Creature } from '../Creature'
+import { EndOfTurnAction } from '../Effect'
 
 export class FrostMaiden extends Creature {
   faction = Faction.Whitelands
@@ -8,5 +10,5 @@ export class FrostMaiden extends Creature {
   attack = 1
   defense = 1
 
-  // TODO skill
+  skill = endOfTurn(EndOfTurnAction.Move)
 }

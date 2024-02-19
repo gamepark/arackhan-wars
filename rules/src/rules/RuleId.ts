@@ -13,6 +13,7 @@ export enum RuleId {
   RevealRule,
   ActivationRule,
   EndPhaseRule,
+  EndOfTurn, // For cards like Frost Maiden
 
   // Special phases
   SolvePerforations = 20,

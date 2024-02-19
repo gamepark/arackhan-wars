@@ -1,13 +1,11 @@
-import { CustomMove, isCustomMove, isMoveItem, isStartPlayerTurn, isStartRule, ItemMove, MaterialMove, PlayerTurnRule, RuleMove } from '@gamepark/rules-api'
-import { onBattlefieldAndAstralPlane } from '../material/Board'
-import { DiscardTiming } from '../material/cards/FactionCardCharacteristics'
-import { Spell } from '../material/cards/Spell'
+import { CustomMove, isCustomMove, isMoveItem, isStartPlayerTurn, ItemMove, MaterialMove, PlayerTurnRule, RuleMove } from '@gamepark/rules-api'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { ActionRule } from './ActionRule'
 import { Attack, AttackRule } from './AttackRule'
 import { getCardRule } from './CardRule'
+import { EndOfTurnRule } from './EndOfTurnRule'
 import { Memory } from './Memory'
 import { MoveRules } from './MoveRules'
 import { RuleId } from './RuleId'
@@ -59,28 +57,6 @@ export class ActivationRule extends PlayerTurnRule {
     return new MoveRules(this.game).beforeItemMove(move)
   }
 
-  onRuleEnd(move: RuleMove) {
-    if (this.remind(Memory.IsInitiativeSequence)) {
-      if (isStartPlayerTurn(move) && move.player === this.remind(Memory.StartPlayer)) {
-        this.forget(Memory.IsInitiativeSequence)
-      }
-    } else {
-      if (isStartPlayerTurn(move) || (isStartRule(move) && move.id === RuleId.EndPhaseRule)) {
-        return this.onEndOfTurn()
-      }
-    }
-    return []
-  }
-
-  onEndOfTurn() {
-    this.memorize(Memory.TurnEffects, [])
-    return this.material(MaterialType.FactionCard)
-      .location(onBattlefieldAndAstralPlane)
-      .player(this.player)
-      .filter((_, index) => (getCardRule(this.game, index).characteristics as Spell)?.discardTiming === DiscardTiming.ActivationOrEndOfTurn)
-      .moveItems({ type: LocationType.PlayerDiscard, player: this.player })
-  }
-
   onCustomMove(move: CustomMove) {
     switch (move.type) {
       case CustomMoveType.Attack:
@@ -92,17 +68,29 @@ export class ActivationRule extends PlayerTurnRule {
         this.memorize(Memory.ActionCard, move.data)
         return [this.rules().startRule(getCardRule(this.game, move.data).characteristics!.action!)]
       case CustomMoveType.Pass:
-        return [this.nextRuleMove]
+        return this.onPass()
     }
     return []
   }
 
-  get nextRuleMove() {
-    const nextPlayer = this.nextPlayer
-    if (nextPlayer === this.remind(Memory.StartPlayer) && !this.remind(Memory.IsInitiativeSequence)) {
-      return this.rules().startRule(RuleId.EndPhaseRule)
+  onPass() {
+    if (this.remind(Memory.IsInitiativeSequence)) {
+      return this.onEndInitiativeSequence()
     } else {
-      return this.rules().startPlayerTurn(RuleId.ActivationRule, nextPlayer)
+      const endOfTurnRule = new EndOfTurnRule(this.game)
+      if (endOfTurnRule.cardsMoves.length > 0) {
+        return [this.rules().startRule(RuleId.EndOfTurn)]
+      } else {
+        return endOfTurnRule.endPlayerTurn()
+      }
     }
+  }
+
+  onEndInitiativeSequence() {
+    const nextPlayer = this.nextPlayer
+    if (nextPlayer === this.remind(Memory.StartPlayer)) {
+      this.forget(Memory.IsInitiativeSequence)
+    }
+    return [this.rules().startPlayerTurn(RuleId.ActivationRule, nextPlayer)]
   }
 }

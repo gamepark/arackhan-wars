@@ -22,6 +22,8 @@ import {
   DefenderConstraint,
   Effect,
   EffectType,
+  EndOfTurn,
+  EndOfTurnAction,
   GainAttributes,
   isAttackerConstraint,
   isDefenderConstraint,
@@ -331,7 +333,7 @@ export class CardRule extends MaterialRulesPart {
   get legalDestinations() {
     if (!this.canBeActivated) return []
     if (this.canFly) {
-      return battlefieldCoordinates.filter(coordinates => this.canEndMovementAt(coordinates))
+      return battlefieldCoordinates.filter(coordinates => this.canMoveOrSwapPosition(coordinates))
     } else if (this.movement > 0) {
       const paths: Path[][] = [
         [X, X, X, _, _, _, _, X],
@@ -407,15 +409,17 @@ export class CardRule extends MaterialRulesPart {
       .location(location => location.type === LocationType.Battlefield && location.x === x && location.y === y)
   }
 
-  canEndMovementAt(location: XYCoordinates, distance?: number) {
+  canMoveTo(location: XYCoordinates): boolean {
+    return !this.getCardAt(location).length && this.thereIsAnotherCardAdjacentTo(location)
+  }
+
+  canMoveOrSwapPosition(location: XYCoordinates, distance?: number) {
+    if (this.canMoveTo(location)) return true
     const cardAtDestination = this.getCardAt(location)
-    if (!cardAtDestination.length) {
-      return this.thereIsAnotherCardAdjacentTo(location)
-    } else if (cardAtDestination.getIndex() === this.index || cardAtDestination.getItem()!.location.player !== this.owner) {
+    if (!cardAtDestination.length || cardAtDestination.getIndex() === this.index || cardAtDestination.getItem()!.location.player !== this.owner) {
       return false
-    } else {
-      return getCardRule(this.game, cardAtDestination.getIndex()).canSwap(this.item.location as XYCoordinates, distance)
     }
+    return getCardRule(this.game, cardAtDestination.getIndex()).canSwap(this.item.location as XYCoordinates, distance)
   }
 
   canSwap(location: XYCoordinates, distance?: number): boolean {
@@ -427,6 +431,24 @@ export class CardRule extends MaterialRulesPart {
 
   get canRegenerate(): boolean {
     return this.attributes.some(attribute => attribute.type === AttributeType.Regeneration) && this.isActive
+  }
+
+  get endOfTurnMoves(): MaterialMove[] {
+    return this.abilities.flatMap(ability =>
+      ability.effects.flatMap(effect =>
+        effect.type === EffectType.EndOfTurn ? this.getEndOfTurnEffectMoves(effect) : []
+      )
+    )
+  }
+
+  getEndOfTurnEffectMoves(effect: EndOfTurn): MaterialMove[] {
+    if (effect.action === EndOfTurnAction.Move) {
+      if (this.remind<number[]>(Memory.MovedCards).includes(this.index)) return []
+      return battlefieldCoordinates.filter(coordinates => this.canMoveTo(coordinates)).map(coordinates =>
+        this.cardMaterial.moveItem({ type: LocationType.Battlefield, ...coordinates, player: this.owner })
+      )
+    }
+    return []
   }
 }
 
