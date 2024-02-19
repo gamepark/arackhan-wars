@@ -46,7 +46,7 @@ const SaveButton = () => {
   const [open, setNameDialogOpen] = useState(false)
   const play = usePlay()
   const { data } = useMyDecks('arackhan-wars')
-  const isSubscriber = !!useMe()?.user.subscriptionSince
+  const isSubscriber = !!useMe()?.user?.subscriptionSince
   const max = isSubscriber ? SUBSCRIBER_MAX_DECKS : DEFAULT_MAX_DECKS
   const hasMaxDecks = (data?.myDecks.length ?? 0) >= max
   const [maxDeckDialogOpen, setMaxDeckDialogOpen] = useState(false)
@@ -119,7 +119,7 @@ const DeckListButton = () => {
   const play = usePlay()
   const [open, setOpen] = useState(false)
   const { data } = useMyDecks('arackhan-wars')
-  const isSubscriber = !!useMe()?.user.subscriptionSince
+  const isSubscriber = !!useMe()?.user?.subscriptionSince
 
   const createNewDeck = useCallback(() => {
     play(rules!.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).deleteItemsAtOnce())
