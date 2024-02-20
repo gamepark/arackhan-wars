@@ -6,7 +6,7 @@ import { MaterialType } from '../MaterialType'
 import { AbilityTargetFilter, itself } from './AbilityTargetFilter'
 import { AttackCondition, AttackLimitation } from './AttackLimitation'
 import { Attribute, AttributeType } from './Attribute'
-import { Effect, EffectType, EndOfTurnAction, LoseAttributes, TriggerAction, TriggerCondition } from './Effect'
+import { Effect, EffectType, EndOfTurnAction, LoseAttributes, ModifyMovementCondition, TriggerAction, TriggerCondition } from './Effect'
 
 export class Ability {
 
@@ -113,6 +113,11 @@ export class Ability {
     this.effects.push({ type: EffectType.IgnoreAttackDefenseModifiers })
     return this
   }
+
+  modifyMovement(modifier: number, ...conditions: ModifyMovementCondition[]) {
+    this.effects.push({ type: EffectType.ModifyMovement, modifier, conditions })
+    return this
+  }
 }
 
 export const attack = (modifier: number) => new Ability().attack(modifier)
@@ -129,3 +134,4 @@ export const trigger = (action: TriggerAction) => ({ when: (condition: TriggerCo
 export const immuneToEnemySpells = () => new Ability().immuneToEnemySpells()
 export const endOfTurn = (action: EndOfTurnAction) => new Ability().endOfTurn(action)
 export const ignoreAttackDefenseModifiers = () => new Ability().ignoreAttackDefenseModifiers()
+export const modifyMovement = (modifier: number, ...conditions: ModifyMovementCondition[]) => new Ability().modifyMovement(modifier, ...conditions)

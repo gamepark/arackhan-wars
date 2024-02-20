@@ -32,6 +32,7 @@ import {
   isMimic,
   isSetAttackDefense,
   isSwapSkills,
+  ModifyMovementCondition,
   Trigger,
   TriggerAction,
   TriggerCondition
@@ -346,7 +347,9 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get movement() {
-    return this.attributes.find(isMovement)?.distance ?? 0
+    const movement = this.attributes.find(isMovement)
+    if (!movement) return 0
+    return movement.distance + sumBy(this.effects, effect => effect.type === EffectType.ModifyMovement ? effect.modifier : 0)
   }
 
   get legalMovements() {
@@ -360,17 +363,7 @@ export class CardRule extends MaterialRulesPart {
     if (this.canFly) {
       return battlefieldCoordinates.filter(coordinates => this.canMoveOrSwapPosition(coordinates))
     } else if (this.movement > 0) {
-      const paths: Path[][] = [
-        [X, X, X, _, _, _, _, X],
-        [_, _, _, _, _, _, _, _],
-        [_, _, _, _, _, _, _, _],
-        [_, _, _, _, _, _, _, _],
-        [_, _, _, _, _, _, _, _],
-        [X, _, _, _, _, X, X, X]
-      ]
-      const itemLocation = this.item.location as XYCoordinates
-      paths[itemLocation.y][itemLocation.x] = Path.Blocked
-      this.buildMovementPaths(paths, itemLocation)
+      const paths = this.buildMovementPaths()
       const legalDestinations: XYCoordinates[] = []
       for (let y = 0; y < paths.length; y++) {
         for (let x = 0; x < paths[y].length; x++) {
@@ -385,16 +378,34 @@ export class CardRule extends MaterialRulesPart {
     }
   }
 
-  private buildMovementPaths(paths: Path[][], { x, y }: XYCoordinates, distance: number = 1) {
-    const adjacentLocations = [{ x: x + 1, y }, { x: x - 1, y }, { x, y: y + 1 }, { x, y: y - 1 }]
-    for (const { x, y } of adjacentLocations) {
-      if (y >= 0 && y < paths.length && x >= 0 && x < paths[y].length && paths[y][x] === Path.Unknown) {
-        paths[y][x] = this.getPath({ x, y }, distance)
-        if (paths[y][x] !== Path.Blocked && !this.locationCancelsMovement(x, y) && distance < this.movement) {
-          this.buildMovementPaths(paths, { x, y }, distance + 1)
+  private buildMovementPaths(movement = this.movement) {
+    const paths: Path[][] = [
+      [X, X, X, _, _, _, _, X],
+      [_, _, _, _, _, _, _, _],
+      [_, _, _, _, _, _, _, _],
+      [_, _, _, _, _, _, _, _],
+      [_, _, _, _, _, _, _, _],
+      [X, _, _, _, _, X, X, X]
+    ]
+    const itemLocation = this.item.location as XYCoordinates
+    paths[itemLocation.y][itemLocation.x] = Path.Blocked
+    let previousLocations = [this.item.location as XYCoordinates]
+    for (let distance = 1; distance <= movement; distance++) {
+      const currentLocations: XYCoordinates[] = []
+      for (const { x, y } of previousLocations) {
+        const adjacentLocations = [{ x: x + 1, y }, { x: x - 1, y }, { x, y: y + 1 }, { x, y: y - 1 }]
+        for (const { x, y } of adjacentLocations) {
+          if (y >= 0 && y < paths.length && x >= 0 && x < paths[y].length && paths[y][x] === Path.Unknown) {
+            paths[y][x] = this.getPath({ x, y }, distance)
+            if (paths[y][x] !== Path.Blocked && !this.locationCancelsMovement(x, y)) {
+              currentLocations.push({ x, y })
+            }
+          }
         }
       }
+      previousLocations = currentLocations
     }
+    return paths
   }
 
   private getPath(location: XYCoordinates, distance: number) {
@@ -405,12 +416,43 @@ export class CardRule extends MaterialRulesPart {
       }
       return getCardRule(this.game, card.getIndex()).canSwap(location, distance) ? Path.CanStop : Path.CanGoThrough
     }
-    return this.thereIsAnotherCardAdjacentTo(location) ? Path.CanStop : Path.CanGoThrough
+    return this.isValidSpotToEndMovement(location, distance) ? Path.CanStop : Path.CanGoThrough
+  }
+
+  private getCardAt({ x, y }: XYCoordinates) {
+    return this.material(MaterialType.FactionCard)
+      .location(location => location.type === LocationType.Battlefield && location.x === x && location.y === y)
+  }
+
+  private isValidSpotToEndMovement(location: XYCoordinates, distance?: number) {
+    return this.thereIsAnotherCardAdjacentTo(location)
+      && (distance === undefined || this.canMoveAtDistance(location, distance))
+  }
+
+  private canMoveAtDistance(location: XYCoordinates, distance: number) {
+    let movement = this.attributes.find(isMovement)?.distance ?? 0
+    for (const effect of this.effects) {
+      if (effect.type === EffectType.ModifyMovement) {
+        if (effect.conditions.includes(ModifyMovementCondition.EndMovementAdjacentToEnemyCard)) {
+          const enemyAdjacentCard = this.getOtherCardsAdjacentTo(location).player(player => player !== this.owner)
+          if (enemyAdjacentCard.length === 0) continue
+        }
+        movement += effect.modifier
+      }
+    }
+    return movement >= distance
   }
 
   public thereIsAnotherCardAdjacentTo(location: XYCoordinates) {
-    return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).filter((_, index) => index !== this.index).getItems()
-      .some(card => areAdjacentSquares(card.location, location))
+    return this.getOtherCardsAdjacentTo(location).length > 0
+  }
+
+  public getOtherCardsAdjacentTo(location: XYCoordinates) {
+    return this.material(MaterialType.FactionCard).filter((item, index) =>
+      index !== this.index
+      && item.location.type === LocationType.Battlefield
+      && areAdjacentSquares(item.location, location)
+    )
   }
 
   private locationCancelsMovement(x: number, y: number) {
@@ -429,28 +471,20 @@ export class CardRule extends MaterialRulesPart {
     )
   }
 
-  getCardAt({ x, y }: XYCoordinates) {
-    return this.material(MaterialType.FactionCard)
-      .location(location => location.type === LocationType.Battlefield && location.x === x && location.y === y)
-  }
-
-  canMoveTo(location: XYCoordinates): boolean {
-    return !this.getCardAt(location).length && this.thereIsAnotherCardAdjacentTo(location)
-  }
-
-  canMoveOrSwapPosition(location: XYCoordinates, distance?: number) {
-    if (this.canMoveTo(location)) return true
+  private canMoveOrSwapPosition(location: XYCoordinates, distance?: number) {
+    if (!this.isValidSpotToEndMovement(location)) return false
     const cardAtDestination = this.getCardAt(location)
-    if (!cardAtDestination.length || cardAtDestination.getIndex() === this.index || cardAtDestination.getItem()!.location.player !== this.owner) {
+    if (!cardAtDestination.length) return true
+    if (cardAtDestination.getIndex() === this.index || cardAtDestination.getItem()!.location.player !== this.owner) {
       return false
     }
     return getCardRule(this.game, cardAtDestination.getIndex()).canSwap(this.item.location as XYCoordinates, distance)
   }
 
-  canSwap(location: XYCoordinates, distance?: number): boolean {
+  private canSwap(location: XYCoordinates, distance?: number): boolean {
     if (!this.canBeActivated || this.remind<Attack[]>(Memory.Attacks).some(attack => attack.card === this.index)) return false
-    if (this.canFly) return true
-    else if (distance) return this.movement >= distance
+    if (this.canFly) return this.isValidSpotToEndMovement(location)
+    else if (distance) return this.isValidSpotToEndMovement(location, distance)
     else return this.legalDestinations.some(({ x, y }) => location.x === x && location.y === y)
   }
 
@@ -467,11 +501,24 @@ export class CardRule extends MaterialRulesPart {
   getEndOfTurnEffectMoves(effect: EndOfTurn): MaterialMove[] {
     if (effect.action === EndOfTurnAction.Move) {
       if (this.remind<number[]>(Memory.MovedCards).includes(this.index)) return []
-      return battlefieldCoordinates.filter(coordinates => this.canMoveTo(coordinates)).map(coordinates =>
+      return battlefieldCoordinates.filter(coordinates =>
+        this.getCardAt(coordinates).length === 0 && this.isValidSpotToEndMovement(coordinates)
+      ).map(coordinates =>
         this.cardMaterial.moveItem({ type: LocationType.Battlefield, ...coordinates, player: this.owner })
       )
     }
     return []
+  }
+
+  canAttackAfterMovement({ x, y }: XYCoordinates): boolean {
+    const movementWithoutAttack = sumBy(this.effects, effect =>
+      effect.type === EffectType.ModifyMovement && effect.conditions.includes(ModifyMovementCondition.DoNotAttack) ? effect.modifier : 0
+    )
+    if (movementWithoutAttack > 0) {
+      const paths = this.buildMovementPaths(this.movement - movementWithoutAttack)
+      return paths[y][x] === Path.CanStop
+    }
+    return true
   }
 }
 

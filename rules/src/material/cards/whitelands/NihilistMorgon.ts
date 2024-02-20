@@ -1,7 +1,9 @@
-import { Creature } from '../Creature'
 import { Faction } from '../../Faction'
-import { Family } from '../Family'
+import { modifyMovement } from '../Ability'
 import { movement } from '../Attribute'
+import { Creature } from '../Creature'
+import { ModifyMovementCondition } from '../Effect'
+import { Family } from '../Family'
 
 export class NihilistMorgon extends Creature {
   faction = Faction.Whitelands
@@ -12,5 +14,5 @@ export class NihilistMorgon extends Creature {
   defense = 2
 
   attribute = movement(2)
-  // TODO skill
+  skill = modifyMovement(+2, ModifyMovementCondition.DoNotAttack, ModifyMovementCondition.EndMovementAdjacentToEnemyCard)
 }

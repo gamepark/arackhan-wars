@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import { Ability } from '@gamepark/arackhan-wars/material/cards/Ability'
 import { itself } from '@gamepark/arackhan-wars/material/cards/AbilityTargetFilter'
 import { AttackCondition, AttackLimitation } from '@gamepark/arackhan-wars/material/cards/AttackLimitation'
-import { Effect, EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
+import { Effect, EffectType, ModifyMovementCondition } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { FactionCard, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { TFunction } from 'i18next'
 import { merge } from 'lodash'
@@ -96,6 +96,12 @@ const getAbilityText = (effect: Effect, t: TFunction, card: FactionCard, targets
       return { defaults: 'ability.end-of-turn-move', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
     case EffectType.IgnoreAttackDefenseModifiers:
       return { defaults: 'ability.ignore-modifiers', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
+    case EffectType.ModifyMovement:
+      if (effect.conditions.includes(ModifyMovementCondition.DoNotAttack)
+        && effect.conditions.includes(ModifyMovementCondition.EndMovementAdjacentToEnemyCard)) {
+        return { defaults: 'ability.modify.movement.if', values: { modifier: effect.modifier, card: t(`card.name.${getUniqueCard(card)}`) } }
+      }
+      return {}
     default:
       return {}
   }
