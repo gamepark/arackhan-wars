@@ -43,6 +43,7 @@ export const Headers: Partial<Record<RuleId, () => ReactJSXElement>> = {
   [RuleId.NoviceFairyAction]: PlaceCreatureActionHeader,
   [RuleId.AncestralLibraryAction]: AncestralLibraryActionHeader,
   [RuleId.TheWhiteGatesAction]: TheWhiteGatesActionHeader,
+  [RuleId.CoriolisWindAction]: MoveCreatureActionHeader,
   [RuleId.StandardBearerAction]: StandardBearerActionHeader,
   [RuleId.BackupAction]: BackupActionHeader,
   [RuleId.MarchingOrderAction]: MarchingOrderActionHeader

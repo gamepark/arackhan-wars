@@ -22,6 +22,7 @@ import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { AncestralLibraryActionRule } from './rules/action/AncestralLibraryActionRule'
 import { BackupActionRule } from './rules/action/BackupActionRule'
+import { CoriolisWindActionRule } from './rules/action/CoriolisWindActionRule'
 import { ForcedExileActionRule } from './rules/action/ForcedExileActionRule'
 import { IceElementalActionRule } from './rules/action/IceElementalActionRule'
 import { MarchingOrderActionRule } from './rules/action/MarchingOrderActionRule'
@@ -78,6 +79,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.NoviceFairyAction]: NoviceFairyActionRule,
     [RuleId.AncestralLibraryAction]: AncestralLibraryActionRule,
     [RuleId.TheWhiteGatesAction]: TheWhiteGatesActionRule,
+    [RuleId.CoriolisWindAction]: CoriolisWindActionRule,
     [RuleId.StandardBearerAction]: StandardBearerActionRule,
     [RuleId.BackupAction]: BackupActionRule,
     [RuleId.MarchingOrderAction]: MarchingOrderActionRule

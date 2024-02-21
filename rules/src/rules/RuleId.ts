@@ -29,6 +29,7 @@ export enum RuleId {
   NemesioWhitelandsAction,
   AncestralLibraryAction,
   TheWhiteGatesAction,
+  CoriolisWindAction,
   StandardBearerAction,
   BackupAction,
   MarchingOrderAction

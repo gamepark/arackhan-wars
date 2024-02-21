@@ -9,15 +9,12 @@ import { CardActionRule } from './CardActionRule'
 export class ForcedExileActionRule extends CardActionRule {
   getPlayerMoves() {
     const battlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-    const opponents = this.game.players.filter(player => player !== this.player)
     return battlefieldCoordinates.flatMap(({ x, y }) => {
       if (battlefield.location(location => location.x === x && location.y === y).length) return []
-      return opponents.flatMap(opponent =>
-        battlefield.player(opponent).filter((_, index) => {
-          const card = getCardRule(this.game, index)
-          return card.isCreature && !card.isImmuneToEnemySpells && card.thereIsAnotherCardAdjacentTo({ x, y })
-        }).moveItems({ type: LocationType.Battlefield, x, y, player: opponent })
-      )
+      return battlefield.player(player => player !== this.player).filter((_, index) => {
+        const card = getCardRule(this.game, index)
+        return card.isCreature && !card.isImmuneToEnemySpells && card.thereIsAnotherCardAdjacentTo({ x, y })
+      }).moveItems(item => ({ type: LocationType.Battlefield, x, y, player: item.location.player }))
     })
   }
 
