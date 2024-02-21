@@ -67,8 +67,8 @@ export class BackupActionRule extends CardActionRule {
     return []
   }
 
-  onRuleEnd() {
+  afterCardAction() {
     this.forget(Memory.Count)
-    return []
+    return super.afterCardAction()
   }
 }

@@ -26,6 +26,7 @@ import { CoriolisWindActionRule } from './rules/action/CoriolisWindActionRule'
 import { EsotericWinterActionRule } from './rules/action/EsotericWinterActionRule'
 import { ForcedExileActionRule } from './rules/action/ForcedExileActionRule'
 import { IceElementalActionRule } from './rules/action/IceElementalActionRule'
+import { IceWingsActionRule } from './rules/action/IceWingsActionRule'
 import { MarchingOrderActionRule } from './rules/action/MarchingOrderActionRule'
 import { MimicryActionRule } from './rules/action/MimicryActionRule'
 import { NemesioWhitelandsActionRule } from './rules/action/NemesioWhitelandsActionRule'
@@ -82,6 +83,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.TheWhiteGatesAction]: TheWhiteGatesActionRule,
     [RuleId.CoriolisWindAction]: CoriolisWindActionRule,
     [RuleId.EsotericWinterAction]: EsotericWinterActionRule,
+    [RuleId.IceWingsAction]: IceWingsActionRule,
     [RuleId.StandardBearerAction]: StandardBearerActionRule,
     [RuleId.BackupAction]: BackupActionRule,
     [RuleId.MarchingOrderAction]: MarchingOrderActionRule
