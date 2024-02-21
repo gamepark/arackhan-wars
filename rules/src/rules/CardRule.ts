@@ -279,6 +279,10 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get attack() {
+    return this.effects.some(effect => effect.type === EffectType.InvertsAttackDefense) ? this.defenseBeforeInvert : this.attackBeforeInvert
+  }
+
+  private get attackBeforeInvert() {
     const setAttackDefense = this.effects.find(isSetAttackDefense)
     const baseAttack = setAttackDefense?.attack ?? this.attackCharacteristic
     const attackModifier = sumBy(this.effects, effect => effect.type === EffectType.Attack ? effect.modifier : 0) + this.swarmBonus
@@ -300,6 +304,10 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get defense() {
+    return this.effects.some(effect => effect.type === EffectType.InvertsAttackDefense) ? this.attackBeforeInvert : this.defenseBeforeInvert
+  }
+
+  private get defenseBeforeInvert() {
     const setAttackDefense = this.effects.find(isSetAttackDefense)
     const baseDefense = setAttackDefense?.defense ?? this.defenseCharacteristic
     const defenseModifier = sumBy(this.effects, effect => effect.type === EffectType.Defense ? effect.modifier : 0)

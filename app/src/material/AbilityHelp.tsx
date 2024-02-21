@@ -102,6 +102,8 @@ const getAbilityText = (effect: Effect, t: TFunction, card: FactionCard, targets
         return { defaults: 'ability.modify.movement.if', values: { modifier: effect.modifier, card: t(`card.name.${getUniqueCard(card)}`) } }
       }
       return {}
+    case EffectType.InvertsAttackDefense:
+      return { defaults: 'ability.inverts-attack-defense', values: { targets } }
     default:
       return {}
   }

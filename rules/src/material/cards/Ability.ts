@@ -118,6 +118,11 @@ export class Ability {
     this.effects.push({ type: EffectType.ModifyMovement, modifier, conditions })
     return this
   }
+
+  invertsAttackDefense() {
+    this.effects.push({ type: EffectType.InvertsAttackDefense })
+    return this
+  }
 }
 
 export const attack = (modifier: number) => new Ability().attack(modifier)
@@ -135,3 +140,4 @@ export const immuneToEnemySpells = () => new Ability().immuneToEnemySpells()
 export const endOfTurn = (action: EndOfTurnAction) => new Ability().endOfTurn(action)
 export const ignoreAttackDefenseModifiers = () => new Ability().ignoreAttackDefenseModifiers()
 export const modifyMovement = (modifier: number, ...conditions: ModifyMovementCondition[]) => new Ability().modifyMovement(modifier, ...conditions)
+export const invertsAttackDefense = () => new Ability().invertsAttackDefense()

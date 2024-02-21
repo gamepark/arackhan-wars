@@ -1,4 +1,6 @@
 import { Faction } from '../../Faction'
+import { invertsAttackDefense } from '../Ability'
+import { adjacent, creature, enemy } from '../AbilityTargetFilter'
 import { stealth } from '../Attribute'
 import { Creature } from '../Creature'
 
@@ -10,5 +12,5 @@ export class QueensJester extends Creature {
   defense = 0
 
   attribute = stealth
-  // TODO skill
+  skill = invertsAttackDefense().to(adjacent, enemy, creature)
 }

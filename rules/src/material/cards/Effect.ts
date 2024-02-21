@@ -7,7 +7,7 @@ export type Effect = ModifyAttack | ModifyDefense
   | AttackerConstraint | DefenderConstraint
   | Deactivated | Mimic | Trigger | ImmuneToEnemySpells
   | EndOfTurn | IgnoreAttackDefenseModifiers | SetAttackDefense
-  | SwapSkills | ModifyMovement
+  | SwapSkills | ModifyMovement | InvertsAttackDefense
 
 export enum EffectType {
   Attack, Defense,
@@ -21,7 +21,8 @@ export enum EffectType {
   EndOfTurn,
   IgnoreAttackDefenseModifiers, SetAttackDefense,
   SwapSkills,
-  ModifyMovement
+  ModifyMovement,
+  InvertsAttackDefense
 }
 
 export type ModifyAttack = {
@@ -158,4 +159,8 @@ export type ModifyMovement = {
 
 export enum ModifyMovementCondition {
   DoNotAttack, EndMovementAdjacentToEnemyCard
+}
+
+export type InvertsAttackDefense = {
+  type: EffectType.InvertsAttackDefense
 }
