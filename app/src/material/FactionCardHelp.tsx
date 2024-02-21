@@ -13,10 +13,11 @@ import { isSpell } from '@gamepark/arackhan-wars/material/cards/Spell'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { FactionCard, FactionCardsCharacteristics, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
+import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { useMe } from '@gamepark/react-client'
 import { linkButtonCss, MaterialHelpProps, Picture, PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
-import { displayLocationHelp, isCustomMove } from '@gamepark/rules-api'
+import { displayLocationHelp, isCustomMove, isMoveItemType } from '@gamepark/rules-api'
 import { Trans, useTranslation } from 'react-i18next'
 import { isDeckbuilding } from '../deckbuilding/deckbuilding.util'
 import astral from '../images/icons/astral.png'
@@ -29,10 +30,14 @@ export const FactionCardHelp = (props: MaterialHelpProps) => {
   const { item, itemIndex, closeDialog } = props
   const { t } = useTranslation()
   const chooseCard = useLegalMove(move => isCustomMove(move) && move.type === CustomMoveType.ChooseCard && move.data === itemIndex)
+  const discardCard = useLegalMove(move =>
+    isMoveItemType(MaterialType.FactionCard) && move.itemIndex === itemIndex && move.location.type === LocationType.PlayerDiscard
+  )
   return <>
     <h2>{item.id.front ? t(`card.name.${getUniqueCard(item.id.front)}`) : t('rules.card.faction', { faction: t(`faction.${item.id.back}`) })}</h2>
     <CardLocationRule {...props}/>
     {chooseCard && <PlayMoveButton move={chooseCard} onPlay={closeDialog}>{t('card.choose')}</PlayMoveButton>}
+    {discardCard && <PlayMoveButton move={discardCard} onPlay={closeDialog}>{t('card.discard')}</PlayMoveButton>}
     {item.id.front && <CardFrontRule {...props}/>}
   </>
 }

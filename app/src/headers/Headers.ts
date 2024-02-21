@@ -2,6 +2,7 @@ import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import { AncestralLibraryActionHeader } from './actions/AncestralLibraryActionHeader'
 import { BackupActionHeader } from './actions/BackupActionHeader'
+import { DiscardActionHeader } from './actions/DiscardActionHeader'
 import { IceElementalActionHeader } from './actions/IceElementalActionHeader'
 import { MarchingOrderActionHeader } from './actions/MarchingOrderActionHeader'
 import { MimicryActionHeader } from './actions/MimicryActionHeader'
@@ -44,6 +45,7 @@ export const Headers: Partial<Record<RuleId, () => ReactJSXElement>> = {
   [RuleId.AncestralLibraryAction]: AncestralLibraryActionHeader,
   [RuleId.TheWhiteGatesAction]: TheWhiteGatesActionHeader,
   [RuleId.CoriolisWindAction]: MoveCreatureActionHeader,
+  [RuleId.EsotericWinterAction]: DiscardActionHeader,
   [RuleId.StandardBearerAction]: StandardBearerActionHeader,
   [RuleId.BackupAction]: BackupActionHeader,
   [RuleId.MarchingOrderAction]: MarchingOrderActionHeader

@@ -30,6 +30,7 @@ export enum RuleId {
   AncestralLibraryAction,
   TheWhiteGatesAction,
   CoriolisWindAction,
+  EsotericWinterAction,
   StandardBearerAction,
   BackupAction,
   MarchingOrderAction
