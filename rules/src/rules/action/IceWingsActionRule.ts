@@ -20,8 +20,7 @@ export class IceWingsActionRule extends CardActionRule {
       if (battlefield.location(location => location.x === x && location.y === y).length) return []
       return myCards.filter((_, index) => {
         const rule = getCardRule(this.game, index)
-        const characteristics = rule.characteristics
-        return rule.isCreature && characteristics !== undefined && characteristics.value <= 5 && rule.thereIsAnotherCardAdjacentTo({ x, y })
+        return rule.isCreature && rule.value <= 5 && rule.thereIsAnotherCardAdjacentTo({ x, y })
       }).moveItems({ type: LocationType.Battlefield, x, y, player: this.player })
     })
     moves.push(this.rules().customMove(CustomMoveType.Pass))

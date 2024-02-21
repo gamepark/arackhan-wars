@@ -1,4 +1,6 @@
 import { Faction } from '../../Faction'
+import { attack, defense } from '../Ability'
+import { allied, creature, maxValue } from '../AbilityTargetFilter'
 import { Spell } from '../Spell'
 
 export class SecretIncantation extends Spell {
@@ -8,5 +10,8 @@ export class SecretIncantation extends Spell {
 
   astral = true
 
-  // TODO effect
+  effects = [
+    attack(+1).to(allied, creature, maxValue(5)),
+    defense(+1).to(allied, creature, maxValue(5))
+  ]
 }

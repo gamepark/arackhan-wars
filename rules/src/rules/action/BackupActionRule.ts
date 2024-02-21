@@ -6,6 +6,7 @@ import { CustomMoveType } from '../../material/CustomMoveType'
 import { CardId, FactionCardsCharacteristics } from '../../material/FactionCard'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
+import { getCardRule } from '../CardRule'
 import { Memory } from '../Memory'
 import { CardActionRule } from './CardActionRule'
 
@@ -23,9 +24,9 @@ export class BackupActionRule extends CardActionRule {
       return isCreature(characteristics) && characteristics.family === Family.Legion6
     }).getItems()
     if (!myLegion6.length) return []
-    const eligibleCards = this.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(this.player).id<CardId>(id => {
-      const characteristics = FactionCardsCharacteristics[id.front]
-      return isCreature(characteristics) && characteristics.family === Family.Legion6 && characteristics.value <= 8
+    const eligibleCards = this.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(this.player).filter((_item, index) => {
+      const cardRule = getCardRule(this.game, index)
+      return cardRule.isCreature && cardRule.family === Family.Legion6 && cardRule.value <= 8
     })
     if (!eligibleCards.length) return []
     const enemyCreatures = battlefield.player(player => player !== this.player).id<CardId>(id => isCreature(FactionCardsCharacteristics[id.front])).getItems()

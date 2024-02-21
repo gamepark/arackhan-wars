@@ -59,8 +59,7 @@ export class AttackByCreaturesOnlyInGroup extends AttackConstraintRule {
 
 export class AttackOnlyEvenValueCards extends AttackConstraintRule {
   preventAttack(_attacker: number, defender: number): boolean {
-    const characteristics = getCardRule(this.game, defender).characteristics
-    return characteristics !== undefined && characteristics.value % 2 !== 0
+    return getCardRule(this.game, defender).value % 2 !== 0
   }
 }
 

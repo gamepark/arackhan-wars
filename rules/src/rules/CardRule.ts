@@ -77,6 +77,10 @@ export class CardRule extends MaterialRulesPart {
     return FactionCardsCharacteristics[mimic?.target ?? this.card]
   }
 
+  get value(): number {
+    return this.characteristics?.value ?? 0
+  }
+
   get isCreature() {
     return isCreature(this.characteristics)
   }
