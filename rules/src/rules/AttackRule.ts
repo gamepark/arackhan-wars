@@ -134,13 +134,23 @@ export class AttackRule extends PlayerTurnRule {
       .moveItems({ type: LocationType.PlayerDiscard, player: this.player })
     )
 
-    this.memorize(Memory.Attacks, [])
-
     if (perforations.length > 0) {
       this.memorize<Perforation[]>(Memory.Perforations, perforations)
       moves.push(this.rules().startRule(RuleId.SolvePerforations))
+    } else {
+      moves.push(...this.cleanAttacks())
     }
 
+    return moves
+  }
+
+  cleanAttacks() {
+    const moves: MaterialMove[] = []
+    const attacks = this.remind<Attack[]>(Memory.Attacks)
+    for (const attack of attacks) {
+      moves.push(...getCardRule(this.game, attack.card).triggerAttackEffects())
+    }
+    this.memorize(Memory.Attacks, [])
     return moves
   }
 

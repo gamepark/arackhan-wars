@@ -53,6 +53,7 @@ export class SolvePerforationsRule extends MaterialRulesPart {
       moves.push(this.rules().startRule(RuleId.SolvePerforations))
     } else {
       this.forget(Memory.Perforations)
+      moves.push(...new AttackRule(this.game).cleanAttacks())
       moves.push(this.rules().startRule(RuleId.ActivationRule))
     }
 

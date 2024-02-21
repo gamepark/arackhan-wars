@@ -328,13 +328,21 @@ export class CardRule extends MaterialRulesPart {
     return this.attributes.some(attribute => attribute.type === AttributeType.Perforation)
   }
 
+  triggerAttackEffects() {
+    const moves: MaterialMove[] = []
+    for (const effect of this.effects) {
+      if (effect.type === EffectType.Trigger && effect.condition === TriggerCondition.Attack) {
+        moves.push(...this.getEffectAction(effect))
+      }
+    }
+    return moves
+  }
+
   triggerFailAttackEffects() {
     const moves: MaterialMove[] = []
     for (const effect of this.effects) {
       if (effect.type === EffectType.Trigger && effect.condition === TriggerCondition.FailAttack) {
-        if (effect.action === TriggerAction.SelfDestroy) { // We can use a delegation when
-          moves.push(...this.getEffectAction(effect))
-        }
+        moves.push(...this.getEffectAction(effect))
       }
     }
     return moves

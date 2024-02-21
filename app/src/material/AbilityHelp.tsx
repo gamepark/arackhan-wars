@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import { Ability } from '@gamepark/arackhan-wars/material/cards/Ability'
 import { itself } from '@gamepark/arackhan-wars/material/cards/AbilityTargetFilter'
 import { AttackCondition, AttackLimitation } from '@gamepark/arackhan-wars/material/cards/AttackLimitation'
-import { Effect, EffectType, ModifyMovementCondition } from '@gamepark/arackhan-wars/material/cards/Effect'
+import { Effect, EffectType, ModifyMovementCondition, TriggerAction, TriggerCondition } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { FactionCard, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { TFunction } from 'i18next'
 import { merge } from 'lodash'
@@ -77,7 +77,19 @@ const getAbilityText = (effect: Effect, t: TFunction, card: FactionCard, targets
     case EffectType.Deactivated:
       return { defaults: 'ability.deactivate' }
     case EffectType.Trigger:
-      return { defaults: 'ability.trigger.fail-attack.destroy', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
+      switch (effect.condition) {
+        case TriggerCondition.Attack:
+          if (effect.action === TriggerAction.SelfDestroy) {
+            return { defaults: 'ability.targets.trigger.attack.destroy', values: { targets } }
+          }
+          break
+        case TriggerCondition.FailAttack:
+          if (effect.action === TriggerAction.SelfDestroy) {
+            return { defaults: 'ability.trigger.fail-attack.destroy', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
+          }
+          break
+      }
+      return {}
     case EffectType.CannotAttack:
       return {
         defaults: effect.limitation ?

@@ -1,4 +1,9 @@
 import { Faction } from '../../Faction'
+import { attack, gainAttributes, trigger } from '../Ability'
+import { allied, creature, family } from '../AbilityTargetFilter'
+import { perforation } from '../Attribute'
+import { TriggerAction, TriggerCondition } from '../Effect'
+import { Family } from '../Family'
 import { Spell } from '../Spell'
 
 export class FairyMadness extends Spell {
@@ -7,5 +12,9 @@ export class FairyMadness extends Spell {
 
   astral = true
 
-  // TODO effects
+  effects = [
+    attack(+3).to(allied, family(Family.IceFairy), creature),
+    gainAttributes(perforation).to(allied, family(Family.IceFairy), creature),
+    trigger(TriggerAction.SelfDestroy).when(TriggerCondition.Attack).to(allied, family(Family.IceFairy), creature)
+  ]
 }

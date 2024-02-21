@@ -108,7 +108,7 @@ export type Trigger = {
 }
 
 export enum TriggerCondition {
-  FailAttack
+  Attack, FailAttack
 }
 
 export enum TriggerAction {
