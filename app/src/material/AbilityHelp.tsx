@@ -41,7 +41,12 @@ const getAbilityText = (effect: Effect, t: TFunction, card: FactionCard, targets
         }
       }
     case EffectType.Defense:
-      if (multipliers) {
+      if (targets && multipliers) {
+        return {
+          defaults: 'ability.defense.gain.per',
+          values: { targets, multipliers, modifier: effect.modifier }
+        }
+      } else if (multipliers) {
         return {
           defaults: 'ability.defense.per',
           values: { multipliers, modifier: effect.modifier }

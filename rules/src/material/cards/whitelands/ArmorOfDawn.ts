@@ -1,4 +1,6 @@
 import { Faction } from '../../Faction'
+import { defense } from '../Ability'
+import { adjacent, allied, creature } from '../AbilityTargetFilter'
 import { initiative } from '../Attribute'
 import { Spell } from '../Spell'
 
@@ -11,5 +13,5 @@ export class ArmorOfDawn extends Spell {
 
   attribute = initiative
 
-  //TODO effect
+  effect = defense(+1).to(allied, creature).per(adjacent, allied, creature)
 }
