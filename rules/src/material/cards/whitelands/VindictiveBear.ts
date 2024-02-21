@@ -1,4 +1,6 @@
 import { Faction } from '../../Faction'
+import { attack } from '../Ability'
+import { adjacent, enemy } from '../AbilityTargetFilter'
 import { omnistrike } from '../Attribute'
 import { Creature } from '../Creature'
 
@@ -11,5 +13,5 @@ export class VindictiveBear extends Creature {
   defense = 3
 
   attribute = omnistrike
-  // TODO skill
+  skill = attack(+1).per(adjacent, enemy)
 }
