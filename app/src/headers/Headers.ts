@@ -9,6 +9,7 @@ import { MoveCreatureActionHeader } from './actions/MoveCreatureActionHeader'
 import { PlaceCreatureActionHeader } from './actions/PlaceCreatureActionHeader'
 import { StandardBearerActionHeader } from './actions/StandardBearerActionHeader'
 import { TargetCreatureActionHeader } from './actions/TargetCreatureActionHeader'
+import { TheWhiteGatesActionHeader } from './actions/TheWhiteGatesActionHeader'
 import { ActivationHeader } from './ActivationHeader'
 import { ChooseDeckHeader } from './ChooseDeckHeader'
 import { ChooseFactionHeader } from './ChooseFactionHeader'
@@ -41,6 +42,7 @@ export const Headers: Partial<Record<RuleId, () => ReactJSXElement>> = {
   [RuleId.NemesioWhitelandsAction]: TargetCreatureActionHeader,
   [RuleId.NoviceFairyAction]: PlaceCreatureActionHeader,
   [RuleId.AncestralLibraryAction]: AncestralLibraryActionHeader,
+  [RuleId.TheWhiteGatesAction]: TheWhiteGatesActionHeader,
   [RuleId.StandardBearerAction]: StandardBearerActionHeader,
   [RuleId.BackupAction]: BackupActionHeader,
   [RuleId.MarchingOrderAction]: MarchingOrderActionHeader

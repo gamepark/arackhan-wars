@@ -31,14 +31,15 @@ import { NoviceFairyActionRule } from './rules/action/NoviceFairyActionRule'
 import { ReplaceWithCreatureActionRule } from './rules/action/ReplaceWithCreatureActionRule'
 import { StandardBearerActionRule } from './rules/action/StandardBearerActionRule'
 import { TeleportationActionRule } from './rules/action/TeleportationActionRule'
+import { TheWhiteGatesActionRule } from './rules/action/TheWhiteGatesActionRule'
 import { ActivationRule } from './rules/ActivationRule'
 import { getCardRule, resetCardsRulesCache } from './rules/CardRule'
 import { ChooseDeckRule } from './rules/ChooseDeckRule'
 import { ChooseFactionRule } from './rules/ChooseFactionRule'
 import { ChooseStartPlayerRule } from './rules/ChooseStartPlayerRule'
 import { DrawRules } from './rules/DrawRules'
-import { EndPhaseRules } from './rules/EndPhaseRules'
 import { EndOfTurnRule } from './rules/EndOfTurnRule'
+import { EndPhaseRules } from './rules/EndPhaseRules'
 import { Memory } from './rules/Memory'
 import { MulliganRule } from './rules/MulliganRule'
 import { PlacementRule } from './rules/PlacementRule'
@@ -76,6 +77,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.NemesioWhitelandsAction]: NemesioWhitelandsActionRule,
     [RuleId.NoviceFairyAction]: NoviceFairyActionRule,
     [RuleId.AncestralLibraryAction]: AncestralLibraryActionRule,
+    [RuleId.TheWhiteGatesAction]: TheWhiteGatesActionRule,
     [RuleId.StandardBearerAction]: StandardBearerActionRule,
     [RuleId.BackupAction]: BackupActionRule,
     [RuleId.MarchingOrderAction]: MarchingOrderActionRule

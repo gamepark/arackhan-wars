@@ -40,19 +40,23 @@ export class MoveRules extends PlayerTurnRule {
   }
 
   onMoveCardOnBattlefield(move: MoveItem) {
+    const moves: MaterialMove[] = this.getSwapMoves(move)
+    const cardRule = getCardRule(this.game, move.itemIndex)
+    if (cardRule.canAttackAfterMovement(move.location as XYCoordinates)) {
+      this.memorize<number[]>(Memory.MovedCards, movedCards => [...movedCards, move.itemIndex])
+    } else {
+      moves.push(this.material(MaterialType.FactionToken).parent(move.itemIndex).rotateItem(true))
+    }
+    return moves
+  }
+
+  getSwapMoves(move: MoveItem): MaterialMove[] {
     const moves: MaterialMove[] = []
     const cardToSwap = this.material(MaterialType.FactionCard)
       .location(location => location.type === LocationType.Battlefield && location.x === move.location.x && location.y === move.location.y)
     if (cardToSwap.length) {
       const swapLocation = this.material(MaterialType.FactionCard).getItem(move.itemIndex)!.location
       moves.push(cardToSwap.moveItem({ ...swapLocation }))
-    }
-
-    const cardRule = getCardRule(this.game, move.itemIndex)
-    if (cardRule.canAttackAfterMovement(move.location as XYCoordinates)) {
-      this.memorize<number[]>(Memory.MovedCards, movedCards => [...movedCards, move.itemIndex])
-    } else {
-      moves.push(this.material(MaterialType.FactionToken).parent(move.itemIndex).rotateItem(true))
     }
     return moves
   }

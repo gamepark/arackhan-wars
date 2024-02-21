@@ -28,6 +28,7 @@ export enum RuleId {
   NoviceFairyAction,
   NemesioWhitelandsAction,
   AncestralLibraryAction,
+  TheWhiteGatesAction,
   StandardBearerAction,
   BackupAction,
   MarchingOrderAction

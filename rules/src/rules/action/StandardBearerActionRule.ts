@@ -37,7 +37,7 @@ export class StandardBearerActionRule extends CardActionRule {
     }
   }
 
-  beforeItemMove(move: ItemMove<number, number, number>): MaterialMove<number, number, number>[] {
+  beforeItemMove(move: ItemMove): MaterialMove[] {
     if (isMoveItemType(MaterialType.FactionCard)(move)) {
       if (move.itemIndex === this.remind(Memory.ActionCard)) {
         const { x, y } = move.location
