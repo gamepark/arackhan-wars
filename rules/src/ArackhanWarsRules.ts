@@ -20,6 +20,7 @@ import { Faction } from './material/Faction'
 import { FactionCard, FactionCardsCharacteristics } from './material/FactionCard'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
+import { AncestralLibraryActionRule } from './rules/action/AncestralLibraryActionRule'
 import { BackupActionRule } from './rules/action/BackupActionRule'
 import { ForcedExileActionRule } from './rules/action/ForcedExileActionRule'
 import { IceElementalActionRule } from './rules/action/IceElementalActionRule'
@@ -74,6 +75,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.IceElementalAction]: IceElementalActionRule,
     [RuleId.NemesioWhitelandsAction]: NemesioWhitelandsActionRule,
     [RuleId.NoviceFairyAction]: NoviceFairyActionRule,
+    [RuleId.AncestralLibraryAction]: AncestralLibraryActionRule,
     [RuleId.StandardBearerAction]: StandardBearerActionRule,
     [RuleId.BackupAction]: BackupActionRule,
     [RuleId.MarchingOrderAction]: MarchingOrderActionRule

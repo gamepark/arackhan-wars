@@ -1,5 +1,6 @@
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
+import { AncestralLibraryActionHeader } from './actions/AncestralLibraryActionHeader'
 import { BackupActionHeader } from './actions/BackupActionHeader'
 import { IceElementalActionHeader } from './actions/IceElementalActionHeader'
 import { MarchingOrderActionHeader } from './actions/MarchingOrderActionHeader'
@@ -39,6 +40,7 @@ export const Headers: Partial<Record<RuleId, () => ReactJSXElement>> = {
   [RuleId.IceElementalAction]: IceElementalActionHeader,
   [RuleId.NemesioWhitelandsAction]: TargetCreatureActionHeader,
   [RuleId.NoviceFairyAction]: PlaceCreatureActionHeader,
+  [RuleId.AncestralLibraryAction]: AncestralLibraryActionHeader,
   [RuleId.StandardBearerAction]: StandardBearerActionHeader,
   [RuleId.BackupAction]: BackupActionHeader,
   [RuleId.MarchingOrderAction]: MarchingOrderActionHeader
