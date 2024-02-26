@@ -80,7 +80,11 @@ const getAbilityText = (effect: Effect, t: TFunction, card: FactionCard, targets
       switch (effect.condition) {
         case TriggerCondition.Attack:
           if (effect.action === TriggerAction.SelfDestroy) {
-            return { defaults: 'ability.targets.trigger.attack.destroy', values: { targets } }
+            if (targets) {
+              return { defaults: 'ability.targets.trigger.attack.destroy', values: { targets } }
+            } else {
+              return { defaults: 'ability.trigger.attack.destroy', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
+            }
           }
           break
         case TriggerCondition.FailAttack:
