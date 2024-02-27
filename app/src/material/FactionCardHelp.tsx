@@ -31,7 +31,7 @@ export const FactionCardHelp = (props: MaterialHelpProps) => {
   const { t } = useTranslation()
   const chooseCard = useLegalMove(move => isCustomMove(move) && move.type === CustomMoveType.ChooseCard && move.data === itemIndex)
   const discardCard = useLegalMove(move =>
-    isMoveItemType(MaterialType.FactionCard) && move.itemIndex === itemIndex && move.location.type === LocationType.PlayerDiscard
+    isMoveItemType(MaterialType.FactionCard)(move) && move.itemIndex === itemIndex && move.location.type === LocationType.PlayerDiscard
   )
   return <>
     <h2>{item.id.front ? t(`card.name.${getUniqueCard(item.id.front)}`) : t('rules.card.faction', { faction: t(`faction.${item.id.back}`) })}</h2>
