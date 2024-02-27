@@ -5,7 +5,7 @@ import { Memory } from '../../rules/Memory'
 import { AttackerConstraint, DefenderConstraint, EffectType } from './Effect'
 
 export enum AttackLimitation {
-  ByCreatures = 1, ByGroupedCreatures, AdjacentCards
+  ByCreatures = 1, ByGroupedCreatures, AdjacentCards, DuringInitiative
 }
 
 export enum AttackCondition {
@@ -47,6 +47,12 @@ export class NoAttackOnAdjacentCard extends AttackConstraintRule {
   }
 }
 
+export class NoAttackDuringInitiative extends AttackConstraintRule {
+  preventAttack(): boolean {
+    return this.remind(Memory.IsInitiativeSequence)
+  }
+}
+
 export class AttackByCreaturesOnlyInGroup extends AttackConstraintRule {
   preventAttack(): boolean {
     return false
@@ -74,6 +80,8 @@ export const getAttackConstraint = (effect: AttackerConstraint | DefenderConstra
           return new NoAttackByGroupedCreatures(game)
         case AttackLimitation.AdjacentCards:
           return new NoAttackOnAdjacentCard(game)
+        case AttackLimitation.DuringInitiative:
+          return new NoAttackDuringInitiative(game)
         default:
           return new NoAttack(game)
       }
