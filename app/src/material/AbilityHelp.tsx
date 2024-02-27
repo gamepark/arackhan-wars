@@ -11,22 +11,23 @@ import { Trans, TransProps, useTranslation } from 'react-i18next'
 
 export const AbilityHelp = ({ type, ability, card }: { type: string, ability: Ability, card: FactionCard }) => {
   const { t } = useTranslation()
-  const targets = ability.filters[0] === itself ? '' : t(`target.${ability.filters.map(filter => filter.text).join('.')}`,
+  const targets = ability.filters[0] === itself ? '' : t(`targets.${ability.filters.map(filter => filter.text).join('.')}`,
     ability.filters.reduce((values, filter) => merge(values, filter.values?.(t)), {}))
-  const multipliers = ability.multipliers ? t(`target.${ability.multipliers.map(filter => filter.text).join('.')}`,
+  const multipliers = ability.multipliers ? t(`targets.${ability.multipliers.map(filter => filter.text).join('.')}`,
     ability.multipliers.reduce((values, filter) => merge(values, filter.values?.(t)), {})) : ''
+  const condition = ability.condition ? ability.condition.getText(t) : ''
   return <>
     {ability.effects.map((effect, index) =>
       <p key={index}>
         <span css={css`text-transform: uppercase`}>{type}</span>
         &nbsp;
-        <Trans values={{ targets }} {...getAbilityText(effect, t, card, targets, multipliers)}><strong/><em/></Trans>
+        <Trans values={{ targets }} {...getAbilityText(effect, t, card, targets, multipliers, condition)}><strong/><em/></Trans>
       </p>
     )}
   </>
 }
 
-const getAbilityText = (effect: Effect, t: TFunction, card: FactionCard, targets: string, multipliers: string): TransProps<any> => {
+const getAbilityText = (effect: Effect, t: TFunction, card: FactionCard, targets: string, multipliers: string, condition: string): TransProps<any> => {
   switch (effect.type) {
     case EffectType.Attack:
       if (multipliers) {
@@ -68,18 +69,22 @@ const getAbilityText = (effect: Effect, t: TFunction, card: FactionCard, targets
       }
     case EffectType.GainAttributes:
       const attribute = effect.attributes[0]
-      if (effect.conditions) {
+      if (!targets) {
         return {
           defaults: 'ability.attribute.gain.if',
-          values: { attribute: t(`attribute.${attribute.type}`, attribute), condition: t('condition.isolated') }
+          values: { attribute: t(`attribute.${attribute.type}`, attribute), condition }
         }
-      } else if (targets) {
+      } else if (!condition) {
         return {
-          defaults: 'ability.attribute.gain',
+          defaults: 'ability.attribute.give',
           values: { targets, attribute: t(`attribute.${attribute.type}`, attribute) }
         }
+      } else {
+        return {
+          defaults: 'ability.attribute.give.if',
+          values: { targets, attribute: t(`attribute.${attribute.type}`, attribute), condition }
+        }
       }
-      return {}
     case EffectType.LoseSkills:
       return { defaults: 'ability.skills.lose' }
     case EffectType.Deactivated:

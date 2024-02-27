@@ -38,11 +38,6 @@ export type ModifyDefense = {
 export type GainAttributes = {
   type: EffectType.GainAttributes
   attributes: Attribute[]
-  conditions?: GainAttributesCondition[]
-}
-
-export enum GainAttributesCondition {
-  Isolated
 }
 
 export function isGainAttributes(effect: Effect): effect is GainAttributes {

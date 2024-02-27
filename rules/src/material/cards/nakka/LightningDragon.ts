@@ -1,9 +1,10 @@
 import { Faction } from '../../Faction'
 import { cannotAttack, gainAttribute } from '../Ability'
+import { thereIsNot } from '../AbilityCondition'
+import { adjacent, allied, creature } from '../AbilityTargetFilter'
 import { AttackLimitation } from '../AttackLimitation'
 import { initiative, movement, omnistrike } from '../Attribute'
 import { Creature } from '../Creature'
-import { GainAttributesCondition } from '../Effect'
 
 export class LightningDragon extends Creature {
   faction = Faction.Nakka
@@ -14,6 +15,6 @@ export class LightningDragon extends Creature {
   defense = 1
 
   attributes = [initiative, movement(2)]
-  skill = gainAttribute(omnistrike, [GainAttributesCondition.Isolated])
+  skill = gainAttribute(omnistrike).if(thereIsNot(adjacent, allied, creature))
   weakness = cannotAttack(AttackLimitation.DuringInitiative)
 }

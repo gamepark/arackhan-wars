@@ -3,24 +3,17 @@ import sumBy from 'lodash/sumBy'
 import { ArackhanWarsRules } from '../../ArackhanWarsRules'
 import { LocationType } from '../LocationType'
 import { MaterialType } from '../MaterialType'
+import { AbilityCondition } from './AbilityCondition'
 import { AbilityTargetFilter, itself } from './AbilityTargetFilter'
 import { AttackCondition, AttackLimitation } from './AttackLimitation'
 import { Attribute, AttributeType } from './Attribute'
-import {
-  Effect,
-  EffectType,
-  EndOfTurnAction,
-  GainAttributesCondition,
-  LoseAttributes,
-  ModifyMovementCondition,
-  TriggerAction,
-  TriggerCondition
-} from './Effect'
+import { Effect, EffectType, EndOfTurnAction, LoseAttributes, ModifyMovementCondition, TriggerAction, TriggerCondition } from './Effect'
 
 export class Ability {
 
   filters: AbilityTargetFilter[] = [itself]
   multipliers?: AbilityTargetFilter[]
+  condition?: AbilityCondition
   effects: Effect[] = []
 
   to(...applicableFilters: AbilityTargetFilter[]) {
@@ -33,9 +26,14 @@ export class Ability {
     return this
   }
 
+  if(condition: AbilityCondition) {
+    this.condition = condition
+    return this
+  }
+
   isApplicable(game: MaterialGame, source: Material, target: Material) {
     if (!source.getItem() || !target.getItem()) return false
-
+    if (this.condition && !this.condition.match(game, source)) return false
     return this.filters.every(filter => filter.filter(source, target, game))
   }
 
@@ -57,8 +55,8 @@ export class Ability {
     return this
   }
 
-  gainAttributes(attributes: Attribute[], conditions?: GainAttributesCondition[]) {
-    this.effects.push({ type: EffectType.GainAttributes, attributes, conditions })
+  gainAttributes(attributes: Attribute[]) {
+    this.effects.push({ type: EffectType.GainAttributes, attributes })
     return this
   }
 
@@ -136,7 +134,7 @@ export class Ability {
 
 export const attack = (modifier: number) => new Ability().attack(modifier)
 export const defense = (modifier: number) => new Ability().defense(modifier)
-export const gainAttribute = (attribute: Attribute, conditions?: GainAttributesCondition[]) => new Ability().gainAttributes([attribute], conditions)
+export const gainAttribute = (attribute: Attribute) => new Ability().gainAttributes([attribute])
 export const loseAttributes = (...attributes: AttributeType[]) => new Ability().loseAttributes(...attributes)
 export const loseAttribute = (attribute: AttributeType) => new Ability().loseAttribute(attribute)
 export const cannotAttack = (limitation?: AttackLimitation) => new Ability().cannotAttack(limitation)
