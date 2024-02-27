@@ -1,6 +1,8 @@
 import { Faction } from '../../Faction'
-import { initiative, movement } from '../Attribute'
+import { gainAttribute } from '../Ability'
+import { initiative, movement, omnistrike } from '../Attribute'
 import { Creature } from '../Creature'
+import { GainAttributesCondition } from '../Effect'
 
 export class LightningDragon extends Creature {
   faction = Faction.Nakka
@@ -11,5 +13,6 @@ export class LightningDragon extends Creature {
   defense = 1
 
   attributes = [initiative, movement(2)]
-  // TODO skill & weakness
+  skill = gainAttribute(omnistrike, [GainAttributesCondition.Isolated])
+  // TODO weakness
 }

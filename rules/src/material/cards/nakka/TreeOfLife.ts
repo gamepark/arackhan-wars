@@ -1,7 +1,7 @@
 import { adjacent, allied, creature } from '../AbilityTargetFilter'
 import { Land } from '../Land'
 import { Faction } from '../../Faction'
-import { gainAttributes } from '../Ability'
+import { gainAttribute } from '../Ability'
 import { regeneration } from '../Attribute'
 
 export class TreeOfLife extends Land {
@@ -10,5 +10,5 @@ export class TreeOfLife extends Land {
 
   defense = 4
 
-  benefit = gainAttributes(regeneration).to(adjacent, allied, creature)
+  benefit = gainAttribute(regeneration).to(adjacent, allied, creature)
 }

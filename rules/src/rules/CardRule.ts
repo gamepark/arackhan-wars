@@ -25,6 +25,7 @@ import {
   EndOfTurn,
   EndOfTurnAction,
   GainAttributes,
+  GainAttributesCondition,
   isAttackerConstraint,
   isDefenderConstraint,
   isGainAttributes,
@@ -172,10 +173,21 @@ export class CardRule extends MaterialRulesPart {
     const attributes = this.characteristics?.getAttributes() ?? []
     return attributes
       .concat(...this.effects.filter(isGainAttributes)
+        .filter(effect => !effect.conditions || effect.conditions.every(condition => this.fulfilCondition(condition)))
         .flatMap((effect: GainAttributes) => effect.attributes)
       ).filter(attribute => !this.effects.some(effect =>
         effect.type === EffectType.LoseAttributes && effect.attributes?.includes(attribute.type))
       )
+  }
+
+  fulfilCondition(condition: GainAttributesCondition) {
+    switch (condition) {
+      case GainAttributesCondition.Isolated:
+        return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).player(this.owner)
+          .filter((item, index) => getCardRule(this.game, index).isCreature && areAdjacentSquares(item.location, this.item.location)).length === 0
+      default:
+        return false
+    }
   }
 
   get token() {

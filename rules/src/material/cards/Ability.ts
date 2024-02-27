@@ -6,7 +6,16 @@ import { MaterialType } from '../MaterialType'
 import { AbilityTargetFilter, itself } from './AbilityTargetFilter'
 import { AttackCondition, AttackLimitation } from './AttackLimitation'
 import { Attribute, AttributeType } from './Attribute'
-import { Effect, EffectType, EndOfTurnAction, LoseAttributes, ModifyMovementCondition, TriggerAction, TriggerCondition } from './Effect'
+import {
+  Effect,
+  EffectType,
+  EndOfTurnAction,
+  GainAttributesCondition,
+  LoseAttributes,
+  ModifyMovementCondition,
+  TriggerAction,
+  TriggerCondition
+} from './Effect'
 
 export class Ability {
 
@@ -48,8 +57,8 @@ export class Ability {
     return this
   }
 
-  gainAttributes(...attributes: Attribute[]) {
-    this.effects.push({ type: EffectType.GainAttributes, attributes })
+  gainAttributes(attributes: Attribute[], conditions?: GainAttributesCondition[]) {
+    this.effects.push({ type: EffectType.GainAttributes, attributes, conditions })
     return this
   }
 
@@ -127,7 +136,7 @@ export class Ability {
 
 export const attack = (modifier: number) => new Ability().attack(modifier)
 export const defense = (modifier: number) => new Ability().defense(modifier)
-export const gainAttributes = (...attributes: Attribute[]) => new Ability().gainAttributes(...attributes)
+export const gainAttribute = (attribute: Attribute, conditions?: GainAttributesCondition[]) => new Ability().gainAttributes([attribute], conditions)
 export const loseAttributes = (...attributes: AttributeType[]) => new Ability().loseAttributes(...attributes)
 export const loseAttribute = (attribute: AttributeType) => new Ability().loseAttribute(attribute)
 export const cannotAttack = (limitation?: AttackLimitation) => new Ability().cannotAttack(limitation)

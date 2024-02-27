@@ -1,5 +1,5 @@
 import { Faction } from '../../Faction'
-import { attack, gainAttributes, trigger } from '../Ability'
+import { attack, gainAttribute, trigger } from '../Ability'
 import { allied, creature, family } from '../AbilityTargetFilter'
 import { perforation } from '../Attribute'
 import { TriggerAction, TriggerCondition } from '../Effect'
@@ -14,7 +14,7 @@ export class FairyMadness extends Spell {
 
   effects = [
     attack(+3).to(allied, family(Family.IceFairy), creature),
-    gainAttributes(perforation).to(allied, family(Family.IceFairy), creature),
+    gainAttribute(perforation).to(allied, family(Family.IceFairy), creature),
     trigger(TriggerAction.SelfDestroy).when(TriggerCondition.Attack).to(allied, family(Family.IceFairy), creature)
   ]
 }

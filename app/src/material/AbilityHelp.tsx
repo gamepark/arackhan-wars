@@ -68,10 +68,18 @@ const getAbilityText = (effect: Effect, t: TFunction, card: FactionCard, targets
       }
     case EffectType.GainAttributes:
       const attribute = effect.attributes[0]
-      return {
-        defaults: 'ability.attribute.gain',
-        values: { targets, attribute: t(`attribute.${attribute.type}`, attribute as any) }
+      if (effect.conditions) {
+        return {
+          defaults: 'ability.attribute.gain.if',
+          values: { attribute: t(`attribute.${attribute.type}`, attribute), condition: t('condition.isolated') }
+        }
+      } else if (targets) {
+        return {
+          defaults: 'ability.attribute.gain',
+          values: { targets, attribute: t(`attribute.${attribute.type}`, attribute) }
+        }
       }
+      return {}
     case EffectType.LoseSkills:
       return { defaults: 'ability.skills.lose' }
     case EffectType.Deactivated:
