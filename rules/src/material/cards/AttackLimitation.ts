@@ -2,10 +2,11 @@ import { areAdjacentSquares, MaterialGame, MaterialRulesPart } from '@gamepark/r
 import { Attack } from '../../rules/AttackRule'
 import { getCardRule } from '../../rules/CardRule'
 import { Memory } from '../../rules/Memory'
+import { MaterialType } from '../MaterialType'
 import { AttackerConstraint, DefenderConstraint, EffectType } from './Effect'
 
 export enum AttackLimitation {
-  ByCreatures = 1, ByGroupedCreatures, AdjacentCards, DuringInitiative
+  ByCreatures = 1, ByGroupedCreatures, AdjacentCards, DuringInitiative, BottomRightCards
 }
 
 export enum AttackCondition {
@@ -53,6 +54,18 @@ export class NoAttackDuringInitiative extends AttackConstraintRule {
   }
 }
 
+export class NoAttackBottomRightCards extends AttackConstraintRule {
+  preventAttack(attacker: number, defender: number): boolean {
+    const attackerLocation = this.material(MaterialType.FactionCard).index(attacker).getItem()!.location
+    const defenderLocation = this.material(MaterialType.FactionCard).index(defender).getItem()!.location
+    if (attackerLocation.player === 1) {
+      return attackerLocation.x! - 1 === defenderLocation.x || attackerLocation.y! - 1 === defenderLocation.y
+    } else {
+      return attackerLocation.x! + 1 === defenderLocation.x || attackerLocation.y! + 1 === defenderLocation.y
+    }
+  }
+}
+
 export class AttackByCreaturesOnlyInGroup extends AttackConstraintRule {
   preventAttack(): boolean {
     return false
@@ -82,6 +95,8 @@ export const getAttackConstraint = (effect: AttackerConstraint | DefenderConstra
           return new NoAttackOnAdjacentCard(game)
         case AttackLimitation.DuringInitiative:
           return new NoAttackDuringInitiative(game)
+        case AttackLimitation.BottomRightCards:
+          return new NoAttackBottomRightCards(game)
         default:
           return new NoAttack(game)
       }
