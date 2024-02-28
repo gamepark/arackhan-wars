@@ -1,3 +1,4 @@
+import { RuleId } from '../../../rules/RuleId'
 import { Faction } from '../../Faction'
 import { canOnlyBeAttacked } from '../Ability'
 import { AttackCondition } from '../AttackLimitation'
@@ -15,5 +16,5 @@ export class NemesioNakka extends Creature {
 
   attribute = movement(2)
   skill = canOnlyBeAttacked(AttackCondition.ByCreaturesInGroup)
-  // TODO action
+  action = RuleId.NemesioNakkaAction
 }

@@ -20,7 +20,9 @@ export abstract class MoveCardsActionRule extends CardActionRule {
       const cardRule = getCardRule(this.game, index)
       const legalDestinations = this.getLegalDestinations(card)
       for (const { x, y } of legalDestinations) {
-        moves.push(cardRule.cardMaterial.moveItem({ type: LocationType.Battlefield, x, y, player: this.player }))
+        if (cardRule.item.location.x !== x || cardRule.item.location.y !== y) {
+          moves.push(cardRule.cardMaterial.moveItem({ type: LocationType.Battlefield, x, y, player: this.player }))
+        }
       }
     }
     if (this.remind<number[]>(Memory.MovedCards).length > 0) {
@@ -70,11 +72,18 @@ export abstract class MoveCardsActionRule extends CardActionRule {
     return []
   }
 
-  afterCardMove(_move: MoveItem): MaterialMove[] {
-    if ((this.moves && this.remind<number[]>(Memory.MovedCards).length >= this.moves) || !this.getCardsAllowedToMove().length) {
+  afterCardMove(move: MoveItem): MaterialMove[] {
+    if ((this.moves && this.remind<number[]>(Memory.MovedCards).length >= this.moves)
+      || (!this.getCardsAllowedToMove().length && !this.isSwapPending(move))) {
       return this.afterCardAction()
     }
     return []
+  }
+
+  isSwapPending(move: MoveItem): boolean {
+    return this.material(MaterialType.FactionCard)
+      .location(l => l.type === LocationType.Battlefield && l.x === move.location.x && l.y === move.location.y)
+      .length > 1
   }
 
   onCustomMove(move: CustomMove) {
