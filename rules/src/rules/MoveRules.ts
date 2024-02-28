@@ -18,7 +18,7 @@ export class MoveRules extends PlayerTurnRule {
       .flatMap(index => getCardRule(this.game, index).legalMovements)
     if (movedCards.length) {
       for (const movedCard of movedCards) {
-        moves.push(this.material(MaterialType.FactionToken).parent(movedCard).rotateItem(true))
+        moves.push(this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(movedCard).rotateItem(true))
       }
       if (movedCards.length > 1) {
         moves.push(this.rules().customMove(CustomMoveType.Deactivate))
@@ -45,7 +45,7 @@ export class MoveRules extends PlayerTurnRule {
     if (cardRule.canAttackAfterMovement(move.location as XYCoordinates)) {
       this.memorize<number[]>(Memory.MovedCards, movedCards => [...movedCards, move.itemIndex])
     } else {
-      moves.push(this.material(MaterialType.FactionToken).parent(move.itemIndex).rotateItem(true))
+      moves.push(this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(move.itemIndex).rotateItem(true))
     }
     return moves
   }

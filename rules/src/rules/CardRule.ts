@@ -356,7 +356,7 @@ export class CardRule extends MaterialRulesPart {
   getEffectAction(effect: Trigger) {
     if (effect.action === TriggerAction.SelfDestroy) {
       return [
-        ...this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(this.index).deleteItems(),
+        ...this.material(MaterialType.FactionToken).parent(this.index).deleteItems(),
         this.cardMaterial.moveItem({ type: LocationType.PlayerDiscard, player: this.owner })
       ]
     }

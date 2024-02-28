@@ -32,6 +32,7 @@ import { MimicryActionRule } from './rules/action/MimicryActionRule'
 import { NemesioNakkaActionRule } from './rules/action/NemesioNakkaActionRule'
 import { NemesioWhitelandsActionRule } from './rules/action/NemesioWhitelandsActionRule'
 import { NoviceFairyActionRule } from './rules/action/NoviceFairyActionRule'
+import { ProtectorActionRule } from './rules/action/ProtectorActionRule'
 import { ReplaceWithCreatureActionRule } from './rules/action/ReplaceWithCreatureActionRule'
 import { StandardBearerActionRule } from './rules/action/StandardBearerActionRule'
 import { TeleportationActionRule } from './rules/action/TeleportationActionRule'
@@ -86,6 +87,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.EsotericWinterAction]: EsotericWinterActionRule,
     [RuleId.IceWingsAction]: IceWingsActionRule,
     [RuleId.NemesioNakkaAction]: NemesioNakkaActionRule,
+    [RuleId.ProtectorAction]: ProtectorActionRule,
     [RuleId.StandardBearerAction]: StandardBearerActionRule,
     [RuleId.BackupAction]: BackupActionRule,
     [RuleId.MarchingOrderAction]: MarchingOrderActionRule
@@ -96,6 +98,9 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
       [LocationType.PlayerDeck]: new PositiveSequenceStrategy(),
       [LocationType.PlayerDiscard]: new PositiveSequenceStrategy(),
       [LocationType.PlayerHand]: new PositiveSequenceStrategy()
+    },
+    [MaterialType.FactionToken]: {
+      [LocationType.FactionCard]: new PositiveSequenceStrategy()
     }
   }
 

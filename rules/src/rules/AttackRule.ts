@@ -91,6 +91,7 @@ export class AttackRule extends PlayerTurnRule {
     const perforations: Perforation[] = []
 
     moves.push(...this.material(MaterialType.FactionToken)
+      .location(LocationType.FactionTokenSpace)
       .parent(parent => attacks.some(attack => attack.card === parent))
       .rotateItems(true))
 
@@ -101,7 +102,7 @@ export class AttackRule extends PlayerTurnRule {
       getCardRule(this.game, enemy).canRegenerate && !attacks.some(attack => attack.targets.includes(enemy) && getCardRule(this.game, attack.card).isSpell)
     )
     for (const regeneratingEnemy of regeneratingEnemies) {
-      moves.push(this.material(MaterialType.FactionToken).parent(regeneratingEnemy).rotateItem(true))
+      moves.push(this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(regeneratingEnemy).rotateItem(true))
     }
     for (const killedEnemy of killedEnemies) {
       moves.push(...this.onSuccessfulAttack(killedEnemy))

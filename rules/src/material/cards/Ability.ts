@@ -12,7 +12,7 @@ import { Effect, EffectType, EndOfTurnAction, LoseAttributes, ModifyMovementCond
 export class Ability {
 
   filters: AbilityTargetFilter[] = [itself]
-  multipliers?: AbilityTargetFilter[]
+  multipliers?: AbilityTargetFilter[] | AbilityMultiplier
   condition?: AbilityCondition
   effects: Effect[] = []
 
@@ -21,8 +21,13 @@ export class Ability {
     return this
   }
 
-  per(...applicableFilters: AbilityTargetFilter[]) {
+  forEach(...applicableFilters: AbilityTargetFilter[]) {
     this.multipliers = applicableFilters
+    return this
+  }
+
+  per(multiplier: AbilityMultiplier) {
+    this.multipliers = multiplier
     return this
   }
 
@@ -38,11 +43,17 @@ export class Ability {
   }
 
   getMultiplierFor(card: Material, game: MaterialGame) {
-    if (!this.multipliers) return 1
-    const battlefield = new ArackhanWarsRules(game).material(MaterialType.FactionCard).location(LocationType.Battlefield)
-    return sumBy(battlefield.getIndexes(), index =>
-      this.multipliers!.every(multiplier => multiplier.filter(card, battlefield.index(index), game)) ? 1 : 0
-    )
+    const multipliers = this.multipliers
+    if (multipliers === undefined) return 1
+    if (Array.isArray(multipliers)) {
+      const battlefield = new ArackhanWarsRules(game).material(MaterialType.FactionCard).location(LocationType.Battlefield)
+      return sumBy(battlefield.getIndexes(), index =>
+        multipliers!.every(multiplier => multiplier.filter(card, battlefield.index(index), game)) ? 1 : 0
+      )
+    } else if (multipliers === AbilityMultiplier.ExtraFactionToken) {
+      return new ArackhanWarsRules(game).material(MaterialType.FactionToken).location(LocationType.FactionCard).parent(card.getIndex()).length
+    }
+    return 1
   }
 
   attack(modifier: number) {
@@ -130,6 +141,10 @@ export class Ability {
     this.effects.push({ type: EffectType.InvertsAttackDefense })
     return this
   }
+}
+
+export enum AbilityMultiplier {
+  ExtraFactionToken
 }
 
 export const attack = (modifier: number) => new Ability().attack(modifier)

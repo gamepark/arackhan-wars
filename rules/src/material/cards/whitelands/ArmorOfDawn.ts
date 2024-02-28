@@ -13,5 +13,5 @@ export class ArmorOfDawn extends Spell {
 
   attribute = initiative
 
-  effect = defense(+1).to(allied, creature).per(adjacent, allied, creature)
+  effect = defense(+1).to(allied, creature).forEach(adjacent, allied, creature)
 }

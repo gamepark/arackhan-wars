@@ -33,6 +33,7 @@ export enum RuleId {
   EsotericWinterAction,
   IceWingsAction,
   NemesioNakkaAction,
+  ProtectorAction,
   StandardBearerAction,
   BackupAction,
   MarchingOrderAction

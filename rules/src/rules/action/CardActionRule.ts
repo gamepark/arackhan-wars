@@ -8,8 +8,12 @@ import { Memory } from '../Memory'
 import { RuleId } from '../RuleId'
 
 export abstract class CardActionRule extends PlayerTurnRule {
+  get cardIndex() {
+    return this.remind<number>(Memory.ActionCard)
+  }
+
   get actionCard() {
-    return this.material(MaterialType.FactionCard).getItem(this.remind(Memory.ActionCard))!
+    return this.material(MaterialType.FactionCard).getItem(this.cardIndex)!
   }
 
   get cardRule() {
@@ -23,7 +27,7 @@ export abstract class CardActionRule extends PlayerTurnRule {
         moves.push(...this.discardActionCard())
       }
     } else {
-      const token = this.material(MaterialType.FactionToken).parent(this.remind(Memory.ActionCard))
+      const token = this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(this.remind(Memory.ActionCard))
       if (token.length) {
         moves.push(token.rotateItem(true))
       }

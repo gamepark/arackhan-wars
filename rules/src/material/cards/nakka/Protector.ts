@@ -1,4 +1,6 @@
+import { RuleId } from '../../../rules/RuleId'
 import { Faction } from '../../Faction'
+import { AbilityMultiplier, attack } from '../Ability'
 import { movement } from '../Attribute'
 import { Creature } from '../Creature'
 import { Family } from '../Family'
@@ -13,5 +15,6 @@ export class Protector extends Creature {
   defense = 2
 
   attribute = movement(2)
-  // TODO skill & action
+  skill = attack(+1).per(AbilityMultiplier.ExtraFactionToken)
+  action = RuleId.ProtectorAction
 }

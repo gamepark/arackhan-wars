@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Ability } from '@gamepark/arackhan-wars/material/cards/Ability'
+import { Ability, AbilityMultiplier } from '@gamepark/arackhan-wars/material/cards/Ability'
 import { itself } from '@gamepark/arackhan-wars/material/cards/AbilityTargetFilter'
 import { AttackCondition, AttackLimitation } from '@gamepark/arackhan-wars/material/cards/AttackLimitation'
 import { Effect, EffectType, ModifyMovementCondition, TriggerAction, TriggerCondition } from '@gamepark/arackhan-wars/material/cards/Effect'
@@ -11,29 +11,36 @@ import { Trans, TransProps, useTranslation } from 'react-i18next'
 
 export const AbilityHelp = ({ type, ability, card }: { type: string, ability: Ability, card: FactionCard }) => {
   const { t } = useTranslation()
-  const targets = ability.filters[0] === itself ? '' : t(`targets.${ability.filters.map(filter => filter.text).join('.')}`,
-    ability.filters.reduce((values, filter) => merge(values, filter.values?.(t)), {}))
-  const multipliers = ability.multipliers ? t(`targets.${ability.multipliers.map(filter => filter.text).join('.')}`,
-    ability.multipliers.reduce((values, filter) => merge(values, filter.values?.(t)), {})) : ''
-  const condition = ability.condition ? ability.condition.getText(t) : ''
   return <>
     {ability.effects.map((effect, index) =>
       <p key={index}>
         <span css={css`text-transform: uppercase`}>{type}</span>
         &nbsp;
-        <Trans values={{ targets }} {...getAbilityText(effect, t, card, targets, multipliers, condition)}><strong/><em/></Trans>
+        <Trans {...getAbilityText(card, ability, effect, t)}><strong/><em/></Trans>
       </p>
     )}
   </>
 }
 
-const getAbilityText = (effect: Effect, t: TFunction, card: FactionCard, targets: string, multipliers: string, condition: string): TransProps<any> => {
+const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: TFunction): TransProps<any> => {
+  const targets = ability.filters[0] === itself ? '' : t(`targets.${ability.filters.map(filter => filter.text).join('.')}`,
+    ability.filters.reduce((values, filter) => merge(values, filter.values?.(t)), {}))
+
   switch (effect.type) {
     case EffectType.Attack:
-      if (multipliers) {
+      if (ability.multipliers === AbilityMultiplier.ExtraFactionToken) {
+        return {
+          defaults: 'ability.attack.per.token',
+          values: { modifier: effect.modifier }
+        }
+      } else if (Array.isArray(ability.multipliers)) {
         return {
           defaults: 'ability.attack.per',
-          values: { multipliers, modifier: effect.modifier }
+          values: {
+            multipliers: t(`targets.${ability.multipliers.map(filter => filter.text).join('.')}`,
+              ability.multipliers.reduce((values, filter) => merge(values, filter.values?.(t)), {})),
+            modifier: effect.modifier
+          }
         }
       } else {
         return {
@@ -42,15 +49,19 @@ const getAbilityText = (effect: Effect, t: TFunction, card: FactionCard, targets
         }
       }
     case EffectType.Defense:
-      if (targets && multipliers) {
-        return {
-          defaults: 'ability.defense.gain.per',
-          values: { targets, multipliers, modifier: effect.modifier }
-        }
-      } else if (multipliers) {
-        return {
-          defaults: 'ability.defense.per',
-          values: { multipliers, modifier: effect.modifier }
+      if (ability.multipliers) {
+        const multipliers = t(`targets.${ability.multipliers.map(filter => filter.text).join('.')}`,
+          ability.multipliers.reduce((values, filter) => merge(values, filter.values?.(t)), {}))
+        if (targets) {
+          return {
+            defaults: 'ability.defense.gain.per',
+            values: { targets, multipliers, modifier: effect.modifier }
+          }
+        } else {
+          return {
+            defaults: 'ability.defense.per',
+            values: { multipliers, modifier: effect.modifier }
+          }
         }
       } else {
         return {
@@ -72,9 +83,9 @@ const getAbilityText = (effect: Effect, t: TFunction, card: FactionCard, targets
       if (!targets) {
         return {
           defaults: 'ability.attribute.gain.if',
-          values: { attribute: t(`attribute.${attribute.type}`, attribute), condition }
+          values: { attribute: t(`attribute.${attribute.type}`, attribute), condition: ability.condition!.getText(t) }
         }
-      } else if (!condition) {
+      } else if (!ability.condition) {
         return {
           defaults: 'ability.attribute.give',
           values: { targets, attribute: t(`attribute.${attribute.type}`, attribute) }
@@ -82,7 +93,7 @@ const getAbilityText = (effect: Effect, t: TFunction, card: FactionCard, targets
       } else {
         return {
           defaults: 'ability.attribute.give.if',
-          values: { targets, attribute: t(`attribute.${attribute.type}`, attribute), condition }
+          values: { targets, attribute: t(`attribute.${attribute.type}`, attribute), condition: ability.condition.getText(t) }
         }
       }
     case EffectType.LoseSkills:
@@ -160,5 +171,5 @@ const attackLimitationText: Record<AttackLimitation, string> = {
   [AttackLimitation.ByGroupedCreatures]: 'group-creatures',
   [AttackLimitation.AdjacentCards]: 'adjacent-cards',
   [AttackLimitation.DuringInitiative]: 'during-initiative',
-  [AttackLimitation.BottomRightCards]: 'bottom-right',
+  [AttackLimitation.BottomRightCards]: 'bottom-right'
 }

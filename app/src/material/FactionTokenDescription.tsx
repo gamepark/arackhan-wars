@@ -11,15 +11,15 @@ import NakkaTokenBack from '../images/tokens/nakka-token-back.jpg'
 import NakkaToken from '../images/tokens/nakka-token-front.jpg'
 import NeutralTokenBack from '../images/tokens/neutral-token-back.jpg'
 import NeutralToken from '../images/tokens/neutral-token-front.jpg'
-import WhitelandTokenBack from '../images/tokens/whitelands-token-back.jpg'
-import WhitelandToken from '../images/tokens/whitelands-token-front.jpg'
+import WhitelandsTokenBack from '../images/tokens/whitelands-token-back.jpg'
+import WhitelandsToken from '../images/tokens/whitelands-token-front.jpg'
 import { FactionTokenHelp } from './FactionTokenHelp'
 
 export class FactionTokenDescription extends RoundTokenDescription {
   diameter = 1.4
 
   images = {
-    [FactionToken.Whitelands]: WhitelandToken,
+    [FactionToken.Whitelands]: WhitelandsToken,
     [FactionToken.Nakka]: NakkaToken,
     [FactionToken.GreyOrder]: GreyOrderToken,
     [FactionToken.Blight]: BlightToken,
@@ -27,7 +27,7 @@ export class FactionTokenDescription extends RoundTokenDescription {
   }
 
   backImages = {
-    [FactionToken.Whitelands]: WhitelandTokenBack,
+    [FactionToken.Whitelands]: WhitelandsTokenBack,
     [FactionToken.Nakka]: NakkaTokenBack,
     [FactionToken.GreyOrder]: GreyOrderTokenBack,
     [FactionToken.Blight]: BlightTokenBack,

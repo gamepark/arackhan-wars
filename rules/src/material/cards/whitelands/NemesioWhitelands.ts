@@ -16,6 +16,6 @@ export class NemesioWhitelands extends Creature {
   defense = 1
 
   attribute = movement(2)
-  skill = defense(+1).per(adjacent, allied, creature)
+  skill = defense(+1).forEach(adjacent, allied, creature)
   action = RuleId.NemesioWhitelandsAction
 }

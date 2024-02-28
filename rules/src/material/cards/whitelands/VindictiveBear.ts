@@ -13,5 +13,5 @@ export class VindictiveBear extends Creature {
   defense = 3
 
   attribute = omnistrike
-  skill = attack(+1).per(adjacent, enemy)
+  skill = attack(+1).forEach(adjacent, enemy)
 }
