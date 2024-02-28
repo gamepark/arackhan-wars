@@ -10,7 +10,7 @@ import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { Attack } from '@gamepark/arackhan-wars/rules/AttackRule'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
-import { useRules } from '@gamepark/react-game'
+import { MaterialContext, useMaterialContext, useRules } from '@gamepark/react-game'
 import { Location, MaterialGame, MaterialItem, XYCoordinates } from '@gamepark/rules-api'
 import { RefObject, useEffect, useRef, useState } from 'react'
 import movementCancel from './images/icons/attributes/movement-cancel.png'
@@ -29,6 +29,7 @@ function AttacksHelp() {
   const rules = useRules<ArackhanWarsRules>()
   const attacks = rules?.remind<Attack[]>(Memory.Attacks)
   const ref = useRef<HTMLCanvasElement>(null)
+  const context = useMaterialContext()
 
   useEffect(() => {
     const ctx = getCanvasContext(ref)
@@ -37,7 +38,7 @@ function AttacksHelp() {
       const attacker = rules.material(MaterialType.FactionCard).getItem(attack.card)!
       for (const target of attack.targets) {
         const defender = rules.material(MaterialType.FactionCard).getItem(target)!
-        drawArrow(ctx, attacker.location, defender.location)
+        drawArrow(ctx, attacker.location, defender.location, context)
       }
     }
   }, [rules, attacks])
@@ -50,6 +51,7 @@ type MovementBlock = { card: MaterialItem, location: Location }
 
 function MovementHelp() {
   const rules = useRules<ArackhanWarsRules>()
+  const context = useMaterialContext()
   const [movementBlocks, setMovementBlocks] = useState<MovementBlock[]>([])
   const ref = useRef<HTMLCanvasElement>(null)
   useDndMonitor({
@@ -87,7 +89,7 @@ function MovementHelp() {
     const ctx = getCanvasContext(ref)
     if (!ctx || !ref.current || !movementBlocks.length) return
     for (const movementBlock of movementBlocks) {
-      drawArrow(ctx, movementBlock.card.location, movementBlock.location)
+      drawArrow(ctx, movementBlock.card.location, movementBlock.location, context)
     }
   }, [rules, movementBlocks])
 
@@ -95,7 +97,7 @@ function MovementHelp() {
   return <>
     <canvas ref={ref} css={canvasCss} width={100 * scale} height={100 * scale}/>
     {movementBlocks.map(({ location }) =>
-      <div key={`${location.x}_${location.y}`} css={movementCancelIcon(battleFieldLocator.getPositionOnParent(location))}/>
+      <div key={`${location.x}_${location.y}`} css={movementCancelIcon(battleFieldLocator.getPositionOnParent(location, context))}/>
     )}
   </>
 }
@@ -111,10 +113,10 @@ const getCanvasContext = (ref: RefObject<HTMLCanvasElement>) => {
   return ctx
 }
 
-const drawArrow = (ctx: CanvasRenderingContext2D, from: Location, to: Location) => {
-  const a = battleFieldLocator.getPositionOnParent(from)
+const drawArrow = (ctx: CanvasRenderingContext2D, from: Location, to: Location, context: MaterialContext) => {
+  const a = battleFieldLocator.getPositionOnParent(from, context)
   a.y -= 2
-  const b = battleFieldLocator.getPositionOnParent(to)
+  const b = battleFieldLocator.getPositionOnParent(to, context)
   b.y -= 2
   const start = getCoordinatesOnLineAtDistance(a, b, 3)
   const end = getCoordinatesOnLineAtDistance(b, a, 3)
