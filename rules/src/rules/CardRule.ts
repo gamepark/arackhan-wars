@@ -33,6 +33,7 @@ import {
   isMimic,
   isSetAttackDefense,
   isSwapSkills,
+  ModifyAttackCondition,
   ModifyMovementCondition,
   Trigger,
   TriggerAction,
@@ -265,7 +266,7 @@ export class CardRule extends MaterialRulesPart {
       // We recursively try all attack groups made of all attackers but one, and keep the best value
       return max(attackers.map(excludedAttacker => this.getDamagesInflicted(attackers.filter(attacker => attacker !== excludedAttacker))))
     }
-    return sumBy(attackers, attacker => getCardRule(this.game, attacker).attack)
+    return sumBy(attackers, attacker => getCardRule(this.game, attacker).getAttack(this.index))
   }
 
   isInvalidAttackersGroup(attackers: number[]) {
@@ -287,13 +288,23 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get attack() {
-    return this.effects.some(effect => effect.type === EffectType.InvertsAttackDefense) ? this.defenseBeforeInvert : this.attackBeforeInvert
+    return this.effects.some(effect => effect.type === EffectType.InvertsAttackDefense) ? this.getDefenseBeforeInvert() : this.getAttackBeforeInvert()
   }
 
-  private get attackBeforeInvert() {
+  getAttack(target: number) {
+    return this.effects.some(effect => effect.type === EffectType.InvertsAttackDefense) ?
+      this.getDefenseBeforeInvert() : this.getAttackBeforeInvert(getCardRule(this.game, target))
+  }
+
+  private getAttackBeforeInvert(target?: CardRule) {
     const setAttackDefense = this.effects.find(isSetAttackDefense)
     const baseAttack = setAttackDefense?.attack ?? this.attackCharacteristic
-    const attackModifier = sumBy(this.effects, effect => effect.type === EffectType.Attack ? effect.modifier : 0) + this.swarmBonus
+    const attackModifier = sumBy(this.effects, effect =>
+      effect.type === EffectType.Attack
+      && (effect.condition !== ModifyAttackCondition.TargetFlyOrMoves
+        || target?.attributes.some(attribute => attribute.type === AttributeType.Flight || attribute.type === AttributeType.Movement)
+      ) ? effect.modifier : 0
+    ) + this.swarmBonus
     return Math.max(0, baseAttack + attackModifier)
   }
 
@@ -312,10 +323,10 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get defense() {
-    return this.effects.some(effect => effect.type === EffectType.InvertsAttackDefense) ? this.attackBeforeInvert : this.defenseBeforeInvert
+    return this.effects.some(effect => effect.type === EffectType.InvertsAttackDefense) ? this.getAttackBeforeInvert() : this.getDefenseBeforeInvert()
   }
 
-  private get defenseBeforeInvert() {
+  private getDefenseBeforeInvert() {
     const setAttackDefense = this.effects.find(isSetAttackDefense)
     const baseDefense = setAttackDefense?.defense ?? this.defenseCharacteristic
     const defenseModifier = sumBy(this.effects, effect => effect.type === EffectType.Defense ? effect.modifier : 0)

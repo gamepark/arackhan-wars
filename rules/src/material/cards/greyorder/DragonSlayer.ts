@@ -1,6 +1,8 @@
 import { Faction } from '../../Faction'
+import { attack } from '../Ability'
 import { rangedAttack } from '../Attribute'
 import { Creature } from '../Creature'
+import { ModifyAttackCondition } from '../Effect'
 
 export class DragonSlayer extends Creature {
   faction = Faction.GreyOrder
@@ -11,5 +13,8 @@ export class DragonSlayer extends Creature {
   defense = 2
 
   attribute = rangedAttack(3)
-  // TODO skill
+  skills = [
+    attack(+2, ModifyAttackCondition.TargetFlyOrMoves)
+    // TODO skills
+  ]
 }

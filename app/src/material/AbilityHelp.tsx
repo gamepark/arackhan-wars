@@ -3,7 +3,14 @@ import { css } from '@emotion/react'
 import { Ability, AbilityMultiplier } from '@gamepark/arackhan-wars/material/cards/Ability'
 import { itself } from '@gamepark/arackhan-wars/material/cards/AbilityTargetFilter'
 import { AttackCondition, AttackLimitation } from '@gamepark/arackhan-wars/material/cards/AttackLimitation'
-import { Effect, EffectType, ModifyMovementCondition, TriggerAction, TriggerCondition } from '@gamepark/arackhan-wars/material/cards/Effect'
+import {
+  Effect,
+  EffectType,
+  ModifyAttackCondition,
+  ModifyMovementCondition,
+  TriggerAction,
+  TriggerCondition
+} from '@gamepark/arackhan-wars/material/cards/Effect'
 import { FactionCard, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { TFunction } from 'i18next'
 import { merge } from 'lodash'
@@ -46,6 +53,11 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
         return {
           defaults: 'ability.attack.gain.if',
           values: { modifier: effect.modifier, condition: ability.condition.getText(t) }
+        }
+      } else if (effect.condition === ModifyAttackCondition.TargetFlyOrMoves) {
+        return {
+          defaults: 'ability.attack.gain.if',
+          values: { modifier: effect.modifier, condition: t('if.attack.fly-move') }
         }
       } else {
         return {

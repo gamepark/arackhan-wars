@@ -116,7 +116,7 @@ export class AttackRule extends PlayerTurnRule {
           if (defeatedEnemies.includes(target)) {
             const enemyLocation = this.material(MaterialType.FactionCard).getItem(target)!.location
             const delta = { x: enemyLocation.x! - cardLocation.x!, y: enemyLocation.y! - cardLocation.y! }
-            const attackValue = cardRule.attack - 1
+            const attackValue = cardRule.getAttack(target) - 1
             if (attackValue >= 0 && Math.abs(delta.x) + Math.abs(delta.y) === 1) {
               const perforation = { attacker: attack.card, x: enemyLocation.x! + delta.x, y: enemyLocation.y! + delta.y, attackValue }
               perforations.push(perforation)

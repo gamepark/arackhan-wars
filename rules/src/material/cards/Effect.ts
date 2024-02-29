@@ -30,6 +30,11 @@ export enum EffectType {
 export type ModifyAttack = {
   type: EffectType.Attack
   modifier: number
+  condition?: ModifyAttackCondition
+}
+
+export enum ModifyAttackCondition {
+  TargetFlyOrMoves
 }
 
 export type ModifyDefense = {

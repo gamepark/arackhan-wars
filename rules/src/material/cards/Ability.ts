@@ -7,7 +7,7 @@ import { AbilityCondition } from './AbilityCondition'
 import { AbilityTargetFilter, itself } from './AbilityTargetFilter'
 import { AttackCondition, AttackLimitation } from './AttackLimitation'
 import { Attribute, AttributeType } from './Attribute'
-import { Effect, EffectType, EndOfTurnAction, LoseAttributes, ModifyMovementCondition, TriggerAction, TriggerCondition } from './Effect'
+import { Effect, EffectType, EndOfTurnAction, LoseAttributes, ModifyAttackCondition, ModifyMovementCondition, TriggerAction, TriggerCondition } from './Effect'
 
 export class Ability {
 
@@ -56,8 +56,8 @@ export class Ability {
     return 1
   }
 
-  attack(modifier: number) {
-    this.effects.push({ type: EffectType.Attack, modifier })
+  attack(modifier: number, condition?: ModifyAttackCondition) {
+    this.effects.push({ type: EffectType.Attack, modifier, condition })
     return this
   }
 
@@ -152,7 +152,7 @@ export enum AbilityMultiplier {
   ExtraFactionToken
 }
 
-export const attack = (modifier: number) => new Ability().attack(modifier)
+export const attack = (modifier: number, condition?: ModifyAttackCondition) => new Ability().attack(modifier, condition)
 export const defense = (modifier: number) => new Ability().defense(modifier)
 export const gainAttribute = (attribute: Attribute) => new Ability().gainAttributes([attribute])
 export const loseAttributes = (...attributes: AttributeType[]) => new Ability().loseAttributes(...attributes)
