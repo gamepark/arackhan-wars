@@ -1,4 +1,7 @@
 import { Faction } from '../../Faction'
+import { canOnlyBeAttacked } from '../Ability'
+import { adjacent, allied, creature } from '../AbilityTargetFilter'
+import { AttackCondition } from '../AttackLimitation'
 import { Land } from '../Land'
 
 export class EternalRoots extends Land {
@@ -8,5 +11,5 @@ export class EternalRoots extends Land {
 
   defense = 4
 
-  // TODO benefit
+  benefit = canOnlyBeAttacked(AttackCondition.ByCreaturesInGroup).to(adjacent, allied, creature)
 }

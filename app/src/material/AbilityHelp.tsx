@@ -144,9 +144,16 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
         values: { targets, card: t(`card.name.${getUniqueCard(card)}`) }
       }
     case EffectType.CanOnlyBeAttacked:
-      return {
-        defaults: `ability.attacked.condition.${attackConditionText[effect.condition]}`,
-        values: { targets, card: t(`card.name.${getUniqueCard(card)}`) }
+      if (targets) {
+        return {
+          defaults: `ability.targets.attacked.condition.${attackConditionText[effect.condition]}`,
+          values: { targets, card: t(`card.name.${getUniqueCard(card)}`) }
+        }
+      } else {
+        return {
+          defaults: `ability.attacked.condition.${attackConditionText[effect.condition]}`,
+          values: { card: t(`card.name.${getUniqueCard(card)}`) }
+        }
       }
     case EffectType.ImmuneToEnemySpells:
       if (targets) {
