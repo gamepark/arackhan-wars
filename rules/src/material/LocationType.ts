@@ -15,5 +15,6 @@ export enum LocationType {
   CombatResultIcon,
   CardValue,
   CardTurnEffect,
-  DeckbuildingBook
+  DeckbuildingBook,
+  UnderCard
 }

@@ -370,7 +370,7 @@ export class CardRule extends MaterialRulesPart {
   getEffectAction(effect: Trigger) {
     if (effect.action === TriggerAction.SelfDestroy) {
       return [
-        ...this.material(MaterialType.FactionToken).parent(this.index).deleteItems(),
+        ...this.removeMaterialFromCard(),
         this.cardMaterial.moveItem({ type: LocationType.PlayerDiscard, player: this.owner })
       ]
     }
@@ -553,6 +553,13 @@ export class CardRule extends MaterialRulesPart {
       return paths[y][x] === Path.CanStop
     }
     return true
+  }
+
+  removeMaterialFromCard(): MaterialMove[] {
+    return [
+      ...this.material(MaterialType.FactionToken).parent(this.index).deleteItems(),
+      ...this.material(MaterialType.FactionCard).parent(this.index).moveItems(item => ({ type: LocationType.PlayerDiscard, player: item.location.player }))
+    ]
   }
 }
 

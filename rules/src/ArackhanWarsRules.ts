@@ -103,7 +103,8 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [MaterialType.FactionCard]: {
       [LocationType.PlayerDeck]: new PositiveSequenceStrategy(),
       [LocationType.PlayerDiscard]: new PositiveSequenceStrategy(),
-      [LocationType.PlayerHand]: new PositiveSequenceStrategy()
+      [LocationType.PlayerHand]: new PositiveSequenceStrategy(),
+      [LocationType.UnderCard]: new PositiveSequenceStrategy()
     },
     [MaterialType.FactionToken]: {
       [LocationType.FactionCard]: new PositiveSequenceStrategy()

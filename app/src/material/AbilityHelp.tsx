@@ -138,6 +138,11 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
             return { defaults: 'ability.trigger.fail-attack.destroy', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
           }
           break
+        case TriggerCondition.DestroyFlyOrMove:
+          if (effect.action === TriggerAction.PutCardUnder) {
+            return { defaults: 'ability.trigger.dragon-trophy', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
+          }
+          break
       }
       return {}
     case EffectType.CannotAttack:

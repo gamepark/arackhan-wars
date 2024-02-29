@@ -16,6 +16,7 @@ import { PlayerTokenStockLocator } from './PlayerTokenStockLocator'
 import { RoundTrackerLocator } from './RoundTrackerLocator'
 import { SkillLostIconLocator } from './SkillLostIconLocator'
 import { TableLocator } from './TableLocator'
+import { UnderCardLocator } from './UnderCardLocator'
 
 export const Locators: Partial<Record<LocationType, ItemLocator>> = {
   [LocationType.Table]: new TableLocator(),
@@ -33,5 +34,6 @@ export const Locators: Partial<Record<LocationType, ItemLocator>> = {
   [LocationType.SkillLostIcon]: new SkillLostIconLocator(),
   [LocationType.CombatResultIcon]: new CombatResultIconLocator(),
   [LocationType.CardValue]: new CardValueLocator(),
-  [LocationType.CardTurnEffect]: new CardTurnEffectLocator()
+  [LocationType.CardTurnEffect]: new CardTurnEffectLocator(),
+  [LocationType.UnderCard]: new UnderCardLocator()
 }

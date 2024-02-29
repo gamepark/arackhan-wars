@@ -33,7 +33,7 @@ export class SolvePerforationsRule extends MaterialRulesPart {
         if (!attacker.isSpell && defender.canRegenerate) {
           moves.push(this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(targetIndex).rotateItem(true))
         } else {
-          moves.push(...new AttackRule(this.game).onSuccessfulAttack(targetIndex))
+          moves.push(...new AttackRule(this.game).onSuccessfulAttack(targetIndex, [perforation.attacker]))
         }
         if (perforation.attackValue > 0) {
           const nextPerforation: Perforation = { ...perforation, attackValue: perforation.attackValue - 1 }

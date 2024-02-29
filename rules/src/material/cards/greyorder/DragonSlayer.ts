@@ -1,8 +1,8 @@
 import { Faction } from '../../Faction'
-import { attack } from '../Ability'
+import { attack, trigger } from '../Ability'
 import { rangedAttack } from '../Attribute'
 import { Creature } from '../Creature'
-import { ModifyAttackCondition } from '../Effect'
+import { ModifyAttackCondition, TriggerAction, TriggerCondition } from '../Effect'
 
 export class DragonSlayer extends Creature {
   faction = Faction.GreyOrder
@@ -14,7 +14,8 @@ export class DragonSlayer extends Creature {
 
   attribute = rangedAttack(3)
   skills = [
-    attack(+2, ModifyAttackCondition.TargetFlyOrMoves)
+    attack(+2, ModifyAttackCondition.TargetFlyOrMoves),
+    trigger(TriggerAction.PutCardUnder).when(TriggerCondition.DestroyFlyOrMove)
     // TODO skills
   ]
 }

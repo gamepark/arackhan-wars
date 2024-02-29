@@ -115,11 +115,11 @@ export type Trigger = {
 }
 
 export enum TriggerCondition {
-  Attack, FailAttack
+  Attack, FailAttack, DestroyFlyOrMove
 }
 
 export enum TriggerAction {
-  SelfDestroy
+  SelfDestroy, PutCardUnder
 }
 
 export type ImmuneToEnemySpells = {
