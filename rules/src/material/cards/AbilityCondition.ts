@@ -2,6 +2,7 @@ import { Material, MaterialGame } from '@gamepark/rules-api'
 import { TFunction } from 'i18next'
 import { merge } from 'lodash'
 import { ArackhanWarsRules } from '../../ArackhanWarsRules'
+import { getCardRule } from '../../rules/CardRule'
 import { Memory } from '../../rules/Memory'
 import { LocationType } from '../LocationType'
 import { MaterialType } from '../MaterialType'
@@ -76,3 +77,15 @@ export class DoNotStartRound extends AbilityCondition {
 }
 
 export const doNotStartRound = new DoNotStartRound()
+
+export class IsActive extends AbilityCondition {
+  match(game: MaterialGame, source: Material) {
+    return getCardRule(game, source.getIndex()).hasActiveToken
+  }
+
+  getText(t: TFunction) {
+    return t('if.active')
+  }
+}
+
+export const isActive = new IsActive()

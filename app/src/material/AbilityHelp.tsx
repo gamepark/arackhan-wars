@@ -160,7 +160,9 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
         }
       }
     case EffectType.ImmuneToEnemySpells:
-      if (targets) {
+      if (ability.condition) {
+        return { defaults: 'ability.spell-immune.if', values: { condition: ability.condition.getText(t) } }
+      } else if (targets) {
         return { defaults: 'ability.spell-immune.targets', values: { targets } }
       } else {
         return { defaults: 'ability.spell-immune' }

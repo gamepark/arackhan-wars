@@ -1,5 +1,6 @@
 import { Faction } from '../../Faction'
-import { cannotAttack } from '../Ability'
+import { cannotAttack, immuneToEnemySpells } from '../Ability'
+import { isActive } from '../AbilityCondition'
 import { AttackLimitation } from '../AttackLimitation'
 import { rangedAttack } from '../Attribute'
 import { Creature } from '../Creature'
@@ -16,6 +17,6 @@ export class Catanolith extends Creature {
   defense = 1
 
   attribute = rangedAttack(3)
-  // TODO skill
+  skill = immuneToEnemySpells().if(isActive)
   weakness = cannotAttack(AttackLimitation.AdjacentCards)
 }
