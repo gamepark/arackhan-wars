@@ -496,9 +496,8 @@ export class CardRule extends MaterialRulesPart {
   }
 
   private canMoveOrSwapPosition(location: XYCoordinates, distance?: number) {
-    if (!this.isValidSpotToEndMovement(location)) return false
     const cardAtDestination = this.getCardAt(location)
-    if (!cardAtDestination.length) return true
+    if (!cardAtDestination.length) return this.isValidSpotToEndMovement(location)
     if (cardAtDestination.getIndex() === this.index || cardAtDestination.getItem()!.location.player !== this.owner) {
       return false
     }
@@ -507,8 +506,8 @@ export class CardRule extends MaterialRulesPart {
 
   private canSwap(location: XYCoordinates, distance?: number): boolean {
     if (!this.canBeActivated || this.remind<Attack[]>(Memory.Attacks).some(attack => attack.card === this.index)) return false
-    if (this.canFly) return this.isValidSpotToEndMovement(location)
-    else if (distance) return this.isValidSpotToEndMovement(location, distance)
+    if (this.canFly) return getDistanceBetweenSquares(location, this.item.location as XYCoordinates) === 1 || this.isValidSpotToEndMovement(location)
+    else if (distance) return distance === 1 || this.isValidSpotToEndMovement(location, distance)
     else return this.legalDestinations.some(({ x, y }) => location.x === x && location.y === y)
   }
 

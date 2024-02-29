@@ -29,6 +29,7 @@ import { IceElementalActionRule } from './rules/action/IceElementalActionRule'
 import { IceWingsActionRule } from './rules/action/IceWingsActionRule'
 import { MarchingOrderActionRule } from './rules/action/MarchingOrderActionRule'
 import { MimicryActionRule } from './rules/action/MimicryActionRule'
+import { MusicalTranceActionRule } from './rules/action/MusicalTranceActionRule'
 import { NemesioNakkaActionRule } from './rules/action/NemesioNakkaActionRule'
 import { NemesioWhitelandsActionRule } from './rules/action/NemesioWhitelandsActionRule'
 import { NoviceFairyActionRule } from './rules/action/NoviceFairyActionRule'
@@ -88,6 +89,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.IceWingsAction]: IceWingsActionRule,
     [RuleId.NemesioNakkaAction]: NemesioNakkaActionRule,
     [RuleId.ProtectorAction]: ProtectorActionRule,
+    [RuleId.MusicalTranceAction]: MusicalTranceActionRule,
     [RuleId.StandardBearerAction]: StandardBearerActionRule,
     [RuleId.BackupAction]: BackupActionRule,
     [RuleId.MarchingOrderAction]: MarchingOrderActionRule

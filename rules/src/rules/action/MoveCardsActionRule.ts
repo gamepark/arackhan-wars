@@ -38,11 +38,15 @@ export abstract class MoveCardsActionRule extends CardActionRule {
     const canSwap = this.canSwap()
     const cardRule = getCardRule(this.game, card.getIndex())
     return battlefieldCoordinates.filter(coordinates => {
-      if (this.maxDistance !== undefined && getDistanceBetweenSquares(cardRule.item.location as XYCoordinates, coordinates) > this.maxDistance) return false
+      const distance = getDistanceBetweenSquares(cardRule.item.location as XYCoordinates, coordinates)
+      if (this.maxDistance !== undefined && distance > this.maxDistance) return false
       const swap = battlefield.location(l => l.x === coordinates.x && l.y === coordinates.y)
       if (swap.length) {
         if (!canSwap || swap.getIndex() === card.getIndex()) return false
         if (!this.getCardsAllowedToMove().getItem(swap.getIndex())) return false
+        return distance === 1 ||
+          (cardRule.thereIsAnotherCardAdjacentTo(coordinates)
+            && getCardRule(this.game, swap.getIndex()).thereIsAnotherCardAdjacentTo(cardRule.item.location as XYCoordinates))
       }
       return cardRule.thereIsAnotherCardAdjacentTo(coordinates)
     })

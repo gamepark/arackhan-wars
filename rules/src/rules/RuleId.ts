@@ -34,6 +34,7 @@ export enum RuleId {
   IceWingsAction,
   NemesioNakkaAction,
   ProtectorAction,
+  MusicalTranceAction,
   StandardBearerAction,
   BackupAction,
   MarchingOrderAction
