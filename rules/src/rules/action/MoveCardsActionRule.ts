@@ -31,6 +31,10 @@ export abstract class MoveCardsActionRule extends CardActionRule {
     return moves
   }
 
+  get battlefield() {
+    return this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
+  }
+
   abstract getCardsAllowedToMove(): Material
 
   getLegalDestinations(card: Material): XYCoordinates[] {

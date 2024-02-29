@@ -1,7 +1,6 @@
 import { Direction, getSquareInDirection, Material, MaterialMove, MoveItem, XYCoordinates } from '@gamepark/rules-api'
 import { isInBattlefield } from '../../material/Board'
 import { Family } from '../../material/cards/Family'
-import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
 import { getCardRule } from '../CardRule'
 import { Memory } from '../Memory'
@@ -15,7 +14,7 @@ export class StandardBearerActionRule extends MoveCardsActionRule {
     if (movedCards.length === 0) {
       return this.material(MaterialType.FactionCard).index(this.remind(Memory.ActionCard))
     } else {
-      return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).player(this.player)
+      return this.battlefield.player(this.player)
         .filter((_, index) => !movedCards.includes(index) && getCardRule(this.game, index).family === Family.Legion6)
     }
   }
@@ -23,10 +22,9 @@ export class StandardBearerActionRule extends MoveCardsActionRule {
   getLegalDestinations(card: Material): XYCoordinates[] {
     const direction = this.remind(Memory.Direction)
     if (direction) {
-      const battlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
       const coordinates = getSquareInDirection(card.getItem()!.location, direction)
       return isInBattlefield(coordinates)
-      && battlefield.location(l => l.x === coordinates.x && l.y === coordinates.y).length === 0
+      && this.battlefield.location(l => l.x === coordinates.x && l.y === coordinates.y).length === 0
       && getCardRule(this.game, card.getIndex()).thereIsAnotherCardAdjacentTo(coordinates) ? [coordinates] : []
     } else {
       return super.getLegalDestinations(card)

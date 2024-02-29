@@ -38,6 +38,7 @@ import { ReplaceWithCreatureActionRule } from './rules/action/ReplaceWithCreatur
 import { StandardBearerActionRule } from './rules/action/StandardBearerActionRule'
 import { TeleportationActionRule } from './rules/action/TeleportationActionRule'
 import { TheWhiteGatesActionRule } from './rules/action/TheWhiteGatesActionRule'
+import { WarpPathActionRule } from './rules/action/WarpPathActionRule'
 import { ActivationRule } from './rules/ActivationRule'
 import { getCardRule, resetCardsRulesCache } from './rules/CardRule'
 import { ChooseDeckRule } from './rules/ChooseDeckRule'
@@ -90,6 +91,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.NemesioNakkaAction]: NemesioNakkaActionRule,
     [RuleId.ProtectorAction]: ProtectorActionRule,
     [RuleId.MusicalTranceAction]: MusicalTranceActionRule,
+    [RuleId.WarpPathAction]: WarpPathActionRule,
     [RuleId.StandardBearerAction]: StandardBearerActionRule,
     [RuleId.BackupAction]: BackupActionRule,
     [RuleId.MarchingOrderAction]: MarchingOrderActionRule
