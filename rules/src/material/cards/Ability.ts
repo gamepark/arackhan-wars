@@ -7,7 +7,17 @@ import { AbilityCondition } from './AbilityCondition'
 import { AbilityTargetFilter, itself } from './AbilityTargetFilter'
 import { AttackCondition, AttackLimitation } from './AttackLimitation'
 import { Attribute, AttributeType } from './Attribute'
-import { Effect, EffectType, EndOfTurnAction, LoseAttributes, ModifyAttackCondition, ModifyMovementCondition, TriggerAction, TriggerCondition } from './Effect'
+import {
+  Effect,
+  EffectType,
+  EndOfTurnAction,
+  ExtraScoreType,
+  LoseAttributes,
+  ModifyAttackCondition,
+  ModifyMovementCondition,
+  TriggerAction,
+  TriggerCondition
+} from './Effect'
 
 export class Ability {
 
@@ -146,6 +156,11 @@ export class Ability {
     this.effects.push({ type: EffectType.ModifyRange, modifier })
     return this
   }
+
+  extraScore(score: ExtraScoreType) {
+    this.effects.push({ type: EffectType.ExtraScore, score })
+    return this
+  }
 }
 
 export enum AbilityMultiplier {
@@ -169,3 +184,4 @@ export const ignoreAttackDefenseModifiers = () => new Ability().ignoreAttackDefe
 export const modifyMovement = (modifier: number, ...conditions: ModifyMovementCondition[]) => new Ability().modifyMovement(modifier, ...conditions)
 export const invertsAttackDefense = () => new Ability().invertsAttackDefense()
 export const range = (modifier: number) => new Ability().range(modifier)
+export const extraScore = (score: ExtraScoreType) => new Ability().extraScore(score)

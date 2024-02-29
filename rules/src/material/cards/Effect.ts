@@ -8,7 +8,7 @@ export type Effect = ModifyAttack | ModifyDefense
   | Deactivated | Mimic | Trigger | ImmuneToEnemySpells
   | EndOfTurn | IgnoreAttackDefenseModifiers | SetAttackDefense
   | SwapSkills | ModifyMovement | InvertsAttackDefense
-  | ModifyRange
+  | ModifyRange | ExtraScore
 
 export enum EffectType {
   Attack, Defense,
@@ -24,7 +24,8 @@ export enum EffectType {
   SwapSkills,
   ModifyMovement,
   InvertsAttackDefense,
-  ModifyRange
+  ModifyRange,
+  ExtraScore
 }
 
 export type ModifyAttack = {
@@ -175,4 +176,13 @@ export type InvertsAttackDefense = {
 export type ModifyRange = {
   type: EffectType.ModifyRange
   modifier: number
+}
+
+export type ExtraScore = {
+  type: EffectType.ExtraScore
+  score: ExtraScoreType
+}
+
+export enum ExtraScoreType {
+  ValueOfCardsUnder
 }

@@ -14,10 +14,9 @@ import {
 } from '@gamepark/rules-api'
 import sumBy from 'lodash/sumBy'
 import { isCreature } from './material/cards/Creature'
-import { isSpell } from './material/cards/Spell'
 import { CustomMoveType } from './material/CustomMoveType'
 import { Faction } from './material/Faction'
-import { FactionCard, FactionCardsCharacteristics } from './material/FactionCard'
+import { FactionCard } from './material/FactionCard'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { AncestralLibraryActionRule } from './rules/action/AncestralLibraryActionRule'
@@ -144,12 +143,13 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
   }
 
   getScore(player: number) {
-    const cardsOnBattlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-      .player(player).id<{ front?: FactionCard, back: Faction }>(id => id?.front !== undefined).getItems()
-    return sumBy(cardsOnBattlefield, card => {
-      const characteristics = FactionCardsCharacteristics[card.id.front as FactionCard]
-      return isSpell(characteristics) ? 0 : characteristics.value
-    })
+    return sumBy(this.material(MaterialType.FactionCard)
+        .location(LocationType.Battlefield)
+        .player(player)
+        .id<{ front?: FactionCard, back: Faction }>(id => id?.front !== undefined)
+        .getIndexes(),
+      index => getCardRule(this.game, index).score
+    )
   }
 
   getTieBreaker(tieBreaker: number, player: number) {

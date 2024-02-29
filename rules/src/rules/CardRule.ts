@@ -25,6 +25,7 @@ import {
   EffectType,
   EndOfTurn,
   EndOfTurnAction,
+  ExtraScoreType,
   GainAttributes,
   isAttackerConstraint,
   isDefenderConstraint,
@@ -81,6 +82,22 @@ export class CardRule extends MaterialRulesPart {
 
   get value(): number {
     return this.characteristics?.value ?? 0
+  }
+
+  get score(): number {
+    return this.isSpell ? 0 : this.value + sumBy(FactionCardsCharacteristics[this.card].getAbilities(), ability =>
+      sumBy(ability.effects, effect => {
+        if (effect.type === EffectType.ExtraScore) {
+          switch (effect.score) {
+            case ExtraScoreType.ValueOfCardsUnder:
+              return sumBy(this.material(MaterialType.FactionCard).location(LocationType.UnderCard).parent(this.index).getIndexes(), index =>
+                getCardRule(this.game, index).value
+              )
+          }
+        }
+        return 0
+      })
+    )
   }
 
   get isCreature() {

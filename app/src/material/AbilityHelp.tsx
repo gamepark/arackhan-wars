@@ -6,6 +6,7 @@ import { AttackCondition, AttackLimitation } from '@gamepark/arackhan-wars/mater
 import {
   Effect,
   EffectType,
+  ExtraScoreType,
   ModifyAttackCondition,
   ModifyMovementCondition,
   TriggerAction,
@@ -198,6 +199,11 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
       return { defaults: 'ability.inverts-attack-defense', values: { targets } }
     case EffectType.ModifyRange:
       return { defaults: 'ability.range.add.targets', values: { targets, modifier: effect.modifier } }
+    case EffectType.ExtraScore:
+      if (effect.score === ExtraScoreType.ValueOfCardsUnder) {
+        return { defaults: 'ability.score.cards-under', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
+      }
+      return {}
     default:
       return {}
   }
