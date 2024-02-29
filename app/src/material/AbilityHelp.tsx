@@ -173,6 +173,8 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
       return {}
     case EffectType.InvertsAttackDefense:
       return { defaults: 'ability.inverts-attack-defense', values: { targets } }
+    case EffectType.ModifyRange:
+      return { defaults: 'ability.range.add.targets', values: { targets, modifier: effect.modifier } }
     default:
       return {}
   }

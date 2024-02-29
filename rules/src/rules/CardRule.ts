@@ -16,7 +16,7 @@ import { ArackhanWarsRules } from '../ArackhanWarsRules'
 import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
 import { Ability } from '../material/cards/Ability'
 import { getAttackConstraint } from '../material/cards/AttackLimitation'
-import { Attribute, AttributeType, isMovement } from '../material/cards/Attribute'
+import { Attribute, AttributeType, isMovement, isRangedAttack } from '../material/cards/Attribute'
 import { Creature, isCreature } from '../material/cards/Creature'
 import {
   AttackerConstraint,
@@ -239,13 +239,16 @@ export class CardRule extends MaterialRulesPart {
     const opponentRule = getCardRule(this.game, opponent)
     const opponentLocation = opponentRule.item.location
     if (!isXYCoordinates(cardLocation) || !isXYCoordinates(opponentLocation)) return false
-    if (opponentRule.hasStealth && this.isCreature && !this.attributes.some(attribute =>
-      attribute.type === AttributeType.RangedAttack && attribute.distance > 1
-    )) return false
-    const distance = getDistanceBetweenSquares(cardLocation, opponentLocation)
-    return distance === 1 || this.attributes.some(attribute =>
-      attribute.type === AttributeType.RangedAttack && distance <= attribute.distance
-    )
+    let distance = getDistanceBetweenSquares(cardLocation, opponentLocation)
+    if (distance === 1 && opponentRule.hasStealth && this.isCreature) distance++
+    return distance <= this.range
+  }
+
+  get range() {
+    const rangedAttack = this.attributes.find(isRangedAttack)
+    if (!rangedAttack) return 1
+    const modifier = sumBy(this.effects, effect => effect.type === EffectType.ModifyRange ? effect.modifier : 0)
+    return rangedAttack.distance + modifier
   }
 
   get hasStealth() {

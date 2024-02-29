@@ -31,6 +31,7 @@ export const omnistrike: Omnistrike = { type: AttributeType.Omnistrike }
 
 export type RangedAttack = { type: AttributeType.RangedAttack, distance: number }
 export const rangedAttack = (distance: number): RangedAttack => ({ type: AttributeType.RangedAttack, distance })
+export const isRangedAttack = (attribute: Attribute): attribute is RangedAttack => attribute.type === AttributeType.RangedAttack
 
 export type Swarm = { type: AttributeType.Swarm }
 export const swarm: Swarm = { type: AttributeType.Swarm }

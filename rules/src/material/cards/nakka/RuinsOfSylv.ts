@@ -1,4 +1,6 @@
 import { Faction } from '../../Faction'
+import { attack, range } from '../Ability'
+import { adjacent, allied, creature } from '../AbilityTargetFilter'
 import { Land } from '../Land'
 
 export class RuinsOfSylv extends Land {
@@ -7,5 +9,8 @@ export class RuinsOfSylv extends Land {
 
   defense = 4
 
-  // TODO benefits
+  benefits = [
+    attack(+1).to(adjacent, allied, creature),
+    range(+1).to(adjacent, allied, creature)
+  ]
 }

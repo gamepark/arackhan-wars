@@ -141,6 +141,11 @@ export class Ability {
     this.effects.push({ type: EffectType.InvertsAttackDefense })
     return this
   }
+
+  range(modifier: number) {
+    this.effects.push({ type: EffectType.ModifyRange, modifier })
+    return this
+  }
 }
 
 export enum AbilityMultiplier {
@@ -163,3 +168,4 @@ export const endOfTurn = (action: EndOfTurnAction) => new Ability().endOfTurn(ac
 export const ignoreAttackDefenseModifiers = () => new Ability().ignoreAttackDefenseModifiers()
 export const modifyMovement = (modifier: number, ...conditions: ModifyMovementCondition[]) => new Ability().modifyMovement(modifier, ...conditions)
 export const invertsAttackDefense = () => new Ability().invertsAttackDefense()
+export const range = (modifier: number) => new Ability().range(modifier)
