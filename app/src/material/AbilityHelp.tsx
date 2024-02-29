@@ -42,6 +42,11 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
             modifier: effect.modifier
           }
         }
+      } else if (ability.condition) {
+        return {
+          defaults: 'ability.attack.gain.if',
+          values: { modifier: effect.modifier, condition: ability.condition.getText(t) }
+        }
       } else {
         return {
           defaults: effect.modifier > 0 ? 'ability.attack.gain' : 'ability.attack.lost',
@@ -62,6 +67,11 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
             defaults: 'ability.defense.per',
             values: { multipliers, modifier: effect.modifier }
           }
+        }
+      } else if (ability.condition) {
+        return {
+          defaults: 'ability.defense.gain.if',
+          values: { modifier: effect.modifier, condition: ability.condition.getText(t) }
         }
       } else {
         return {

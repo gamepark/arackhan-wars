@@ -2,6 +2,7 @@ import { Material, MaterialGame } from '@gamepark/rules-api'
 import { TFunction } from 'i18next'
 import { merge } from 'lodash'
 import { ArackhanWarsRules } from '../../ArackhanWarsRules'
+import { Memory } from '../../rules/Memory'
 import { LocationType } from '../LocationType'
 import { MaterialType } from '../MaterialType'
 import { AbilityTargetFilter } from './AbilityTargetFilter'
@@ -49,3 +50,29 @@ export class ThereIsNotOnBattlefield extends AbilityCondition {
 }
 
 export const thereIsNot = (...filters: AbilityTargetFilter[]) => new ThereIsNotOnBattlefield(filters)
+
+export class StartRound extends AbilityCondition {
+  match(game: MaterialGame, source: Material) {
+    const rules = new ArackhanWarsRules(game)
+    return rules.remind(Memory.StartPlayer) === source.getItem()?.location?.player
+  }
+
+  getText(t: TFunction) {
+    return t('if.start-round')
+  }
+}
+
+export const startRound = new StartRound()
+
+export class DoNotStartRound extends AbilityCondition {
+  match(game: MaterialGame, source: Material) {
+    const rules = new ArackhanWarsRules(game)
+    return rules.remind(Memory.StartPlayer) !== source.getItem()?.location?.player
+  }
+
+  getText(t: TFunction) {
+    return t('if.no-start-round')
+  }
+}
+
+export const doNotStartRound = new DoNotStartRound()
