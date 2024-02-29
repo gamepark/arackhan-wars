@@ -135,7 +135,11 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
           : 'ability.attack.limit'
       }
     case EffectType.CanOnlyAttack:
-      return { defaults: `ability.attack.condition.${attackConditionText[effect.condition]}` }
+      if (targets) {
+        return { defaults: `ability.targets.attack.condition.${attackConditionText[effect.condition]}`, values: { targets } }
+      } else {
+        return { defaults: `ability.attack.condition.${attackConditionText[effect.condition]}` }
+      }
     case EffectType.CannotBeAttacked:
       return {
         defaults: effect.limitation ?
