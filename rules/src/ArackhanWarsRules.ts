@@ -21,6 +21,7 @@ import { FactionCard, FactionCardsCharacteristics } from './material/FactionCard
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { AncestralLibraryActionRule } from './rules/action/AncestralLibraryActionRule'
+import { AssassinActionRule } from './rules/action/AssassinActionRule'
 import { BackupActionRule } from './rules/action/BackupActionRule'
 import { CoriolisWindActionRule } from './rules/action/CoriolisWindActionRule'
 import { DiscardEnemySpellActionRule } from './rules/action/DiscardEnemySpellActionRule'
@@ -92,6 +93,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.ProtectorAction]: ProtectorActionRule,
     [RuleId.MusicalTranceAction]: MusicalTranceActionRule,
     [RuleId.WarpPathAction]: WarpPathActionRule,
+    [RuleId.AssassinAction]: AssassinActionRule,
     [RuleId.StandardBearerAction]: StandardBearerActionRule,
     [RuleId.BackupAction]: BackupActionRule,
     [RuleId.MarchingOrderAction]: MarchingOrderActionRule

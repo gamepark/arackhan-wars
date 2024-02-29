@@ -1,3 +1,4 @@
+import { RuleId } from '../../../rules/RuleId'
 import { Faction } from '../../Faction'
 import { initiative } from '../Attribute'
 import { Creature } from '../Creature'
@@ -12,5 +13,5 @@ export class Assassin extends Creature {
   defense = 1
 
   attribute = initiative
-  // TODO action
+  action = RuleId.AssassinAction
 }

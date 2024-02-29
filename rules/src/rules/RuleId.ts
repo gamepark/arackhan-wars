@@ -36,6 +36,7 @@ export enum RuleId {
   ProtectorAction,
   MusicalTranceAction,
   WarpPathAction,
+  AssassinAction,
   StandardBearerAction,
   BackupAction,
   MarchingOrderAction
