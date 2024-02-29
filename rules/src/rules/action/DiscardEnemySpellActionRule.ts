@@ -5,7 +5,7 @@ import { MaterialType } from '../../material/MaterialType'
 import { getCardRule } from '../CardRule'
 import { CardActionRule } from './CardActionRule'
 
-export class EsotericWinterActionRule extends CardActionRule {
+export class DiscardEnemySpellActionRule extends CardActionRule {
   getPlayerMoves() {
     return this.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane)
       .filter((item, index) => item.location.player !== this.player && getCardRule(this.game, index).isSpell)

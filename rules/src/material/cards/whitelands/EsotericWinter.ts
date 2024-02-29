@@ -10,5 +10,5 @@ export class EsotericWinter extends Spell {
   astral = true
 
   attribute = initiative
-  action = RuleId.EsotericWinterAction
+  action = RuleId.DiscardEnemySpellAction
 }

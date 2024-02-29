@@ -30,7 +30,7 @@ export enum RuleId {
   AncestralLibraryAction,
   TheWhiteGatesAction,
   CoriolisWindAction,
-  EsotericWinterAction,
+  DiscardEnemySpellAction,
   IceWingsAction,
   NemesioNakkaAction,
   ProtectorAction,

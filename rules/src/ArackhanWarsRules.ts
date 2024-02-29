@@ -23,7 +23,7 @@ import { MaterialType } from './material/MaterialType'
 import { AncestralLibraryActionRule } from './rules/action/AncestralLibraryActionRule'
 import { BackupActionRule } from './rules/action/BackupActionRule'
 import { CoriolisWindActionRule } from './rules/action/CoriolisWindActionRule'
-import { EsotericWinterActionRule } from './rules/action/EsotericWinterActionRule'
+import { DiscardEnemySpellActionRule } from './rules/action/DiscardEnemySpellActionRule'
 import { ForcedExileActionRule } from './rules/action/ForcedExileActionRule'
 import { IceElementalActionRule } from './rules/action/IceElementalActionRule'
 import { IceWingsActionRule } from './rules/action/IceWingsActionRule'
@@ -84,7 +84,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.AncestralLibraryAction]: AncestralLibraryActionRule,
     [RuleId.TheWhiteGatesAction]: TheWhiteGatesActionRule,
     [RuleId.CoriolisWindAction]: CoriolisWindActionRule,
-    [RuleId.EsotericWinterAction]: EsotericWinterActionRule,
+    [RuleId.DiscardEnemySpellAction]: DiscardEnemySpellActionRule,
     [RuleId.IceWingsAction]: IceWingsActionRule,
     [RuleId.NemesioNakkaAction]: NemesioNakkaActionRule,
     [RuleId.ProtectorAction]: ProtectorActionRule,
