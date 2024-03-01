@@ -161,6 +161,11 @@ export class Ability {
     this.effects.push({ type: EffectType.ExtraScore, score })
     return this
   }
+
+  ignoreFellowGroupAttackerConstraint(filters: AbilityTargetFilter[]) {
+    this.effects.push({ type: EffectType.IgnoreFellowGroupAttackerConstraint, filters })
+    return this
+  }
 }
 
 export enum AbilityMultiplier {
@@ -185,3 +190,4 @@ export const modifyMovement = (modifier: number, ...conditions: ModifyMovementCo
 export const invertsAttackDefense = () => new Ability().invertsAttackDefense()
 export const range = (modifier: number) => new Ability().range(modifier)
 export const extraScore = (score: ExtraScoreType) => new Ability().extraScore(score)
+export const ignoreFellowGroupAttackerConstraint = (...filters: AbilityTargetFilter[]) => new Ability().ignoreFellowGroupAttackerConstraint(filters)

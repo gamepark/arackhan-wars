@@ -1,4 +1,6 @@
 import { Faction } from '../../Faction'
+import { ignoreFellowGroupAttackerConstraint } from '../Ability'
+import { allied, creature, family } from '../AbilityTargetFilter'
 import { Creature } from '../Creature'
 import { Family } from '../Family'
 
@@ -10,5 +12,5 @@ export class SeniorMercenary extends Creature {
   attack = 2
   defense = 1
 
-  // TODO skill
+  skill = ignoreFellowGroupAttackerConstraint(allied, family(Family.Mercenary), creature)
 }

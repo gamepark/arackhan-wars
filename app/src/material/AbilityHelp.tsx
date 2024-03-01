@@ -204,6 +204,15 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
         return { defaults: 'ability.score.cards-under', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
       }
       return {}
+    case EffectType.IgnoreFellowGroupAttackerConstraint:
+      return {
+        defaults: 'ability.ignore-fellow-weakness',
+        values: {
+          targets: t(`targets.${effect.filters.map(filter => filter.text).join('.')}`,
+            effect.filters.reduce((values, filter) => merge(values, filter.values?.(t)), {})),
+          card: t(`card.name.${getUniqueCard(card)}`)
+        }
+      }
     default:
       return {}
   }

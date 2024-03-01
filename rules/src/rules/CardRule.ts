@@ -30,6 +30,7 @@ import {
   isAttackerConstraint,
   isDefenderConstraint,
   isGainAttributes,
+  isIgnoreFellowGroupAttackerConstraint,
   isLoseSkills,
   isMimic,
   isSetAttackDefense,
@@ -241,15 +242,29 @@ export class CardRule extends MaterialRulesPart {
   }
 
   someEffectPreventsAttacking(opponent: number) {
-    return this.effects.some(effect => isAttackerConstraint(effect) && this.isPreventingAttack(effect, opponent))
+    const formerAttackers = this.remind<Attack[]>(Memory.Attacks).filter(attack => attack.targets.includes(opponent))
+      .map(attack => attack.card)
+    const ignoreFellowConstraints = formerAttackers.flatMap(attacker => getCardRule(this.game, attacker).effects.filter(isIgnoreFellowGroupAttackerConstraint))
+    ignoreFellowConstraints.push(...this.effects.filter(isIgnoreFellowGroupAttackerConstraint))
+    return this.effects.some(effect =>
+          isAttackerConstraint(effect)
+          && !ignoreFellowConstraints.some(effect => effect.filters.every(filter =>
+            filter.filter(this.cardMaterial, this.cardMaterial, this.game)
+          ))
+          && this.isPreventingAttack(effect, opponent)
+      )
       || getCardRule(this.game, opponent).effects.some(effect =>
         (effect.type === EffectType.ImmuneToEnemySpells && this.isSpell)
         || (isDefenderConstraint(effect) && this.isPreventingAttack(effect, opponent))
       )
-    || this.remind<Attack[]>(Memory.Attacks).some(attack =>
-        attack.targets.includes(opponent) && getCardRule(this.game, attack.card).effects.some(effect =>
-            isAttackerConstraint(effect) && getAttackConstraint(effect, this.game).preventAttackerToJoinGroup(this.index)
-          )
+      || formerAttackers.some(attacker =>
+        getCardRule(this.game, attacker).effects.some(effect =>
+            isAttackerConstraint(effect)
+            && !ignoreFellowConstraints.some(effect => effect.filters.every(filter =>
+              filter.filter(this.cardMaterial, this.material(MaterialType.FactionCard).index(attacker), this.game)
+            ))
+            && getAttackConstraint(effect, this.game).preventAttackerToJoinGroup(this.index)
+        )
       )
   }
 

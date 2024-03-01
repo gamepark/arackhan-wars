@@ -1,4 +1,5 @@
 import { FactionCard } from '../FactionCard'
+import { AbilityTargetFilter } from './AbilityTargetFilter'
 import { AttackCondition, AttackLimitation } from './AttackLimitation'
 import { Attribute, AttributeType } from './Attribute'
 
@@ -8,7 +9,7 @@ export type Effect = ModifyAttack | ModifyDefense
   | Deactivated | Mimic | Trigger | ImmuneToEnemySpells
   | EndOfTurn | IgnoreAttackDefenseModifiers | SetAttackDefense
   | SwapSkills | ModifyMovement | InvertsAttackDefense
-  | ModifyRange | ExtraScore
+  | ModifyRange | ExtraScore | IgnoreFellowGroupAttackerConstraint
 
 export enum EffectType {
   Attack, Defense,
@@ -25,7 +26,8 @@ export enum EffectType {
   ModifyMovement,
   InvertsAttackDefense,
   ModifyRange,
-  ExtraScore
+  ExtraScore,
+  IgnoreFellowGroupAttackerConstraint
 }
 
 export type ModifyAttack = {
@@ -185,4 +187,13 @@ export type ExtraScore = {
 
 export enum ExtraScoreType {
   ValueOfCardsUnder
+}
+
+export type IgnoreFellowGroupAttackerConstraint = {
+  type: EffectType.IgnoreFellowGroupAttackerConstraint
+  filters: AbilityTargetFilter[]
+}
+
+export function isIgnoreFellowGroupAttackerConstraint(effect: Effect): effect is IgnoreFellowGroupAttackerConstraint {
+  return effect.type === EffectType.IgnoreFellowGroupAttackerConstraint
 }
