@@ -6,25 +6,26 @@ import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { useTranslation } from 'react-i18next'
 
-export const MimicryActionHeader = () => {
+export const NemesioGreyOrderActionHeader = () => {
   const { t } = useTranslation()
   const playerId = usePlayerId()
   const rules = useRules<ArackhanWarsRules>()!
   const activePlayer = rules.getActivePlayer()
   const player = usePlayerName(activePlayer)
-  const target = rules.remind(Memory.TargetCard)
-  if (target === undefined) {
+  const nemesio = rules.remind(Memory.ActionCard)
+  const actionCard = rules.material(MaterialType.FactionCard).getItem(nemesio)?.id.front
+  const card = t(`card.name.${getUniqueCard(actionCard)}`)
+  if (!rules.remind<number[]>(Memory.OncePerRound).includes(nemesio)) {
     if (playerId === activePlayer) {
-      return <>{t('mimicry.target.choose')}</>
+      return <>{t('header.destroy.you', { card })}</>
     } else {
-      return <>{t('mimicry.target.choice', { player })}</>
+      return <>{t('header.destroy.player', { card, player })}</>
     }
   } else {
-    const actionCard = rules.material(MaterialType.FactionCard).getItem(rules.remind(Memory.ActionCard))?.id.front
     if (playerId === activePlayer) {
-      return <>{t('header.mimic.you', { card: t(`card.name.${getUniqueCard(actionCard)}`) })}</>
+      return <>{t('header.mimic.you', { card })}</>
     } else {
-      return <>{t('header.mimic.player', { player, card: t(`card.name.${getUniqueCard(actionCard)}`) })}</>
+      return <>{t('header.mimic.player', { card, player })}</>
     }
   }
 }

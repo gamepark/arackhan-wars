@@ -1,3 +1,4 @@
+import { RuleId } from '../../../rules/RuleId'
 import { Faction } from '../../Faction'
 import { movement } from '../Attribute'
 import { Creature } from '../Creature'
@@ -13,5 +14,5 @@ export class NemesioGreyOrder extends Creature {
   defense = 1
 
   attribute = movement(2)
-  // TODO action
+  action = RuleId.NemesioGreyOrderAction
 }
