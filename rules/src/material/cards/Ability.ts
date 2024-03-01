@@ -13,7 +13,7 @@ import {
   EndOfTurnAction,
   ExtraScoreType,
   LoseAttributes,
-  ModifyAttackCondition,
+  ModifyAttackCondition, ModifyDefenseCondition,
   ModifyMovementCondition,
   TriggerAction,
   TriggerCondition
@@ -71,8 +71,8 @@ export class Ability {
     return this
   }
 
-  defense(modifier: number) {
-    this.effects.push({ type: EffectType.Defense, modifier })
+  defense(modifier: number, condition?: ModifyDefenseCondition) {
+    this.effects.push({ type: EffectType.Defense, modifier, condition })
     return this
   }
 
@@ -173,7 +173,7 @@ export enum AbilityMultiplier {
 }
 
 export const attack = (modifier: number, condition?: ModifyAttackCondition) => new Ability().attack(modifier, condition)
-export const defense = (modifier: number) => new Ability().defense(modifier)
+export const defense = (modifier: number, condition?: ModifyDefenseCondition) => new Ability().defense(modifier, condition)
 export const gainAttribute = (attribute: Attribute) => new Ability().gainAttributes([attribute])
 export const loseAttributes = (...attributes: AttributeType[]) => new Ability().loseAttributes(...attributes)
 export const loseAttribute = (attribute: AttributeType) => new Ability().loseAttribute(attribute)

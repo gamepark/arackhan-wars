@@ -100,7 +100,7 @@ export class AttackRule extends PlayerTurnRule {
     const attackedBy = this.attackedBy
     const attackValues = mapValues(attackedBy, (attackers, card) => getCardRule(this.game, parseInt(card)).getDamagesInflicted(attackers))
     const defeatedEnemies = Object.keys(attackValues).map(key => parseInt(key))
-      .filter(enemy => (attackValues[enemy] ?? 0) > getCardRule(this.game, enemy).defense)
+      .filter(enemy => (attackValues[enemy] ?? 0) > getCardRule(this.game, enemy).getDefense(attackedBy[enemy]))
     const [regeneratingEnemies, killedEnemies] = partition(defeatedEnemies, enemy =>
       getCardRule(this.game, enemy).canRegenerate && !attacks.some(attack => attack.targets.includes(enemy) && getCardRule(this.game, attack.card).isSpell)
     )

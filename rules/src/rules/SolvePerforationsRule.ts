@@ -29,7 +29,7 @@ export class SolvePerforationsRule extends MaterialRulesPart {
       const targetIndex = target.getIndex()
       const defender = getCardRule(this.game, targetIndex)
       if (attacker.someEffectPreventsAttacking(targetIndex) || defender.isInvalidAttackersGroup([perforation.attacker])) continue
-      if (perforation.attackValue > defender.defense) {
+      if (perforation.attackValue > defender.getDefense([perforation.attacker])) {
         if (!attacker.isSpell && defender.canRegenerate) {
           moves.push(this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(targetIndex).rotateItem(true))
         } else {

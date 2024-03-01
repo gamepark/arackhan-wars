@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
 import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
 import { EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
@@ -433,8 +434,9 @@ export class FactionCardDescription extends CardDescription {
     const cardRule = getCardRule(rules.game, index)
     const attacks = (rules.remind<Attack[]>(Memory.Attacks) ?? []).filter(attack => attack.targets.includes(index))
     if (attacks.length) {
-      const attackValue = cardRule.getDamagesInflicted(attacks.map(attack => attack.card))
-      const icon = cardRule.defense >= (attackValue ?? 0) ? CombatResult.Defense : cardRule.canRegenerate ? CombatResult.Regeneration : CombatResult.Dead
+      const attackers = attacks.map(attack => attack.card)
+      const attackValue = cardRule.getDamagesInflicted(attackers)
+      const icon = cardRule.getDefense(attackers) >= (attackValue ?? 0) ? CombatResult.Defense : cardRule.canRegenerate ? CombatResult.Regeneration : CombatResult.Dead
       locations.push({ type: LocationType.CombatResultIcon, parent: index, id: icon, x: attackValue })
     }
     locations.push({ type: LocationType.FactionCard, parent: index })
@@ -507,14 +509,17 @@ export function getCardBattlefieldModifierLocations(game: MaterialGame, index: n
   const locations: Location[] = []
   const cardRule = getCardRule(game, index)
   const attackCharacteristic = cardRule.attackCharacteristic
-  const attack = cardRule.attack
+  const attacks = new ArackhanWarsRules(game).remind<Attack[]>(Memory.Attacks) ?? []
+  const cardAttack = attacks.find(attack => attack.card === index && attack.targets.length === 1)
+  const attack = cardAttack ? cardRule.getAttack(cardAttack.targets[0]) : cardRule.attack
   if (attackCharacteristic !== attack) {
-    locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Attack, parent: index, x: cardRule.attack, y: attack - attackCharacteristic })
+    locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Attack, parent: index, x: attack, y: attack - attackCharacteristic })
   }
   const defenseCharacteristic = cardRule.defenseCharacteristic
-  const defense = cardRule.defense
+  const attackers = attacks.filter(attack => attack.targets.includes(index)).map(attack => attack.card)
+  const defense = cardRule.getDefense(attackers)
   if (defenseCharacteristic !== defense) {
-    locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Defense, parent: index, x: cardRule.defense, y: defense - defenseCharacteristic })
+    locations.push({ type: LocationType.CombatIcon, id: CombatIcon.Defense, parent: index, x: defense, y: defense - defenseCharacteristic })
   }
   const characteristics = cardRule.characteristics
   const nativeAttributes = characteristics?.getAttributes() ?? []

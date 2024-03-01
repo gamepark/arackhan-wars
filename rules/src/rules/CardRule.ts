@@ -36,6 +36,7 @@ import {
   isSetAttackDefense,
   isSwapSkills,
   ModifyAttackCondition,
+  ModifyDefenseCondition,
   ModifyMovementCondition,
   Trigger,
   TriggerAction,
@@ -363,10 +364,22 @@ export class CardRule extends MaterialRulesPart {
     return this.effects.some(effect => effect.type === EffectType.InvertsAttackDefense) ? this.getAttackBeforeInvert() : this.getDefenseBeforeInvert()
   }
 
-  private getDefenseBeforeInvert() {
+  getDefense(attackers: number[]) {
+    return this.effects.some(effect => effect.type === EffectType.InvertsAttackDefense) ?
+      this.getAttackBeforeInvert() : this.getDefenseBeforeInvert(attackers)
+  }
+
+  private getDefenseBeforeInvert(attackers: number[] = []) {
     const setAttackDefense = this.effects.find(isSetAttackDefense)
     const baseDefense = setAttackDefense?.defense ?? this.defenseCharacteristic
-    const defenseModifier = sumBy(this.effects, effect => effect.type === EffectType.Defense ? effect.modifier : 0)
+    const defenseModifier = sumBy(this.effects, effect =>
+      effect.type === EffectType.Defense
+      && (effect.condition !== ModifyDefenseCondition.AttackedByFlyOrMoves
+        || attackers.some(attacker => getCardRule(this.game, attacker).attributes.some(attribute =>
+          attribute.type === AttributeType.Flight || attribute.type === AttributeType.Movement
+        ))
+      )
+        ? effect.modifier : 0)
     return Math.max(0, baseDefense + defenseModifier)
   }
 

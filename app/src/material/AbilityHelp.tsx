@@ -8,6 +8,7 @@ import {
   EffectType,
   ExtraScoreType,
   ModifyAttackCondition,
+  ModifyDefenseCondition,
   ModifyMovementCondition,
   TriggerAction,
   TriggerCondition
@@ -85,6 +86,11 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
         return {
           defaults: 'ability.defense.gain.if',
           values: { modifier: effect.modifier, condition: ability.condition.getText(t) }
+        }
+      } else if (effect.condition === ModifyDefenseCondition.AttackedByFlyOrMoves) {
+        return {
+          defaults: 'ability.defense.targets.gain.if',
+          values: { modifier: effect.modifier, targets, condition: t('if.defense.fly-move') }
         }
       } else {
         return {
