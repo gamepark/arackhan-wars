@@ -3,6 +3,7 @@ import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import { AncestralLibraryActionHeader } from './actions/AncestralLibraryActionHeader'
 import { BackupActionHeader } from './actions/BackupActionHeader'
 import { CardActionHeader } from './actions/CardActionHeader'
+import { DeactivateActionHeader } from './actions/DeactivateActionHeader'
 import { DiscardActionHeader } from './actions/DiscardActionHeader'
 import { IceElementalActionHeader } from './actions/IceElementalActionHeader'
 import { MarchingOrderActionHeader } from './actions/MarchingOrderActionHeader'
@@ -56,6 +57,7 @@ export const Headers: Partial<Record<RuleId, () => ReactJSXElement>> = {
   [RuleId.AssassinAction]: MoveCreatureActionHeader,
   [RuleId.NemesioGreyOrderAction]: NemesioGreyOrderActionHeader,
   [RuleId.StandardBearerAction]: StandardBearerActionHeader,
+  [RuleId.TomurDiscAction]: DeactivateActionHeader,
   [RuleId.BackupAction]: BackupActionHeader,
   [RuleId.MarchingOrderAction]: MarchingOrderActionHeader
 }

@@ -39,6 +39,7 @@ export enum RuleId {
   AssassinAction,
   NemesioGreyOrderAction,
   StandardBearerAction,
+  TomurDiscAction,
   BackupAction,
   MarchingOrderAction
 }

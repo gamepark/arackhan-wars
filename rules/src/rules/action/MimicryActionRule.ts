@@ -1,8 +1,7 @@
 import { CustomMove, MaterialMove } from '@gamepark/rules-api'
-import { isCreature } from '../../material/cards/Creature'
 import { EffectType } from '../../material/cards/Effect'
 import { CustomMoveType } from '../../material/CustomMoveType'
-import { FactionCard, FactionCardsCharacteristics } from '../../material/FactionCard'
+import { FactionCard } from '../../material/FactionCard'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
 import { getCardRule } from '../CardRule'
@@ -14,7 +13,7 @@ export class MimicryActionRule extends CardActionRule {
 
   getPlayerMoves() {
     const creaturesOnBattlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-      .filter((item) => isCreature(FactionCardsCharacteristics[item.id.front]))
+      .filter((_, index) => getCardRule(this.game, index).isCreature)
 
     if (this.target === undefined) {
       return creaturesOnBattlefield.player(this.player).getIndexes()
