@@ -1,4 +1,6 @@
 import { Faction } from '../../Faction'
+import { cannotAttack } from '../Ability'
+import { AttackLimitation } from '../AttackLimitation'
 import { Creature } from '../Creature'
 import { Family } from '../Family'
 
@@ -10,5 +12,5 @@ export class WhitePlainsMercenary extends Creature {
   attack = 2
   defense = 3
 
-  // TODO weakness
+  weakness = cannotAttack(AttackLimitation.InGroup)
 }

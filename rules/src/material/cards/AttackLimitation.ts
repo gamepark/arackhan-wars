@@ -6,7 +6,7 @@ import { MaterialType } from '../MaterialType'
 import { AttackerConstraint, DefenderConstraint, EffectType } from './Effect'
 
 export enum AttackLimitation {
-  ByCreatures = 1, ByGroupedCreatures, AdjacentCards, DuringInitiative, BottomRightCards
+  ByCreatures = 1, ByGroupedCreatures, AdjacentCards, DuringInitiative, BottomRightCards, InGroup
 }
 
 export enum AttackCondition {
@@ -14,7 +14,13 @@ export enum AttackCondition {
 }
 
 export abstract class AttackConstraintRule extends MaterialRulesPart {
-  abstract preventAttack(attacker: number, defender: number): boolean
+  preventAttack(_attacker: number, _defender: number): boolean {
+    return false
+  }
+
+  preventAttackerToJoinGroup(_newAttacker: number): boolean {
+    return false
+  }
 
   isInvalidAttackGroup(_attackers: number[], _defender: number): boolean {
     return false
@@ -33,12 +39,29 @@ export class NoAttackByCreatures extends AttackConstraintRule {
   }
 }
 
-export class NoAttackByGroupedCreatures extends AttackConstraintRule {
+export class NoAttackInGroup extends AttackConstraintRule {
+  preventGroupAttackWith(_otherAttacker: number): boolean {
+    return true
+  }
+
+  preventAttackerToJoinGroup(_newAttacker: number): boolean {
+    return true
+  }
+
   preventAttack(attacker: number, defender: number): boolean {
-    return getCardRule(this.game, attacker).isCreature
-      && this.remind<Attack[]>(Memory.Attacks).some(attack =>
-        attack.targets.includes(defender) && getCardRule(this.game, attack.card).isCreature
-      )
+    return getCardRule(this.game, attacker).isCreature && this.remind<Attack[]>(Memory.Attacks).some(attack =>
+      attack.targets.includes(defender) && this.preventGroupAttackWith(attack.card)
+    )
+  }
+}
+
+export class NoAttackByGroupedCreatures extends NoAttackInGroup {
+  preventGroupAttackWith(otherAttacker: number): boolean {
+    return getCardRule(this.game, otherAttacker).isCreature
+  }
+
+  preventAttackerToJoinGroup(newAttacker: number): boolean {
+    return this.preventGroupAttackWith(newAttacker)
   }
 }
 
@@ -67,10 +90,6 @@ export class NoAttackBottomRightCards extends AttackConstraintRule {
 }
 
 export class AttackByCreaturesOnlyInGroup extends AttackConstraintRule {
-  preventAttack(): boolean {
-    return false
-  }
-
   isInvalidAttackGroup(attackers: number[]): boolean {
     return attackers.length === 1 && getCardRule(this.game, attackers[0]).isCreature
   }
@@ -97,6 +116,8 @@ export const getAttackConstraint = (effect: AttackerConstraint | DefenderConstra
           return new NoAttackDuringInitiative(game)
         case AttackLimitation.BottomRightCards:
           return new NoAttackBottomRightCards(game)
+        case AttackLimitation.InGroup:
+          return new NoAttackInGroup(game)
         default:
           return new NoAttack(game)
       }

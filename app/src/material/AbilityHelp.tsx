@@ -219,5 +219,6 @@ const attackLimitationText: Record<AttackLimitation, string> = {
   [AttackLimitation.ByGroupedCreatures]: 'group-creatures',
   [AttackLimitation.AdjacentCards]: 'adjacent-cards',
   [AttackLimitation.DuringInitiative]: 'during-initiative',
-  [AttackLimitation.BottomRightCards]: 'bottom-right'
+  [AttackLimitation.BottomRightCards]: 'bottom-right',
+  [AttackLimitation.InGroup]: 'in-group'
 }

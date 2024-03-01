@@ -246,6 +246,11 @@ export class CardRule extends MaterialRulesPart {
         (effect.type === EffectType.ImmuneToEnemySpells && this.isSpell)
         || (isDefenderConstraint(effect) && this.isPreventingAttack(effect, opponent))
       )
+    || this.remind<Attack[]>(Memory.Attacks).some(attack =>
+        attack.targets.includes(opponent) && getCardRule(this.game, attack.card).effects.some(effect =>
+            isAttackerConstraint(effect) && getAttackConstraint(effect, this.game).preventAttackerToJoinGroup(this.index)
+          )
+      )
   }
 
   private isPreventingAttack(effect: AttackerConstraint | DefenderConstraint, opponent: number) {
