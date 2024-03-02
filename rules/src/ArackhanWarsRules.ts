@@ -20,6 +20,7 @@ import { FactionCard } from './material/FactionCard'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { AncestralLibraryActionRule } from './rules/action/AncestralLibraryActionRule'
+import { ArmouredConvoyActionRule } from './rules/action/ArmouredConvoyActionRule'
 import { AssassinActionRule } from './rules/action/AssassinActionRule'
 import { BackupActionRule } from './rules/action/BackupActionRule'
 import { CoriolisWindActionRule } from './rules/action/CoriolisWindActionRule'
@@ -47,8 +48,8 @@ import { ChooseDeckRule } from './rules/ChooseDeckRule'
 import { ChooseFactionRule } from './rules/ChooseFactionRule'
 import { ChooseStartPlayerRule } from './rules/ChooseStartPlayerRule'
 import { DrawRules } from './rules/DrawRules'
-import { EndOfTurnRule } from './rules/EndOfTurnRule'
 import { EndOfRoundRules } from './rules/EndOfRoundRules'
+import { EndOfTurnRule } from './rules/EndOfTurnRule'
 import { Memory } from './rules/Memory'
 import { MulliganRule } from './rules/MulliganRule'
 import { PlacementRule } from './rules/PlacementRule'
@@ -98,6 +99,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.NemesioGreyOrderAction]: NemesioGreyOrderActionRule,
     [RuleId.StandardBearerAction]: StandardBearerActionRule,
     [RuleId.TomurDiscAction]: TomurDiscActionRule,
+    [RuleId.ArmouredConvoyAction]: ArmouredConvoyActionRule,
     [RuleId.BackupAction]: BackupActionRule,
     [RuleId.MarchingOrderAction]: MarchingOrderActionRule
   }
