@@ -43,5 +43,6 @@ export enum RuleId {
   ArmouredConvoyAction,
   BackupAction,
   MarchingOrderAction,
-  OnLeaveAction
+  OnLeaveAction,
+  TheGreyOrderRisesAction
 }

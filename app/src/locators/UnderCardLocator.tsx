@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { ItemLocator } from '@gamepark/react-game'
-import { Coordinates, MaterialItem } from '../../../../workshop/packages/rules-api'
+import { Coordinates, MaterialItem } from '@gamepark/rules-api'
 
 export class UnderCardLocator extends ItemLocator {
   parentItemType = MaterialType.FactionCard

@@ -40,6 +40,7 @@ import { ProtectorActionRule } from './rules/action/ProtectorActionRule'
 import { ReplaceWithCreatureActionRule } from './rules/action/ReplaceWithCreatureActionRule'
 import { StandardBearerActionRule } from './rules/action/StandardBearerActionRule'
 import { TeleportationActionRule } from './rules/action/TeleportationActionRule'
+import { TheGreyOrderRisesActionRule } from './rules/action/TheGreyOrderRisesActionRule'
 import { TheWhiteGatesActionRule } from './rules/action/TheWhiteGatesActionRule'
 import { TomurDiscActionRule } from './rules/action/TomurDiscActionRule'
 import { WarpPathActionRule } from './rules/action/WarpPathActionRule'
@@ -103,7 +104,8 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.ArmouredConvoyAction]: ArmouredConvoyActionRule,
     [RuleId.BackupAction]: BackupActionRule,
     [RuleId.MarchingOrderAction]: MarchingOrderActionRule,
-    [RuleId.OnLeaveAction]: OnLeaveActionRule
+    [RuleId.OnLeaveAction]: OnLeaveActionRule,
+    [RuleId.TheGreyOrderRisesAction]: TheGreyOrderRisesActionRule
   }
 
   locationsStrategies = {
