@@ -10,7 +10,7 @@ export type Effect = ModifyAttack | ModifyDefense
   | EndOfTurn | IgnoreAttackDefenseModifiers | SetAttackDefense
   | SwapSkills | ModifyMovement | InvertsAttackDefense
   | ModifyRange | ExtraScore | IgnoreFellowGroupAttackerConstraint
-  | CannotBePlayed
+  | CannotBePlayed | HitAllies
 
 export enum EffectType {
   Attack, Defense,
@@ -30,6 +30,7 @@ export enum EffectType {
   ExtraScore,
   IgnoreFellowGroupAttackerConstraint,
   CannotBePlayed,
+  HitAllies,
 }
 
 export type ModifyAttack = {
@@ -213,4 +214,8 @@ export type CannotBePlayed = {
 
 export enum RoundLimitation {
   LastRound
+}
+
+export type HitAllies = {
+  type: EffectType.HitAllies
 }

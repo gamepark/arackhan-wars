@@ -173,6 +173,11 @@ export class Ability {
     this.effects.push({ type: EffectType.CannotBePlayed, limitation })
     return this
   }
+
+  hitAllies() {
+    this.effects.push({ type: EffectType.HitAllies })
+    return this
+  }
 }
 
 export enum AbilityMultiplier {
@@ -199,3 +204,4 @@ export const range = (modifier: number) => new Ability().range(modifier)
 export const extraScore = (score: ExtraScoreType) => new Ability().extraScore(score)
 export const ignoreFellowGroupAttackerConstraint = (...filters: AbilityTargetFilter[]) => new Ability().ignoreFellowGroupAttackerConstraint(filters)
 export const cannotBePlayed = (limitation: RoundLimitation) => new Ability().cannotBePlayed(limitation)
+export const hitAllies = () => new Ability().hitAllies()

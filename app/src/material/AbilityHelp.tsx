@@ -240,6 +240,8 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
         return { defaults: 'ability.cannot-place.last-turn' }
       }
       return {}
+    case EffectType.HitAllies:
+      return { defaults: 'ability.hit-allies', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
     default:
       return {}
   }

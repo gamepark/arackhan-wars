@@ -29,7 +29,8 @@ export class AttackRule extends PlayerTurnRule {
     const moves: MaterialMove[] = []
 
     const cardsAlreadyAttacked = this.cardsAlreadyAttacked
-    const potentialTargets = cardsAlreadyAttacked.length > 0 ? cardsAlreadyAttacked
+    const potentialTargets = cardsAlreadyAttacked.length > 0 ?
+      cardsAlreadyAttacked.filter(index => getCardRule(this.game, index).owner !== this.player)
       : this.material(MaterialType.FactionCard)
         .location(LocationType.Battlefield)
         .player(player => player !== this.player)

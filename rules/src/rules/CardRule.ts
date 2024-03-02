@@ -451,7 +451,12 @@ export class CardRule extends MaterialRulesPart {
 
   get omnistrikeTargets() {
     return this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-      .player(player => player !== this.owner)
+      .filter((item, index) => {
+        if (this.effects.some(effect => effect.type === EffectType.HitAllies) && getCardRule(this.game, index).isCreature) {
+          return index !== this.index
+        }
+        return item.location.player !== this.owner
+      })
       .getIndexes().filter(opponent => getCardRule(this.game, opponent).canBeAttacked && this.canAttackTarget(opponent))
   }
 

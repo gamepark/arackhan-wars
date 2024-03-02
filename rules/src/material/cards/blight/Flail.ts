@@ -1,4 +1,5 @@
 import { Faction } from '../../Faction'
+import { hitAllies } from '../Ability'
 import { omnistrike } from '../Attribute'
 import { Creature } from '../Creature'
 
@@ -10,5 +11,5 @@ export class Flail extends Creature {
   defense = 0
 
   attribute = omnistrike
-  // TODO weakness
+  weakness = hitAllies()
 }
