@@ -2,6 +2,7 @@ import { areAdjacentSquares, Material, MaterialGame } from '@gamepark/rules-api'
 import { TFunction } from 'i18next'
 import { getCardRule } from '../../rules/CardRule'
 import { FactionCardsCharacteristics } from '../FactionCard'
+import { AttributeType } from './Attribute'
 import { isCreature } from './Creature'
 import { Family } from './Family'
 import { isLand } from './Land'
@@ -52,6 +53,13 @@ export const maxValue = (value: number): AbilityTargetFilter => ({
   filter: (_source: Material, target: Material, game: MaterialGame) => getCardRule(game, target.getIndex()).value <= value,
   text: 'max-value',
   values: () => ({ maxValue })
+})
+
+export const withAttribute = (attributeType: AttributeType): AbilityTargetFilter => ({
+  filter: (_source: Material, target: Material, game: MaterialGame) =>
+    getCardRule(game, target.getIndex()).attributes.some(attribute => attribute.type === attributeType),
+  text: 'attribute',
+  values: (t: TFunction) => ({ attribute: t(`attribute.${attributeType}`) })
 })
 
 export const and = (...filters: AbilityTargetFilter[]) => ({

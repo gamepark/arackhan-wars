@@ -44,7 +44,7 @@ export class EndOfTurnRule extends PlayerTurnRule {
     if (nextPlayer !== this.remind(Memory.StartPlayer)) {
       moves.push(this.rules().startPlayerTurn(RuleId.ActivationRule, nextPlayer))
     } else {
-      moves.push(this.rules().startRule(RuleId.EndPhaseRule))
+      moves.push(this.rules().startRule(RuleId.EndOfRoundRule))
     }
     moves.push(...this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)

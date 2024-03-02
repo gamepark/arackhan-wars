@@ -9,7 +9,7 @@ import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-war
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
-import { NUMBER_OF_ROUNDS } from '@gamepark/arackhan-wars/rules/EndPhaseRules'
+import { NUMBER_OF_ROUNDS } from '@gamepark/arackhan-wars/rules/EndOfRoundRules'
 import { PlacementRule } from '@gamepark/arackhan-wars/rules/PlacementRule'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import {

@@ -178,6 +178,16 @@ export class CardRule extends MaterialRulesPart {
     return this.effectsCache
   }
 
+  private getAttributeEffects(): Effect[] {
+    return this.battleFieldCardsRules.flatMap(card =>
+      this.isImmuneTo(card) ? []
+        : card.abilities.filter(ability =>
+          ability.effects.some(effect => effect.type === EffectType.LoseAttributes || effect.type === EffectType.GainAttributes)
+          && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
+        ).flatMap(ability => ability.effects)
+    ).concat(...this.targetingEffects)
+  }
+
   get targetingEffects(): Effect[] {
     const turnEffects = this.remind<TargetingEffect[]>(Memory.TurnEffects) ?? []
     const roundEffects = this.remind<TargetingEffect[]>(Memory.RoundEffects) ?? []
@@ -187,14 +197,15 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get attributes(): Attribute[] {
-    if (this.effects.some(effect => effect.type === EffectType.LoseAttributes && !effect.attributes)) {
+    const effects = this.getAttributeEffects()
+    if (effects.some(effect => effect.type === EffectType.LoseAttributes && !effect.attributes)) {
       return []
     }
     const attributes = this.characteristics?.getAttributes() ?? []
     return uniqBy(attributes
-      .concat(...this.effects.filter(isGainAttributes)
+      .concat(...effects.filter(isGainAttributes)
         .flatMap((effect: GainAttributes) => effect.attributes)
-      ).filter(attribute => !this.effects.some(effect =>
+      ).filter(attribute => !effects.some(effect =>
         effect.type === EffectType.LoseAttributes && effect.attributes?.includes(attribute.type))
       ), attribute => attribute.type)
   }
@@ -418,7 +429,7 @@ export class CardRule extends MaterialRulesPart {
   }
 
   getEffectAction(effect: Trigger) {
-    if (effect.action === TriggerAction.SelfDestroy) {
+    if (effect.action === TriggerAction.Destroy) {
       return [
         ...this.removeMaterialFromCard(),
         this.cardMaterial.moveItem({ type: LocationType.PlayerDiscard, player: this.owner })

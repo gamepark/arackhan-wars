@@ -13,5 +13,5 @@ export class ChildEater extends Creature {
   defense = 2
 
   attribute = perforation
-  weakness = trigger(TriggerAction.SelfDestroy).when(TriggerCondition.FailAttack)
+  weakness = trigger(TriggerAction.Destroy).when(TriggerCondition.FailAttack)
 }

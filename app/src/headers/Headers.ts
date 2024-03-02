@@ -35,7 +35,7 @@ export const Headers: Partial<Record<RuleId, () => ReactJSXElement>> = {
   [RuleId.RevealRule]: RevealHeader,
   [RuleId.ActivationRule]: ActivationHeader,
   [RuleId.SolvePerforations]: ActivationHeader,
-  [RuleId.EndPhaseRule]: EndPhaseHeader,
+  [RuleId.EndOfRoundRule]: EndPhaseHeader,
   [RuleId.EndOfTurn]: EndOfTurnHeader,
   [RuleId.ForcedExileActionRule]: MoveCreatureActionHeader,
   [RuleId.HorseOfAvalonActionRule]: PlaceCreatureActionHeader,

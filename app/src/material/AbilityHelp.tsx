@@ -132,7 +132,7 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
     case EffectType.Trigger:
       switch (effect.condition) {
         case TriggerCondition.Attack:
-          if (effect.action === TriggerAction.SelfDestroy) {
+          if (effect.action === TriggerAction.Destroy) {
             if (targets) {
               return { defaults: 'ability.targets.trigger.attack.destroy', values: { targets } }
             } else {
@@ -141,13 +141,18 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
           }
           break
         case TriggerCondition.FailAttack:
-          if (effect.action === TriggerAction.SelfDestroy) {
+          if (effect.action === TriggerAction.Destroy) {
             return { defaults: 'ability.trigger.fail-attack.destroy', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
           }
           break
         case TriggerCondition.DestroyFlyOrMove:
           if (effect.action === TriggerAction.PutCardUnder) {
             return { defaults: 'ability.trigger.dragon-trophy', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
+          }
+          break
+        case TriggerCondition.EndOfRound:
+          if (effect.action === TriggerAction.Destroy) {
+            return { defaults: 'ability.trigger.end-round.destroy', values: { targets } }
           }
           break
       }

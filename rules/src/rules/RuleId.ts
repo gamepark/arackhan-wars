@@ -12,7 +12,7 @@ export enum RuleId {
   PlacementRule,
   RevealRule,
   ActivationRule,
-  EndPhaseRule,
+  EndOfRoundRule,
   EndOfTurn, // For cards like Frost Maiden
 
   // Special phases

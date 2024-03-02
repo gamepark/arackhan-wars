@@ -16,6 +16,6 @@ arackhanWarsAnimations.when()
   .duration(0.2)
 
 arackhanWarsAnimations.when()
-  .rule(RuleId.EndPhaseRule)
+  .rule(RuleId.EndOfRoundRule)
   .move(move => isMoveItemType(MaterialType.FactionToken)(move))
   .duration(0.3)

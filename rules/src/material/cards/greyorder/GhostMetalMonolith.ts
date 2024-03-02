@@ -1,7 +1,8 @@
 import { Faction } from '../../Faction'
-import { defense, immuneToEnemySpells } from '../Ability'
-import { adjacent, allied, creature } from '../AbilityTargetFilter'
-import { ModifyDefenseCondition } from '../Effect'
+import { defense, immuneToEnemySpells, trigger } from '../Ability'
+import { adjacent, allied, creature, maxValue, withAttribute } from '../AbilityTargetFilter'
+import { AttributeType } from '../Attribute'
+import { ModifyDefenseCondition, TriggerAction, TriggerCondition } from '../Effect'
 import { Land } from '../Land'
 
 export class GhostMetalMonolith extends Land {
@@ -12,7 +13,7 @@ export class GhostMetalMonolith extends Land {
 
   benefits = [
     immuneToEnemySpells().to(adjacent, allied, creature),
-    defense(+2, ModifyDefenseCondition.AttackedByFlyOrMoves).to(adjacent, allied, creature)
-    // TODO destroy adjacent flight creatures
+    defense(+2, ModifyDefenseCondition.AttackedByFlyOrMoves).to(adjacent, allied, creature),
+    trigger(TriggerAction.Destroy).when(TriggerCondition.EndOfRound).to(adjacent, creature, maxValue(5), withAttribute(AttributeType.Flight))
   ]
 }

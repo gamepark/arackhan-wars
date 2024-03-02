@@ -15,6 +15,6 @@ export class FairyMadness extends Spell {
   effects = [
     attack(+3).to(allied, family(Family.IceFairy), creature),
     gainAttribute(perforation).to(allied, family(Family.IceFairy), creature),
-    trigger(TriggerAction.SelfDestroy).when(TriggerCondition.Attack).to(allied, family(Family.IceFairy), creature)
+    trigger(TriggerAction.Destroy).when(TriggerCondition.Attack).to(allied, family(Family.IceFairy), creature)
   ]
 }

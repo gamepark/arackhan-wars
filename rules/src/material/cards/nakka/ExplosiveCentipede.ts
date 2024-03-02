@@ -10,5 +10,5 @@ export class ExplosiveCentipede extends Creature {
   attack = 2
   defense = 2
 
-  weakness = trigger(TriggerAction.SelfDestroy).when(TriggerCondition.Attack)
+  weakness = trigger(TriggerAction.Destroy).when(TriggerCondition.Attack)
 }
