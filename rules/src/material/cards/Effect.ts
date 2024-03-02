@@ -10,6 +10,7 @@ export type Effect = ModifyAttack | ModifyDefense
   | EndOfTurn | IgnoreAttackDefenseModifiers | SetAttackDefense
   | SwapSkills | ModifyMovement | InvertsAttackDefense
   | ModifyRange | ExtraScore | IgnoreFellowGroupAttackerConstraint
+  | CannotBePlayed
 
 export enum EffectType {
   Attack, Defense,
@@ -27,7 +28,8 @@ export enum EffectType {
   InvertsAttackDefense,
   ModifyRange,
   ExtraScore,
-  IgnoreFellowGroupAttackerConstraint
+  IgnoreFellowGroupAttackerConstraint,
+  CannotBePlayed,
 }
 
 export type ModifyAttack = {
@@ -202,4 +204,13 @@ export type IgnoreFellowGroupAttackerConstraint = {
 
 export function isIgnoreFellowGroupAttackerConstraint(effect: Effect): effect is IgnoreFellowGroupAttackerConstraint {
   return effect.type === EffectType.IgnoreFellowGroupAttackerConstraint
+}
+
+export type CannotBePlayed = {
+  type: EffectType.CannotBePlayed
+  limitation: RoundLimitation
+}
+
+export enum RoundLimitation {
+  LastRound
 }

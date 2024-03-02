@@ -516,6 +516,7 @@ export class CardRule extends MaterialRulesPart {
       if (card.getItem()?.location.player !== this.owner) {
         return Path.Blocked
       }
+      if (distance > 1 && !this.thereIsAnotherCardAdjacentTo(this.item.location as XYCoordinates)) return Path.CanGoThrough
       return getCardRule(this.game, card.getIndex()).canSwap(location, distance) ? Path.CanStop : Path.CanGoThrough
     }
     return this.isValidSpotToEndMovement(location, distance) ? Path.CanStop : Path.CanGoThrough
@@ -585,8 +586,9 @@ export class CardRule extends MaterialRulesPart {
   private canSwap(location: XYCoordinates, distance?: number): boolean {
     if (!this.canBeActivated || this.remind<Attack[]>(Memory.Attacks).some(attack => attack.card === this.index)) return false
     if (this.canFly) return getDistanceBetweenSquares(location, this.item.location as XYCoordinates) === 1 || this.isValidSpotToEndMovement(location)
-    else if (distance) return distance === 1 || this.isValidSpotToEndMovement(location, distance)
-    else return this.legalDestinations.some(({ x, y }) => location.x === x && location.y === y)
+    else if (distance) {
+      return this.canMoveAtDistance(location, distance) && (distance === 1 || this.thereIsAnotherCardAdjacentTo(location))
+    } else return this.legalDestinations.some(({ x, y }) => location.x === x && location.y === y)
   }
 
   get canRegenerate(): boolean {

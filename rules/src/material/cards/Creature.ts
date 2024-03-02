@@ -11,15 +11,9 @@ export abstract class Creature extends FactionCardCharacteristics {
 
   skill?: Ability
   skills: Ability[] = []
-  weakness?: Ability
-  weaknesses: Ability[] = []
 
   getSkills(): Ability[] {
     return this.skill ? [this.skill] : this.skills
-  }
-
-  getWeaknesses(): Ability[] {
-    return this.weakness ? [this.weakness] : this.weaknesses
   }
 
   getAbilities(): Ability[] {

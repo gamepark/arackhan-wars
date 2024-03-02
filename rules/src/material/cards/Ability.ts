@@ -13,8 +13,10 @@ import {
   EndOfTurnAction,
   ExtraScoreType,
   LoseAttributes,
-  ModifyAttackCondition, ModifyDefenseCondition,
+  ModifyAttackCondition,
+  ModifyDefenseCondition,
   ModifyMovementCondition,
+  RoundLimitation,
   TriggerAction,
   TriggerCondition
 } from './Effect'
@@ -166,6 +168,11 @@ export class Ability {
     this.effects.push({ type: EffectType.IgnoreFellowGroupAttackerConstraint, filters })
     return this
   }
+
+  cannotBePlayed(limitation: RoundLimitation) {
+    this.effects.push({ type: EffectType.CannotBePlayed, limitation })
+    return this
+  }
 }
 
 export enum AbilityMultiplier {
@@ -191,3 +198,4 @@ export const invertsAttackDefense = () => new Ability().invertsAttackDefense()
 export const range = (modifier: number) => new Ability().range(modifier)
 export const extraScore = (score: ExtraScoreType) => new Ability().extraScore(score)
 export const ignoreFellowGroupAttackerConstraint = (...filters: AbilityTargetFilter[]) => new Ability().ignoreFellowGroupAttackerConstraint(filters)
+export const cannotBePlayed = (limitation: RoundLimitation) => new Ability().cannotBePlayed(limitation)

@@ -10,6 +10,7 @@ import {
   ModifyAttackCondition,
   ModifyDefenseCondition,
   ModifyMovementCondition,
+  RoundLimitation,
   TriggerAction,
   TriggerCondition
 } from '@gamepark/arackhan-wars/material/cards/Effect'
@@ -228,6 +229,11 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
           card: t(`card.name.${getUniqueCard(card)}`)
         }
       }
+    case EffectType.CannotBePlayed:
+      if (effect.limitation === RoundLimitation.LastRound) {
+        return { defaults: 'ability.cannot-place.last-turn' }
+      }
+      return {}
     default:
       return {}
   }

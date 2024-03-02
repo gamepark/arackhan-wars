@@ -123,14 +123,14 @@ const CardFrontRule = (props: MaterialHelpProps) => {
     {isCreature(characteristics) && characteristics.getSkills().map((skill, index) =>
       <AbilityHelp key={index} type={t('card.skill')} ability={skill} card={factionCard}/>
     )}
-    {isCreature(characteristics) && characteristics.getWeaknesses().map((weakness, index) =>
-      <AbilityHelp key={index} type={t('card.weakness')} ability={weakness} card={factionCard}/>
-    )}
     {isSpell(characteristics) && characteristics.getEffects().map((effect, index) =>
       <AbilityHelp key={index} type={t('card.effect')} ability={effect} card={factionCard}/>
     )}
     {isLand(characteristics) && characteristics.getBenefits().map((benefit, index) =>
       <AbilityHelp key={index} type={t('card.benefit')} ability={benefit} card={factionCard}/>
+    )}
+    {characteristics.getWeaknesses().map((weakness, index) =>
+      <AbilityHelp key={index} type={t('card.weakness')} ability={weakness} card={factionCard}/>
     )}
     {characteristics.getAbilities().map(ability =>
       ability.effects.map(effect => {

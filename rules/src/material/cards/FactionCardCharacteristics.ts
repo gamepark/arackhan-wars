@@ -40,6 +40,13 @@ export abstract class FactionCardCharacteristics {
     return this.attribute ? [this.attribute] : this.attributes
   }
 
+  weakness?: Ability
+  weaknesses: Ability[] = []
+
+  getWeaknesses(): Ability[] {
+    return this.weakness ? [this.weakness] : this.weaknesses
+  }
+
   abstract getAbilities(): Ability[]
 
   get canAttack() {

@@ -1,5 +1,5 @@
-import { DiscardTiming, FactionCardCharacteristics, FactionCardKind } from './FactionCardCharacteristics'
 import { Ability } from './Ability'
+import { DiscardTiming, FactionCardCharacteristics, FactionCardKind } from './FactionCardCharacteristics'
 
 export abstract class Spell extends FactionCardCharacteristics {
   kind: FactionCardKind = FactionCardKind.Spell
@@ -14,7 +14,7 @@ export abstract class Spell extends FactionCardCharacteristics {
   }
 
   getAbilities(): Ability[] {
-    return this.getEffects()
+    return this.getEffects().concat(this.getWeaknesses())
   }
 
   get canAttack() {

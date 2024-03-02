@@ -15,7 +15,7 @@ export abstract class Land extends FactionCardCharacteristics {
   }
 
   getAbilities(): Ability[] {
-    return this.getBenefits()
+    return this.getBenefits().concat(this.getWeaknesses())
   }
 }
 
