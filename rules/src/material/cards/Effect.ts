@@ -40,7 +40,7 @@ export type ModifyAttack = {
 }
 
 export enum ModifyAttackCondition {
-  TargetFlyOrMoves
+  TargetFlyOrMoves, TargetFly, TargetInitiative
 }
 
 export type ModifyDefense = {

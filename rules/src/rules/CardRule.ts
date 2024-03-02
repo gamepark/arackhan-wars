@@ -400,12 +400,22 @@ export class CardRule extends MaterialRulesPart {
     const setAttackDefense = this.effects.find(isSetAttackDefense)
     const baseAttack = setAttackDefense?.attack ?? this.attackCharacteristic
     const attackModifier = sumBy(this.effects, effect =>
-      effect.type === EffectType.Attack
-      && (effect.condition !== ModifyAttackCondition.TargetFlyOrMoves
-        || target?.attributes.some(attribute => attribute.type === AttributeType.Flight || attribute.type === AttributeType.Movement)
-      ) ? effect.modifier : 0
+      effect.type === EffectType.Attack && this.respectsModifyAttackCondition(target, effect.condition) ? effect.modifier : 0
     ) + this.swarmBonus
     return Math.max(0, baseAttack + attackModifier)
+  }
+
+  private respectsModifyAttackCondition(target?: CardRule, condition?: ModifyAttackCondition) {
+    switch (condition) {
+      case ModifyAttackCondition.TargetFlyOrMoves:
+        return target?.attributes.some(attribute => attribute.type === AttributeType.Flight || attribute.type === AttributeType.Movement)
+      case ModifyAttackCondition.TargetFly:
+        return target?.attributes.some(attribute => attribute.type === AttributeType.Flight)
+      case ModifyAttackCondition.TargetInitiative:
+        return target?.attributes.some(attribute => attribute.type === AttributeType.Initiative)
+      default:
+        return true
+    }
   }
 
   get swarmBonus() {

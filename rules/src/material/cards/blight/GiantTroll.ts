@@ -1,5 +1,7 @@
 import { Faction } from '../../Faction'
+import { attack } from '../Ability'
 import { Creature } from '../Creature'
+import { ModifyAttackCondition } from '../Effect'
 import { Family } from '../Family'
 
 export class GiantTroll extends Creature {
@@ -10,5 +12,6 @@ export class GiantTroll extends Creature {
   attack = 3
   defense = 2
 
-  // TODO: skill & weakness
+  skill = attack(+1, ModifyAttackCondition.TargetFly)
+  weakness = attack(-1, ModifyAttackCondition.TargetInitiative)
 }

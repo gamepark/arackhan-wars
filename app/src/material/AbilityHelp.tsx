@@ -42,7 +42,9 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
       if (ability.multipliers === AbilityMultiplier.ExtraFactionToken) {
         return {
           defaults: 'ability.attack.per.token',
-          values: { modifier: effect.modifier }
+          values: {
+            modifier: effect.modifier < 0 ? effect.modifier : '+' + effect.modifier
+          }
         }
       } else if (Array.isArray(ability.multipliers)) {
         return {
@@ -50,23 +52,32 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
           values: {
             multipliers: t(`targets.${ability.multipliers.map(filter => filter.text).join('.')}`,
               ability.multipliers.reduce((values, filter) => merge(values, filter.values?.(t)), {})),
-            modifier: effect.modifier
+            modifier: effect.modifier < 0 ? effect.modifier : '+' + effect.modifier
           }
         }
       } else if (ability.condition) {
         return {
-          defaults: 'ability.attack.gain.if',
-          values: { modifier: effect.modifier, condition: ability.condition.getText(t) }
+          defaults: 'ability.attack.if',
+          values: {
+            modifier: effect.modifier < 0 ? effect.modifier : '+' + effect.modifier,
+            condition: ability.condition.getText(t)
+          }
         }
-      } else if (effect.condition === ModifyAttackCondition.TargetFlyOrMoves) {
+      } else if (effect.condition !== undefined) {
         return {
-          defaults: 'ability.attack.gain.if',
-          values: { modifier: effect.modifier, condition: t('if.attack.fly-move') }
+          defaults: 'ability.attack.if',
+          values: {
+            modifier: effect.modifier < 0 ? effect.modifier : '+' + effect.modifier,
+            condition: t(attackModifierConditionText[effect.condition])
+          }
         }
       } else {
         return {
-          defaults: effect.modifier > 0 ? 'ability.attack.gain' : 'ability.attack.lost',
-          values: { targets, modifier: effect.modifier }
+          defaults: 'ability.attack.targets',
+          values: {
+            targets,
+            modifier: effect.modifier < 0 ? effect.modifier : '+' + effect.modifier
+          }
         }
       }
     case EffectType.Defense:
@@ -75,29 +86,46 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
           ability.multipliers.reduce((values, filter) => merge(values, filter.values?.(t)), {}))
         if (targets) {
           return {
-            defaults: 'ability.defense.gain.per',
-            values: { targets, multipliers, modifier: effect.modifier }
+            defaults: 'ability.defense.targets.per',
+            values: {
+              targets,
+              multipliers,
+              modifier: effect.modifier < 0 ? effect.modifier : '+' + effect.modifier
+            }
           }
         } else {
           return {
             defaults: 'ability.defense.per',
-            values: { multipliers, modifier: effect.modifier }
+            values: {
+              multipliers,
+              modifier: effect.modifier < 0 ? effect.modifier : '+' + effect.modifier
+            }
           }
         }
       } else if (ability.condition) {
         return {
-          defaults: 'ability.defense.gain.if',
-          values: { modifier: effect.modifier, condition: ability.condition.getText(t) }
+          defaults: 'ability.defense.if',
+          values: {
+            modifier: effect.modifier < 0 ? effect.modifier : '+' + effect.modifier,
+            condition: ability.condition.getText(t)
+          }
         }
       } else if (effect.condition === ModifyDefenseCondition.AttackedByFlyOrMoves) {
         return {
-          defaults: 'ability.defense.targets.gain.if',
-          values: { modifier: effect.modifier, targets, condition: t('if.defense.fly-move') }
+          defaults: 'ability.defense.targets.if',
+          values: {
+            modifier: effect.modifier < 0 ? effect.modifier : '+' + effect.modifier,
+            targets,
+            condition: t('if.defense.fly-move')
+          }
         }
       } else {
         return {
-          defaults: effect.modifier > 0 ? 'ability.defense.gain' : 'ability.defense.lost',
-          values: { targets, modifier: effect.modifier }
+          defaults: 'ability.defense.targets',
+          values: {
+            targets,
+            modifier: effect.modifier < 0 ? effect.modifier : '+' + effect.modifier
+          }
         }
       }
     case EffectType.LoseAttributes:
@@ -260,4 +288,10 @@ const attackLimitationText: Record<AttackLimitation, string> = {
   [AttackLimitation.BottomRightCards]: 'bottom-right',
   [AttackLimitation.InGroup]: 'in-group',
   [AttackLimitation.InGroupNotFamily]: 'in-group-not-family'
+}
+
+const attackModifierConditionText: Record<ModifyAttackCondition, string> = {
+  [ModifyAttackCondition.TargetFlyOrMoves]: 'if.attack.fly-move',
+  [ModifyAttackCondition.TargetFly]: 'if.attack.fly',
+  [ModifyAttackCondition.TargetInitiative]: 'if.attack.initiative'
 }
