@@ -191,7 +191,8 @@ export type ExtraScore = {
 }
 
 export enum ExtraScoreType {
-  ValueOfCardsUnder
+  ValueOfCardsUnder,
+  MastersOfAracKhan,
 }
 
 export type IgnoreFellowGroupAttackerConstraint = {

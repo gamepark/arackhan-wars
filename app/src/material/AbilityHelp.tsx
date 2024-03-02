@@ -211,10 +211,14 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
     case EffectType.ModifyRange:
       return { defaults: 'ability.range.add.targets', values: { targets, modifier: effect.modifier } }
     case EffectType.ExtraScore:
-      if (effect.score === ExtraScoreType.ValueOfCardsUnder) {
-        return { defaults: 'ability.score.cards-under', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
+      switch (effect.score) {
+        case ExtraScoreType.ValueOfCardsUnder:
+          return { defaults: 'ability.score.cards-under', values: { card: t(`card.name.${getUniqueCard(card)}`) } }
+        case ExtraScoreType.MastersOfAracKhan:
+          return { defaults: 'ability.score.masters' }
+        default:
+          return {}
       }
-      return {}
     case EffectType.IgnoreFellowGroupAttackerConstraint:
       return {
         defaults: 'ability.ignore-fellow-weakness',
