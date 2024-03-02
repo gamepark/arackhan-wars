@@ -21,7 +21,7 @@ export abstract class MoveCardsActionRule extends CardActionRule {
       const legalDestinations = this.getLegalDestinations(card)
       for (const { x, y } of legalDestinations) {
         if (cardRule.item.location.x !== x || cardRule.item.location.y !== y) {
-          moves.push(cardRule.cardMaterial.moveItem({ type: LocationType.Battlefield, x, y, player: this.player }))
+          moves.push(cardRule.cardMaterial.moveItem(item => ({ type: LocationType.Battlefield, x, y, player: item.location.player })))
         }
       }
     }

@@ -56,7 +56,7 @@ export class MoveRules extends PlayerTurnRule {
       .location(location => location.type === LocationType.Battlefield && location.x === move.location.x && location.y === move.location.y)
     if (cardToSwap.length) {
       const swapLocation = this.material(MaterialType.FactionCard).getItem(move.itemIndex)!.location
-      moves.push(cardToSwap.moveItem({ ...swapLocation }))
+      moves.push(cardToSwap.moveItem(item => ({ ...swapLocation, player: item.location.player })))
     }
     return moves
   }
