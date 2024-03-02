@@ -68,7 +68,7 @@ function MovementHelp() {
         cardCopy.getItem()!.location.x = legalMovement.location.x
         cardCopy.getItem()!.location.y = legalMovement.location.y
         for (const rule of cardRules.battleFieldCardsRules) {
-          if (rule.abilities.some(ability =>
+          if (rule.index !== cardIndex && rule.abilities.some(ability =>
               ability.isApplicable(gameCopy, rule.cardMaterial, cardCopy)
               && ability.effects.some(effect =>
                 effect.type === EffectType.Deactivated
@@ -160,6 +160,8 @@ const canvasCss = css`
 
 const movementCancelIcon = ({ x, y }: XYCoordinates) => css`
   position: absolute;
+  left: ${29}em;
+  top: ${29}em;
   width: ${attributesIconDescription.ratio * 2.5}em;
   height: ${2.5}em;
   background-image: url(${movementCancel});

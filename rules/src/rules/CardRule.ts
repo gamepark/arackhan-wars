@@ -609,9 +609,11 @@ export class CardRule extends MaterialRulesPart {
     cardCopy.getItem()!.location.x = x
     cardCopy.getItem()!.location.y = y
     const effects = this.battleFieldCardsRules.flatMap(card =>
-      card.abilities.filter(ability => ability.isApplicable(gameCopy, card.cardMaterial, cardCopy))
-        .flatMap(ability => ability.effects)
-        .concat(...this.targetingEffects)
+      card.index !== this.index ?
+        card.abilities.filter(ability => ability.isApplicable(gameCopy, card.cardMaterial, cardCopy))
+          .flatMap(ability => ability.effects)
+          .concat(...this.targetingEffects)
+        : []
     )
     return effects.some(effect =>
       effect.type === EffectType.Deactivated
