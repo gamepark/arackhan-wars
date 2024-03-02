@@ -18,4 +18,5 @@ export enum Family {
   Blacksmith,
   Troll,
   Harpy,
+  ShamanRat
 }

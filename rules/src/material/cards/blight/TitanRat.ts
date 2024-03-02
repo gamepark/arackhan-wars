@@ -1,4 +1,6 @@
 import { Faction } from '../../Faction'
+import { attack } from '../Ability'
+import { adjacent, allied, creature, family } from '../AbilityTargetFilter'
 import { Creature } from '../Creature'
 import { Family } from '../Family'
 
@@ -11,5 +13,8 @@ export class TitanRat extends Creature {
   attack = 2
   defense = 2
 
-  // TODO skills
+  skills = [
+    attack(+2).forEach(adjacent, allied, family(Family.ShamanRat), creature),
+    attack(+1).forEach(adjacent, allied, family(Family.Rat), creature)
+  ]
 }
