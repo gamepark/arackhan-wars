@@ -3,6 +3,7 @@ import { css } from '@emotion/react'
 import { Ability, AbilityMultiplier } from '@gamepark/arackhan-wars/material/cards/Ability'
 import { itself } from '@gamepark/arackhan-wars/material/cards/AbilityTargetFilter'
 import { AttackCondition, AttackLimitation } from '@gamepark/arackhan-wars/material/cards/AttackLimitation'
+import { Creature } from '@gamepark/arackhan-wars/material/cards/Creature'
 import {
   Effect,
   EffectType,
@@ -14,7 +15,7 @@ import {
   TriggerAction,
   TriggerCondition
 } from '@gamepark/arackhan-wars/material/cards/Effect'
-import { FactionCard, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
+import { FactionCard, FactionCardsCharacteristics, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { TFunction } from 'i18next'
 import { merge } from 'lodash'
 import { Trans, TransProps, useTranslation } from 'react-i18next'
@@ -159,10 +160,15 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
       }
       return {}
     case EffectType.CannotAttack:
+      const values: any = {}
+      if (effect.limitation === AttackLimitation.InGroupNotFamily) {
+        values.family = t(`card.family.${(FactionCardsCharacteristics[card] as Creature).family}`)
+      }
       return {
         defaults: effect.limitation ?
           `ability.attack.limit.${attackLimitationText[effect.limitation]}`
-          : 'ability.attack.limit'
+          : 'ability.attack.limit',
+        values
       }
     case EffectType.CanOnlyAttack:
       if (targets) {
@@ -250,5 +256,6 @@ const attackLimitationText: Record<AttackLimitation, string> = {
   [AttackLimitation.AdjacentCards]: 'adjacent-cards',
   [AttackLimitation.DuringInitiative]: 'during-initiative',
   [AttackLimitation.BottomRightCards]: 'bottom-right',
-  [AttackLimitation.InGroup]: 'in-group'
+  [AttackLimitation.InGroup]: 'in-group',
+  [AttackLimitation.InGroupNotFamily]: 'in-group-not-family'
 }

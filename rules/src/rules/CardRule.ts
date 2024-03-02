@@ -15,7 +15,20 @@ import uniqBy from 'lodash/uniqBy'
 import { ArackhanWarsRules } from '../ArackhanWarsRules'
 import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
 import { Ability } from '../material/cards/Ability'
-import { getAttackConstraint } from '../material/cards/AttackLimitation'
+import {
+  AttackByCreaturesOnlyInGroup,
+  AttackCondition,
+  AttackLimitation,
+  AttackOnlyEvenValueCards,
+  NoAttack,
+  NoAttackBottomRightCards,
+  NoAttackByCreatures,
+  NoAttackByGroupedCreatures,
+  NoAttackDuringInitiative,
+  NoAttackInGroup,
+  NoAttackInGroupNotFamily,
+  NoAttackOnAdjacentCard
+} from '../material/cards/AttackLimitation'
 import { Attribute, AttributeType, isMovement, isRangedAttack } from '../material/cards/Attribute'
 import { Creature, isCreature } from '../material/cards/Creature'
 import {
@@ -260,10 +273,9 @@ export class CardRule extends MaterialRulesPart {
   }
 
   someEffectPreventsAttacking(opponent: number) {
-    const formerAttackers = this.remind<Attack[]>(Memory.Attacks).filter(attack => attack.targets.includes(opponent))
-      .map(attack => attack.card)
-    const ignoreFellowConstraints = formerAttackers.flatMap(attacker => getCardRule(this.game, attacker).effects.filter(isIgnoreFellowGroupAttackerConstraint))
-    ignoreFellowConstraints.push(...this.effects.filter(isIgnoreFellowGroupAttackerConstraint))
+    const attackers = this.remind<Attack[]>(Memory.Attacks).filter(attack => attack.targets.includes(opponent)).map(attack => attack.card)
+    attackers.push(this.index)
+    const ignoreFellowConstraints = attackers.flatMap(attacker => getCardRule(this.game, attacker).effects.filter(isIgnoreFellowGroupAttackerConstraint))
     return this.effects.some(effect =>
           isAttackerConstraint(effect)
           && !ignoreFellowConstraints.some(effect => effect.filters.every(filter =>
@@ -275,19 +287,52 @@ export class CardRule extends MaterialRulesPart {
         (effect.type === EffectType.ImmuneToEnemySpells && this.isSpell)
         || (isDefenderConstraint(effect) && this.isPreventingAttack(effect, opponent))
       )
-      || formerAttackers.some(attacker =>
+      || attackers.some(attacker =>
         getCardRule(this.game, attacker).effects.some(effect =>
             isAttackerConstraint(effect)
             && !ignoreFellowConstraints.some(effect => effect.filters.every(filter =>
               filter.filter(this.cardMaterial, this.material(MaterialType.FactionCard).index(attacker), this.game)
             ))
-            && getAttackConstraint(effect, this.game).preventAttackerToJoinGroup(this.index)
+            && this.getAttackConstraint(effect).preventAttackGroup(attackers, opponent)
         )
       )
   }
 
   private isPreventingAttack(effect: AttackerConstraint | DefenderConstraint, opponent: number) {
-    return getAttackConstraint(effect, this.game).preventAttack(this.index, opponent)
+    return this.getAttackConstraint(effect).preventAttack(this.index, opponent)
+  }
+
+  private getAttackConstraint(effect: AttackerConstraint | DefenderConstraint) {
+    switch (effect.type) {
+      case EffectType.CannotAttack:
+      case EffectType.CannotBeAttacked:
+        switch (effect.limitation) {
+          case AttackLimitation.ByCreatures:
+            return new NoAttackByCreatures(this.game)
+          case AttackLimitation.ByGroupedCreatures:
+            return new NoAttackByGroupedCreatures(this.game)
+          case AttackLimitation.AdjacentCards:
+            return new NoAttackOnAdjacentCard(this.game)
+          case AttackLimitation.DuringInitiative:
+            return new NoAttackDuringInitiative(this.game)
+          case AttackLimitation.BottomRightCards:
+            return new NoAttackBottomRightCards(this.game)
+          case AttackLimitation.InGroup:
+            return new NoAttackInGroup(this.game)
+          case AttackLimitation.InGroupNotFamily:
+            return new NoAttackInGroupNotFamily(this.game, this.family)
+          default:
+            return new NoAttack(this.game)
+        }
+      case EffectType.CanOnlyAttack:
+      case EffectType.CanOnlyBeAttacked:
+        switch (effect.condition) {
+          case AttackCondition.ByCreaturesInGroup:
+            return new AttackByCreaturesOnlyInGroup(this.game)
+          case AttackCondition.EvenValueCards:
+            return new AttackOnlyEvenValueCards(this.game)
+        }
+    }
   }
 
   private isInRange(opponent: number) {
@@ -335,7 +380,7 @@ export class CardRule extends MaterialRulesPart {
   }
 
   private isEffectInvalidAttackGroup(effect: AttackerConstraint | DefenderConstraint, attackers: number[]) {
-    return getAttackConstraint(effect, this.game).isInvalidAttackGroup(attackers, this.index)
+    return this.getAttackConstraint(effect).isInsufficientAttackGroup(attackers, this.index)
   }
 
   get attackCharacteristic() {
