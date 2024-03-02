@@ -1,3 +1,4 @@
+import { RuleId } from '../../../rules/RuleId'
 import { Faction } from '../../Faction'
 import { initiative } from '../Attribute'
 import { Spell } from '../Spell'
@@ -9,5 +10,5 @@ export class OnLeave extends Spell {
   astral = true
 
   attribute = initiative
-  // TODO action
+  action = RuleId.OnLeaveAction
 }

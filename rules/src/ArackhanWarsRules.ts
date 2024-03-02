@@ -35,6 +35,7 @@ import { NemesioGreyOrderActionRule } from './rules/action/NemesioGreyOrderActio
 import { NemesioNakkaActionRule } from './rules/action/NemesioNakkaActionRule'
 import { NemesioWhitelandsActionRule } from './rules/action/NemesioWhitelandsActionRule'
 import { NoviceFairyActionRule } from './rules/action/NoviceFairyActionRule'
+import { OnLeaveActionRule } from './rules/action/OnLeaveActionRule'
 import { ProtectorActionRule } from './rules/action/ProtectorActionRule'
 import { ReplaceWithCreatureActionRule } from './rules/action/ReplaceWithCreatureActionRule'
 import { StandardBearerActionRule } from './rules/action/StandardBearerActionRule'
@@ -101,7 +102,8 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.TomurDiscAction]: TomurDiscActionRule,
     [RuleId.ArmouredConvoyAction]: ArmouredConvoyActionRule,
     [RuleId.BackupAction]: BackupActionRule,
-    [RuleId.MarchingOrderAction]: MarchingOrderActionRule
+    [RuleId.MarchingOrderAction]: MarchingOrderActionRule,
+    [RuleId.OnLeaveAction]: OnLeaveActionRule
   }
 
   locationsStrategies = {
