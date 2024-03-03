@@ -1,4 +1,7 @@
 import { Faction } from '../../Faction'
+import { gainAttribute } from '../Ability'
+import { adjacent, allied, creature, maxValue } from '../AbilityTargetFilter'
+import { stealth } from '../Attribute'
 import { Land } from '../Land'
 
 export class DarkTunnel extends Land {
@@ -9,5 +12,8 @@ export class DarkTunnel extends Land {
 
   defense = 3
 
-  // TODO benefits
+  benefits = [
+    gainAttribute(stealth).to(adjacent, allied, creature, maxValue(7))
+    // TODO benefit 2
+  ]
 }

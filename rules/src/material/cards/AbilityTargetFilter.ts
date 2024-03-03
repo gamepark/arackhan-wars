@@ -52,7 +52,7 @@ export const land: AbilityTargetFilter = {
 export const maxValue = (value: number): AbilityTargetFilter => ({
   filter: (_source: Material, target: Material, game: MaterialGame) => getCardRule(game, target.getIndex()).value <= value,
   text: 'max-value',
-  values: () => ({ maxValue })
+  values: () => ({ maxValue: value })
 })
 
 export const withAttribute = (attributeType: AttributeType): AbilityTargetFilter => ({
