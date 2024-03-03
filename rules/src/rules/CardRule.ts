@@ -20,7 +20,7 @@ import {
   AttackByCreaturesOnlyInGroup,
   AttackCondition,
   AttackLimitation,
-  AttackOnlyEvenValueCards,
+  AttackOnlyEvenValueCards, CreaturesIfAdjacent,
   NoAttack,
   NoAttackBottomRightCards,
   NoAttackByCreatures,
@@ -333,6 +333,8 @@ export class CardRule extends MaterialRulesPart {
             return new AttackByCreaturesOnlyInGroup(this.game)
           case AttackCondition.EvenValueCards:
             return new AttackOnlyEvenValueCards(this.game)
+          case AttackCondition.CreaturesIfAdjacent:
+            return new CreaturesIfAdjacent(this.game)
         }
     }
   }

@@ -9,7 +9,7 @@ export enum AttackLimitation {
 }
 
 export enum AttackCondition {
-  ByCreaturesInGroup = 1, EvenValueCards
+  ByCreaturesInGroup = 1, EvenValueCards, CreaturesIfAdjacent
 }
 
 export abstract class AttackConstraintRule extends MaterialRulesPart {
@@ -93,6 +93,13 @@ export class AttackByCreaturesOnlyInGroup extends AttackConstraintRule {
 export class AttackOnlyEvenValueCards extends AttackConstraintRule {
   preventAttack(_attacker: number, defender: number): boolean {
     return getCardRule(this.game, defender).value % 2 !== 0
+  }
+}
+
+export class CreaturesIfAdjacent extends AttackConstraintRule {
+  preventAttack(attacker: number, defender: number): boolean {
+    const attackerRule = getCardRule(this.game, attacker)
+    return attackerRule.isCreature && !areAdjacentSquares(attackerRule.item.location, getCardRule(this.game, defender).item.location)
   }
 }
 
