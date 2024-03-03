@@ -422,8 +422,13 @@ export class CardRule extends MaterialRulesPart {
 
   get swarmBonus() {
     if (!this.family || !this.attributes.some(attribute => attribute.type === AttributeType.Swarm)) return 0
+    const swarmSameCard = this.effects.some(effect => effect.type === EffectType.SwarmSameCard)
     return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).getIndexes()
-      .filter(index => index !== this.index && getCardRule(this.game, index).family === this.family).length
+      .filter(index => index !== this.index && (
+        swarmSameCard ?
+          getCardRule(this.game, index).card === this.card
+          : getCardRule(this.game, index).family === this.family
+      )).length
   }
 
   get family() {

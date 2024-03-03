@@ -1,4 +1,5 @@
 import { Faction } from '../../Faction'
+import { swarmSameCard } from '../Ability'
 import { swarm } from '../Attribute'
 import { Creature } from '../Creature'
 import { Family } from '../Family'
@@ -12,5 +13,5 @@ export class Ratman extends Creature {
   defense = 1
 
   attribute = swarm
-  // TODO weakness
+  weakness = swarmSameCard()
 }

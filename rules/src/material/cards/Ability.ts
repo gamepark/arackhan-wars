@@ -178,6 +178,11 @@ export class Ability {
     this.effects.push({ type: EffectType.HitAllies })
     return this
   }
+
+  swarmSameCard() {
+    this.effects.push({ type: EffectType.SwarmSameCard })
+    return this
+  }
 }
 
 export enum AbilityMultiplier {
@@ -206,3 +211,4 @@ export const extraScore = (score: ExtraScoreType) => new Ability().extraScore(sc
 export const ignoreFellowGroupAttackerConstraint = (...filters: AbilityTargetFilter[]) => new Ability().ignoreFellowGroupAttackerConstraint(filters)
 export const cannotBePlayed = (limitation: RoundLimitation) => new Ability().cannotBePlayed(limitation)
 export const hitAllies = () => new Ability().hitAllies()
+export const swarmSameCard = () => new Ability().swarmSameCard()

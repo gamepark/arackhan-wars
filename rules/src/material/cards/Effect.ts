@@ -10,7 +10,7 @@ export type Effect = ModifyAttack | ModifyDefense
   | EndOfTurn | IgnoreAttackDefenseModifiers | SetAttackDefense
   | SwapSkills | ModifyMovement | InvertsAttackDefense
   | ModifyRange | ExtraScore | IgnoreFellowGroupAttackerConstraint
-  | CannotBePlayed | HitAllies | Possession
+  | CannotBePlayed | HitAllies | Possession | SwarmSameCard
 
 export enum EffectType {
   Attack, Defense,
@@ -32,6 +32,7 @@ export enum EffectType {
   CannotBePlayed,
   HitAllies,
   Possession,
+  SwarmSameCard,
 }
 
 export type ModifyAttack = {
@@ -225,4 +226,8 @@ export type Possession = {
   type: EffectType.Possession
   originalOwner: number
   swapWith?: number
+}
+
+export type SwarmSameCard = {
+  type: EffectType.SwarmSameCard
 }
