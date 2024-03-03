@@ -5,6 +5,7 @@ import { DiscardTiming } from '../material/cards/FactionCardCharacteristics'
 import { Spell } from '../material/cards/Spell'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
+import { TargetingEffect } from './action/TargetingEffect'
 import { getCardRule } from './CardRule'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
@@ -14,17 +15,35 @@ export const NUMBER_OF_ROUNDS = 9
 export class EndOfRoundRules extends MaterialRulesPart {
 
   onRuleStart() {
+    const moves: MaterialMove[] = []
+    const tokensToIgnore: number[] = []
+    for (const targetingEffect of this.remind<TargetingEffect[]>(Memory.RoundEffects)) {
+      if (targetingEffect.effect.type === EffectType.Possession) {
+        const { targets: [card], effect: possession } = targetingEffect
+        const token = this.material(MaterialType.FactionToken).parent(card)
+        tokensToIgnore.push(token.getIndex())
+        this.material(MaterialType.FactionCard).getItem(card)!.location.player = possession.originalOwner
+        if (possession.swapWith !== undefined) {
+          moves.push(token.moveItem({ type: LocationType.FactionTokenSpace, parent: possession.swapWith }))
+        } else {
+          moves.push(token.deleteItem())
+          moves.push(this.material(MaterialType.FactionToken).createItem({
+            id: this.remind(Memory.PlayerFactionToken, possession.originalOwner),
+            location: { parent: card, type: LocationType.FactionCard, player: possession.originalOwner }
+          }))
+        }
+      }
+    }
+
     this.memorize(Memory.RoundEffects, [])
     this.memorize(Memory.OncePerRound, [])
-    const moves: MaterialMove[] = []
 
     for (const cardIndex of this.material(MaterialType.FactionCard).getIndexes()) {
       const cardRule = getCardRule(this.game, cardIndex)
       for (const effect of cardRule.effects) {
         if (effect.type === EffectType.Trigger && effect.condition === TriggerCondition.EndOfRound) {
           if (effect.action === TriggerAction.Destroy) {
-            moves.push(...cardRule.removeMaterialFromCard())
-            moves.push(cardRule.cardMaterial.moveItem({ type: LocationType.PlayerDiscard, player: cardRule.owner }))
+            moves.push(...cardRule.destroyCard())
           }
         }
       }
@@ -39,7 +58,9 @@ export class EndOfRoundRules extends MaterialRulesPart {
       )
     }
 
-    moves.push(...this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).rotation(true).rotateItems(false))
+    moves.push(...this.material(MaterialType.FactionToken)
+      .filter((_, index) => !tokensToIgnore.includes(index))
+      .location(LocationType.FactionTokenSpace).rotation(true).rotateItems(false))
 
     const round = this.material(MaterialType.RoundTrackerToken).getItem()!.location.x!
     if (round === NUMBER_OF_ROUNDS) {

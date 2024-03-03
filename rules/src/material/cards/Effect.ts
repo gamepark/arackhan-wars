@@ -10,7 +10,7 @@ export type Effect = ModifyAttack | ModifyDefense
   | EndOfTurn | IgnoreAttackDefenseModifiers | SetAttackDefense
   | SwapSkills | ModifyMovement | InvertsAttackDefense
   | ModifyRange | ExtraScore | IgnoreFellowGroupAttackerConstraint
-  | CannotBePlayed | HitAllies
+  | CannotBePlayed | HitAllies | Possession
 
 export enum EffectType {
   Attack, Defense,
@@ -31,6 +31,7 @@ export enum EffectType {
   IgnoreFellowGroupAttackerConstraint,
   CannotBePlayed,
   HitAllies,
+  Possession,
 }
 
 export type ModifyAttack = {
@@ -218,4 +219,10 @@ export enum RoundLimitation {
 
 export type HitAllies = {
   type: EffectType.HitAllies
+}
+
+export type Possession = {
+  type: EffectType.Possession
+  originalOwner: number
+  swapWith?: number
 }

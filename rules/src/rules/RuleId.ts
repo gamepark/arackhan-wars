@@ -44,5 +44,6 @@ export enum RuleId {
   BackupAction,
   MarchingOrderAction,
   OnLeaveAction,
-  TheGreyOrderRisesAction
+  TheGreyOrderRisesAction,
+  NemesioBlightAction
 }

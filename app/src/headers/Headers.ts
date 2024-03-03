@@ -9,6 +9,7 @@ import { IceElementalActionHeader } from './actions/IceElementalActionHeader'
 import { MarchingOrderActionHeader } from './actions/MarchingOrderActionHeader'
 import { MimicryActionHeader } from './actions/MimicryActionHeader'
 import { MoveCreatureActionHeader } from './actions/MoveCreatureActionHeader'
+import { NemesioBlightActionHeader } from './actions/NemesioBlightActionHeader'
 import { NemesioGreyOrderActionHeader } from './actions/NemesioGreyOrderActionHeader'
 import { PlaceCreatureActionHeader } from './actions/PlaceCreatureActionHeader'
 import { StandardBearerActionHeader } from './actions/StandardBearerActionHeader'
@@ -62,5 +63,6 @@ export const Headers: Partial<Record<RuleId, () => ReactJSXElement>> = {
   [RuleId.BackupAction]: BackupActionHeader,
   [RuleId.MarchingOrderAction]: MarchingOrderActionHeader,
   [RuleId.OnLeaveAction]: MoveCreatureActionHeader,
-  [RuleId.TheGreyOrderRisesAction]: CardActionHeader
+  [RuleId.TheGreyOrderRisesAction]: CardActionHeader,
+  [RuleId.NemesioBlightAction]: NemesioBlightActionHeader
 }

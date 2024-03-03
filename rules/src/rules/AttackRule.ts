@@ -180,12 +180,10 @@ export class AttackRule extends PlayerTurnRule {
       const putCardUnder = attackers.find(attacker => getCardRule(this.game, attacker).effects.some(effect =>
         effect.type === EffectType.Trigger && effect.condition === TriggerCondition.DestroyFlyOrMove && flyOrMoves
       ))
-      return [
-        ...cardRule.removeMaterialFromCard(),
-        cardRule.cardMaterial.moveItem(putCardUnder !== undefined ?
-          { type: LocationType.UnderCard, parent: putCardUnder, player: cardRule.item.location.player }
-          : { type: LocationType.PlayerDiscard, player: cardRule.item.location.player })
-      ]
+      const destination = putCardUnder !== undefined ?
+        { type: LocationType.UnderCard, parent: putCardUnder, player: cardRule.item.location.player }
+        : undefined
+      return cardRule.destroyCard(destination)
     }
   }
 

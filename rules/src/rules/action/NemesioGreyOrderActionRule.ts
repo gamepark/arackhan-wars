@@ -18,7 +18,7 @@ export class NemesioGreyOrderActionRule extends CardActionRule {
           const cardRule = getCardRule(this.game, index)
           return index !== nemesio && cardRule.isCreature && cardRule.value >= 3
         })
-        .moveItems({ type: LocationType.PlayerDiscard, player: this.player })
+        .moveItems((_, index) => ({ type: LocationType.PlayerDiscard, player: getCardRule(this.game, index).originalOwner }))
     } else {
       return this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
         .filter((_, index) => index !== nemesio && getCardRule(this.game, index).isCreature)

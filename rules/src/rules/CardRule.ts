@@ -2,6 +2,7 @@ import {
   areAdjacentSquares,
   getDistanceBetweenSquares,
   isXYCoordinates,
+  Location,
   Material,
   MaterialGame,
   MaterialItem,
@@ -51,6 +52,7 @@ import {
   ModifyAttackCondition,
   ModifyDefenseCondition,
   ModifyMovementCondition,
+  Possession,
   Trigger,
   TriggerAction,
   TriggerCondition
@@ -495,13 +497,7 @@ export class CardRule extends MaterialRulesPart {
   }
 
   getEffectAction(effect: Trigger) {
-    if (effect.action === TriggerAction.Destroy) {
-      return [
-        ...this.removeMaterialFromCard(),
-        this.cardMaterial.moveItem({ type: LocationType.PlayerDiscard, player: this.owner })
-      ]
-    }
-    return []
+    return effect.action === TriggerAction.Destroy ? this.destroyCard() : []
   }
 
   get canFly() {
@@ -684,6 +680,18 @@ export class CardRule extends MaterialRulesPart {
       return paths[y][x] === Path.CanStop
     }
     return true
+  }
+
+  get originalOwner() {
+    const possession = this.remind<TargetingEffect[]>(Memory.RoundEffects)
+      .find(t => t.targets.includes(this.index) && t.effect.type === EffectType.Possession)
+    return possession ? (possession.effect as Possession).originalOwner : this.owner
+  }
+
+  destroyCard(destination?: Location): MaterialMove[] {
+    const moves = this.removeMaterialFromCard()
+    moves.push(this.cardMaterial.moveItem(destination ?? { type: LocationType.PlayerDiscard, player: this.originalOwner }))
+    return moves
   }
 
   removeMaterialFromCard(): MaterialMove[] {

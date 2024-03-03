@@ -1,3 +1,4 @@
+import { RuleId } from '../../../rules/RuleId'
 import { Faction } from '../../Faction'
 import { movement, stealth } from '../Attribute'
 import { Creature } from '../Creature'
@@ -13,5 +14,5 @@ export class NemesioBlight extends Creature {
   defense = 0
 
   attributes = [stealth, movement(2)]
-  //TODO action
+  action = RuleId.NemesioBlightAction
 }

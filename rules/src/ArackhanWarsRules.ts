@@ -31,6 +31,7 @@ import { IceWingsActionRule } from './rules/action/IceWingsActionRule'
 import { MarchingOrderActionRule } from './rules/action/MarchingOrderActionRule'
 import { MimicryActionRule } from './rules/action/MimicryActionRule'
 import { MusicalTranceActionRule } from './rules/action/MusicalTranceActionRule'
+import { NemesioBlightActionRule } from './rules/action/NemesioBlightActionRule'
 import { NemesioGreyOrderActionRule } from './rules/action/NemesioGreyOrderActionRule'
 import { NemesioNakkaActionRule } from './rules/action/NemesioNakkaActionRule'
 import { NemesioWhitelandsActionRule } from './rules/action/NemesioWhitelandsActionRule'
@@ -105,7 +106,8 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.BackupAction]: BackupActionRule,
     [RuleId.MarchingOrderAction]: MarchingOrderActionRule,
     [RuleId.OnLeaveAction]: OnLeaveActionRule,
-    [RuleId.TheGreyOrderRisesAction]: TheGreyOrderRisesActionRule
+    [RuleId.TheGreyOrderRisesAction]: TheGreyOrderRisesActionRule,
+    [RuleId.NemesioBlightAction]: NemesioBlightActionRule
   }
 
   locationsStrategies = {
