@@ -1,4 +1,7 @@
 import { Faction } from '../../Faction'
+import { FactionCard } from '../../FactionCard'
+import { deactivate, loseSkills } from '../Ability'
+import { adjacent, adjacentTo, cardNamed, creature, enemy } from '../AbilityTargetFilter'
 import { flight, stealth } from '../Attribute'
 import { Creature } from '../Creature'
 
@@ -11,5 +14,8 @@ export class Lucy extends Creature {
   defense = 0
 
   attributes = [stealth, flight]
-  //TODO skills
+  skills = [
+    loseSkills().to(adjacent, enemy, creature),
+    deactivate(enemy, creature, adjacentTo(cardNamed(FactionCard.Lucy), cardNamed(FactionCard.Feyr)))
+  ]
 }

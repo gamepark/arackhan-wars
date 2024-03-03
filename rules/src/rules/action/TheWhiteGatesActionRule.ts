@@ -1,4 +1,4 @@
-import { Material, XYCoordinates } from '@gamepark/rules-api'
+import { Material } from '@gamepark/rules-api'
 import { getCardRule } from '../CardRule'
 import { MoveCardsActionRule } from './MoveCardsActionRule'
 
@@ -7,7 +7,7 @@ export class TheWhiteGatesActionRule extends MoveCardsActionRule {
 
   getCardsAllowedToMove(): Material {
     const theWhiteGates = this.cardRule
-    return theWhiteGates.getOtherCardsAdjacentTo(theWhiteGates.item.location as XYCoordinates)
+    return theWhiteGates.getOtherCardsAdjacentTo()
       .player(this.player)
       .filter((_, index) => getCardRule(this.game, index).isCreature)
   }

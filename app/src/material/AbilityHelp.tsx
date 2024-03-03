@@ -135,7 +135,7 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
           values: { targets, attribute: t(`attribute.${effect.attributes[0]}`) }
         }
       } else {
-        return { defaults: 'ability.attributes.lose' }
+        return { defaults: 'ability.attributes.lose', values: { targets } }
       }
     case EffectType.GainAttributes:
       const attribute = effect.attributes[0]
@@ -156,9 +156,9 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
         }
       }
     case EffectType.LoseSkills:
-      return { defaults: 'ability.skills.lose' }
+      return { defaults: 'ability.skills.lose', values: { targets } }
     case EffectType.Deactivated:
-      return { defaults: 'ability.deactivate' }
+      return { defaults: 'ability.deactivate', values: { targets } }
     case EffectType.Trigger:
       switch (effect.condition) {
         case TriggerCondition.Attack:

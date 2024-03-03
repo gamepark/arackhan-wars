@@ -1,7 +1,7 @@
 import { areAdjacentSquares, Material, MaterialGame } from '@gamepark/rules-api'
 import { TFunction } from 'i18next'
 import { getCardRule } from '../../rules/CardRule'
-import { FactionCardsCharacteristics } from '../FactionCard'
+import { FactionCard, FactionCardsCharacteristics } from '../FactionCard'
 import { AttributeType } from './Attribute'
 import { isCreature } from './Creature'
 import { Family } from './Family'
@@ -60,6 +60,19 @@ export const withAttribute = (attributeType: AttributeType): AbilityTargetFilter
     getCardRule(game, target.getIndex()).attributes.some(attribute => attribute.type === attributeType),
   text: 'attribute',
   values: (t: TFunction) => ({ attribute: t(`attribute.${attributeType}`) })
+})
+
+export const adjacentTo = (...filters: AbilityTargetFilter[]): AbilityTargetFilter => ({
+  filter: (source: Material, target: Material, game: MaterialGame) => {
+    const adjacentCards = getCardRule(game, target.getIndex()).getOtherCardsAdjacentTo().getIndexes().map(index => getCardRule(game, index))
+    return filters.every(filter => adjacentCards.some(card => filter.filter(source, card.cardMaterial, game)))
+  },
+  text: 'adjacent-to'
+})
+
+export const cardNamed = (card: FactionCard): AbilityTargetFilter => ({
+  filter: (_source: Material, target: Material, game: MaterialGame) => getCardRule(game, target.getIndex()).card === card,
+  text: 'card'
 })
 
 export const and = (...filters: AbilityTargetFilter[]) => ({

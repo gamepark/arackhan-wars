@@ -189,6 +189,7 @@ export const defense = (modifier: number, condition?: ModifyDefenseCondition) =>
 export const gainAttribute = (attribute: Attribute) => new Ability().gainAttributes([attribute])
 export const loseAttributes = (...attributes: AttributeType[]) => new Ability().loseAttributes(...attributes)
 export const loseAttribute = (attribute: AttributeType) => new Ability().loseAttribute(attribute)
+export const loseSkills = () => new Ability().loseSkills()
 export const cannotAttack = (limitation?: AttackLimitation) => new Ability().cannotAttack(limitation)
 export const canOnlyAttack = (condition: AttackCondition) => new Ability().canOnlyAttack(condition)
 export const canOnlyBeAttacked = (condition: AttackCondition) => new Ability().canOnlyBeAttacked(condition)

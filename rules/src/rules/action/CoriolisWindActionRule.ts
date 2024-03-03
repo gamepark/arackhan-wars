@@ -1,4 +1,4 @@
-import { Material, XYCoordinates } from '@gamepark/rules-api'
+import { Material } from '@gamepark/rules-api'
 import { getCardRule } from '../CardRule'
 import { MoveCardsActionRule } from './MoveCardsActionRule'
 
@@ -8,7 +8,7 @@ export class CoriolisWindActionRule extends MoveCardsActionRule {
 
   getCardsAllowedToMove(): Material {
     const coriolisWind = this.cardRule
-    return coriolisWind.getOtherCardsAdjacentTo(coriolisWind.item.location as XYCoordinates)
+    return coriolisWind.getOtherCardsAdjacentTo()
       .player(player => player !== this.player)
       .filter((_, index) => {
         const cardRule = getCardRule(this.game, index)

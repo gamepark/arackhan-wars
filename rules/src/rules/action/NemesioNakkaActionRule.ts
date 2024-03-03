@@ -7,7 +7,7 @@ export class NemesioNakkaActionRule extends MoveCardsActionRule {
 
   getCardsAllowedToMove(): Material {
     const nemesio = this.cardRule
-    return nemesio.getOtherCardsAdjacentTo(nemesio.item.location as XYCoordinates)
+    return nemesio.getOtherCardsAdjacentTo()
       .player(this.player)
       .filter((_, index) => {
         const cardRule = getCardRule(this.game, index)

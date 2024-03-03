@@ -83,7 +83,8 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get card(): FactionCard {
-    return this.item.id.front as FactionCard
+    const mimic = this.targetingEffects.find(isMimic)
+    return mimic?.target ?? this.item.id.front as FactionCard
   }
 
   get owner() {
@@ -91,8 +92,7 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get characteristics(): FactionCardCharacteristics | undefined {
-    const mimic = this.targetingEffects.find(isMimic)
-    return FactionCardsCharacteristics[mimic?.target ?? this.card]
+    return FactionCardsCharacteristics[this.card]
   }
 
   get value(): number {
@@ -610,7 +610,7 @@ export class CardRule extends MaterialRulesPart {
     return this.getOtherCardsAdjacentTo(location).length > 0
   }
 
-  public getOtherCardsAdjacentTo(location: XYCoordinates) {
+  public getOtherCardsAdjacentTo(location: XYCoordinates = this.item.location as XYCoordinates) {
     return this.material(MaterialType.FactionCard).filter((item, index) =>
       index !== this.index
       && item.location.type === LocationType.Battlefield
