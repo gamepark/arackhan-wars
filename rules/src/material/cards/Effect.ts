@@ -11,6 +11,7 @@ export type Effect = ModifyAttack | ModifyDefense
   | SwapSkills | ModifyMovement | InvertsAttackDefense
   | ModifyRange | ExtraScore | IgnoreFellowGroupAttackerConstraint
   | CannotBePlayed | HitAllies | Possession | SwarmSameCard
+  | AddCharacteristics
 
 export enum EffectType {
   Attack, Defense,
@@ -33,6 +34,7 @@ export enum EffectType {
   HitAllies,
   Possession,
   SwarmSameCard,
+  AddCharacteristics,
 }
 
 export type ModifyAttack = {
@@ -230,4 +232,13 @@ export type Possession = {
 
 export type SwarmSameCard = {
   type: EffectType.SwarmSameCard
+}
+
+export type AddCharacteristics = {
+  type: EffectType.AddCharacteristics
+  card: FactionCard
+}
+
+export function isAddCharacteristics(effect: Effect): effect is AddCharacteristics {
+  return effect.type === EffectType.AddCharacteristics
 }

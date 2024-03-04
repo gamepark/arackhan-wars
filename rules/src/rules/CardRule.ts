@@ -12,7 +12,6 @@ import {
 } from '@gamepark/rules-api'
 import max from 'lodash/max'
 import sumBy from 'lodash/sumBy'
-import uniqBy from 'lodash/uniqBy'
 import { ArackhanWarsRules } from '../ArackhanWarsRules'
 import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
 import { Ability } from '../material/cards/Ability'
@@ -20,7 +19,8 @@ import {
   AttackByCreaturesOnlyInGroup,
   AttackCondition,
   AttackLimitation,
-  AttackOnlyEvenValueCards, CreaturesIfAdjacent,
+  AttackOnlyEvenValueCards,
+  CreaturesIfAdjacent,
   NoAttack,
   NoAttackBottomRightCards,
   NoAttackByCreatures,
@@ -30,7 +30,7 @@ import {
   NoAttackInGroupNotFamily,
   NoAttackOnAdjacentCard
 } from '../material/cards/AttackLimitation'
-import { Attribute, AttributeType, isMovement, isRangedAttack } from '../material/cards/Attribute'
+import { Attribute, AttributeType, isMovement, isRangedAttack, Movement, RangedAttack } from '../material/cards/Attribute'
 import { Creature, isCreature } from '../material/cards/Creature'
 import {
   AttackerConstraint,
@@ -40,7 +40,7 @@ import {
   EndOfTurn,
   EndOfTurnAction,
   ExtraScoreType,
-  GainAttributes,
+  isAddCharacteristics,
   isAttackerConstraint,
   isDefenderConstraint,
   isGainAttributes,
@@ -145,16 +145,25 @@ export class CardRule extends MaterialRulesPart {
   get abilities(): Ability[] {
     const characteristics = this.characteristics
     const swapSkills = this.targetingEffects.find(isSwapSkills)
+    let abilities = characteristics?.getAbilities() ?? []
     if (isCreature(characteristics)) {
       if (this.loseSkills) {
-        return characteristics.getWeaknesses()
+        abilities = characteristics.getWeaknesses()
       } else if (swapSkills) {
         const otherCreatureIndex = swapSkills.creatures.find(index => index !== this.index)!
         const otherCreature = FactionCardsCharacteristics[this.material(MaterialType.FactionCard).getItem<CardId>(otherCreatureIndex)!.id!.front]
-        return (otherCreature as Creature).getSkills().concat(characteristics.getWeaknesses())
+        abilities = (otherCreature as Creature).getSkills().concat(characteristics.getWeaknesses())
       }
     }
-    return characteristics?.getAbilities() ?? []
+    for (const addCharacteristic of this.targetingEffects.filter(isAddCharacteristics)) {
+      const card = FactionCardsCharacteristics[addCharacteristic.card]
+      if (isCreature(card) && this.loseSkills) {
+        abilities = abilities.concat(card.getWeaknesses())
+      } else {
+        abilities = abilities.concat(card.getAbilities())
+      }
+    }
+    return abilities
   }
 
   isImmuneTo(rule: CardRule) {
@@ -203,7 +212,8 @@ export class CardRule extends MaterialRulesPart {
     return this.battleFieldCardsRules.flatMap(card =>
       this.isImmuneTo(card) ? []
         : card.abilities.filter(ability =>
-          ability.effects.some(effect => effect.type === EffectType.LoseAttributes || effect.type === EffectType.GainAttributes)
+          ability.effects.some(effect => effect.type === EffectType.LoseAttributes || effect.type === EffectType.GainAttributes
+            || effect.type === EffectType.AddCharacteristics)
           && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
         ).flatMap(ability => ability.effects)
     ).concat(...this.targetingEffects)
@@ -222,13 +232,33 @@ export class CardRule extends MaterialRulesPart {
     if (effects.some(effect => effect.type === EffectType.LoseAttributes && !effect.attributes)) {
       return []
     }
-    const attributes = this.characteristics?.getAttributes() ?? []
-    return uniqBy(attributes
-      .concat(...effects.filter(isGainAttributes)
-        .flatMap((effect: GainAttributes) => effect.attributes)
-      ).filter(attribute => !effects.some(effect =>
-        effect.type === EffectType.LoseAttributes && effect.attributes?.includes(attribute.type))
-      ), attribute => attribute.type)
+    const attributes = this.characteristics ? [...this.characteristics.getAttributes()] : []
+    for (const effect of effects) {
+      if (effect.type === EffectType.AddCharacteristics) {
+        for (const attribute of FactionCardsCharacteristics[effect.card].getAttributes()) {
+          this.addAttribute(attributes, attribute)
+        }
+      }
+    }
+    for (const gainAttribute of effects.filter(isGainAttributes)) {
+      for (const attribute of gainAttribute.attributes) {
+        this.addAttribute(attributes, attribute)
+      }
+    }
+    return attributes.filter(attribute => !effects.some(effect =>
+      effect.type === EffectType.LoseAttributes && effect.attributes?.includes(attribute.type))
+    )
+  }
+
+  private addAttribute(attributes: Attribute[], attribute: Attribute) {
+    const index = attributes.findIndex(a => a.type === attribute.type)
+    if (index === -1) {
+      attributes.push(attribute)
+    } else if (attribute.type === AttributeType.Movement || attribute.type === AttributeType.RangedAttack) {
+      if (attribute.distance > (attributes[index] as Movement | RangedAttack).distance) {
+        attributes[index] = attribute
+      }
+    }
   }
 
   get token() {
@@ -403,9 +433,16 @@ export class CardRule extends MaterialRulesPart {
   private getAttackBeforeInvert(target?: CardRule) {
     const setAttackDefense = this.effects.find(isSetAttackDefense)
     const baseAttack = setAttackDefense?.attack ?? this.attackCharacteristic
-    const attackModifier = sumBy(this.effects, effect =>
-      effect.type === EffectType.Attack && this.respectsModifyAttackCondition(target, effect.condition) ? effect.modifier : 0
-    ) + this.swarmBonus
+    const attackModifier = sumBy(this.effects, effect => {
+      switch (effect.type) {
+        case EffectType.Attack:
+          return this.respectsModifyAttackCondition(target, effect.condition) ? effect.modifier : 0
+        case EffectType.AddCharacteristics:
+          return (FactionCardsCharacteristics[effect.card] as Creature).attack
+        default:
+          return 0
+      }
+    }) + this.swarmBonus
     return Math.max(0, baseAttack + attackModifier)
   }
 
@@ -453,14 +490,20 @@ export class CardRule extends MaterialRulesPart {
   private getDefenseBeforeInvert(attackers: number[] = []) {
     const setAttackDefense = this.effects.find(isSetAttackDefense)
     const baseDefense = setAttackDefense?.defense ?? this.defenseCharacteristic
-    const defenseModifier = sumBy(this.effects, effect =>
-      effect.type === EffectType.Defense
-      && (effect.condition !== ModifyDefenseCondition.AttackedByFlyOrMoves
-        || attackers.some(attacker => getCardRule(this.game, attacker).attributes.some(attribute =>
-          attribute.type === AttributeType.Flight || attribute.type === AttributeType.Movement
-        ))
-      )
-        ? effect.modifier : 0)
+    const defenseModifier = sumBy(this.effects, effect => {
+      switch (effect.type) {
+        case EffectType.Defense:
+          return effect.condition !== ModifyDefenseCondition.AttackedByFlyOrMoves
+          || attackers.some(attacker => getCardRule(this.game, attacker).attributes.some(attribute =>
+            attribute.type === AttributeType.Flight || attribute.type === AttributeType.Movement
+          ))
+            ? effect.modifier : 0
+        case EffectType.AddCharacteristics:
+          return (FactionCardsCharacteristics[effect.card] as Creature).defense
+        default:
+          return 0
+      }
+    })
     return Math.max(0, baseDefense + defenseModifier)
   }
 

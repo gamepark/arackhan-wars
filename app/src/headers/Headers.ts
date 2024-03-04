@@ -5,6 +5,7 @@ import { BackupActionHeader } from './actions/BackupActionHeader'
 import { CardActionHeader } from './actions/CardActionHeader'
 import { DeactivateActionHeader } from './actions/DeactivateActionHeader'
 import { DiscardActionHeader } from './actions/DiscardActionHeader'
+import { EssenceAbsorptionActionHeader } from './actions/EssenceAbsorptionActionHeader'
 import { IceElementalActionHeader } from './actions/IceElementalActionHeader'
 import { MarchingOrderActionHeader } from './actions/MarchingOrderActionHeader'
 import { MimicryActionHeader } from './actions/MimicryActionHeader'
@@ -66,5 +67,6 @@ export const Headers: Partial<Record<RuleId, () => ReactJSXElement>> = {
   [RuleId.OnLeaveAction]: MoveCreatureActionHeader,
   [RuleId.TheGreyOrderRisesAction]: CardActionHeader,
   [RuleId.NemesioBlightAction]: NemesioBlightActionHeader,
+  [RuleId.EssenceAbsorptionAction]: EssenceAbsorptionActionHeader,
   [RuleId.PossessionAction]: PossessionActionHeader
 }

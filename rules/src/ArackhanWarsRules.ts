@@ -25,6 +25,7 @@ import { AssassinActionRule } from './rules/action/AssassinActionRule'
 import { BackupActionRule } from './rules/action/BackupActionRule'
 import { CoriolisWindActionRule } from './rules/action/CoriolisWindActionRule'
 import { DiscardEnemySpellActionRule } from './rules/action/DiscardEnemySpellActionRule'
+import { EssenceAbsorptionActionRule } from './rules/action/EssenceAbsorptionActionRule'
 import { ForcedExileActionRule } from './rules/action/ForcedExileActionRule'
 import { IceElementalActionRule } from './rules/action/IceElementalActionRule'
 import { IceWingsActionRule } from './rules/action/IceWingsActionRule'
@@ -109,6 +110,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     [RuleId.OnLeaveAction]: OnLeaveActionRule,
     [RuleId.TheGreyOrderRisesAction]: TheGreyOrderRisesActionRule,
     [RuleId.NemesioBlightAction]: NemesioBlightActionRule,
+    [RuleId.EssenceAbsorptionAction]: EssenceAbsorptionActionRule,
     [RuleId.PossessionAction]: PossessionActionRule
   }
 

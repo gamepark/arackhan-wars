@@ -14,6 +14,6 @@ export class PlagueWagon extends Creature {
   defense = 2
 
   attribute = movement(2)
-  skill = loseAttributes().to(adjacent, enemy, creature)
-  weakness = loseAttributes().to(adjacent, allied, creature)
+  skill = loseAttributes().loseSkills().to(adjacent, enemy, creature)
+  weakness = loseAttributes().loseSkills().to(adjacent, allied, creature)
 }

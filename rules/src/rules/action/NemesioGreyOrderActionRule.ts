@@ -1,6 +1,6 @@
 import { isMoveItemType, isSelectItemType, ItemMove } from '@gamepark/rules-api'
 import { EffectType } from '../../material/cards/Effect'
-import { FactionCard } from '../../material/FactionCard'
+import { CardId } from '../../material/FactionCard'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
 import { getCardRule } from '../CardRule'
@@ -38,8 +38,9 @@ export class NemesioGreyOrderActionRule extends CardActionRule {
     if (isMoveItemType(MaterialType.FactionCard)(move)) {
       this.memorize<number[]>(Memory.OncePerRound, cards => [...cards, nemesio])
     } else if (isSelectItemType(MaterialType.FactionCard)(move)) {
-      delete this.material(MaterialType.FactionCard).getItem(move.itemIndex)!.selected
-      const target = this.material(MaterialType.FactionCard).getItem(move.itemIndex)?.id.front as FactionCard
+      const card = this.material(MaterialType.FactionCard).getItem<CardId>(move.itemIndex)!
+      delete card.selected
+      const target = card.id!.front
       this.memorize<TargetingEffect[]>(Memory.RoundEffects, effects => [...effects,
         { targets: [nemesio], effect: { type: EffectType.Mimic, target } }
       ])
