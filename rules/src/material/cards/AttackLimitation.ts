@@ -18,7 +18,7 @@ export abstract class AttackConstraintRule extends MaterialRulesPart {
   }
 
   preventAttackGroup(_attackers: number[], _defender: number): boolean {
-    return true
+    return false
   }
 
   isInsufficientAttackGroup(_attackers: number[], _defender: number): boolean {
