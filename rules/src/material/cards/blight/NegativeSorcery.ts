@@ -1,3 +1,4 @@
+import { RuleId } from '../../../rules/RuleId'
 import { Faction } from '../../Faction'
 import { initiative } from '../Attribute'
 import { Spell } from '../Spell'
@@ -10,5 +11,5 @@ export class NegativeSorcery extends Spell {
 
   attribute = initiative
 
-  // TODO action
+  action = RuleId.DiscardEnemySpellAction
 }
