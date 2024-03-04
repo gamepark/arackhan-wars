@@ -3,7 +3,7 @@ import {
   hideFront,
   hideFrontToOthers,
   HidingStrategy,
-  isCustomMove,
+  isCustomMoveType,
   MaterialGame,
   MaterialItem,
   MaterialMove,
@@ -146,11 +146,11 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
 
   getView(player?: number): MaterialGame {
     const view = super.getView(player)
-    if (this.game.rule?.id === RuleId.ChooseFaction && Memory.PlayerFaction in view.memory) {
-      const { [Memory.PlayerFaction]: playerFactionMemory, ...memory } = view.memory
-      if (player !== undefined && player in playerFactionMemory) {
-        const factionMemory = { [player]: view.memory[Memory.PlayerFaction][player] }
-        return { ...view, memory: { ...memory, [Memory.PlayerFaction]: factionMemory } }
+    if ((this.game.rule?.id === RuleId.ChooseFaction || this.game.rule?.id === RuleId.ChooseDeck) && Memory.PlayerDeck in view.memory) {
+      const { [Memory.PlayerDeck]: playerDeckMemory, ...memory } = view.memory
+      if (player !== undefined && player in playerDeckMemory) {
+        const factionMemory = { [player]: view.memory[Memory.PlayerDeck][player] }
+        return { ...view, memory: { ...memory, [Memory.PlayerDeck]: factionMemory } }
       } else {
         return { ...view, memory }
       }
@@ -183,15 +183,13 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
   }
 
   getMoveView(move: MaterialMoveRandomized, player?: number) {
-    if (isCustomMove(move) && move.type === CustomMoveType.ChooseFaction && move.data.player !== player) {
+    if (isCustomMoveType(CustomMoveType.ChooseFaction)(move) && move.data.player !== player) {
       return { ...move, data: { player: move.data.player } } // Hide chosen faction
+    } else if (isCustomMoveType(CustomMoveType.ChooseDeck)(move) && move.data.player !== player) {
+      return { ...move, data: { player: move.data.player } } // Hide chosen deck
     } else {
       return super.getMoveView(move, player)
     }
-  }
-
-  keepMoveSecret() {
-    return false // TODO: keep choose deck secret during ChooseDeckRule
   }
 }
 

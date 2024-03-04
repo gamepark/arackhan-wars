@@ -4,6 +4,7 @@ import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
+import { DeckValidator } from '@gamepark/arackhan-wars/rules/DeckValidator'
 import { Deck } from '@gamepark/react-client'
 import { MaterialComponent, RulesDialog, ThemeButton, usePlay, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { displayMaterialHelp, MoveKind } from '@gamepark/rules-api'
@@ -74,8 +75,10 @@ const DeckDisplay = ({ deck, cancel }: { deck: Deck, cancel: () => void }) => {
       <div css={buttonLine}>
         <ThemeButton onClick={cancel}>{t('Cancel')}</ThemeButton>
         <h3>{name}</h3>
-        <ThemeButton
-          onClick={() => play({ kind: MoveKind.CustomMove, type: CustomMoveType.ChooseDeck, data: { player, cards } })}>{t('deck.choose')}</ThemeButton>
+        <ThemeButton disabled={!new DeckValidator(cards).isValid}
+                     onClick={() => play({ kind: MoveKind.CustomMove, type: CustomMoveType.ChooseDeck, data: { player, cards } })}>
+          {t('deck.choose')}
+        </ThemeButton>
       </div>
       <ul css={grid}>
         {cards.map((card, index) => <li key={index}>

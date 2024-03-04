@@ -1,16 +1,14 @@
 import { publisherDecks } from '@gamepark/arackhan-wars-app/src/deckbuilding/decks/PublisherDecks'
 import { CustomMove, isCustomMoveType, MaterialMove } from '@gamepark/rules-api'
 import { CustomMoveType } from '../material/CustomMoveType'
-import { FactionCard, FactionCardsCharacteristics } from '../material/FactionCard'
-import { LocationType } from '../material/LocationType'
-import { MaterialType } from '../material/MaterialType'
+import { FactionCard } from '../material/FactionCard'
 import { ChooseFactionRule } from './ChooseFactionRule'
 import { DeckValidator } from './DeckValidator'
-import { RuleId } from './RuleId'
+import { Memory } from './Memory'
 
 export type ChooseDeck = {
   player: number
-  cards: FactionCard[]
+  cards?: FactionCard[]
 }
 
 export class ChooseDeckRule extends ChooseFactionRule {
@@ -19,27 +17,22 @@ export class ChooseDeckRule extends ChooseFactionRule {
     if (!this.isTurnToPlay(player)) return false
     if (!isCustomMoveType(CustomMoveType.ChooseDeck)(move)) return false
     const chooseDeck: ChooseDeck = move.data
-    return player === chooseDeck.player && new DeckValidator(chooseDeck.cards).isValid
+    return player === chooseDeck.player && new DeckValidator(chooseDeck.cards ?? []).isValid
   }
 
   getLegalMoves(player: number) {
     return publisherDecks.map(cards => this.rules().customMove(CustomMoveType.ChooseDeck, { player, cards }))
   }
 
-  onCustomMove(move: CustomMove) {
+  onCustomMove(move: CustomMove): MaterialMove[] {
     if (move.type !== CustomMoveType.ChooseDeck) return []
-    const chooseDeck: ChooseDeck = move.data
-    return [
-      this.material(MaterialType.FactionCard).createItemsAtOnce(
-        chooseDeck.cards.map((card: FactionCard) => ({
-          id: { front: card, back: FactionCardsCharacteristics[card].faction },
-          location: { type: LocationType.PlayerDeck, player: chooseDeck.player }
-        }))
-      ),
-      this.rules().endPlayerTurn(chooseDeck.player)]
+    if (move.data.cards !== undefined) {
+      this.memorize(Memory.PlayerDeck, move.data.cards, move.data.player)
+    }
+    return [this.rules().endPlayerTurn(move.data.player)]
   }
 
-  getMovesAfterPlayersDone() {
-    return [this.rules().startPlayerTurn(RuleId.ChooseStartPlayer, this.game.players[0])]
+  getPlayerDeck(player: number): FactionCard[] {
+    return this.remind<FactionCard[] | undefined>(Memory.PlayerDeck, player) ?? []
   }
 }
