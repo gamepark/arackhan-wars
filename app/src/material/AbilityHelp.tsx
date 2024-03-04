@@ -192,11 +192,21 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
       if (effect.limitation === AttackLimitation.InGroupNotFamily) {
         values.family = t(`card.family.${(FactionCardsCharacteristics[card] as Creature).family}`)
       }
-      return {
-        defaults: effect.limitation ?
-          `ability.attack.limit.${attackLimitationText[effect.limitation]}`
-          : 'ability.attack.limit',
-        values
+      if (targets) {
+        values.targets = targets
+        return {
+          defaults: effect.limitation ?
+            `ability.targets.attack.limit.${attackLimitationText[effect.limitation]}`
+            : 'ability.targets.attack.limit',
+          values
+        }
+      } else {
+        return {
+          defaults: effect.limitation ?
+            `ability.attack.limit.${attackLimitationText[effect.limitation]}`
+            : 'ability.attack.limit',
+          values
+        }
       }
     case EffectType.CanOnlyAttack:
       if (targets) {

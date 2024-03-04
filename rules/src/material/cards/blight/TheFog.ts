@@ -1,4 +1,7 @@
 import { Faction } from '../../Faction'
+import { cannotAttack, canOnlyAttack } from '../Ability'
+import { creature, enemy } from '../AbilityTargetFilter'
+import { AttackCondition, AttackLimitation } from '../AttackLimitation'
 import { Spell } from '../Spell'
 
 export class TheFog extends Spell {
@@ -7,5 +10,8 @@ export class TheFog extends Spell {
 
   astral = true
 
-  // TODO effect
+  effects = [
+    canOnlyAttack(AttackCondition.CreaturesIfAdjacent).to(enemy, creature),
+    cannotAttack(AttackLimitation.InGroup).to(enemy, creature)
+  ]
 }
