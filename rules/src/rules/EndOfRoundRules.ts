@@ -20,7 +20,7 @@ export class EndOfRoundRules extends MaterialRulesPart {
     for (const targetingEffect of this.remind<TargetingEffect[]>(Memory.RoundEffects)) {
       if (targetingEffect.effect.type === EffectType.Possession) {
         const { targets: [card], effect: possession } = targetingEffect
-        const token = this.material(MaterialType.FactionToken).parent(card)
+        const token = this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(card)
         tokensToIgnore.push(token.getIndex())
         this.material(MaterialType.FactionCard).getItem(card)!.location.player = possession.originalOwner
         if (possession.swapWith !== undefined) {
@@ -29,7 +29,7 @@ export class EndOfRoundRules extends MaterialRulesPart {
           moves.push(token.deleteItem())
           moves.push(this.material(MaterialType.FactionToken).createItem({
             id: this.remind(Memory.PlayerFactionToken, possession.originalOwner),
-            location: { parent: card, type: LocationType.FactionCard, player: possession.originalOwner }
+            location: { parent: card, type: LocationType.FactionTokenSpace, player: possession.originalOwner }
           }))
         }
       }

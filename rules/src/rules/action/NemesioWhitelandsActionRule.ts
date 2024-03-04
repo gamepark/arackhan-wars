@@ -18,8 +18,7 @@ export class NemesioWhitelandsActionRule extends CardActionRule {
   afterItemMove(move: ItemMove) {
     if (isSelectItemType(MaterialType.FactionCard)(move)) {
       const nemesio = this.cardIndex
-      const card = this.material(MaterialType.FactionCard).getItem(move.itemIndex)
-      delete card?.selected
+      delete this.material(MaterialType.FactionCard).getItem(move.itemIndex)!.selected
       this.memorize<TargetingEffect[]>(Memory.RoundEffects, effects => [...effects,
         { targets: [nemesio, move.itemIndex], effect: { type: EffectType.SwapSkills, creatures: [nemesio, move.itemIndex] } }
       ])

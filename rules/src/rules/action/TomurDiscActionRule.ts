@@ -18,6 +18,7 @@ export class TomurDiscActionRule extends CardActionRule {
 
   afterItemMove(move: ItemMove) {
     if (isSelectItemType(MaterialType.FactionCard)(move)) {
+      delete this.material(MaterialType.FactionCard).getItem(move.itemIndex)!.selected
       return [
         this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(move.itemIndex).rotateItem(true),
         ...this.afterCardAction()

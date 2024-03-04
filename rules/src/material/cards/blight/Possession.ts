@@ -1,3 +1,4 @@
+import { RuleId } from '../../../rules/RuleId'
 import { Faction } from '../../Faction'
 import { Spell } from '../Spell'
 
@@ -8,5 +9,5 @@ export class Possession extends Spell {
 
   astral = true
 
-  // TODO action
+  action = RuleId.PossessionAction
 }

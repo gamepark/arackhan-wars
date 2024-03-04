@@ -38,6 +38,7 @@ export class NemesioGreyOrderActionRule extends CardActionRule {
     if (isMoveItemType(MaterialType.FactionCard)(move)) {
       this.memorize<number[]>(Memory.OncePerRound, cards => [...cards, nemesio])
     } else if (isSelectItemType(MaterialType.FactionCard)(move)) {
+      delete this.material(MaterialType.FactionCard).getItem(move.itemIndex)!.selected
       const target = this.material(MaterialType.FactionCard).getItem(move.itemIndex)?.id.front as FactionCard
       this.memorize<TargetingEffect[]>(Memory.RoundEffects, effects => [...effects,
         { targets: [nemesio], effect: { type: EffectType.Mimic, target } }

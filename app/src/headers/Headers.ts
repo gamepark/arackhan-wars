@@ -12,6 +12,7 @@ import { MoveCreatureActionHeader } from './actions/MoveCreatureActionHeader'
 import { NemesioBlightActionHeader } from './actions/NemesioBlightActionHeader'
 import { NemesioGreyOrderActionHeader } from './actions/NemesioGreyOrderActionHeader'
 import { PlaceCreatureActionHeader } from './actions/PlaceCreatureActionHeader'
+import { PossessionActionHeader } from './actions/PossessionActionHeader'
 import { StandardBearerActionHeader } from './actions/StandardBearerActionHeader'
 import { TargetCreatureActionHeader } from './actions/TargetCreatureActionHeader'
 import { TheWhiteGatesActionHeader } from './actions/TheWhiteGatesActionHeader'
@@ -64,5 +65,6 @@ export const Headers: Partial<Record<RuleId, () => ReactJSXElement>> = {
   [RuleId.MarchingOrderAction]: MarchingOrderActionHeader,
   [RuleId.OnLeaveAction]: MoveCreatureActionHeader,
   [RuleId.TheGreyOrderRisesAction]: CardActionHeader,
-  [RuleId.NemesioBlightAction]: NemesioBlightActionHeader
+  [RuleId.NemesioBlightAction]: NemesioBlightActionHeader,
+  [RuleId.PossessionAction]: PossessionActionHeader
 }
