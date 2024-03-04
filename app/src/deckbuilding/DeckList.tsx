@@ -4,12 +4,12 @@ import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons/faCircleE
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons/faTrashCan'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { publisherDecks } from '@gamepark/arackhan-wars/material/decks/PublisherDecks'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
 import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
 import { DeckValidator } from '@gamepark/arackhan-wars/rules/DeckValidator'
 import { Deck, useMyDecks } from '@gamepark/react-client'
 import { useTranslation } from 'react-i18next'
-import { publisherDecks } from './decks/PublisherDecks'
 
 type DeckList = {
   openDeck: (deck: Deck) => void
@@ -68,7 +68,7 @@ const deckNameCss = (faction?: Faction) => css`
   font-weight: normal;
   color: ${faction ? factionColor[faction] : '#6B4135'};
   cursor: pointer;
-  
+
   &:hover {
     text-decoration: underline;
   }

@@ -1,6 +1,6 @@
-import { publisherDecks } from '@gamepark/arackhan-wars-app/src/deckbuilding/decks/PublisherDecks'
 import { CustomMove, isCustomMoveType, MaterialMove } from '@gamepark/rules-api'
 import { CustomMoveType } from '../material/CustomMoveType'
+import { publisherDecks } from '../material/decks/PublisherDecks'
 import { FactionCard } from '../material/FactionCard'
 import { ChooseFactionRule } from './ChooseFactionRule'
 import { DeckValidator } from './DeckValidator'

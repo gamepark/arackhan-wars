@@ -1,5 +1,5 @@
-import { DeckListing } from '@gamepark/arackhan-wars/material/cards/PreBuildDecks'
-import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
+import { DeckListing } from '../cards/PreBuildDecks'
+import { FactionCard } from '../FactionCard'
 
 export const StrikeForce: DeckListing = {
   [FactionCard.DrunkKnight]: 4,
