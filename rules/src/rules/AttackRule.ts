@@ -134,11 +134,6 @@ export class AttackRule extends PlayerTurnRule {
       }
     }
 
-    moves.push(...this.material(MaterialType.FactionCard)
-      .filter((_, index) => attacks.some(attack => attack.card === index) && getCardRule(this.game, index).isSpell)
-      .moveItems({ type: LocationType.PlayerDiscard, player: this.player })
-    )
-
     if (perforations.length > 0) {
       this.memorize<Perforation[]>(Memory.Perforations, perforations)
       moves.push(this.rules().startRule(RuleId.SolvePerforations))
@@ -152,8 +147,13 @@ export class AttackRule extends PlayerTurnRule {
   cleanAttacks() {
     const moves: MaterialMove[] = []
     const attacks = this.remind<Attack[]>(Memory.Attacks)
+
     for (const attack of attacks) {
-      moves.push(...getCardRule(this.game, attack.card).triggerAttackEffects())
+      const cardRule = getCardRule(this.game, attack.card)
+      moves.push(...cardRule.triggerAttackEffects())
+      if (cardRule.isSpell) {
+        moves.push(cardRule.cardMaterial.moveItem({ type: LocationType.PlayerDiscard, player: cardRule.originalOwner }))
+      }
     }
     this.memorize(Memory.Attacks, [])
     return moves
