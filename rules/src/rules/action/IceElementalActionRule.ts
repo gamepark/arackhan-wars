@@ -7,6 +7,10 @@ import { CardActionRule } from './CardActionRule'
 import { TargetingEffect } from './TargetingEffect'
 
 export class IceElementalActionRule extends CardActionRule {
+  canPlay(): boolean {
+    return true
+  }
+
   getPlayerMoves() {
     return [
       this.rules().customMove(CustomMoveType.ChooseEffect, { type: EffectType.SetAttackDefense, attack: 0, defense: 3 }),

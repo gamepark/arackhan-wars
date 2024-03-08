@@ -9,14 +9,22 @@ import { CardActionRule } from './CardActionRule'
 import { TargetingEffect } from './TargetingEffect'
 
 export class PossessionActionRule extends CardActionRule {
-  getPlayerMoves() {
+  canPlay(): boolean {
+    return this.validTargets.length > 0
+  }
+
+  get validTargets() {
     return this.material(MaterialType.FactionCard)
-      .filter((_, index) => {
+      .filter((item, index) => {
+        if (item.location.type !== LocationType.Battlefield || item.location.player === this.player) return false
         const cardRule = getCardRule(this.game, index)
         return cardRule.isCreature && !cardRule.isImmuneToEnemySpells
       })
-      .player(p => p !== this.player)
-      .selectItems()
+
+  }
+
+  getPlayerMoves() {
+    return this.validTargets.selectItems()
   }
 
   afterItemMove(move: ItemMove) {

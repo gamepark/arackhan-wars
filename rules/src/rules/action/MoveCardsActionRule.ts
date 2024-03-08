@@ -12,6 +12,16 @@ export abstract class MoveCardsActionRule extends CardActionRule {
   moves?: number
   maxDistance?: number
 
+  canPlay(): boolean {
+    const cardsAllowedToMove = this.getCardsAllowedToMove()
+    for (const index of cardsAllowedToMove.getIndexes()) {
+      const card = cardsAllowedToMove.index(index)
+      const legalDestinations = this.getLegalDestinations(card)
+      if (legalDestinations.length > 1) return true
+    }
+    return false
+  }
+
   getPlayerMoves() {
     const moves: MaterialMove[] = []
     const cardsAllowedToMove = this.getCardsAllowedToMove()

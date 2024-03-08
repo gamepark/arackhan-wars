@@ -11,15 +11,22 @@ import { TargetingEffect } from './TargetingEffect'
 
 export class MimicryActionRule extends CardActionRule {
 
-  getPlayerMoves() {
-    const creaturesOnBattlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-      .filter((_, index) => getCardRule(this.game, index).isCreature)
+  canPlay(): boolean {
+    const creatures = this.creaturesOnBattlefield
+    return creatures.length > 2 && creatures.player(this.player).length > 0
+  }
 
+  get creaturesOnBattlefield() {
+    return this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
+      .filter((_, index) => getCardRule(this.game, index).isCreature)
+  }
+
+  getPlayerMoves() {
     if (this.target === undefined) {
-      return creaturesOnBattlefield.player(this.player).getIndexes()
+      return this.creaturesOnBattlefield.player(this.player).getIndexes()
         .map(index => this.rules().customMove(CustomMoveType.ChooseCard, index))
     } else {
-      return creaturesOnBattlefield.getIndexes()
+      return this.creaturesOnBattlefield.getIndexes()
         .filter(index => index !== this.target)
         .map(index => this.rules().customMove(CustomMoveType.ChooseCard, index))
     }

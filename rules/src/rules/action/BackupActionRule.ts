@@ -11,29 +11,40 @@ import { Memory } from '../Memory'
 import { CardActionRule } from './CardActionRule'
 
 export class BackupActionRule extends CardActionRule {
+  canPlay(): boolean {
+    return this.eligibleCards.length > 0 && this.eligibleSpots.length > 0
+  }
 
   onRuleStart() {
     this.memorize(Memory.Count, 2)
     return []
   }
 
-  getPlayerMoves() {
+  get eligibleCards() {
+    return this.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(this.player).filter((_item, index) => {
+      const cardRule = getCardRule(this.game, index)
+      return cardRule.isCreature && cardRule.family === Family.Legion6 && cardRule.value <= 8
+    })
+  }
+
+  get eligibleSpots() {
     const battlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
     const myLegion6 = battlefield.player(this.player).id<CardId>(id => {
       const characteristics = FactionCardsCharacteristics[id.front]
       return isCreature(characteristics) && characteristics.family === Family.Legion6
     }).getItems()
     if (!myLegion6.length) return []
-    const eligibleCards = this.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(this.player).filter((_item, index) => {
-      const cardRule = getCardRule(this.game, index)
-      return cardRule.isCreature && cardRule.family === Family.Legion6 && cardRule.value <= 8
-    })
-    if (!eligibleCards.length) return []
     const enemyCreatures = battlefield.player(player => player !== this.player).id<CardId>(id => isCreature(FactionCardsCharacteristics[id.front])).getItems()
-    const eligibleSpots = battlefieldCoordinates.filter(coordinates =>
+    return battlefieldCoordinates.filter(coordinates =>
       myLegion6.some(legion => areAdjacentSquares(coordinates, legion.location))
       && !enemyCreatures.some(enemy => areAdjacentSquares(coordinates, enemy.location))
     )
+  }
+
+  getPlayerMoves() {
+    const eligibleCards = this.eligibleCards
+    if (!eligibleCards.length) return []
+    const eligibleSpots = this.eligibleSpots
     const moves: MaterialMove[] = eligibleSpots.flatMap(spot =>
       eligibleCards.moveItems({ type: LocationType.Battlefield, ...spot, player: this.player })
     )
@@ -51,7 +62,7 @@ export class BackupActionRule extends CardActionRule {
           id: this.remind(Memory.PlayerFactionToken, this.player),
           location: { parent: move.itemIndex, type: LocationType.FactionTokenSpace, player: this.player }
         })]
-      if (this.remind(Memory.Count) > 1) {
+      if (this.remind(Memory.Count) > 1 && this.eligibleCards.length > 0) {
         this.memorize(Memory.Count, count => count - 1)
       } else {
         moves.push(...this.afterCardAction())

@@ -63,6 +63,7 @@ import { isSpell, Spell } from '../material/cards/Spell'
 import { CardId, FactionCard, FactionCardsCharacteristics } from '../material/FactionCard'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
+import { CardActionRule } from './action/CardActionRule'
 import { TargetingEffect } from './action/TargetingEffect'
 import { Attack } from './AttackRule'
 import { Memory } from './Memory'
@@ -391,7 +392,9 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get canPerformAction() {
-    return this.characteristics?.action && this.canBeActivated
+    if (this.characteristics?.action === undefined || !this.canBeActivated) return false
+    const ActionRule = new ArackhanWarsRules(this.game).rules[this.characteristics.action]
+    return (new ActionRule(this.game) as CardActionRule).canPlay()
   }
 
   getDamagesInflicted(attackers: number[]): number | undefined {

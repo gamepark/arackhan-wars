@@ -6,10 +6,17 @@ import { getCardRule } from '../CardRule'
 import { CardActionRule } from './CardActionRule'
 
 export class DiscardEnemySpellActionRule extends CardActionRule {
-  getPlayerMoves() {
+  canPlay(): boolean {
+    return this.enemySpells.length > 0
+  }
+
+  get enemySpells() {
     return this.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane)
       .filter((item, index) => item.location.player !== this.player && getCardRule(this.game, index).isSpell)
-      .moveItems(item => ({ type: LocationType.PlayerDiscard, player: item.location.player }))
+  }
+
+  getPlayerMoves() {
+    return this.enemySpells.moveItems(item => ({ type: LocationType.PlayerDiscard, player: item.location.player }))
   }
 
   afterItemMove(move: ItemMove) {

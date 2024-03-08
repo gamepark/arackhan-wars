@@ -10,19 +10,31 @@ import { CardActionRule } from './CardActionRule'
 import { TargetingEffect } from './TargetingEffect'
 
 export class NemesioGreyOrderActionRule extends CardActionRule {
+  canPlay(): boolean {
+    return this.cardsToSacrifice.length > 0 && this.otherCreatures.length > 1
+  }
+
+  get cardsToSacrifice() {
+    const nemesio = this.cardIndex
+    return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).player(this.player)
+      .filter((_, index) => {
+        const cardRule = getCardRule(this.game, index)
+        return index !== nemesio && cardRule.isCreature && cardRule.value >= 3
+      })
+  }
+
+  get otherCreatures() {
+    const nemesio = this.cardIndex
+    return this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
+      .filter((_, index) => index !== nemesio && getCardRule(this.game, index).isCreature)
+  }
+
   getPlayerMoves() {
     const nemesio = this.remind(Memory.ActionCard)
     if (!this.remind<number[]>(Memory.OncePerRound).includes(nemesio)) {
-      return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).player(this.player)
-        .filter((_, index) => {
-          const cardRule = getCardRule(this.game, index)
-          return index !== nemesio && cardRule.isCreature && cardRule.value >= 3
-        })
-        .moveItems((_, index) => ({ type: LocationType.PlayerDiscard, player: getCardRule(this.game, index).originalOwner }))
+      return this.cardsToSacrifice.moveItems((_, index) => ({ type: LocationType.PlayerDiscard, player: getCardRule(this.game, index).originalOwner }))
     } else {
-      return this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-        .filter((_, index) => index !== nemesio && getCardRule(this.game, index).isCreature)
-        .selectItems()
+      return this.otherCreatures.selectItems()
     }
   }
 

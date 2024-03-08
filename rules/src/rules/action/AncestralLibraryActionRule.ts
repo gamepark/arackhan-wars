@@ -5,6 +5,10 @@ import { Memory } from '../Memory'
 import { CardActionRule } from './CardActionRule'
 
 export class AncestralLibraryActionRule extends CardActionRule {
+  canPlay(): boolean {
+    return this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(this.player).length > 0
+  }
+
   onRuleStart() {
     const deck = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(this.player).deck()
     const count = Math.min(4, deck.length)

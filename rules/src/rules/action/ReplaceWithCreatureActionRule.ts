@@ -7,6 +7,11 @@ import { Memory } from '../Memory'
 import { CardActionRule } from './CardActionRule'
 
 export class ReplaceWithCreatureActionRule extends CardActionRule {
+
+  canPlay(): boolean {
+    return this.getEligibleCards().length > 0
+  }
+
   onRuleStart() {
     this.memorize(Memory.Location, this.actionCard.location)
     return this.discardActionCard()

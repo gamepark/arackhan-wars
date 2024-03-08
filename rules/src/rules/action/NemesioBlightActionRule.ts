@@ -7,6 +7,11 @@ import { CardActionRule } from './CardActionRule'
 import { TargetingEffect } from './TargetingEffect'
 
 export class NemesioBlightActionRule extends CardActionRule {
+  canPlay(): boolean {
+    const adjacentCreature = this.adjacentCreatures
+    return adjacentCreature.player(this.player).length > 0 && adjacentCreature.player(p => p !== this.player).length > 0
+  }
+
   getPlayerMoves() {
     const selectedCard = this.material(MaterialType.FactionCard).selected()
     if (selectedCard.length === 0) {

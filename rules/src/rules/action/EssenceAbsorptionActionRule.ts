@@ -10,13 +10,20 @@ import { CardActionRule } from './CardActionRule'
 import { TargetingEffect } from './TargetingEffect'
 
 export class EssenceAbsorptionActionRule extends CardActionRule {
-  getPlayerMoves() {
-    const alliedCreatures = this.material(MaterialType.FactionCard).location(LocationType.Battlefield).player(this.player)
+  canPlay(): boolean {
+    return this.alliedCreatures.length >= 2
+  }
+
+  get alliedCreatures() {
+    return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).player(this.player)
       .filter((_, index) => getCardRule(this.game, index).isCreature)
+  }
+
+  getPlayerMoves() {
     if (this.remind(Memory.TargetCard) === undefined) {
-      return alliedCreatures.moveItems((_, index) => ({ type: LocationType.PlayerDiscard, player: getCardRule(this.game, index).originalOwner }))
+      return this.alliedCreatures.moveItems((_, index) => ({ type: LocationType.PlayerDiscard, player: getCardRule(this.game, index).originalOwner }))
     } else {
-      return alliedCreatures.selectItems()
+      return this.alliedCreatures.selectItems()
     }
   }
 

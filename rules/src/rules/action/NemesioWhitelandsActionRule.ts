@@ -8,11 +8,18 @@ import { CardActionRule } from './CardActionRule'
 import { TargetingEffect } from './TargetingEffect'
 
 export class NemesioWhitelandsActionRule extends CardActionRule {
-  getPlayerMoves() {
+  canPlay(): boolean {
+    return this.otherCreatures.length > 0
+  }
+
+  get otherCreatures() {
     const nemesio = this.cardIndex
     return this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
       .filter((_, index) => index !== nemesio && getCardRule(this.game, index).isCreature)
-      .selectItems()
+  }
+
+  getPlayerMoves() {
+    return this.otherCreatures.selectItems()
   }
 
   afterItemMove(move: ItemMove) {

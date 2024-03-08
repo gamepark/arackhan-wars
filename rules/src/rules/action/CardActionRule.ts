@@ -8,6 +8,8 @@ import { Memory } from '../Memory'
 import { RuleId } from '../RuleId'
 
 export abstract class CardActionRule extends PlayerTurnRule {
+  abstract canPlay(): boolean
+
   get cardIndex() {
     return this.remind<number>(Memory.ActionCard)
   }

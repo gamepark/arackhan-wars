@@ -4,6 +4,10 @@ import { Memory } from '../Memory'
 import { CardActionRule } from './CardActionRule'
 
 export class ProtectorActionRule extends CardActionRule {
+  canPlay(): boolean {
+    return true
+  }
+
   onRuleStart() {
     return [
       this.material(MaterialType.FactionToken).createItem({
