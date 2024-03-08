@@ -1,7 +1,6 @@
 import { CustomMove, MaterialMove, PlayerTurnRule, XYCoordinates } from '@gamepark/rules-api'
 import mapValues from 'lodash/mapValues'
 import partition from 'lodash/partition'
-import uniq from 'lodash/uniq'
 import { onBattlefieldAndAstralPlane } from '../material/Board'
 import { AttributeType } from '../material/cards/Attribute'
 import { EffectType, TriggerCondition } from '../material/cards/Effect'
@@ -28,14 +27,11 @@ export class AttackRule extends PlayerTurnRule {
   getPlayerMoves() {
     const moves: MaterialMove[] = []
 
-    const cardsAlreadyAttacked = this.cardsAlreadyAttacked
-    const potentialTargets = cardsAlreadyAttacked.length > 0 ?
-      cardsAlreadyAttacked.filter(index => getCardRule(this.game, index).owner !== this.player)
-      : this.material(MaterialType.FactionCard)
-        .location(LocationType.Battlefield)
-        .player(player => player !== this.player)
-        .getIndexes()
-        .filter(index => getCardRule(this.game, index).canBeAttacked)
+    const potentialTargets = this.material(MaterialType.FactionCard)
+      .location(LocationType.Battlefield)
+      .player(player => player !== this.player)
+      .getIndexes()
+      .filter(index => getCardRule(this.game, index).canBeAttacked)
 
     for (const card of this.potentialAttackers) {
       const attackerRules = getCardRule(this.game, card)
@@ -52,7 +48,7 @@ export class AttackRule extends PlayerTurnRule {
       }
     }
 
-    if (cardsAlreadyAttacked.length > 0 && !this.remind<number[]>(Memory.MovedCards).length) {
+    if (this.remind<Attack[]>(Memory.Attacks).length > 0 && !this.remind<number[]>(Memory.MovedCards).length) {
       moves.push(this.rules().customMove(CustomMoveType.SolveAttack))
     }
 
@@ -68,11 +64,6 @@ export class AttackRule extends PlayerTurnRule {
       .filter(index =>
         getCardRule(this.game, index).canAttack && !attacks.some(attack => attack.card === index)
       )
-  }
-
-  get cardsAlreadyAttacked() {
-    const attacks = this.remind<Attack[]>(Memory.Attacks)
-    return uniq(attacks.flatMap(attacks => attacks.targets))
   }
 
   onCustomMove(move: CustomMove) {
