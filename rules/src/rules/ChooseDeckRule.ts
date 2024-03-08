@@ -20,7 +20,7 @@ export class ChooseDeckRule extends ChooseFactionRule {
     return player === chooseDeck.player && new DeckValidator(chooseDeck.cards ?? []).isValid
   }
 
-  getLegalMoves(player: number) {
+  getActivePlayerLegalMoves(player: number) {
     return publisherDecks.map(cards => this.rules().customMove(CustomMoveType.ChooseDeck, { player, cards }))
   }
 

@@ -33,15 +33,8 @@ export class MulliganRule extends SimultaneousRule {
     return this.remind<FactionToken>(Memory.PlayerFactionToken, player)
   }
 
-  getLegalMoves(player: number) {
-
-    if (!this.isTurnToPlay(player)) {
-      return []
-    }
-
+  getActivePlayerLegalMoves(player: number) {
     const cardsInHand = this.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(player)
-
-
     const moves: MaterialMove[] = cardsInHand.moveItems({ type: LocationType.PlayerDeck, player })
 
     if (cardsInHand.length < START_HAND) {
