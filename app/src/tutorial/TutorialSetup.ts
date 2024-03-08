@@ -57,6 +57,8 @@ export class TutorialSetup extends ArackhanWarsSetup {
   }
 
   start() {
+    this.memorize(Memory.RoundEffects, [])
+    this.memorize(Memory.OncePerRound, [])
     this.memorize(Memory.StartPlayer, this.players[0])
     this.startPlayerTurn(RuleId.PlacementRule, this.game.players[0])
   }

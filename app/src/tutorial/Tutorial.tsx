@@ -20,7 +20,7 @@ import { roundTrackerDescription } from '../material/RoundTrackerDescription'
 import { TutorialSetup } from './TutorialSetup'
 
 export class Tutorial extends MaterialTutorial {
-  version = 4
+  version = 5
   options = { players: 2 }
   setup = new TutorialSetup()
 
