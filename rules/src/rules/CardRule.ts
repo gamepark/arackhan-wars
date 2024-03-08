@@ -88,13 +88,14 @@ export class CardRule extends MaterialRulesPart {
     return this.game.items[MaterialType.FactionCard]![this.index]
   }
 
-  get card(): FactionCard {
+  get card(): FactionCard | undefined {
     const mimic = this.targetingEffects.find(isMimic)
-    return mimic?.target ?? this.item.id.front as FactionCard
+    return mimic?.target ?? this.item.id.front as FactionCard | undefined
   }
 
   get cardNames(): FactionCard[] {
-    const names = [getUniqueCard(this.card)]
+    const card = this.card
+    const names = card !== undefined ? [getUniqueCard(card)] : []
     for (const addCharacteristic of this.targetingEffects.filter(isAddCharacteristics)) {
       names.push(getUniqueCard(addCharacteristic.card))
     }
@@ -106,7 +107,8 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get characteristics(): FactionCardCharacteristics | undefined {
-    return FactionCardsCharacteristics[this.card]
+    const card = this.card
+    return card !== undefined ? FactionCardsCharacteristics[card] : undefined
   }
 
   get value(): number {
@@ -115,7 +117,9 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get score(): number {
-    return this.isSpell ? 0 : this.value + sumBy(FactionCardsCharacteristics[this.card].getAbilities(), ability =>
+    const card = this.card
+    if (card === undefined) return 0
+    return this.isSpell ? 0 : this.value + sumBy(FactionCardsCharacteristics[card].getAbilities(), ability =>
       sumBy(ability.effects, effect => {
         if (effect.type === EffectType.ExtraScore) {
           switch (effect.score) {
