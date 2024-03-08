@@ -34,7 +34,7 @@ export const allied: AbilityTargetFilter = {
 }
 
 export const family = (family: Family): AbilityTargetFilter => ({
-  filter: (_source: Material, target: Material, game: MaterialGame) => getCardRule(game, target.getIndex()).family === family,
+  filter: (_source: Material, target: Material, game: MaterialGame) => getCardRule(game, target.getIndex()).families.includes(family),
   text: 'family',
   values: (t: TFunction) => ({ family: t(`card.family.${family}`) })
 })
@@ -71,7 +71,7 @@ export const adjacentTo = (...filters: AbilityTargetFilter[]): AbilityTargetFilt
 })
 
 export const cardNamed = (card: FactionCard): AbilityTargetFilter => ({
-  filter: (_source: Material, target: Material, game: MaterialGame) => getCardRule(game, target.getIndex()).card === card,
+  filter: (_source: Material, target: Material, game: MaterialGame) => getCardRule(game, target.getIndex()).cardNames.includes(card),
   text: 'card'
 })
 

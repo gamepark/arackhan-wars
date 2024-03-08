@@ -1,4 +1,5 @@
 import { areAdjacentSquares, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
+import intersection from 'lodash/intersection'
 import { getCardRule } from '../../rules/CardRule'
 import { Memory } from '../../rules/Memory'
 import { MaterialType } from '../MaterialType'
@@ -45,12 +46,12 @@ export class NoAttackInGroup extends AttackConstraintRule {
 }
 
 export class NoAttackInGroupNotFamily extends NoAttackInGroup {
-  constructor(game: MaterialGame, private family?: Family) {
+  constructor(game: MaterialGame, private families: Family[]) {
     super(game)
   }
 
   preventAttackGroup(attackers: number[]): boolean {
-    return attackers.some(attacker => getCardRule(this.game, attacker).family !== this.family)
+    return attackers.some(attacker => intersection(getCardRule(this.game, attacker).families, this.families).length === 0)
   }
 }
 

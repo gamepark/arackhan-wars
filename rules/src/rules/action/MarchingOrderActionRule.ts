@@ -10,7 +10,7 @@ export class MarchingOrderActionRule extends MoveCardsActionRule {
   getCardsAllowedToMove(): Material {
     const movedCards = this.remind<number[]>(Memory.MovedCards)
     return this.battlefield.player(this.player).filter((_, index) =>
-      !movedCards.includes(index) && getCardRule(this.game, index).family === Family.Legion6
+      !movedCards.includes(index) && getCardRule(this.game, index).families.includes(Family.Legion6)
     )
   }
 

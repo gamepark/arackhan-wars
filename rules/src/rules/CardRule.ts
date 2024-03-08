@@ -10,8 +10,10 @@ import {
   MaterialRulesPart,
   XYCoordinates
 } from '@gamepark/rules-api'
+import intersection from 'lodash/intersection'
 import max from 'lodash/max'
 import sumBy from 'lodash/sumBy'
+import uniq from 'lodash/uniq'
 import { ArackhanWarsRules } from '../ArackhanWarsRules'
 import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
 import { Ability } from '../material/cards/Ability'
@@ -30,7 +32,7 @@ import {
   NoAttackInGroupNotFamily,
   NoAttackOnAdjacentCard
 } from '../material/cards/AttackLimitation'
-import { Attribute, AttributeType, isMovement, isRangedAttack, Movement, RangedAttack } from '../material/cards/Attribute'
+import { Attribute, AttributeType, isMovement, isRangedAttack } from '../material/cards/Attribute'
 import { Creature, isCreature } from '../material/cards/Creature'
 import {
   AttackerConstraint,
@@ -58,9 +60,10 @@ import {
   TriggerCondition
 } from '../material/cards/Effect'
 import { FactionCardCharacteristics } from '../material/cards/FactionCardCharacteristics'
+import { Family } from '../material/cards/Family'
 import { Land } from '../material/cards/Land'
 import { isSpell, Spell } from '../material/cards/Spell'
-import { CardId, FactionCard, FactionCardsCharacteristics } from '../material/FactionCard'
+import { CardId, FactionCard, FactionCardsCharacteristics, getUniqueCard } from '../material/FactionCard'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { CardActionRule } from './action/CardActionRule'
@@ -90,6 +93,14 @@ export class CardRule extends MaterialRulesPart {
     return mimic?.target ?? this.item.id.front as FactionCard
   }
 
+  get cardNames(): FactionCard[] {
+    const names = [getUniqueCard(this.card)]
+    for (const addCharacteristic of this.targetingEffects.filter(isAddCharacteristics)) {
+      names.push(getUniqueCard(addCharacteristic.card))
+    }
+    return uniq(names)
+  }
+
   get owner() {
     return this.item.location.player!
   }
@@ -99,7 +110,8 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get value(): number {
-    return this.characteristics?.value ?? 0
+    return (this.characteristics?.value ?? 0)
+      + sumBy(this.targetingEffects.filter(isAddCharacteristics), effect => FactionCardsCharacteristics[effect.card].value)
   }
 
   get score(): number {
@@ -130,6 +142,10 @@ export class CardRule extends MaterialRulesPart {
 
   get isSpell() {
     return isSpell(this.characteristics)
+  }
+
+  get isLegendary() { // for future expansions
+    return this.cardNames.some(card => FactionCardsCharacteristics[card].legendary)
   }
 
   private get loseSkills() {
@@ -255,10 +271,11 @@ export class CardRule extends MaterialRulesPart {
     const index = attributes.findIndex(a => a.type === attribute.type)
     if (index === -1) {
       attributes.push(attribute)
-    } else if (attribute.type === AttributeType.Movement || attribute.type === AttributeType.RangedAttack) {
-      if (attribute.distance > (attributes[index] as Movement | RangedAttack).distance) {
-        attributes[index] = attribute
-      }
+    }
+    const existingAttribute = attributes[index]
+    if ((isMovement(attribute) && isMovement(existingAttribute))
+      || (isRangedAttack(attribute) && isRangedAttack(existingAttribute))) {
+      attributes[index] = { type: attribute.type, distance: existingAttribute.distance + attribute.distance }
     }
   }
 
@@ -353,7 +370,7 @@ export class CardRule extends MaterialRulesPart {
           case AttackLimitation.InGroup:
             return new NoAttackInGroup(this.game)
           case AttackLimitation.InGroupNotFamily:
-            return new NoAttackInGroupNotFamily(this.game, this.family)
+            return new NoAttackInGroupNotFamily(this.game, this.families)
           default:
             return new NoAttack(this.game)
         }
@@ -463,18 +480,27 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get swarmBonus() {
-    if (!this.family || !this.attributes.some(attribute => attribute.type === AttributeType.Swarm)) return 0
+    const families = this.families
+    if (!this.families.length || !this.attributes.some(attribute => attribute.type === AttributeType.Swarm)) return 0
     const swarmSameCard = this.effects.some(effect => effect.type === EffectType.SwarmSameCard)
-    return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).getIndexes()
-      .filter(index => index !== this.index && (
-        swarmSameCard ?
-          getCardRule(this.game, index).card === this.card
-          : getCardRule(this.game, index).family === this.family
-      )).length
+    return sumBy(this.material(MaterialType.FactionCard).location(LocationType.Battlefield).getIndexes(), index => {
+      if (index === this.index) return 0
+      const cardRule = getCardRule(this.game, index)
+      if (swarmSameCard) return intersection(cardRule.cardNames, this.cardNames).length
+      return intersection(cardRule.families, families).length
+    })
   }
 
-  get family() {
-    return (this.characteristics as Creature)?.family
+  get families() {
+    const families: Family[] = []
+    if (isCreature(this.characteristics) && this.characteristics.family) families.push(this.characteristics.family)
+    for (const addCharacteristic of this.targetingEffects.filter(isAddCharacteristics)) {
+      const characteristics = FactionCardsCharacteristics[addCharacteristic.card]
+      if (isCreature(characteristics) && characteristics.family) {
+        families.push(characteristics.family)
+      }
+    }
+    return uniq(families)
   }
 
   get defenseCharacteristic() {
