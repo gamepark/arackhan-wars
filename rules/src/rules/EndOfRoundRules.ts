@@ -21,16 +21,20 @@ export class EndOfRoundRules extends MaterialRulesPart {
       if (targetingEffect.effect.type === EffectType.Possession) {
         const { targets: [card], effect: possession } = targetingEffect
         const token = this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(card)
-        tokensToIgnore.push(token.getIndex())
-        this.material(MaterialType.FactionCard).getItem(card)!.location.player = possession.originalOwner
-        if (possession.swapWith !== undefined) {
-          moves.push(token.moveItem({ type: LocationType.FactionTokenSpace, parent: possession.swapWith }))
-        } else {
-          moves.push(token.deleteItem())
-          moves.push(this.material(MaterialType.FactionToken).createItem({
-            id: this.remind(Memory.PlayerFactionToken, possession.originalOwner),
-            location: { parent: card, type: LocationType.FactionTokenSpace, player: possession.originalOwner }
-          }))
+        if (token.length !== 0) {
+          tokensToIgnore.push(token.getIndex())
+          this.material(MaterialType.FactionCard).getItem(card)!.location.player = possession.originalOwner
+          const swap = possession.swapWith !== undefined && this.material(MaterialType.FactionCard).getItem(possession.swapWith)?.location.type === LocationType.Battlefield
+            ? possession.swapWith : undefined
+          if (swap !== undefined) {
+            moves.push(token.moveItem({ type: LocationType.FactionTokenSpace, parent: swap }))
+          } else {
+            moves.push(token.deleteItem())
+            moves.push(this.material(MaterialType.FactionToken).createItem({
+              id: this.remind(Memory.PlayerFactionToken, possession.originalOwner),
+              location: { parent: card, type: LocationType.FactionTokenSpace, player: possession.originalOwner }
+            }))
+          }
         }
       }
     }
