@@ -12,7 +12,7 @@ export class StandardBearerActionRule extends MoveCardsActionRule {
   getCardsAllowedToMove(): Material {
     const movedCards = this.remind<number[]>(Memory.MovedCards)
     if (movedCards.length === 0) {
-      return this.material(MaterialType.FactionCard).index(this.remind(Memory.ActionCard))
+      return this.material(MaterialType.FactionCard).index(this.cardIndex)
     } else {
       return this.battlefield.player(this.player)
         .filter((_, index) => !movedCards.includes(index) && getCardRule(this.game, index).families.includes(Family.Legion6))

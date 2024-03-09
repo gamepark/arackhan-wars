@@ -415,7 +415,9 @@ export class CardRule extends MaterialRulesPart {
   get canPerformAction() {
     if (this.characteristics?.action === undefined || !this.canBeActivated) return false
     const ActionRule = new ArackhanWarsRules(this.game).rules[this.characteristics.action]
-    return (new ActionRule(this.game) as CardActionRule).canPlay()
+    const actionRule = new ActionRule(this.game) as CardActionRule
+    actionRule.cardIndex = this.index
+    return actionRule.canPlay()
   }
 
   getDamagesInflicted(attackers: number[]): number | undefined {

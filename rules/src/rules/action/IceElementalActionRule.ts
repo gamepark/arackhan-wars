@@ -21,9 +21,8 @@ export class IceElementalActionRule extends CardActionRule {
 
   onCustomMove(move: CustomMove) {
     if (move.type === CustomMoveType.ChooseEffect) {
-      const card = this.remind(Memory.ActionCard)
-      this.memorize<TargetingEffect[]>(Memory.RoundEffects, effects => [...effects, { targets: [card], effect: move.data }])
-      this.memorize<number[]>(Memory.OncePerRound, cards => [...cards, card])
+      this.memorize<TargetingEffect[]>(Memory.RoundEffects, effects => [...effects, { targets: [this.cardIndex], effect: move.data }])
+      this.memorize<number[]>(Memory.OncePerRound, cards => [...cards, this.cardIndex])
       return [this.rules().startRule(RuleId.ActivationRule)]
     }
     return []

@@ -1,4 +1,4 @@
-import { MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { MaterialGame, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { isCreature } from '../../material/cards/Creature'
 import { FactionCardsCharacteristics } from '../../material/FactionCard'
 import { LocationType } from '../../material/LocationType'
@@ -8,18 +8,21 @@ import { Memory } from '../Memory'
 import { RuleId } from '../RuleId'
 
 export abstract class CardActionRule extends PlayerTurnRule {
-  abstract canPlay(): boolean
+  cardIndex: number
 
-  get cardIndex() {
-    return this.remind<number>(Memory.ActionCard)
+  constructor(game: MaterialGame) {
+    super(game)
+    this.cardIndex = this.remind(Memory.ActionCard)
   }
+
+  abstract canPlay(): boolean
 
   get actionCard() {
     return this.material(MaterialType.FactionCard).getItem(this.cardIndex)!
   }
 
   get cardRule() {
-    return getCardRule(this.game, this.remind(Memory.ActionCard))
+    return getCardRule(this.game, this.cardIndex)
   }
 
   afterCardAction() {
@@ -29,7 +32,7 @@ export abstract class CardActionRule extends PlayerTurnRule {
         moves.push(...this.discardActionCard())
       }
     } else {
-      const token = this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(this.remind(Memory.ActionCard))
+      const token = this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(this.cardIndex)
       if (token.length) {
         moves.push(token.rotateItem(true))
       }
@@ -39,12 +42,11 @@ export abstract class CardActionRule extends PlayerTurnRule {
   }
 
   discardActionCard() {
-    const actionCard = this.remind(Memory.ActionCard)
-    const card = this.material(MaterialType.FactionCard).index(actionCard)
+    const card = this.material(MaterialType.FactionCard).index(this.cardIndex)
     const moves: MaterialMove[] = [card.moveItem({ type: LocationType.PlayerDiscard, player: this.player })]
     if (isCreature(FactionCardsCharacteristics[card.getItem()?.id.front])) {
-      moves.unshift(this.material(MaterialType.FactionToken).parent(actionCard).deleteItem())
-      this.memorize<number[]>(Memory.MovedCards, movedCards => movedCards.filter(card => card !== actionCard))
+      moves.unshift(this.material(MaterialType.FactionToken).parent(this.cardIndex).deleteItem())
+      this.memorize<number[]>(Memory.MovedCards, movedCards => movedCards.filter(card => card !== this.cardIndex))
     }
     return moves
   }

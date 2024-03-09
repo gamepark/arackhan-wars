@@ -30,8 +30,7 @@ export class NemesioGreyOrderActionRule extends CardActionRule {
   }
 
   getPlayerMoves() {
-    const nemesio = this.remind(Memory.ActionCard)
-    if (!this.remind<number[]>(Memory.OncePerRound).includes(nemesio)) {
+    if (!this.remind<number[]>(Memory.OncePerRound).includes(this.cardIndex)) {
       return this.cardsToSacrifice.moveItems((_, index) => ({ type: LocationType.PlayerDiscard, player: getCardRule(this.game, index).originalOwner }))
     } else {
       return this.otherCreatures.selectItems()
