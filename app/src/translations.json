@@ -140,7 +140,7 @@
       "possession.you": "Possession: select an ennemy creature",
       "possession.player": "Possession: {player} selects an ennemy creature",
       "essence-absorption.you": "Essence Absorption: select another allied creature",
-      "essence-absorption.player": "Essence Absorption: {players} selects another allied creature",
+      "essence-absorption.player": "Essence Absorption: {player} selects another allied creature",
       "backup.choose": "Backup: place a 6ᵀᴴ Legion creature worth 6 or less from you hand",
       "backup.pass": "Backup: place another 6ᵀᴴ Legion creature or <0>pass</0>",
       "backup.player": "Backup: {player} can place up to two 6ᵀᴴ Legion creatures",

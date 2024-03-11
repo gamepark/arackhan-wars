@@ -43,6 +43,7 @@ export class EssenceAbsorptionActionRule extends CardActionRule {
         { targets: [move.itemIndex], effect: { type: EffectType.AddCharacteristics, card: this.remind(Memory.TargetCard) } }
       ])
       this.memorize<number[]>(Memory.OncePerRound, cards => [...cards, this.cardIndex])
+      this.forget(Memory.TargetCard)
       return [this.rules().startRule(RuleId.ActivationRule)]
     }
     return []
