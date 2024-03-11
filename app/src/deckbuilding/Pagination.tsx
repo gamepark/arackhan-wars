@@ -23,6 +23,7 @@ export const Pagination = () => {
 const pagination = css`
   position: absolute;
   height: fit-content;
+  align-content: baseline;
   top: auto;
   bottom: 0.5em;
   left: 19.5em;
