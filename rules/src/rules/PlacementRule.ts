@@ -39,7 +39,7 @@ export class PlacementRule extends PlayerTurnRule {
   canBePlayed(card: FactionCard) {
     return !FactionCardsCharacteristics[card].getAbilities().some(ability =>
       ability.effects.some(effect =>
-        effect.type === EffectType.CannotBePlayed && effect.limitation === RoundLimitation.LastRound && this.round
+        effect.type === EffectType.CannotBePlayed && effect.limitation === RoundLimitation.LastRound && this.round === 9
       )
     )
   }
