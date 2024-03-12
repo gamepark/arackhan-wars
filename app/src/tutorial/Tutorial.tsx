@@ -480,6 +480,27 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
+        text: (t: TFunction) => <Trans defaults="tuto.attack.solve" values={{
+          card1: t(`card.name.${FactionCard.SwampTroll}`),
+          card2: t(`card.name.${FactionCard.IceMeteor}`)
+        }}><strong/><em/></Trans>,
+        position: { x: 30, y: 0 }
+      },
+      focus: (game: MaterialGame) => ({
+        materials: [
+          this.getBattlefieldCard(game, FactionCard.LunarWendigo),
+          this.getBattlefieldCard(game, FactionCard.SwampTroll),
+          this.getBattlefieldCard(game, FactionCard.IceMeteor),
+          this.getTokens(game, [FactionCard.LunarWendigo, FactionCard.SwampTroll, FactionCard.IceMeteor])
+        ],
+        scale: 0.5
+      }),
+      move: {
+        filter: isCustomMoveType(CustomMoveType.SolveAttack)
+      }
+    },
+    {
+      popup: {
         text: (t: TFunction) => <Trans defaults="tuto.pass.2" values={{
           card1: t(`card.name.${FactionCard.ShieldOfDawn}`),
           card2: t(`card.name.${FactionCard.SwampOgre}`)
