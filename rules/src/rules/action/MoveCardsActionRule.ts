@@ -17,7 +17,7 @@ export abstract class MoveCardsActionRule extends CardActionRule {
     for (const index of cardsAllowedToMove.getIndexes()) {
       const card = cardsAllowedToMove.index(index)
       const legalDestinations = this.getLegalDestinations(card)
-      if (legalDestinations.length > 1) return true
+      if (legalDestinations.length > 0) return true
     }
     return false
   }
