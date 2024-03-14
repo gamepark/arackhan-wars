@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { AttributeType, attributeTypes } from '@gamepark/arackhan-wars/material/cards/Attribute'
-import { Faction } from '@gamepark/arackhan-wars/material/Faction'
+import { Faction, factions } from '@gamepark/arackhan-wars/material/Faction'
 import { usePlay, useRules } from '@gamepark/react-game'
 import astral from '../images/icons/astral.png'
 import creature from '../images/icons/creature.png'
@@ -9,34 +9,32 @@ import land from '../images/icons/land.png'
 import spell from '../images/icons/spell.png'
 import { attributesIconDescription } from '../locators/AttributesIconsLocator'
 import { factionTokenDescription } from '../material/FactionTokenDescription'
-import { DeckbuildingFilter } from './DeckbuildingFilter'
+import { CardType, cardTypes, DeckbuildingFilter } from './DeckbuildingFilter'
 import { DeckbuildingRules } from './DeckbuildingRules'
 
 export default function DeckbuildingFilters() {
   const rules = useRules<DeckbuildingRules>()
   const play = usePlay()
   return <div css={filters}>
-    <div css={[filterButton, factionButton(Faction.Whitelands), rules?.remind(DeckbuildingFilter.Whitelands) || inactive]}
-         onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Whitelands))}/>
-    <div css={[filterButton, factionButton(Faction.Nakka), rules?.remind(DeckbuildingFilter.Nakka) || inactive]}
-         onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Nakka))}/>
-    <div css={[filterButton, factionButton(Faction.GreyOrder), rules?.remind(DeckbuildingFilter.GreyOrder) || inactive]}
-         onClick={() => play(rules!.changeFilter(DeckbuildingFilter.GreyOrder))}/>
-    <div css={[filterButton, factionButton(Faction.Blight), rules?.remind(DeckbuildingFilter.Blight) || inactive]}
-         onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Blight))}/>
+    {factions.map(faction => {
+      const inactive = rules?.remind(DeckbuildingFilter.Faction) !== faction
+      return <div key={faction}
+                  css={[filterButton, factionButton(faction), inactive && inactiveCss]}
+                  onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Faction, inactive ? faction : undefined))}/>
+    })}
+    {cardTypes.map(cardType => {
+      const inactive = rules?.remind(DeckbuildingFilter.CardType) !== cardType
+      return <div key={cardType}
+                  css={[filterButton, cardTypeButton(cardType), inactive && inactiveCss]}
+                  onClick={() => play(rules!.changeFilter(DeckbuildingFilter.CardType, inactive ? cardType : undefined))}/>
+    })}
     <div/>
-    <div css={[filterButton, creatureButton, rules?.remind(DeckbuildingFilter.Creature) || inactive]}
-         onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Creature))}/>
-    <div css={[filterButton, landButton, rules?.remind(DeckbuildingFilter.Land) || inactive]}
-         onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Land))}/>
-    <div css={[filterButton, spellButton, rules?.remind(DeckbuildingFilter.Spell) || inactive]}
-         onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Spell))}/>
-    <div css={[filterButton, astralButton, rules?.remind(DeckbuildingFilter.Astral) || inactive]}
-         onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Astral))}/>
-    {attributeTypes.map(attributeType =>
-      <div key={attributeType} css={[filterButton, attributeButton(attributeType), rules?.remind(attributeType + 10) || inactive]}
-           onClick={() => play(rules!.changeFilter(attributeType + 10))}/>
-    )}
+    {attributeTypes.map(attributeType => {
+      const inactive = rules?.remind(DeckbuildingFilter.Attribute) !== attributeType
+      return <div key={attributeType}
+                  css={[filterButton, attributeButton(attributeType), inactive && inactiveCss]}
+                  onClick={() => play(rules!.changeFilter(DeckbuildingFilter.Attribute, inactive ? attributeType : undefined))}/>
+    })}
   </div>
 }
 
@@ -64,27 +62,22 @@ const factionButton = (faction: Faction) => css`
   background-image: url("${factionTokenDescription.images[faction]}");
 `
 
-const creatureButton = css`
-  background-image: url("${creature}");
+const cardTypeButton = (cardType: CardType) => css`
+  background-image: url("${cardTypeIcon[cardType]}");
 `
 
-const landButton = css`
-  background-image: url("${land}");
-`
-
-const spellButton = css`
-  background-image: url("${spell}");
-`
-
-const astralButton = css`
-  background-image: url("${astral}");
-`
+const cardTypeIcon: Record<CardType, string> = {
+  [CardType.Creature]: creature,
+  [CardType.Land]: land,
+  [CardType.Spell]: spell,
+  [CardType.Astral]: astral
+}
 
 const attributeButton = (attributeType: AttributeType) => css`
   border-radius: 50%;
   background-image: url("${attributesIconDescription.attributeImages[attributeType]}");
 `
 
-const inactive = css`
+const inactiveCss = css`
   filter: drop-shadow(0 0 0.5em black) brightness(0.5);
 `

@@ -1,4 +1,4 @@
-import { attributeTypes } from '@gamepark/arackhan-wars/material/cards/Attribute'
+import { AttributeType } from '@gamepark/arackhan-wars/material/cards/Attribute'
 import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
 import { FactionCardCharacteristics } from '@gamepark/arackhan-wars/material/cards/FactionCardCharacteristics'
 import { isLand } from '@gamepark/arackhan-wars/material/cards/Land'
@@ -20,9 +20,8 @@ import {
   MaterialRules,
   PlayerTurnRule
 } from '@gamepark/rules-api'
-import difference from 'lodash/difference'
 import range from 'lodash/range'
-import { DeckbuildingFilter, deckbuildingFilters } from './DeckbuildingFilter'
+import { CardType, DeckbuildingFilter } from './DeckbuildingFilter'
 
 const Page = 100
 const Name = 101
@@ -51,8 +50,8 @@ export class DeckbuildingRules extends MaterialRules<number, MaterialType, Locat
     return false
   }
 
-  changeFilter(filter: DeckbuildingFilter) {
-    return new DeckbuildingRule(this.game).rules().customMove(DeckbuildingMove.ChangeFilter, filter)
+  changeFilter(filter: DeckbuildingFilter, value?: Faction | CardType | AttributeType) {
+    return new DeckbuildingRule(this.game).rules().customMove(DeckbuildingMove.ChangeFilter, { filter, value })
   }
 
   changePage(page: number) {
@@ -77,13 +76,16 @@ export class DeckbuildingRules extends MaterialRules<number, MaterialType, Locat
 }
 
 class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType> {
+
+  isLegalMove() {
+    return true
+  }
+
   getPlayerMoves() {
     const bookCards = this.material(MaterialType.FactionCard).location(LocationType.DeckbuildingBook)
     const deckCards = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck)
     return [
       ...range(0, DeckSize).flatMap(x => bookCards.moveItems({ type: LocationType.PlayerDeck, x })),
-      ...deckbuildingFilters.map(filter => this.rules().customMove(DeckbuildingMove.ChangeFilter, filter)),
-      ...difference(range(1, this.maxPage + 1), [this.page]).map(page => this.rules().customMove(DeckbuildingMove.ChangePage, page)),
       ...range(0, DeckSize).flatMap(x => {
         const cardAtX = deckCards.location(l => l.x === x)
         if (!cardAtX.length) return []
@@ -120,7 +122,7 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
   onCustomMove(move: CustomMove) {
     switch (move.type) {
       case DeckbuildingMove.ChangeFilter:
-        return this.onChangeFilter(move.data)
+        return this.onChangeFilter(move.data.filter, move.data.value)
       case DeckbuildingMove.ChangePage:
         this.memorize<number>(Page, move.data)
         return this.displayNewPage()
@@ -131,14 +133,9 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
     return []
   }
 
-  onChangeFilter(filter: DeckbuildingFilter) {
-    this.memorize<boolean>(filter, value => !value)
+  onChangeFilter(filter: DeckbuildingFilter, value: Faction | CardType | AttributeType) {
+    this.memorize(filter, value)
     this.memorize<number>(Page, 1)
-    if (filter === DeckbuildingFilter.Spell && !this.remind(DeckbuildingFilter.Spell)) {
-      this.memorize(DeckbuildingFilter.Astral, false)
-    } else if (filter === DeckbuildingFilter.Astral && this.remind(DeckbuildingFilter.Astral)) {
-      this.memorize(DeckbuildingFilter.Spell, true)
-    }
     return this.displayNewPage()
   }
 
@@ -158,48 +155,35 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
 
   filterCard(card: FactionCard) {
     const characteristics = FactionCardsCharacteristics[card]
-    return this.factionFilter(characteristics.faction)
+    return this.factionFilter(characteristics)
       && this.typeFilter(characteristics)
       && this.attributesFilter(characteristics)
   }
 
-  factionFilter(faction: Faction) {
-    const whitelands = this.remind(DeckbuildingFilter.Whitelands)
-    const nakka = this.remind(DeckbuildingFilter.Nakka)
-    const greyOrder = this.remind(DeckbuildingFilter.GreyOrder)
-    const blight = this.remind(DeckbuildingFilter.Blight)
-    if (!whitelands && !nakka && !greyOrder && !blight) return true
-    switch (faction) {
-      case Faction.Whitelands:
-        return whitelands
-      case Faction.Nakka:
-        return nakka
-      case Faction.GreyOrder:
-        return greyOrder
-      case Faction.Blight:
-        return blight
-    }
+  factionFilter(characteristics: FactionCardCharacteristics) {
+    const faction = this.remind<Faction | undefined>(DeckbuildingFilter.Faction)
+    return typeof faction !== 'number' || faction === characteristics.faction
   }
 
   typeFilter(characteristics: FactionCardCharacteristics) {
-    const creature = this.remind(DeckbuildingFilter.Creature)
-    const land = this.remind(DeckbuildingFilter.Land)
-    const spell = this.remind(DeckbuildingFilter.Spell)
-    if (!creature && !land && !spell) return true
-    if (!creature && isCreature(characteristics)) return false
-    if (!land && isLand(characteristics)) return false
-    if (!spell && isSpell(characteristics)) return false
-    return !this.remind(DeckbuildingFilter.Astral) || (isSpell(characteristics) && characteristics.astral)
+    const cardType = this.remind<CardType | undefined>(DeckbuildingFilter.CardType)
+    switch (cardType) {
+      case CardType.Creature:
+        return isCreature(characteristics)
+      case CardType.Land:
+        return isLand(characteristics)
+      case CardType.Spell:
+        return isSpell(characteristics)
+      case CardType.Astral:
+        return isSpell(characteristics) && characteristics.astral
+      default:
+        return true
+    }
   }
 
   attributesFilter(characteristics: FactionCardCharacteristics) {
-    if (!attributeTypes.some(attributeType => this.remind(attributeType + 10))) return true
-    for (const attributeType of attributeTypes) {
-      if (this.remind(attributeType + 10) && characteristics.getAttributes().some(attribute => attribute.type === attributeType)) {
-        return true
-      }
-    }
-    return false
+    const attributeType = this.remind<AttributeType | undefined>(DeckbuildingFilter.Attribute)
+    return typeof attributeType !== 'number' || characteristics.getAttributes().some(attribute => attribute.type === attributeType)
   }
 }
 

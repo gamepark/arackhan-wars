@@ -1,8 +1,11 @@
 import { isEnumValue } from '@gamepark/rules-api'
 
 export enum DeckbuildingFilter {
-  Whitelands = 1, Nakka, GreyOrder, Blight, Creature, Land, Spell, Astral,
-  Initiative = 11, Movement, Flight, Omnistrike, RangedAttack, Swarm, Regeneration, Stealth, Perforation
+  Faction, CardType, Attribute
 }
 
-export const deckbuildingFilters = Object.values(DeckbuildingFilter).filter(isEnumValue)
+export enum CardType {
+  Creature, Land, Spell, Astral
+}
+
+export const cardTypes = Object.values(CardType).filter(isEnumValue)
