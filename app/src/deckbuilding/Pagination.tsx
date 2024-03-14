@@ -10,11 +10,13 @@ export const Pagination = () => {
   const rules = useRules<DeckbuildingRules>()
   const play = usePlay()
   const page = rules?.page
+  const maxPage = rules?.maxPage
   return <div css={pagination}>
     <button css={paginationButton} disabled={page === 1} onClick={() => play(rules?.changePage(page - 1))}>
       <FontAwesomeIcon icon={faChevronLeft} css={iconCss}/>
     </button>
-    <button css={paginationButton} disabled={page === rules?.maxPage} onClick={() => play(rules?.changePage(page + 1))}>
+    <span css={currentPage}>{page}/{maxPage}</span>
+    <button css={paginationButton} disabled={page === maxPage} onClick={() => play(rules?.changePage(page + 1))}>
       <FontAwesomeIcon icon={faChevronRight} css={iconCss}/>
     </button>
   </div>
@@ -26,10 +28,14 @@ const pagination = css`
   align-content: baseline;
   top: auto;
   bottom: 0.5em;
-  left: 19.5em;
-  display: grid;
-  gap: 0.5em;
-  grid-template-columns: repeat(2, 1fr);
+  left: 22.35em;
+  display: flex;
+  transform: translateX(-50%);
+`
+
+const currentPage = css`
+  font-size: 2em;
+  margin: 0 0.5em;
 `
 
 const paginationButton = [buttonResetCss, css`
