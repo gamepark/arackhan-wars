@@ -2,7 +2,7 @@
 import { css } from '@emotion/react'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
-import { FactionCardsCharacteristics, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
+import { FactionCard, FactionCardsCharacteristics, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { DeckValidator } from '@gamepark/arackhan-wars/rules/DeckValidator'
 import { Deck, useMe } from '@gamepark/react-client'
@@ -81,16 +81,21 @@ const DeckDisplay = ({ deck, cancel }: { deck: Deck, cancel: () => void }) => {
           {t('deck.choose')}
         </ThemeButton>
       </div>
-      <ul css={grid}>
-        {cards.map((card, index) => <li key={index}>
-          <MaterialComponent type={MaterialType.FactionCard} itemId={{ front: card, back: FactionCardsCharacteristics[card].faction }}
-                             onClick={() => play(displayMaterialHelp(MaterialType.FactionCard, {
-                               id: { front: card, back: FactionCardsCharacteristics[card].faction }
-                             }), { local: true })}/>
-        </li>)}
-      </ul>
+      <DeckCards cards={cards}/>
     </>
   )
+}
+
+export const DeckCards = ({ cards }: { cards: FactionCard[] }) => {
+  const play = usePlay()
+  return <ul css={grid}>
+    {cards.map((card, index) => <li key={index}>
+      <MaterialComponent type={MaterialType.FactionCard} itemId={{ front: card, back: FactionCardsCharacteristics[card].faction }}
+                         onClick={() => play(displayMaterialHelp(MaterialType.FactionCard, {
+                           id: { front: card, back: FactionCardsCharacteristics[card].faction }
+                         }), { local: true })}/>
+    </li>)}
+  </ul>
 }
 
 const buttonLine = css`
@@ -107,7 +112,7 @@ const grid = css`
   display: grid;
   grid-template-columns: auto auto auto auto auto auto auto auto;
   list-style-type: none;
-  gap: 1em;
+  gap: 0.8em;
   padding: 0 0.5em 0.5em 0;
   margin: 0;
   font-size: 0.8em;

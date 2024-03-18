@@ -34,6 +34,7 @@ export class TutorialSetup extends ArackhanWarsSetup {
   }
 
   createPlayerDeck(player: number, faction: Faction) {
+    this.memorize(Memory.PlayerDeck, PreBuildDecks[faction], player)
     this.material(MaterialType.FactionCard).createItems(
       PreBuildDecks[faction].map(card => ({ id: { front: card, back: faction }, location: { type: LocationType.PlayerDeck, player } }))
     )

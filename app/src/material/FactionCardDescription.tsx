@@ -13,7 +13,7 @@ import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import { CardDescription, ItemContext, MaterialContext } from '@gamepark/react-game'
-import { isCustomMove, isCustomMoveType, isMoveItemType, Location, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { displayLocationHelp, isCustomMove, isCustomMoveType, isMoveItemType, Location, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { differenceBy, range } from 'lodash'
 import { isDeckbuilding } from '../deckbuilding/deckbuilding.util'
 import BlightCardBack from '../images/cards/blight/BlightCardBack.jpg'
@@ -498,6 +498,13 @@ export class FactionCardDescription extends CardDescription {
   }
 
   stockLocation = { type: LocationType.DeckbuildingBook }
+
+  displayHelp(item: MaterialItem, context: ItemContext) {
+    if (item.location.type === LocationType.PlayerDeck || item.location.type === LocationType.PlayerDiscard) {
+      return displayLocationHelp(item.location)
+    }
+    return super.displayHelp(item, context)
+  }
 }
 
 export const factionCardDescription = new FactionCardDescription()

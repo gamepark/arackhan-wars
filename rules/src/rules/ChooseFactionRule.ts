@@ -16,20 +16,28 @@ export class ChooseFactionRule extends SimultaneousRule {
   }
 
   onCustomMove(move: CustomMove): MaterialMove[] {
-    if (move.type !== CustomMoveType.ChooseFaction) return []
-    if (move.data.faction !== undefined) {
-      this.memorize(Memory.PlayerDeck, move.data.faction, move.data.player)
+    switch (move.type) {
+      case CustomMoveType.ChooseFaction:
+        if (move.data.faction !== undefined) {
+          this.memorize(Memory.PlayerDeck, PreBuildDecks[move.data.faction], move.data.player)
+        }
+        return [this.rules().endPlayerTurn(move.data.player)]
+      case CustomMoveType.ChooseDeck:
+        if (move.data.cards !== undefined) {
+          this.memorize(Memory.PlayerDeck, move.data.cards, move.data.player)
+        }
+        return [this.rules().endPlayerTurn(move.data.player)]
+      case CustomMoveType.RevealDecks:
+        for (let i = 0; i < this.game.players.length; i++) {
+          this.memorize(Memory.PlayerDeck, move.data[i], this.game.players[i])
+        }
+        break
     }
-    return [this.rules().endPlayerTurn(move.data.player)]
-  }
-
-  getPlayerDeck(player: number): FactionCard[] {
-    const faction = this.remind<Faction | undefined>(Memory.PlayerDeck, player)
-    return faction !== undefined ? PreBuildDecks[faction] : []
+    return []
   }
 
   getMovesAfterPlayersDone() {
-    const decks = this.game.players.map(player => this.getPlayerDeck(player))
+    const decks = this.game.players.map(player => this.remind<FactionCard[] | undefined>(Memory.PlayerDeck, player) ?? [])
     if (decks.some(deck => deck.length === 0)) {
       return []
     }
@@ -43,6 +51,7 @@ export class ChooseFactionRule extends SimultaneousRule {
         }))
       ))
     }
+    moves.push(this.rules().customMove(CustomMoveType.RevealDecks, decks))
     moves.push(this.rules().startPlayerTurn(RuleId.ChooseStartPlayer, this.game.players[0]))
     return moves
   }
@@ -73,6 +82,5 @@ export class ChooseFactionRule extends SimultaneousRule {
     while (playersWithoutTokens.length > 0) {
       this.memorize(Memory.PlayerFactionToken, remainingTokens.pop(), playersWithoutTokens.pop())
     }
-    this.forget(Memory.PlayerDeck)
   }
 }

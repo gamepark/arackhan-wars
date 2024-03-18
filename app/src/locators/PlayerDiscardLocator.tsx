@@ -8,6 +8,8 @@ export class PlayerDiscardLocator extends DeckLocator {
   locationDescription = new PlayerDiscardDescription()
   parentItemType = MaterialType.BattleMat
 
+  delta = { x: -0.04, y: -0.04, z: 0.1 }
+
   getPositionOnParent(location: Location, context: MaterialContext) {
     const bottomPlayerId = context.player ?? 1
     return location.player === bottomPlayerId ? { x: 8.4, y: 90 } : { x: 91.4, y: 9.85 }

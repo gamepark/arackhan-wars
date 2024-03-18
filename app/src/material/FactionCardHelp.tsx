@@ -48,8 +48,6 @@ const CardLocationRule = (props: MaterialHelpProps) => {
   const playerId = usePlayerId()
   const player = usePlayerName(item.location?.player)
   switch (item.location?.type) {
-    case LocationType.PlayerDeck:
-      return <p>{item.location?.player === playerId ? t('rules.card.deck.mine') : t('rules.card.deck', { player })}</p>
     case LocationType.PlayerHand:
       return <p>{item.location?.player === playerId ? t('rules.card.hand.mine') : t('rules.card.hand', { player })}</p>
     case LocationType.Battlefield:

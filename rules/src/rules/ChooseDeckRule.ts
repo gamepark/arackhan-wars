@@ -1,10 +1,9 @@
-import { CustomMove, isCustomMoveType, MaterialMove } from '@gamepark/rules-api'
+import { isCustomMoveType, MaterialMove } from '@gamepark/rules-api'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { publisherDecks } from '../material/decks/PublisherDecks'
 import { FactionCard } from '../material/FactionCard'
 import { ChooseFactionRule } from './ChooseFactionRule'
 import { DeckValidator } from './DeckValidator'
-import { Memory } from './Memory'
 
 export type ChooseDeck = {
   player: number
@@ -22,17 +21,5 @@ export class ChooseDeckRule extends ChooseFactionRule {
 
   getActivePlayerLegalMoves(player: number) {
     return publisherDecks.map(cards => this.rules().customMove(CustomMoveType.ChooseDeck, { player, cards }))
-  }
-
-  onCustomMove(move: CustomMove): MaterialMove[] {
-    if (move.type !== CustomMoveType.ChooseDeck) return []
-    if (move.data.cards !== undefined) {
-      this.memorize(Memory.PlayerDeck, move.data.cards, move.data.player)
-    }
-    return [this.rules().endPlayerTurn(move.data.player)]
-  }
-
-  getPlayerDeck(player: number): FactionCard[] {
-    return this.remind<FactionCard[] | undefined>(Memory.PlayerDeck, player) ?? []
   }
 }

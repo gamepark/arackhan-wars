@@ -9,7 +9,7 @@ export class PlayerDiscardDescription extends LocationDescription {
   ratio = 790 / 1102
   borderRadius = 0.4
   alwaysVisible = true
-  coordinates = { x: 0, y: 0, z: 10 }
+  coordinates = { x: 0, y: 0, z: 0 }
 
   help = PlayerDiscardHelp
   helpImage = discard

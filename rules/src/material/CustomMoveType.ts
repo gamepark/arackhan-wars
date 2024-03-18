@@ -10,4 +10,5 @@ export enum CustomMoveType {
   Deactivate,
   ChooseDeck,
   ChooseEffect,
+  RevealDecks
 }
