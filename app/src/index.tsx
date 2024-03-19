@@ -9,6 +9,7 @@ import { arackhanWarsAnimations } from './animations/ArackhanWarsAnimations'
 import App from './App'
 import { isDeckbuilding } from './deckbuilding/deckbuilding.util'
 import { DeckbuildingProvider } from './deckbuilding/DeckbuildingProvider'
+import { ArackhanWarsHistory } from './history/ArackhanWarsHistory'
 import { Locators } from './locators/Locators'
 import { Material, materialI18n } from './material/Material'
 import { theme } from './theme'
@@ -27,6 +28,7 @@ ReactDOM.render(
       <GameProvider game="arackhan-wars" GameSetup={ArackhanWarsSetup} Rules={ArackhanWarsRules} optionsSpec={ArackhanWarsOptionsSpec}
                     material={Material} locators={Locators} materialI18n={materialI18n} animations={arackhanWarsAnimations}
                     tutorial={new Tutorial()} ai={window.Worker ? tutorialAI : undefined} version={2}
+                    MaterialHistory={ArackhanWarsHistory}
                     theme={theme}>
         <App/>
       </GameProvider>
