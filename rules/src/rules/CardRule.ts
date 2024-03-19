@@ -768,7 +768,7 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get originalOwner() {
-    const possession = this.remind<TargetingEffect[]>(Memory.RoundEffects)
+    const possession = (this.remind<TargetingEffect[]>(Memory.RoundEffects) ?? [])
       .find(t => t.targets.includes(this.index) && t.effect.type === EffectType.Possession)
     return possession ? (possession.effect as Possession).originalOwner : this.owner
   }

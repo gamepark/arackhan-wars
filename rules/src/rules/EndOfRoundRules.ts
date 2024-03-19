@@ -17,7 +17,7 @@ export class EndOfRoundRules extends MaterialRulesPart {
   onRuleStart() {
     const moves: MaterialMove[] = []
     const tokensToIgnore: number[] = []
-    for (const targetingEffect of this.remind<TargetingEffect[]>(Memory.RoundEffects)) {
+    for (const targetingEffect of this.remind<TargetingEffect[]>(Memory.RoundEffects) ?? []) {
       if (targetingEffect.effect.type === EffectType.Possession) {
         const { targets: [card], effect: possession } = targetingEffect
         const token = this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(card)
