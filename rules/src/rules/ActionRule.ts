@@ -14,7 +14,9 @@ export class ActionRule extends PlayerTurnRule {
   }
 
   get availableCards() {
-    if (this.remind<Attack[]>(Memory.Attacks).length > 0 || this.remind<number[]>(Memory.MovedCards).length > 0) return []
+    const movedCards = this.remind<number[]>(Memory.MovedCards)
+    if (movedCards.length === 1) return movedCards
+    if (this.remind<Attack[]>(Memory.Attacks).length > 0 || movedCards.length > 1) return []
     const oncePerRound = this.remind<number[]>(Memory.OncePerRound) ?? []
     return this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)

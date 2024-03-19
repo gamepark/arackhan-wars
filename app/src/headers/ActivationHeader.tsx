@@ -28,6 +28,13 @@ const MyActivationHeader = () => {
   if (movedCards.length === 1) {
     const movedCardId = rules.material(MaterialType.FactionCard).getItem(movedCards[0])!.id.front
     const deactivate = legalMoves.find(isMoveItemType(MaterialType.FactionToken))!
+    const performAction = legalMoves.find(isCustomMoveType(CustomMoveType.PerformAction))!
+    if (performAction) {
+      return <Trans defaults="header.move.action" values={{ card: t(`card.name.${getUniqueCard(movedCardId)}`) }}>
+        <PlayMoveButton move={performAction}/>
+        <PlayMoveButton move={deactivate}/>
+      </Trans>
+    }
     return <Trans defaults="header.move.you" values={{ card: t(`card.name.${getUniqueCard(movedCardId)}`) }}>
       <PlayMoveButton move={deactivate}/>
     </Trans>
