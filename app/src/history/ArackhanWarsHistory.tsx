@@ -22,7 +22,7 @@ import { TakeHistory } from './TakeHistory'
 export const ArackhanWarsHistory = ({ move, context: { game, action, consequenceIndex } }: MaterialHistoryProps<MaterialGame, MaterialMove>) => {
   if (game.rule?.id === RuleId.RevealRule) {
     if (isMoveItemType(MaterialType.FactionCard)(move)) {
-      return <RevealCardHistory move={move}/>
+      return <RevealCardHistory move={move} game={game}/>
     }
   }
   if (game.rule?.id === RuleId.ActivationRule) {
