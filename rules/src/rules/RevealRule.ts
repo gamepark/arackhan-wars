@@ -10,9 +10,11 @@ import { RuleId } from './RuleId'
 export class RevealRule extends MaterialRulesPart {
 
   onRuleStart() {
+    const startPlayer = this.remind(Memory.StartPlayer)
     return [
-      ...this.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane).rotation(true).rotateItems(false),
-      this.rules().startPlayerTurn(RuleId.ActivationRule, this.remind(Memory.StartPlayer))
+      ...this.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane).rotation(true)
+        .sort(item => item.location.player === startPlayer ? 0 : 1).rotateItems(false),
+      this.rules().startPlayerTurn(RuleId.ActivationRule, startPlayer)
     ]
   }
 
