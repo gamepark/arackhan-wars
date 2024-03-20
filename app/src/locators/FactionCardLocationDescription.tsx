@@ -25,7 +25,7 @@ export class FactionCardLocationDescription extends LocationDescription {
       } else {
         const cardRule = getCardRule(rules.game, location.parent!)
         return cardRule.canBeAttacked && cardRule.item.location.player !== player
-          && getCardRule(rules.game, move.data.card).canAttackTarget(location.parent!)
+          && getCardRule(rules.game, move.data.card).canMeleeAttackTarget(location.parent!)
       }
     }
 

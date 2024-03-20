@@ -326,6 +326,10 @@ export class CardRule extends MaterialRulesPart {
     return this.isInRange(opponent) && !this.someEffectPreventsAttacking(opponent)
   }
 
+  canMeleeAttackTarget(opponent: number) {
+    return this.getAttackDistance(opponent) === 1 && !this.someEffectPreventsAttacking(opponent)
+  }
+
   someEffectPreventsAttacking(opponent: number) {
     const attackers = this.remind<Attack[]>(Memory.Attacks).filter(attack => attack.targets.includes(opponent)).map(attack => attack.card)
     attackers.push(this.index)
@@ -391,14 +395,18 @@ export class CardRule extends MaterialRulesPart {
     }
   }
 
-  private isInRange(opponent: number) {
+  getAttackDistance(opponent: number): number {
     const cardLocation = this.item.location
     const opponentRule = getCardRule(this.game, opponent)
     const opponentLocation = opponentRule.item.location
-    if (!isXYCoordinates(cardLocation) || !isXYCoordinates(opponentLocation)) return false
+    if (!isXYCoordinates(cardLocation) || !isXYCoordinates(opponentLocation)) return Infinity
     let distance = getDistanceBetweenSquares(cardLocation, opponentLocation)
     if (distance === 1 && opponentRule.hasStealth && this.isCreature) distance++
-    return distance <= this.range
+    return distance
+  }
+
+  private isInRange(opponent: number) {
+    return this.getAttackDistance(opponent) <= this.range
   }
 
   get range() {
@@ -554,7 +562,7 @@ export class CardRule extends MaterialRulesPart {
         }
         return item.location.player !== this.owner
       })
-      .getIndexes().filter(opponent => getCardRule(this.game, opponent).canBeAttacked && this.canAttackTarget(opponent))
+      .getIndexes().filter(opponent => getCardRule(this.game, opponent).canBeAttacked && this.canMeleeAttackTarget(opponent))
   }
 
   get hasPerforation() {

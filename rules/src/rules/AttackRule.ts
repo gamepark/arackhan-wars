@@ -36,8 +36,15 @@ export class AttackRule extends PlayerTurnRule {
     for (const card of this.potentialAttackers) {
       const attackerRules = getCardRule(this.game, card)
       if (attackerRules.hasOmnistrike) {
-        if (potentialTargets.some(target => attackerRules.canAttackTarget(target))) {
+        if (potentialTargets.some(target => attackerRules.canMeleeAttackTarget(target))) {
           moves.push(this.rules().customMove(CustomMoveType.Attack, { card }))
+        }
+        if (attackerRules.range > 1) {
+          for (const target of potentialTargets) {
+            if (attackerRules.canAttackTarget(target) && !attackerRules.canMeleeAttackTarget(target)) {
+              moves.push(this.rules().customMove(CustomMoveType.Attack, { card, target }))
+            }
+          }
         }
       } else {
         for (const target of potentialTargets) {
