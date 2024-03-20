@@ -38,11 +38,8 @@ export class BattleMatDescription extends BoardDescription {
     return players.flatMap(player => [0, 1].map(x => ({ type: LocationType.AstralPlane, x, player })))
   }
 
-  private getDecks(context: MaterialContext) {
-    return [{
-      type: LocationType.PlayerDeck,
-      player: context.player
-    }]
+  private getDecks({ rules: { players } }: MaterialContext) {
+    return players.map(player => ({ type: LocationType.PlayerDeck, player }))
   }
 
   private getDiscards({ rules: { players } }: MaterialContext) {
