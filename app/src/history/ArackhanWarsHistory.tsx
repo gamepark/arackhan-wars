@@ -10,6 +10,8 @@ import { MaterialHistoryProps } from '@gamepark/react-game'
 import { isCreateItemType, isCustomMoveType, isMoveItemType, isStartPlayerTurn, isStartRule, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { ActionHistory } from './ActionHistory'
 import { AttackHistory } from './AttackHistory'
+import { ChooseDeckHistory } from './ChooseDeckHistory'
+import { ChooseStartPlayerHistory } from './ChooseStartPlayerHistory'
 import { KillHistory } from './KillHistory'
 import { MoveCardHistory } from './MoveCardHistory'
 import { NewRoundHistory } from './NewRoundHistory'
@@ -20,6 +22,12 @@ import { StartActivationHistory } from './StartActivationHistory'
 import { TakeHistory } from './TakeHistory'
 
 export const ArackhanWarsHistory = ({ move, context: { game, action, consequenceIndex } }: MaterialHistoryProps<MaterialGame, MaterialMove>) => {
+  if (isCustomMoveType(CustomMoveType.ChooseDeck)(move) || isCustomMoveType(CustomMoveType.ChooseFaction)(move)) {
+    return <ChooseDeckHistory player={move.data.player}/>
+  }
+  if (game.rule?.id === RuleId.ChooseStartPlayer && isCustomMoveType(CustomMoveType.ChoosePlayer)(move)) {
+    return <ChooseStartPlayerHistory player={game.rule.player!} chosenPlayer={move.data}/>
+  }
   if (game.rule?.id === RuleId.RevealRule) {
     if (isMoveItemType(MaterialType.FactionCard)(move)) {
       return <RevealCardHistory move={move} game={game}/>
