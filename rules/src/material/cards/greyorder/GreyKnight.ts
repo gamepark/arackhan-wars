@@ -9,6 +9,7 @@ export class GreyKnight extends Creature {
   value = 9
   deckBuildingValue = 15
   limit = 4
+  holo = true
 
   family = Family.Legion6
   attack = 2

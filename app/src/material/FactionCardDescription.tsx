@@ -1,11 +1,12 @@
 /** @jsxImportSource @emotion/react */
+import { css, Interpolation, keyframes, Theme } from '@emotion/react'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
 import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
 import { EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
-import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
+import { CardId, FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { Attack } from '@gamepark/arackhan-wars/rules/AttackRule'
@@ -121,6 +122,23 @@ import EN1141Truce from '../images/cards/greyorder/en/EN1141TruceFullArt.jpg'
 import EN1142Warcry from '../images/cards/greyorder/en/EN1142Warcry.jpg'
 import EN1143YhdilBlast from '../images/cards/greyorder/en/EN1143YhdilBlast.jpg'
 import GreyOrderCardBack from '../images/cards/greyorder/GreyOrderCardBack.jpg'
+import Holo1006Gabriel from '../images/cards/holo/Holo1006Gabriel.png'
+import Holo1034FortressOfMyjir from '../images/cards/holo/Holo1034FortressOfMyjir.png'
+import Holo1037ArmorOfDawn from '../images/cards/holo/Holo1037ArmorOfDawn.png'
+import Holo1074UnstableHydra from '../images/cards/holo/Holo1074UnstableHydra.png'
+import Holo1082TreeOfLife from '../images/cards/holo/Holo1082TreeOfLife.png'
+import Holo1098Catanolith from '../images/cards/holo/Holo1098Catanolith.png'
+import Holo1107GreyKnight from '../images/cards/holo/Holo1107GreyKnight.png'
+import Holo1120TheSeneschal from '../images/cards/holo/Holo1120TheSeneschal.png'
+import Holo1128AvalonFortress from '../images/cards/holo/Holo1128AvalonFortress.png'
+import Holo1131MastersOfAracKhan from '../images/cards/holo/Holo1131MastersOfAracKhan.png'
+import Holo1135HorseOfAvalon from '../images/cards/holo/Holo1135HorseOfAvalon.png'
+import Holo1152Feyr from '../images/cards/holo/Holo1152Feyr.png'
+import Holo1162Lucy from '../images/cards/holo/Holo1162Lucy.png'
+import Holo1167PlagueWagon from '../images/cards/holo/Holo1167PlagueWagon.png'
+import Holo1180WesternForge from '../images/cards/holo/Holo1180WesternForge.png'
+import Holo1187ForcedExile from '../images/cards/holo/Holo1187ForcedExile.png'
+import Holo1192TheFear from '../images/cards/holo/Holo1192TheFear.png'
 import EN1048Behemoth from '../images/cards/nakka/en/EN1048Behemoth.jpg'
 import EN1049BehemothFullArt from '../images/cards/nakka/en/EN1049BehemothFullArt.jpg'
 import EN1050CarnivorousPlant from '../images/cards/nakka/en/EN1050CarnivorousPlant.jpg'
@@ -497,6 +515,26 @@ export class FactionCardDescription extends CardDescription {
     return isDeckbuilding ? false : undefined
   }
 
+  getFrontExtraCss(id: CardId): Interpolation<Theme> {
+    if (id.front !== undefined && FactionCardsCharacteristics[id.front].holo) {
+      return css`
+        &:before {
+          content: ' ';
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background-image: url(${Holo[id.front]});
+          background-size: cover;
+          mask-image: linear-gradient(45deg, #0000 0%, #fff 50%, #0000 100%);
+          mask-size: 300% 300%;
+          animation: ${holoKeyframes} 3s infinite alternate;
+          pointer-events: none;
+        }
+      `
+    }
+    return
+  }
+
   stockLocation = { type: LocationType.DeckbuildingBook }
 
   displayHelp(item: MaterialItem, context: ItemContext) {
@@ -545,4 +583,33 @@ export function getCardBattlefieldModifierLocations(game: MaterialGame, index: n
     locations.push({ type: LocationType.SkillLostIcon })
   }
   return locations
+}
+
+const holoKeyframes = keyframes`
+  from {
+    mask-position: bottom left;
+  }
+  80%, to {
+    mask-position: top right;
+  }
+`
+
+const Holo: Partial<Record<FactionCard, string>> = {
+  [FactionCard.GabrielFullArtHolo]: Holo1006Gabriel,
+  [FactionCard.FortressOfMyjirFullArtHolo]: Holo1034FortressOfMyjir,
+  [FactionCard.ArmorOfDawn]: Holo1037ArmorOfDawn,
+  [FactionCard.UnstableHydra]: Holo1074UnstableHydra,
+  [FactionCard.TreeOfLifeFullArtHolo]: Holo1082TreeOfLife,
+  [FactionCard.Catanolith]: Holo1098Catanolith,
+  [FactionCard.GreyKnight]: Holo1107GreyKnight,
+  [FactionCard.TheSeneschalFullArtHolo]: Holo1120TheSeneschal,
+  [FactionCard.AvalonFortressFullArtHolo]: Holo1128AvalonFortress,
+  [FactionCard.MastersOfAracKhan]: Holo1131MastersOfAracKhan,
+  [FactionCard.HorseOfAvalonFullArtHolo]: Holo1135HorseOfAvalon,
+  [FactionCard.FeyrFullArtHolo]: Holo1152Feyr,
+  [FactionCard.LucyFullArtHolo]: Holo1162Lucy,
+  [FactionCard.PlagueWagon]: Holo1167PlagueWagon,
+  [FactionCard.WesternForgeFullArtHolo]: Holo1180WesternForge,
+  [FactionCard.ForcedExileFullArtHolo]: Holo1187ForcedExile,
+  [FactionCard.TheFearFullArtHolo]: Holo1192TheFear
 }
