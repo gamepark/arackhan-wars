@@ -17,7 +17,6 @@ export const ArackhanWarsOptionsSpec: OptionsSpec<ArackhanWarsOptions> = {
   deckbuilding: {
     label: (t: TFunction) => t('deckbuilding'),
     help: (t: TFunction) => t('deckbuilding.help'),
-    competitiveDisabled: true,
     subscriberRequired: true
-  },
+  }
 }
