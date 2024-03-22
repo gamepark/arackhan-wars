@@ -539,7 +539,9 @@ export class FactionCardDescription extends CardDescription {
 
   displayHelp(item: MaterialItem, context: ItemContext) {
     if (item.location.type === LocationType.PlayerDeck || item.location.type === LocationType.PlayerDiscard) {
-      return displayLocationHelp(item.location)
+      if (!isDeckbuilding) {
+        return displayLocationHelp(item.location)
+      }
     }
     return super.displayHelp(item, context)
   }
