@@ -69,7 +69,7 @@ export class MoveRules extends PlayerTurnRule {
   onCustomMove(move: CustomMove) {
     if (move.type === CustomMoveType.Deactivate) {
       const movedCards = this.remind<number[]>(Memory.MovedCards)
-      return movedCards.map(movedCard => this.material(MaterialType.FactionToken).parent(movedCard).rotateItem(true))
+      return movedCards.map(movedCard => this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(movedCard).rotateItem(true))
     }
     return []
   }
