@@ -47,7 +47,7 @@ export class ActivationRule extends PlayerTurnRule {
     moves.push(...new MoveRules(this.game).getPlayerMoves())
     moves.push(...new ActionRule(this.game).getPlayerMoves())
     if (!this.remind<Attack[]>(Memory.Attacks).length && !this.remind<number[]>(Memory.MovedCards).length) {
-      moves.push(this.rules().customMove(CustomMoveType.Pass))
+      moves.push(this.rules().customMove(CustomMoveType.Pass, this.remind(Memory.IsInitiativeSequence)))
     }
     return moves
   }
