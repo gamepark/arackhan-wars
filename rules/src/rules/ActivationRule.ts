@@ -4,7 +4,6 @@ import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { ActionRule } from './ActionRule'
 import { Attack, AttackRule } from './AttackRule'
-import { getCardRule } from './CardRule'
 import { EndOfTurnRule } from './EndOfTurnRule'
 import { Memory } from './Memory'
 import { MoveRules } from './MoveRules'
@@ -65,8 +64,7 @@ export class ActivationRule extends PlayerTurnRule {
       case CustomMoveType.Deactivate:
         return new MoveRules(this.game).onCustomMove(move)
       case CustomMoveType.PerformAction:
-        this.memorize(Memory.ActionCard, move.data)
-        return [this.rules().startRule(getCardRule(this.game, move.data).characteristics!.action!)]
+        return new ActionRule(this.game).onCustomMove(move)
       case CustomMoveType.Pass:
         return this.onPass()
     }

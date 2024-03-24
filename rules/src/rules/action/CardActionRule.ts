@@ -46,7 +46,6 @@ export abstract class CardActionRule extends PlayerTurnRule {
     const moves: MaterialMove[] = [card.moveItem({ type: LocationType.PlayerDiscard, player: this.player })]
     if (isCreature(FactionCardsCharacteristics[card.getItem()?.id.front])) {
       moves.unshift(this.material(MaterialType.FactionToken).parent(this.cardIndex).deleteItem())
-      this.memorize<number[]>(Memory.MovedCards, movedCards => movedCards.filter(card => card !== this.cardIndex))
     }
     return moves
   }
