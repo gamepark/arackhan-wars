@@ -140,8 +140,9 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
   }
 
   play(move: any) {
+    const consequences = super.play(move)
     resetCardsRulesCache()
-    return super.play(move)
+    return consequences
   }
 
   getView(player?: number): MaterialGame {
