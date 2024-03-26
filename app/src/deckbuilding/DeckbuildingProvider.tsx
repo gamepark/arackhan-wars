@@ -9,7 +9,7 @@ import { DeckbuildingMaterial } from './DeckbuildingMaterial'
 import { DeckbuildingRules, DeckBuildingSetup } from './DeckbuildingRules'
 
 export const DeckbuildingProvider = () => {
-  return <GameProvider game="arackhan-wars-deckbuilding" GameSetup={DeckBuildingSetup} Rules={DeckbuildingRules}
+  return <GameProvider game="arackhan-wars" storage="arackhan-wars-deckbuilding" GameSetup={DeckBuildingSetup} Rules={DeckbuildingRules}
                        material={DeckbuildingMaterial} locators={DeckbuildingLocators} materialI18n={materialI18n} animations={new MaterialGameAnimations()}
                        theme={theme} rulesHelp={{[RuleId.Deckbuilding]: DeckbuildingHelp}}>
     <DeckbuildingApp/>
