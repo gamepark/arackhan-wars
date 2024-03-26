@@ -8,7 +8,7 @@ import { EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { Attack } from '@gamepark/arackhan-wars/rules/AttackRule'
-import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
+import { getCardRule, Path } from '@gamepark/arackhan-wars/rules/CardRule'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { MaterialContext, useMaterialContext, useRules } from '@gamepark/react-game'
 import { Location, MaterialGame, MaterialItem, XYCoordinates } from '@gamepark/rules-api'
@@ -60,22 +60,26 @@ function MovementHelp() {
       const cardIndex = event.active.data.current.index
       const cardRules = getCardRule(rules!.game, cardIndex)
       if (cardRules.item.location.type !== LocationType.Battlefield || cardRules.canFly) return
-      const legalMovements = cardRules.legalMovements
+      const paths = cardRules.buildMovementPaths()
       const movementBlocks: MovementBlock[] = []
-      for (const legalMovement of legalMovements) {
-        const gameCopy: MaterialGame = JSON.parse(JSON.stringify(rules!.game))
-        const cardCopy = new ArackhanWarsRules(gameCopy).material(MaterialType.FactionCard).index(cardIndex)
-        cardCopy.getItem()!.location.x = legalMovement.location.x
-        cardCopy.getItem()!.location.y = legalMovement.location.y
-        for (const rule of cardRules.battleFieldCardsRules) {
-          if (rule.index !== cardIndex && rule.abilities.some(ability =>
-              ability.isApplicable(gameCopy, rule.cardMaterial, cardCopy)
-              && ability.effects.some(effect =>
-                effect.type === EffectType.Deactivated
-                || (effect.type === EffectType.LoseAttributes && (!effect.attributes || effect.attributes.includes(AttributeType.Movement)))
-              )
-          )) {
-            movementBlocks.push({ card: rule.item, location: legalMovement.location as Location })
+      for (let y = 0; y < paths.length; y++) {
+        for (let x = 0; x < paths[y].length; x++) {
+          if (paths[y][x] === Path.CanStop || paths[y][x] === Path.CanGoThrough) {
+            const gameCopy: MaterialGame = JSON.parse(JSON.stringify(rules!.game))
+            const cardCopy = new ArackhanWarsRules(gameCopy).material(MaterialType.FactionCard).index(cardIndex)
+            cardCopy.getItem()!.location.x = x
+            cardCopy.getItem()!.location.y = y
+            for (const rule of cardRules.battleFieldCardsRules) {
+              if (rule.index !== cardIndex && rule.abilities.some(ability =>
+                  ability.isApplicable(gameCopy, rule.cardMaterial, cardCopy)
+                  && ability.effects.some(effect =>
+                    effect.type === EffectType.Deactivated
+                    || (effect.type === EffectType.LoseAttributes && (!effect.attributes || effect.attributes.includes(AttributeType.Movement)))
+                  )
+              )) {
+                movementBlocks.push({ card: rule.item, location: { type: LocationType.Battlefield, x, y } })
+              }
+            }
           }
         }
       }
@@ -89,7 +93,9 @@ function MovementHelp() {
     const ctx = getCanvasContext(ref)
     if (!ctx || !ref.current || !movementBlocks.length) return
     for (const movementBlock of movementBlocks) {
-      drawArrow(ctx, movementBlock.card.location, movementBlock.location, context)
+      if (movementBlock.card.location.type !== LocationType.AstralPlane) {
+        drawArrow(ctx, movementBlock.card.location, movementBlock.location, context)
+      }
     }
   }, [rules, movementBlocks])
 

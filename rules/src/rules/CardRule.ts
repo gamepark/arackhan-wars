@@ -630,7 +630,7 @@ export class CardRule extends MaterialRulesPart {
     }
   }
 
-  private buildMovementPaths(movement = this.movement) {
+  public buildMovementPaths(movement = this.movement) {
     const paths: Path[][] = [
       [X, X, X, _, _, _, _, X],
       [_, _, _, _, _, _, _, _],
@@ -813,7 +813,7 @@ export function resetCardsRulesCache() {
   cardsRulesCache = undefined
 }
 
-enum Path {
+export enum Path {
   Unknown, Blocked, CanStop, CanGoThrough
 }
 
