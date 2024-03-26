@@ -1,6 +1,6 @@
 {
   "name": "@gamepark/arackhan-wars",
-  "version": "3.3.3",
+  "version": "3.3.4",
   "description": "The rules of AracKhan Wars adapted for Game Park",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
