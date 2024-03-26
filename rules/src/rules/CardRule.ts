@@ -765,15 +765,13 @@ export class CardRule extends MaterialRulesPart {
     return []
   }
 
-  canAttackAfterMovement({ x, y }: XYCoordinates): boolean {
+  cannotAttackAfterMoveTo({ x, y }: XYCoordinates): boolean {
     const movementWithoutAttack = sumBy(this.effects, effect =>
       effect.type === EffectType.ModifyMovement && effect.conditions.includes(ModifyMovementCondition.DoNotAttack) ? effect.modifier : 0
     )
-    if (movementWithoutAttack > 0) {
-      const paths = this.buildMovementPaths(this.movement - movementWithoutAttack)
-      return paths[y][x] === Path.CanStop
-    }
-    return true
+    if (movementWithoutAttack === 0) return false
+    const paths = this.buildMovementPaths(this.movement - movementWithoutAttack)
+    return paths[y][x] !== Path.CanStop
   }
 
   get originalOwner() {

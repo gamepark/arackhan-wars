@@ -42,10 +42,10 @@ export class MoveRules extends PlayerTurnRule {
   onMoveCardOnBattlefield(move: MoveItem) {
     const moves: MaterialMove[] = this.getSwapMoves(move)
     const cardRule = getCardRule(this.game, move.itemIndex)
-    if (cardRule.canAttackAfterMovement(move.location as XYCoordinates)) {
-      this.memorize<number[]>(Memory.MovedCards, movedCards => [...movedCards, move.itemIndex])
-    } else {
+    if (cardRule.cannotAttackAfterMoveTo(move.location as XYCoordinates)) {
       moves.push(this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(move.itemIndex).rotateItem(true))
+    } else {
+      this.memorize<number[]>(Memory.MovedCards, movedCards => [...movedCards, move.itemIndex])
     }
     return moves
   }
