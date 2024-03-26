@@ -24,7 +24,7 @@ export class EndOfTurnRule extends PlayerTurnRule {
   }
 
   afterItemMove(move: ItemMove) {
-    if (isMoveItemType(MaterialType.FactionCard)(move)) {
+    if (isMoveItemType(MaterialType.FactionCard)(move) && move.location.type === LocationType.Battlefield) {
       this.memorize(Memory.MovedCards, movedCards => [...movedCards, move.itemIndex])
     }
     return []
@@ -41,17 +41,17 @@ export class EndOfTurnRule extends PlayerTurnRule {
     const moves: MaterialMove[] = []
     const nextPlayer = this.nextPlayer
     this.memorize(Memory.TurnEffects, [])
-    if (nextPlayer !== this.remind(Memory.StartPlayer)) {
-      moves.push(this.rules().startPlayerTurn(RuleId.ActivationRule, nextPlayer))
-    } else {
-      moves.push(this.rules().startRule(RuleId.EndOfRoundRule))
-    }
     moves.push(...this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
       .player(this.player)
       .filter((_, index) => (getCardRule(this.game, index).characteristics as Spell)?.discardTiming === DiscardTiming.ActivationOrEndOfTurn)
       .moveItems({ type: LocationType.PlayerDiscard, player: this.player })
     )
+    if (nextPlayer !== this.remind(Memory.StartPlayer)) {
+      moves.push(this.rules().startPlayerTurn(RuleId.ActivationRule, nextPlayer))
+    } else {
+      moves.push(this.rules().startRule(RuleId.EndOfRoundRule))
+    }
     return moves
   }
 }
