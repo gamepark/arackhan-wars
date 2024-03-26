@@ -713,17 +713,8 @@ export class CardRule extends MaterialRulesPart {
     const cardCopy = new ArackhanWarsRules(gameCopy).material(MaterialType.FactionCard).index(this.index)
     cardCopy.getItem()!.location.x = x
     cardCopy.getItem()!.location.y = y
-    const effects = this.battleFieldCardsRules.flatMap(card =>
-      card.index !== this.index ?
-        card.abilities.filter(ability => ability.isApplicable(gameCopy, card.cardMaterial, cardCopy))
-          .flatMap(ability => ability.effects)
-          .concat(...this.targetingEffects)
-        : []
-    )
-    return effects.some(effect =>
-      effect.type === EffectType.Deactivated
-      || (effect.type === EffectType.LoseAttributes && (!effect.attributes || effect.attributes.includes(AttributeType.Movement)))
-    )
+    const cardRules = new CardRule(gameCopy, this.index)
+    return !cardRules.isActive || !cardRules.attributes.some(attribute => attribute.type === AttributeType.Movement)
   }
 
   private canMoveOrSwapPosition(location: XYCoordinates, distance?: number) {

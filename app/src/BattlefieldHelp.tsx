@@ -8,7 +8,7 @@ import { EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { Attack } from '@gamepark/arackhan-wars/rules/AttackRule'
-import { getCardRule, Path } from '@gamepark/arackhan-wars/rules/CardRule'
+import { CardRule, getCardRule, Path } from '@gamepark/arackhan-wars/rules/CardRule'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { MaterialContext, useMaterialContext, useRules } from '@gamepark/react-game'
 import { Location, MaterialGame, MaterialItem, XYCoordinates } from '@gamepark/rules-api'
@@ -47,7 +47,7 @@ function AttacksHelp() {
   return <canvas ref={ref} css={canvasCss} width={100 * scale} height={100 * scale}/>
 }
 
-type MovementBlock = { card: MaterialItem, location: Location }
+type MovementBlock = { card?: MaterialItem, location: Location }
 
 function MovementHelp() {
   const rules = useRules<ArackhanWarsRules>()
@@ -69,15 +69,18 @@ function MovementHelp() {
             const cardCopy = new ArackhanWarsRules(gameCopy).material(MaterialType.FactionCard).index(cardIndex)
             cardCopy.getItem()!.location.x = x
             cardCopy.getItem()!.location.y = y
-            for (const rule of cardRules.battleFieldCardsRules) {
-              if (rule.index !== cardIndex && rule.abilities.some(ability =>
-                  ability.isApplicable(gameCopy, rule.cardMaterial, cardCopy)
-                  && ability.effects.some(effect =>
-                    effect.type === EffectType.Deactivated
-                    || (effect.type === EffectType.LoseAttributes && (!effect.attributes || effect.attributes.includes(AttributeType.Movement)))
-                  )
-              )) {
-                movementBlocks.push({ card: rule.item, location: { type: LocationType.Battlefield, x, y } })
+            const cardRulesCopy = new CardRule(gameCopy, cardRules.index)
+            if (!cardRulesCopy.isActive || !cardRulesCopy.attributes.some(attribute => attribute.type === AttributeType.Movement)) {
+              for (const rule of cardRulesCopy.battleFieldCardsRules) {
+                if (!cardRulesCopy.isImmuneTo(rule) && rule.index !== cardIndex && rule.abilities.some(ability =>
+                    ability.isApplicable(gameCopy, rule.cardMaterial, cardCopy)
+                    && ability.effects.some(effect =>
+                      effect.type === EffectType.Deactivated
+                      || (effect.type === EffectType.LoseAttributes && (!effect.attributes || effect.attributes.includes(AttributeType.Movement)))
+                    )
+                )) {
+                  movementBlocks.push({ card: rule.item, location: { type: LocationType.Battlefield, x, y } })
+                }
               }
             }
           }
@@ -93,7 +96,7 @@ function MovementHelp() {
     const ctx = getCanvasContext(ref)
     if (!ctx || !ref.current || !movementBlocks.length) return
     for (const movementBlock of movementBlocks) {
-      if (movementBlock.card.location.type !== LocationType.AstralPlane) {
+      if (movementBlock.card && movementBlock.card.location.type !== LocationType.AstralPlane) {
         drawArrow(ctx, movementBlock.card.location, movementBlock.location, context)
       }
     }
