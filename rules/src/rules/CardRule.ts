@@ -275,11 +275,12 @@ export class CardRule extends MaterialRulesPart {
     const index = attributes.findIndex(a => a.type === attribute.type)
     if (index === -1) {
       attributes.push(attribute)
-    }
-    const existingAttribute = attributes[index]
-    if ((isMovement(attribute) && isMovement(existingAttribute))
-      || (isRangedAttack(attribute) && isRangedAttack(existingAttribute))) {
-      attributes[index] = { type: attribute.type, distance: existingAttribute.distance + attribute.distance }
+    } else {
+      const existingAttribute = attributes[index]
+      if ((isMovement(attribute) && isMovement(existingAttribute))
+        || (isRangedAttack(attribute) && isRangedAttack(existingAttribute))) {
+        attributes[index] = { type: attribute.type, distance: existingAttribute.distance + attribute.distance }
+      }
     }
   }
 
