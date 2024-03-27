@@ -456,13 +456,16 @@ export class CardRule extends MaterialRulesPart {
     return (this.characteristics as Creature | Spell)?.attack ?? 0
   }
 
+  private get invertsAttackDefense() {
+    return sumBy(this.effects, effect => effect.type === EffectType.InvertsAttackDefense ? 1 : 0) % 2 === 1
+  }
+
   get attack() {
-    return this.effects.some(effect => effect.type === EffectType.InvertsAttackDefense) ? this.getDefenseBeforeInvert() : this.getAttackBeforeInvert()
+    return this.invertsAttackDefense ? this.getDefenseBeforeInvert() : this.getAttackBeforeInvert()
   }
 
   getAttack(target: number) {
-    return this.effects.some(effect => effect.type === EffectType.InvertsAttackDefense) ?
-      this.getDefenseBeforeInvert() : this.getAttackBeforeInvert(getCardRule(this.game, target))
+    return this.invertsAttackDefense ? this.getDefenseBeforeInvert() : this.getAttackBeforeInvert(getCardRule(this.game, target))
   }
 
   private getAttackBeforeInvert(target?: CardRule) {
@@ -523,12 +526,11 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get defense() {
-    return this.effects.some(effect => effect.type === EffectType.InvertsAttackDefense) ? this.getAttackBeforeInvert() : this.getDefenseBeforeInvert()
+    return this.invertsAttackDefense ? this.getAttackBeforeInvert() : this.getDefenseBeforeInvert()
   }
 
   getDefense(attackers: number[]) {
-    return this.effects.some(effect => effect.type === EffectType.InvertsAttackDefense) ?
-      this.getAttackBeforeInvert() : this.getDefenseBeforeInvert(attackers)
+    return this.invertsAttackDefense ? this.getAttackBeforeInvert() : this.getDefenseBeforeInvert(attackers)
   }
 
   private getDefenseBeforeInvert(attackers: number[] = []) {
