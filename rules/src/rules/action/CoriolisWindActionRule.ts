@@ -10,7 +10,7 @@ export class CoriolisWindActionRule extends MoveCardsActionRule {
     const coriolisWind = this.cardRule
     return coriolisWind.getOtherCardsAdjacentTo()
       .player(player => player !== this.player)
-      .filter((_, index) => {
+      .index(index => {
         const cardRule = getCardRule(this.game, index)
         return cardRule.isCreature && !cardRule.isImmuneToEnemySpells
       })

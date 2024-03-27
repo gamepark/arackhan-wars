@@ -5,7 +5,7 @@ import { FactionCardCharacteristics } from '@gamepark/arackhan-wars/material/car
 import { PreBuildDecks } from '@gamepark/arackhan-wars/material/cards/PreBuildDecks'
 import { isSpell, Spell } from '@gamepark/arackhan-wars/material/cards/Spell'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
-import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
+import { CardId, FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
@@ -69,7 +69,7 @@ type PlacementTest = {
 
 const placementAi = (game: MaterialGame, bot: number) => {
   const rules = new ArackhanWarsRules(game)
-  const opponentPlacedCards = rules.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane).filter(item => !item.id.front).getIndexes()
+  const opponentPlacedCards = rules.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane).id<CardId>(id => !id.front).getIndexes()
   const battlefieldSpaces = new PlacementRule(game).battlefieldLegalSpaces
   const cards = rules.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(bot).getIndexes()
   const [astralCards, battlefieldCards] = partition(cards, card =>
@@ -200,26 +200,26 @@ const evaluatePlacement = (rules: ArackhanWarsRules, isFirstPlayer: boolean, bot
 const countAdjacentTargets = (rules: ArackhanWarsRules, space: XYCoordinates, bot: number): number => {
   return rules.material(MaterialType.FactionCard)
     .location(location => location.type === LocationType.Battlefield && areAdjacentSquares(space, location))
-    .player(p => p !== bot).filter(item => item.id.front && !isSpell(FactionCardCharacteristics[item.id.front])).length
+    .player(p => p !== bot).id<CardId>(id => id.front && !isSpell(FactionCardCharacteristics[id.front])).length
 }
 
 const countAdjacentEnemyCreatures = (rules: ArackhanWarsRules, space: XYCoordinates, bot: number): number => {
   return rules.material(MaterialType.FactionCard)
     .location(location => location.type === LocationType.Battlefield && areAdjacentSquares(space, location))
-    .player(p => p !== bot).filter(item => item.id.front && isCreature(FactionCardCharacteristics[item.id.front])).length
+    .player(p => p !== bot).id<CardId>(id => id.front && isCreature(FactionCardCharacteristics[id.front])).length
 }
 
 const hasTargetWithDefenseEqualTo = (rules: ArackhanWarsRules, space: XYCoordinates, bot: number, defense: number): boolean => {
   return rules.material(MaterialType.FactionCard)
     .location(location => location.type === LocationType.Battlefield && areAdjacentSquares(space, location))
-    .player(p => p !== bot).filter(item => item.id.front && !isSpell(FactionCardCharacteristics[item.id.front]))
+    .player(p => p !== bot).id<CardId>(id => id.front && !isSpell(FactionCardCharacteristics[id.front]))
     .getIndexes().some(index => getCardRule(rules.game, index).defense === defense)
 }
 
 const countAdjacentAllyCreatures = (rules: ArackhanWarsRules, space: XYCoordinates, bot: number): number => {
   return rules.material(MaterialType.FactionCard)
     .location(location => location.type === LocationType.Battlefield && areAdjacentSquares(space, location))
-    .player(bot).filter(item => item.id.front && isCreature(FactionCardCharacteristics[item.id.front])).length
+    .player(bot).id<CardId>(id => id.front && isCreature(FactionCardCharacteristics[id.front])).length
 }
 
 const getActivationNegamax = (rules: ArackhanWarsRules, bot: number, timeLimit = new Date().getTime() + 10000): Negamax => {

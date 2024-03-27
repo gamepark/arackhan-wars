@@ -9,6 +9,6 @@ export class TheWhiteGatesActionRule extends MoveCardsActionRule {
     const theWhiteGates = this.cardRule
     return theWhiteGates.getOtherCardsAdjacentTo()
       .player(this.player)
-      .filter((_, index) => getCardRule(this.game, index).isCreature)
+      .index(index => getCardRule(this.game, index).isCreature)
   }
 }

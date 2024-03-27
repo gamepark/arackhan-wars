@@ -17,7 +17,7 @@ export class NemesioGreyOrderActionRule extends CardActionRule {
   get cardsToSacrifice() {
     const nemesio = this.cardIndex
     return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).player(this.player)
-      .filter((_, index) => {
+      .index(index => {
         const cardRule = getCardRule(this.game, index)
         return index !== nemesio && cardRule.isCreature && cardRule.value >= 3
       })
@@ -26,7 +26,7 @@ export class NemesioGreyOrderActionRule extends CardActionRule {
   get otherCreatures() {
     const nemesio = this.cardIndex
     return this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-      .filter((_, index) => index !== nemesio && getCardRule(this.game, index).isCreature)
+      .index(index => index !== nemesio && getCardRule(this.game, index).isCreature)
   }
 
   getPlayerMoves() {

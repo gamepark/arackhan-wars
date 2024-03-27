@@ -9,7 +9,7 @@ export class MusicalTranceActionRule extends MoveCardsActionRule {
 
   getCardsAllowedToMove(): Material {
     const movedCards = this.remind<number[]>(Memory.MovedCards)
-    return this.battlefield.player(this.player).filter((_, index) => {
+    return this.battlefield.player(this.player).index(index => {
         if (movedCards.includes(index)) return false
         return getCardRule(this.game, index).families.some(family =>
           family === Family.Musician || family === Family.Dancer

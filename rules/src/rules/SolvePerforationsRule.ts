@@ -24,7 +24,7 @@ export class SolvePerforationsRule extends MaterialRulesPart {
       const target = this.material(MaterialType.FactionCard)
         .location(location => location.type === LocationType.Battlefield && location.x === perforation.x && location.y === perforation.y)
         .player(player => player !== this.game.rule!.player!)
-        .filter((_, index) => !isSpell(getCardRule(this.game, index).characteristics))
+        .index(index => !isSpell(getCardRule(this.game, index).characteristics))
       if (!target.length) continue
       const targetIndex = target.getIndex()
       const defender = getCardRule(this.game, targetIndex)

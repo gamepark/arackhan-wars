@@ -18,7 +18,7 @@ export class MimicryActionRule extends CardActionRule {
 
   get creaturesOnBattlefield() {
     return this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-      .filter((_, index) => getCardRule(this.game, index).isCreature)
+      .index(index => getCardRule(this.game, index).isCreature)
   }
 
   getPlayerMoves() {

@@ -1,7 +1,7 @@
 import { areAdjacentSquares, MaterialItem, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
 import { EffectType, RoundLimitation } from '../material/cards/Effect'
-import { isSpell } from '../material/cards/Spell'
+import { Spell } from '../material/cards/Spell'
 import { CardId, FactionCard, FactionCardsCharacteristics } from '../material/FactionCard'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
@@ -22,8 +22,8 @@ export class PlacementRule extends PlayerTurnRule {
     const factionCards = this.material(MaterialType.FactionCard)
     const playerHand = factionCards.location(LocationType.PlayerHand).player(this.player)
       .id<CardId>(id => id.front && this.canBePlayed(id.front))
-    const astralCards = playerHand.filter(this.isAstral)
-    const otherCards = playerHand.filter(item => !this.isAstral(item))
+    const astralCards = playerHand.id<CardId>(id => (FactionCardsCharacteristics[id.front] as Spell).astral)
+    const otherCards = playerHand.id<CardId>(id => !(FactionCardsCharacteristics[id.front] as Spell).astral)
 
     for (let x = 0; x < 2; x++) {
       moves.push(...astralCards.moveItems({ type: LocationType.AstralPlane, x, rotation: true, player: this.player }))
@@ -46,11 +46,6 @@ export class PlacementRule extends PlayerTurnRule {
 
   get round() {
     return this.material(MaterialType.RoundTrackerToken).getItem()!.location.x!
-  }
-
-  isAstral(item: MaterialItem): boolean {
-    const card = FactionCardsCharacteristics[item.id.front]
-    return isSpell(card) && card.astral
   }
 
   get battlefieldLegalSpaces() {

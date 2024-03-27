@@ -174,7 +174,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
       return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).player(player).length
     } else if (tieBreaker === 2) {
       return -this.material(MaterialType.FactionCard).location(LocationType.PlayerDiscard).player(player)
-        .filter((_, index) => isCreature(getCardRule(this.game, index).characteristics)).length
+        .index(index => isCreature(getCardRule(this.game, index).characteristics)).length
     }
     return
   }

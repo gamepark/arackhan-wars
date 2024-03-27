@@ -13,7 +13,7 @@ export class TomurDiscActionRule extends CardActionRule {
   get enemyActiveCreatures() {
     return this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
       .player(player => player !== this.player)
-      .filter((_, index) => {
+      .index(index => {
         const cardRule = getCardRule(this.game, index)
         return cardRule.isCreature && cardRule.isActive
       })

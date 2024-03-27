@@ -9,7 +9,7 @@ export class OnLeaveActionRule extends MoveCardsActionRule {
   moves = 1
 
   getCardsAllowedToMove(): Material {
-    return this.battlefield.player(this.player).filter((_, index) => getCardRule(this.game, index).isCreature)
+    return this.battlefield.player(this.player).index(index => getCardRule(this.game, index).isCreature)
   }
 
   getLegalDestinations(card: Material): XYCoordinates[] {

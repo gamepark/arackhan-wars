@@ -6,7 +6,7 @@ export class ForcedExileActionRule extends MoveCardsActionRule {
   moves = 1
 
   getCardsAllowedToMove(): Material {
-    return this.battlefield.player(player => player !== this.player).filter((_, index) => {
+    return this.battlefield.player(player => player !== this.player).index(index => {
       const cardRule = getCardRule(this.game, index)
       return cardRule.isCreature && !cardRule.isImmuneToEnemySpells
     })

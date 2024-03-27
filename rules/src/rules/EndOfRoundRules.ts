@@ -57,13 +57,13 @@ export class EndOfRoundRules extends MaterialRulesPart {
       moves.push(...this.material(MaterialType.FactionCard)
         .location(onBattlefieldAndAstralPlane)
         .player(player)
-        .filter((_, index) => (getCardRule(this.game, index).characteristics as Spell)?.discardTiming === DiscardTiming.EndOfRound)
+        .index(index => (getCardRule(this.game, index).characteristics as Spell)?.discardTiming === DiscardTiming.EndOfRound)
         .moveItems({ type: LocationType.PlayerDiscard, player })
       )
     }
 
     moves.push(...this.material(MaterialType.FactionToken)
-      .filter((_, index) => !tokensToIgnore.includes(index))
+      .index(index => !tokensToIgnore.includes(index))
       .location(LocationType.FactionTokenSpace).rotation(true).rotateItems(false))
 
     const round = this.material(MaterialType.RoundTrackerToken).getItem()!.location.x!

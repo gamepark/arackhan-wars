@@ -10,7 +10,7 @@ export class ArmouredConvoyActionRule extends MoveCardsActionRule {
   maxDistance = 3
 
   getCardsAllowedToMove(): Material {
-    return this.battlefield.player(this.player).filter((_, index) => getCardRule(this.game, index).isCreature)
+    return this.battlefield.player(this.player).index(index => getCardRule(this.game, index).isCreature)
   }
 
   afterCardMove(move: MoveItem): MaterialMove[] {

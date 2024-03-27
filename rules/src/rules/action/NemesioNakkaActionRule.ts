@@ -9,7 +9,7 @@ export class NemesioNakkaActionRule extends MoveCardsActionRule {
     const nemesio = this.cardRule
     return nemesio.getOtherCardsAdjacentTo()
       .player(this.player)
-      .filter((_, index) => {
+      .index(index => {
         const cardRule = getCardRule(this.game, index)
         return cardRule.isCreature && cardRule.value <= 8
       })
@@ -17,7 +17,7 @@ export class NemesioNakkaActionRule extends MoveCardsActionRule {
 
   getLegalDestinations(): XYCoordinates[] {
     return this.battlefield.player(this.player)
-      .filter((_, index) => {
+      .index(index => {
         const cardRule = getCardRule(this.game, index)
         return cardRule.isCreature && cardRule.value <= 8
       }).getItems().map(item => item.location as XYCoordinates)

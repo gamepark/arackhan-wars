@@ -44,7 +44,7 @@ export class EndOfTurnRule extends PlayerTurnRule {
     moves.push(...this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
       .player(this.player)
-      .filter((_, index) => (getCardRule(this.game, index).characteristics as Spell)?.discardTiming === DiscardTiming.ActivationOrEndOfTurn)
+      .index(index => (getCardRule(this.game, index).characteristics as Spell)?.discardTiming === DiscardTiming.ActivationOrEndOfTurn)
       .moveItems({ type: LocationType.PlayerDiscard, player: this.player })
     )
     if (nextPlayer !== this.remind(Memory.StartPlayer)) {

@@ -1,6 +1,6 @@
 import { isMoveItem, ItemMove } from '@gamepark/rules-api'
 import { isCreature } from '../../material/cards/Creature'
-import { FactionCardsCharacteristics } from '../../material/FactionCard'
+import { CardId, FactionCardsCharacteristics } from '../../material/FactionCard'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
 import { Memory } from '../Memory'
@@ -21,7 +21,7 @@ export class ReplaceWithCreatureActionRule extends CardActionRule {
     return this.material(MaterialType.FactionCard)
       .location(LocationType.PlayerHand)
       .player(this.player)
-      .filter(item => isCreature(FactionCardsCharacteristics[item.id.front]))
+      .id<CardId>(id => isCreature(FactionCardsCharacteristics[id.front]))
   }
 
   getPlayerMoves() {

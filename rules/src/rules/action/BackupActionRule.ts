@@ -21,7 +21,7 @@ export class BackupActionRule extends CardActionRule {
   }
 
   get eligibleCards() {
-    return this.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(this.player).filter((_item, index) => {
+    return this.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(this.player).index(index => {
       const cardRule = getCardRule(this.game, index)
       return cardRule.isCreature && cardRule.families.includes(Family.Legion6) && cardRule.value <= 8
     })

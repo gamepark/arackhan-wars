@@ -6,12 +6,12 @@ export class WarpPathActionRule extends MoveCardsActionRule {
   moves = 4
 
   getCardsAllowedToMove(): Material {
-    return this.battlefield.player(this.player).filter((_, index) => getCardRule(this.game, index).isCreature)
+    return this.battlefield.player(this.player).index(index => getCardRule(this.game, index).isCreature)
   }
 
   getLegalDestinations(): XYCoordinates[] {
     return this.battlefield.player(this.player)
-      .filter((_, index) => getCardRule(this.game, index).isCreature)
+      .index(index => getCardRule(this.game, index).isCreature)
       .getItems().map(item => item.location as XYCoordinates)
   }
 }

@@ -1,7 +1,7 @@
 import { ArackhanWarsSetup } from '@gamepark/arackhan-wars/ArackhanWarsSetup'
 import { PreBuildDecks } from '@gamepark/arackhan-wars/material/cards/PreBuildDecks'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
-import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
+import { CardId, FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { FactionToken } from '@gamepark/arackhan-wars/material/FactionToken'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
@@ -27,7 +27,7 @@ export class TutorialSetup extends ArackhanWarsSetup {
     const requiredCards = this.requiredCards[faction]
     const playerDeck = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(player)
     for (const requiredCard of requiredCards) {
-      playerDeck.filter(item => item.id.front === requiredCard).moveItem({ type: LocationType.PlayerHand, player })
+      playerDeck.id<CardId>(id => id.front === requiredCard).moveItem({ type: LocationType.PlayerHand, player })
     }
     this.shufflePlayerDeck(player)
     this.draw(player, START_HAND - requiredCards.length)

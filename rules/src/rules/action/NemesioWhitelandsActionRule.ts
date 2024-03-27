@@ -15,7 +15,7 @@ export class NemesioWhitelandsActionRule extends CardActionRule {
   get otherCreatures() {
     const nemesio = this.cardIndex
     return this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-      .filter((_, index) => index !== nemesio && getCardRule(this.game, index).isCreature)
+      .index(index => index !== nemesio && getCardRule(this.game, index).isCreature)
   }
 
   getPlayerMoves() {

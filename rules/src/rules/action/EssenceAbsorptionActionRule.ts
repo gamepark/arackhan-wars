@@ -16,7 +16,7 @@ export class EssenceAbsorptionActionRule extends CardActionRule {
 
   get alliedCreatures() {
     return this.material(MaterialType.FactionCard).location(LocationType.Battlefield).player(this.player)
-      .filter((_, index) => getCardRule(this.game, index).isCreature)
+      .index(index => getCardRule(this.game, index).isCreature)
   }
 
   getPlayerMoves() {

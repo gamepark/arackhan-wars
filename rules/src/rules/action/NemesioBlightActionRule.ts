@@ -26,7 +26,7 @@ export class NemesioBlightActionRule extends CardActionRule {
   }
 
   get adjacentCreatures() {
-    return this.cardRule.getOtherCardsAdjacentTo().filter((_, index) => getCardRule(this.game, index).isCreature)
+    return this.cardRule.getOtherCardsAdjacentTo().index(index => getCardRule(this.game, index).isCreature)
   }
 
   afterItemMove() {
