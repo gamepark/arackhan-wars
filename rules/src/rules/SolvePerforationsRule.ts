@@ -15,7 +15,7 @@ export type Perforation = {
 export class SolvePerforationsRule extends MaterialRulesPart {
   onRuleStart() {
     const moves: MaterialMove[] = []
-    const perforations = this.remind<Perforation[]>(Memory.Perforations)
+    const perforations = this.remind<Perforation[]>(Memory.Perforations) ?? []
     const nextPerforations: Perforation[] = []
     for (const perforation of perforations) {
       const attacker = getCardRule(this.game, perforation.attacker)
