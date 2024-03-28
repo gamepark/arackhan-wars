@@ -19,6 +19,7 @@ import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material
 import { Ability } from '../material/cards/Ability'
 import {
   AttackByCreaturesOnlyInGroup,
+  AttackByCreaturesOnlyInGroupOrSpells,
   AttackCondition,
   AttackLimitation,
   AttackOnlyEvenValueCards,
@@ -344,7 +345,8 @@ export class CardRule extends MaterialRulesPart {
       )
       || getCardRule(this.game, opponent).effects.some(effect =>
         (effect.type === EffectType.ImmuneToEnemySpells && this.isSpell)
-        || (isDefenderConstraint(effect) && this.isPreventingAttack(effect, opponent))
+        || (isDefenderConstraint(effect)
+          && (this.isPreventingAttack(effect, opponent) || this.getAttackConstraint(effect).preventAttackGroup(attackers, opponent)))
       )
       || attackers.some(attacker =>
         getCardRule(this.game, attacker).effects.some(effect =>
@@ -392,6 +394,8 @@ export class CardRule extends MaterialRulesPart {
             return new AttackOnlyEvenValueCards(this.game)
           case AttackCondition.CreaturesIfAdjacent:
             return new CreaturesIfAdjacent(this.game)
+          case AttackCondition.ByCreaturesInGroupOrSpells:
+            return new AttackByCreaturesOnlyInGroupOrSpells(this.game)
         }
     }
   }

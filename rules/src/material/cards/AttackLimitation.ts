@@ -10,7 +10,7 @@ export enum AttackLimitation {
 }
 
 export enum AttackCondition {
-  ByCreaturesInGroup = 1, EvenValueCards, CreaturesIfAdjacent
+  ByCreaturesInGroup = 1, EvenValueCards, CreaturesIfAdjacent, ByCreaturesInGroupOrSpells
 }
 
 export abstract class AttackConstraintRule extends MaterialRulesPart {
@@ -88,6 +88,13 @@ export class NoAttackBottomRightCards extends AttackConstraintRule {
 export class AttackByCreaturesOnlyInGroup extends AttackConstraintRule {
   isInsufficientAttackGroup(attackers: number[]): boolean {
     return attackers.length === 1 && getCardRule(this.game, attackers[0]).isCreature
+  }
+}
+
+export class AttackByCreaturesOnlyInGroupOrSpells extends AttackByCreaturesOnlyInGroup {
+  preventAttackGroup(attackers: number[]): boolean {
+    return attackers.some(attacker => getCardRule(this.game, attacker).isSpell)
+      && attackers.some(attacker => getCardRule(this.game, attacker).isCreature)
   }
 }
 

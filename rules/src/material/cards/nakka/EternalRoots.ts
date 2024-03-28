@@ -11,5 +11,5 @@ export class EternalRoots extends Land {
 
   defense = 4
 
-  benefit = canOnlyBeAttacked(AttackCondition.ByCreaturesInGroup).to(adjacent, allied, creature)
+  benefit = canOnlyBeAttacked(AttackCondition.ByCreaturesInGroupOrSpells).to(adjacent, allied, creature)
 }

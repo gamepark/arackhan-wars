@@ -291,6 +291,7 @@ const attackConditionText: Record<AttackCondition, string> = {
   [AttackCondition.ByCreaturesInGroup]: 'creatures-in-group',
   [AttackCondition.EvenValueCards]: 'even-value',
   [AttackCondition.CreaturesIfAdjacent]: 'creatures-if-adjacent',
+  [AttackCondition.ByCreaturesInGroupOrSpells]: 'creatures-in-group-or-spells'
 }
 
 const attackLimitationText: Record<AttackLimitation, string> = {
