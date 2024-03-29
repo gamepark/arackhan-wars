@@ -6,6 +6,7 @@ import { Land } from '../Land'
 
 export class EternalRoots extends Land {
   faction = Faction.Nakka
+  legendary = false
   value = 8
   fullArt = true
 
