@@ -156,9 +156,9 @@ export class CardRule extends MaterialRulesPart {
   private get loseSkills() {
     if (this.loseSkillsCache === undefined) {
       this.loseSkillsCache = this.battleFieldCardsRules.some(card =>
-          !this.isImmuneTo(card) && card.characteristics?.getAbilities().some(ability =>
+           card.characteristics?.getAbilities().some(ability =>
             ability.effects.some(isLoseSkills) && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
-          )
+          ) && !this.isImmuneTo(card)
       )
     }
     return this.loseSkillsCache
@@ -189,13 +189,13 @@ export class CardRule extends MaterialRulesPart {
   }
 
   isImmuneTo(rule: CardRule) {
-    return this.isImmuneToEnemySpells && rule.isSpell && rule.item.location.player !== this.item.location.player
+    return rule.item.location.player !== this.item.location.player && rule.isSpell && this.isImmuneToEnemySpells
   }
 
   get isImmuneToEnemySpells() {
     if (this.immuneToEnemySpellsCache === undefined) {
       this.immuneToEnemySpellsCache = this.battleFieldCardsRules.some(rule =>
-        rule.characteristics?.getAbilities().some(ability =>
+        rule.abilities.some(ability =>
           ability.effects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
           && ability.isApplicable(this.game, rule.cardMaterial, this.cardMaterial)
         )
