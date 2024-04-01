@@ -73,9 +73,9 @@ import { Attack } from './AttackRule'
 import { Memory } from './Memory'
 
 export class CardRule extends MaterialRulesPart {
+  private abilitiesCache: Ability[] | undefined = undefined
   private effectsCache: Effect[] | undefined = undefined
   private immuneToEnemySpellsCache: boolean | undefined = undefined
-  private loseSkillsCache: boolean | undefined = undefined
 
   constructor(game: MaterialGame, public index: number) {
     super(game)
@@ -153,23 +153,27 @@ export class CardRule extends MaterialRulesPart {
     return this.cardNames.some(card => FactionCardsCharacteristics[card].legendary)
   }
 
-  private get loseSkills() {
-    if (this.loseSkillsCache === undefined) {
-      this.loseSkillsCache = this.battleFieldCardsRules.some(card =>
-           card.characteristics?.getAbilities().some(ability =>
-            ability.effects.some(isLoseSkills) && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
-          ) && !this.isImmuneTo(card)
-      )
-    }
-    return this.loseSkillsCache
+  private hasLostSkills(depth: number) {
+    return this.battleFieldCardsRules.some(card =>
+      card.getAbilities(depth + 1).some(ability =>
+        ability.effects.some(isLoseSkills) && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
+      ) && !this.isImmuneTo(card, depth + 1)
+    )
   }
 
   get abilities(): Ability[] {
+    if (!this.abilitiesCache) {
+      this.abilitiesCache = this.getAbilities()
+    }
+    return this.abilitiesCache
+  }
+
+  private getAbilities(depth = 1): Ability[] {
     const characteristics = this.characteristics
     const swapSkills = this.targetingEffects.find(isSwapSkills)
     let abilities = characteristics?.getAbilities() ?? []
     if (isCreature(characteristics)) {
-      if (this.loseSkills) {
+      if (depth < 3 && this.hasLostSkills(depth)) {
         abilities = characteristics.getWeaknesses()
       } else if (swapSkills) {
         const otherCreatureIndex = swapSkills.creatures.find(index => index !== this.index)!
@@ -179,7 +183,7 @@ export class CardRule extends MaterialRulesPart {
     }
     for (const addCharacteristic of this.targetingEffects.filter(isAddCharacteristics)) {
       const card = FactionCardsCharacteristics[addCharacteristic.card]
-      if (isCreature(card) && this.loseSkills) {
+      if (isCreature(card) && depth < 3 && this.hasLostSkills(depth)) {
         abilities = abilities.concat(card.getWeaknesses())
       } else {
         abilities = abilities.concat(card.getAbilities())
@@ -188,14 +192,18 @@ export class CardRule extends MaterialRulesPart {
     return abilities
   }
 
-  isImmuneTo(rule: CardRule) {
-    return rule.item.location.player !== this.item.location.player && rule.isSpell && this.isImmuneToEnemySpells
+  isImmuneTo(rule: CardRule, depth = 1) {
+    return rule.item.location.player !== this.item.location.player && rule.isSpell && this.getIsImmuneToEnemySpells(depth)
   }
 
   get isImmuneToEnemySpells() {
+    return this.getIsImmuneToEnemySpells()
+  }
+
+  getIsImmuneToEnemySpells(depth = 1) {
     if (this.immuneToEnemySpellsCache === undefined) {
       this.immuneToEnemySpellsCache = this.battleFieldCardsRules.some(rule =>
-        rule.abilities.some(ability =>
+        rule.getAbilities(depth + 1).some(ability =>
           ability.effects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
           && ability.isApplicable(this.game, rule.cardMaterial, this.cardMaterial)
         )
