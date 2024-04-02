@@ -16,6 +16,10 @@ export abstract class Creature extends FactionCardCharacteristics {
     return this.skill ? [this.skill] : this.skills
   }
 
+  hasSkill(): boolean {
+    return this.skill !== undefined || this.skills.length > 0
+  }
+
   getAbilities(): Ability[] {
     return this.getSkills().concat(this.getWeaknesses())
   }

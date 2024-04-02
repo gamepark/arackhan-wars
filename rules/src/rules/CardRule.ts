@@ -155,7 +155,7 @@ export class CardRule extends MaterialRulesPart {
 
   private hasLostSkills(depth: number) {
     return this.battleFieldCardsRules.some(card =>
-      card.getAbilities(depth + 1).some(ability =>
+      card.index !== this.index && card.getAbilities(depth + 1).some(ability =>
         ability.effects.some(isLoseSkills) && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
       ) && !this.isImmuneTo(card, depth + 1)
     )
@@ -173,7 +173,7 @@ export class CardRule extends MaterialRulesPart {
     const swapSkills = this.targetingEffects.find(isSwapSkills)
     let abilities = characteristics?.getAbilities() ?? []
     if (isCreature(characteristics)) {
-      if (depth < 3 && this.hasLostSkills(depth)) {
+      if (characteristics.hasSkill() && depth < 3 && this.hasLostSkills(depth)) {
         abilities = characteristics.getWeaknesses()
       } else if (swapSkills) {
         const otherCreatureIndex = swapSkills.creatures.find(index => index !== this.index)!
@@ -183,7 +183,7 @@ export class CardRule extends MaterialRulesPart {
     }
     for (const addCharacteristic of this.targetingEffects.filter(isAddCharacteristics)) {
       const card = FactionCardsCharacteristics[addCharacteristic.card]
-      if (isCreature(card) && depth < 3 && this.hasLostSkills(depth)) {
+      if (isCreature(card) && card.hasSkill() && depth < 3 && this.hasLostSkills(depth)) {
         abilities = abilities.concat(card.getWeaknesses())
       } else {
         abilities = abilities.concat(card.getAbilities())
