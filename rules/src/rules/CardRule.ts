@@ -155,9 +155,9 @@ export class CardRule extends MaterialRulesPart {
 
   private hasLostSkills(depth: number) {
     return this.battleFieldCardsRules.some(card =>
-      card.index !== this.index && card.getAbilities(depth + 1).some(ability =>
-        ability.effects.some(isLoseSkills) && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
-      ) && !this.isImmuneTo(card, depth + 1)
+        card.index !== this.index && card.getAbilities(depth + 1).some(ability =>
+          ability.effects.some(isLoseSkills) && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
+        ) && !this.isImmuneTo(card, depth + 1)
     )
   }
 
@@ -321,7 +321,7 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get canBeActivated() {
-    return this.isActive && (!this.isInitiativeSequence || this.hasInitiative)
+    return this.isActive && (!this.isInitiativeSequence || this.hasInitiative || this.remind<number[]>(Memory.MovedCards).includes(this.index))
   }
 
   get canAttack() {
