@@ -71,7 +71,7 @@ function MovementHelp() {
             cardCopy.getItem()!.location.y = y
             const cardRulesCopy = new CardRule(gameCopy, cardRules.index)
             if (!cardRulesCopy.isActive || !cardRulesCopy.attributes.some(attribute => attribute.type === AttributeType.Movement)) {
-              for (const rule of cardRulesCopy.battleFieldCardsRules) {
+              for (const rule of cardRulesCopy.cardsThatMightAffect) {
                 if (!cardRulesCopy.isImmuneTo(rule) && rule.index !== cardIndex && rule.abilities.some(ability =>
                     ability.isApplicable(gameCopy, rule.cardMaterial, cardCopy)
                     && ability.effects.some(effect =>

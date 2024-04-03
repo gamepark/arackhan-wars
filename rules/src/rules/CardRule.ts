@@ -15,7 +15,7 @@ import max from 'lodash/max'
 import sumBy from 'lodash/sumBy'
 import uniq from 'lodash/uniq'
 import { ArackhanWarsRules } from '../ArackhanWarsRules'
-import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
+import { battlefieldCoordinates } from '../material/Board'
 import { Ability } from '../material/cards/Ability'
 import {
   AttackByCreaturesOnlyInGroup,
@@ -154,7 +154,7 @@ export class CardRule extends MaterialRulesPart {
   }
 
   private hasLostSkills(depth: number) {
-    return this.battleFieldCardsRules.some(card =>
+    return this.cardsThatMightAffect.some(card =>
         card.index !== this.index && card.getAbilities(depth + 1).some(ability =>
           ability.effects.some(isLoseSkills) && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
         ) && !this.isImmuneTo(card, depth + 1)
@@ -202,7 +202,7 @@ export class CardRule extends MaterialRulesPart {
 
   getIsImmuneToEnemySpells(depth = 1) {
     if (this.immuneToEnemySpellsCache === undefined) {
-      this.immuneToEnemySpellsCache = this.battleFieldCardsRules.some(rule =>
+      this.immuneToEnemySpellsCache = this.cardsThatMightAffect.some(rule =>
         rule.getAbilities(depth + 1).some(ability =>
           ability.effects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
           && ability.isApplicable(this.game, rule.cardMaterial, this.cardMaterial)
@@ -212,14 +212,17 @@ export class CardRule extends MaterialRulesPart {
     return this.immuneToEnemySpellsCache
   }
 
-  get battleFieldCardsRules() {
-    return this.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane).getIndexes()
-      .map(index => getCardRule(this.game, index))
+  get cardsThatMightAffect() {
+    if (this.item.location.type === LocationType.AstralPlane) return []
+    return this.material(MaterialType.FactionCard).location(location =>
+      location.type === LocationType.AstralPlane ||
+      (location.type === LocationType.Battlefield && getDistanceBetweenSquares(this.item.location as XYCoordinates, location as XYCoordinates) <= 1)
+    ).getIndexes().map(index => getCardRule(this.game, index))
   }
 
   get effects(): Effect[] {
     if (!this.effectsCache) {
-      this.effectsCache = this.battleFieldCardsRules.flatMap(card =>
+      this.effectsCache = this.cardsThatMightAffect.flatMap(card =>
         this.isImmuneTo(card) ? []
           : card.abilities.filter(ability => ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial))
             .flatMap(ability => {
@@ -239,7 +242,7 @@ export class CardRule extends MaterialRulesPart {
   }
 
   private getAttributeEffects(): Effect[] {
-    return this.battleFieldCardsRules.flatMap(card =>
+    return this.cardsThatMightAffect.flatMap(card =>
       this.isImmuneTo(card) ? []
         : card.abilities.filter(ability =>
           ability.effects.some(effect => effect.type === EffectType.LoseAttributes || effect.type === EffectType.GainAttributes
