@@ -48,7 +48,7 @@ export abstract class MoveCardsActionRule extends CardActionRule {
   abstract getCardsAllowedToMove(): Material
 
   getLegalDestinations(card: Material): XYCoordinates[] {
-    const battlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
+    const battlefield = this.battlefield
     const canSwap = this.canSwap()
     const cardRule = getCardRule(this.game, card.getIndex())
     return battlefieldCoordinates.filter(coordinates => {

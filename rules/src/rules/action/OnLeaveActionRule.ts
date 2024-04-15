@@ -13,10 +13,12 @@ export class OnLeaveActionRule extends MoveCardsActionRule {
   }
 
   getLegalDestinations(card: Material): XYCoordinates[] {
+    const battlefield = this.battlefield
     const cardRule = getCardRule(this.game, card.getIndex())
     return battlefieldCoordinates.filter(coordinates => {
       const otherAdjacentCards = cardRule.getOtherCardsAdjacentTo(coordinates)
       return otherAdjacentCards.player(this.player).length > 0 && otherAdjacentCards.player(p => p !== this.player).length === 0
+        && !battlefield.location(l => l.x === coordinates.x && l.y === coordinates.y).length
     })
   }
 
