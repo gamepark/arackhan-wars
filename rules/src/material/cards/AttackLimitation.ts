@@ -6,7 +6,7 @@ import { MaterialType } from '../MaterialType'
 import { Family } from './Family'
 
 export enum AttackLimitation {
-  ByCreatures = 1, ByGroupedCreatures, AdjacentCards, DuringInitiative, BottomRightCards, InGroup, InGroupNotFamily
+  ByCreatures = 1, ByGroupedCreatures, AdjacentCards, DuringInitiative, BottomRightCards, InGroup, InGroupWeakness, InGroupNotFamily
 }
 
 export enum AttackCondition {

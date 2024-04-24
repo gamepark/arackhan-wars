@@ -165,7 +165,7 @@ export class Ability {
   }
 
   ignoreFellowGroupAttackerConstraint(filters: AbilityTargetFilter[]) {
-    this.effects.push({ type: EffectType.IgnoreFellowGroupAttackerConstraint, filters })
+    this.effects.push({ type: EffectType.IgnoreFellowGroupAttackWeakness, filters })
     return this
   }
 

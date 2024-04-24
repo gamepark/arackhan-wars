@@ -9,7 +9,7 @@ export type Effect = ModifyAttack | ModifyDefense
   | Deactivated | Mimic | Trigger | ImmuneToEnemySpells
   | EndOfTurn | IgnoreAttackDefenseModifiers | SetAttackDefense
   | SwapSkills | ModifyMovement | InvertsAttackDefense
-  | ModifyRange | ExtraScore | IgnoreFellowGroupAttackerConstraint
+  | ModifyRange | ExtraScore | IgnoreFellowGroupAttackWeakness
   | CannotBePlayed | HitAllies | Possession | SwarmSameCard
   | AddCharacteristics
 
@@ -29,7 +29,7 @@ export enum EffectType {
   InvertsAttackDefense,
   ModifyRange,
   ExtraScore,
-  IgnoreFellowGroupAttackerConstraint,
+  IgnoreFellowGroupAttackWeakness,
   CannotBePlayed,
   HitAllies,
   Possession,
@@ -108,6 +108,10 @@ export function isAttackerConstraint(effect: Effect): effect is AttackerConstrai
 
 export function isDefenderConstraint(effect: Effect): effect is DefenderConstraint {
   return effect.type === EffectType.CannotBeAttacked || effect.type === EffectType.CanOnlyBeAttacked
+}
+
+export function isNoGroupAttackWeakness(effect: Effect): boolean {
+  return effect.type === EffectType.CannotAttack && effect.limitation === AttackLimitation.InGroupWeakness
 }
 
 export type Deactivated = {
@@ -202,13 +206,13 @@ export enum ExtraScoreType {
   MastersOfAracKhan,
 }
 
-export type IgnoreFellowGroupAttackerConstraint = {
-  type: EffectType.IgnoreFellowGroupAttackerConstraint
+export type IgnoreFellowGroupAttackWeakness = {
+  type: EffectType.IgnoreFellowGroupAttackWeakness
   filters: AbilityTargetFilter[]
 }
 
-export function isIgnoreFellowGroupAttackerConstraint(effect: Effect): effect is IgnoreFellowGroupAttackerConstraint {
-  return effect.type === EffectType.IgnoreFellowGroupAttackerConstraint
+export function isIgnoreFellowGroupAttackWeakness(effect: Effect): effect is IgnoreFellowGroupAttackWeakness {
+  return effect.type === EffectType.IgnoreFellowGroupAttackWeakness
 }
 
 export type CannotBePlayed = {

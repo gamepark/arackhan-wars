@@ -264,7 +264,7 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
         default:
           return {}
       }
-    case EffectType.IgnoreFellowGroupAttackerConstraint:
+    case EffectType.IgnoreFellowGroupAttackWeakness:
       return {
         defaults: 'ability.ignore-fellow-weakness',
         values: {
@@ -301,6 +301,7 @@ const attackLimitationText: Record<AttackLimitation, string> = {
   [AttackLimitation.DuringInitiative]: 'during-initiative',
   [AttackLimitation.BottomRightCards]: 'bottom-right',
   [AttackLimitation.InGroup]: 'in-group',
+  [AttackLimitation.InGroupWeakness]: 'in-group',
   [AttackLimitation.InGroupNotFamily]: 'in-group-not-family'
 }
 

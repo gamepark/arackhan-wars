@@ -12,5 +12,5 @@ export class WhitePlainsMercenary extends Creature {
   attack = 2
   defense = 3
 
-  weakness = cannotAttack(AttackLimitation.InGroup)
+  weakness = cannotAttack(AttackLimitation.InGroupWeakness)
 }

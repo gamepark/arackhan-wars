@@ -47,9 +47,10 @@ import {
   isAttackerConstraint,
   isDefenderConstraint,
   isGainAttributes,
-  isIgnoreFellowGroupAttackerConstraint,
+  isIgnoreFellowGroupAttackWeakness,
   isLoseSkills,
   isMimic,
+  isNoGroupAttackWeakness,
   isSetAttackDefense,
   isSwapSkills,
   ModifyAttackCondition,
@@ -346,13 +347,9 @@ export class CardRule extends MaterialRulesPart {
   someEffectPreventsAttacking(opponent: number) {
     const attackers = this.remind<Attack[]>(Memory.Attacks).filter(attack => attack.targets.includes(opponent)).map(attack => attack.card)
     attackers.push(this.index)
-    const ignoreFellowConstraints = attackers.flatMap(attacker => getCardRule(this.game, attacker).effects.filter(isIgnoreFellowGroupAttackerConstraint))
+    const ignoreFellowWeakness = attackers.flatMap(attacker => getCardRule(this.game, attacker).effects.filter(isIgnoreFellowGroupAttackWeakness))
     return this.effects.some(effect =>
-          isAttackerConstraint(effect)
-          && !ignoreFellowConstraints.some(effect => effect.filters.every(filter =>
-            filter.filter(this.cardMaterial, this.cardMaterial, this.game)
-          ))
-          && this.isPreventingAttack(effect, opponent)
+        isAttackerConstraint(effect) && this.isPreventingAttack(effect, opponent)
       )
       || getCardRule(this.game, opponent).effects.some(effect =>
         (effect.type === EffectType.ImmuneToEnemySpells && this.isSpell)
@@ -362,9 +359,9 @@ export class CardRule extends MaterialRulesPart {
       || attackers.some(attacker =>
         getCardRule(this.game, attacker).effects.some(effect =>
             isAttackerConstraint(effect)
-            && !ignoreFellowConstraints.some(effect => effect.filters.every(filter =>
+            && (!isNoGroupAttackWeakness(effect) || !ignoreFellowWeakness.some(effect => effect.filters.every(filter =>
               filter.filter(this.cardMaterial, this.material(MaterialType.FactionCard).index(attacker), this.game)
-            ))
+            )))
             && this.getAttackConstraint(effect).preventAttackGroup(attackers, opponent)
         )
       )
@@ -390,6 +387,7 @@ export class CardRule extends MaterialRulesPart {
           case AttackLimitation.BottomRightCards:
             return new NoAttackBottomRightCards(this.game)
           case AttackLimitation.InGroup:
+          case AttackLimitation.InGroupWeakness:
             return new NoAttackInGroup(this.game)
           case AttackLimitation.InGroupNotFamily:
             return new NoAttackInGroupNotFamily(this.game, this.families)
