@@ -13,7 +13,7 @@ export class MimicryActionRule extends CardActionRule {
 
   canPlay(): boolean {
     const creatures = this.creaturesOnBattlefield
-    return creatures.length > 2 && creatures.player(this.player).length > 0
+    return creatures.length > 1 && creatures.player(this.player).length > 0
   }
 
   get creaturesOnBattlefield() {
