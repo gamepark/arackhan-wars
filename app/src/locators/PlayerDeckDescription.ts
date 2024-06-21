@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import { LocationDescription } from '@gamepark/react-game'
 import { LocationContext } from '@gamepark/react-game/dist/locators'
-import { Location } from '../../../../workshop/packages/rules-api'
+import { Location } from '@gamepark/rules-api'
 import { factionCardDescription } from '../material/FactionCardDescription'
 import { PlayerDeckHelp } from './PlayerDeckHelp'
 
