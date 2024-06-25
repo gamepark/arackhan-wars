@@ -14,6 +14,7 @@ import {
   isEnumValue,
   isMoveItemType,
   ItemMove,
+  LocalMovePreview,
   Location,
   MaterialGameSetup,
   MaterialMove,
@@ -32,9 +33,8 @@ export enum DeckbuildingMove {
   ChangeFilter = 1, ChangePage, Rename
 }
 
-export class DeckbuildingRules extends MaterialRules<number, MaterialType, LocationType> {
-
-  static local = true
+export class DeckbuildingRules extends MaterialRules<number, MaterialType, LocationType>
+  implements LocalMovePreview<MaterialMove<number, MaterialType, LocationType>> {
 
   locationsStrategies = {
     [MaterialType.FactionCard]: {
@@ -48,6 +48,10 @@ export class DeckbuildingRules extends MaterialRules<number, MaterialType, Locat
 
   itemsCanMerge() {
     return false
+  }
+
+  previewMove() {
+    return true
   }
 
   changeFilter(filter: DeckbuildingFilter, value?: Faction | CardType | AttributeType) {
