@@ -1283,7 +1283,7 @@
       "time.wait.total": "Temps d’attente total",
       "time.wait.max": "Temps d’attente maximum",
       "time.awaited": "A fait attendre les autres (moyenne)",
-      "tuto.over": "Félicitations, vous avez terminé le tutoriel !\nPrêt à jouer avec d’autres joueurs ?",
+      "tuto.over": "Félicitations, vous avez terminé le tutoriel !\nPrêt⸱e à jouer avec d’autres joueurs ?",
       "quantity.tooltip": "Quantité : {n}"
     }
   },
