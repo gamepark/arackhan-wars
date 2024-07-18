@@ -16,7 +16,7 @@ export default function DeckbuildingApp() {
   }, [])
   const loading = !game || isJustDisplayed || isImagesLoading
   useEffect(() => {
-    if (game) {
+    if (game && !game.helpDisplay) {
       const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
       storage.state = game
       localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
