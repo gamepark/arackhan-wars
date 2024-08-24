@@ -5,10 +5,11 @@ import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import { GameTable, GameTableNavigation, usePlay, usePlayerId, useRules } from '@gamepark/react-game'
-import { displayLocationHelp } from '@gamepark/rules-api'
+import { MaterialMoveBuilder } from '@gamepark/rules-api'
 import { useEffect } from 'react'
 import { BattlefieldHelp } from './BattlefieldHelp'
 import { PlayerPanels } from './panels/PlayerPanels'
+import displayLocationHelp = MaterialMoveBuilder.displayLocationHelp
 
 export default function GameDisplay() {
   useOpponentDeckDisplay()

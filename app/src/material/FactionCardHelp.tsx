@@ -17,7 +17,7 @@ import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { useMe } from '@gamepark/react-client'
 import { linkButtonCss, MaterialHelpProps, Picture, PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
-import { displayLocationHelp, isCustomMove, isMoveItemType } from '@gamepark/rules-api'
+import { isCustomMove, isMoveItemType, MaterialMoveBuilder } from '@gamepark/rules-api'
 import { Trans, useTranslation } from 'react-i18next'
 import { isDeckbuilding } from '../deckbuilding/deckbuilding.util'
 import astral from '../images/icons/astral.png'
@@ -25,6 +25,7 @@ import captureFlag from '../images/icons/capture-flag.png'
 import { AbilityHelp } from './AbilityHelp'
 import { alignIcon, AttributeHelp } from './AttributeHelp'
 import { CardEffectsHelp } from './CardEffectsHelp'
+import displayLocationHelp = MaterialMoveBuilder.displayLocationHelp
 
 export const FactionCardHelp = (props: MaterialHelpProps) => {
   const { item, itemIndex, closeDialog } = props

@@ -1,28 +1,10 @@
-import { HandLocator, ItemContext } from '@gamepark/react-game'
-import { Location, MaterialItem } from '@gamepark/rules-api'
+import { HandLocator, MaterialContext } from '@gamepark/react-game'
+import { Location } from '@gamepark/rules-api'
 
 export class PlayerHandLocator extends HandLocator {
-  getCoordinates(location: Location, { player, rules }: ItemContext) {
-    if (location.player === (player ?? rules.players[0])) {
-      return { x: 50, y: 12, z: 10 }
-    } else {
-      return { x: 50, y: -12, z: 10 }
-    }
-  }
-
-  getBaseAngle(item: MaterialItem, { player, rules }: ItemContext) {
-    return item.location.player === (player ?? rules.players[0]) ? 0 : -180
-  }
-
-  getGapMaxAngle() {
-    return 1.2
-  }
-
-  getMaxAngle() {
-    return 9
-  }
-
-  getRadius() {
-    return 300
-  }
+  radius = 300
+  maxAngle = 9
+  gapMaxAngle = 1.2
+  getCoordinates = (location: Location, { player = 1 }: MaterialContext) => ({ x: 50, y: location.player === player ? 12 : -12, z: 5 })
+  getBaseAngle = (location: Location, { player = 1 }: MaterialContext) => location.player === player ? 0 : -180
 }

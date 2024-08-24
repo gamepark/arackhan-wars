@@ -4,8 +4,9 @@ import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationHelpProps, MaterialComponent, pointerCursorCss, usePlay, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
-import { displayMaterialHelp } from '@gamepark/rules-api'
+import { MaterialMoveBuilder } from '@gamepark/rules-api'
 import { useTranslation } from 'react-i18next'
+import displayMaterialHelp = MaterialMoveBuilder.displayMaterialHelp
 
 export const PlayerDiscardHelp = ({ location }: LocationHelpProps) => {
   const { t } = useTranslation()

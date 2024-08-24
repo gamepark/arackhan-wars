@@ -1,13 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { ItemLocator } from '@gamepark/react-game'
-import { FactionTokenSpaceDescription } from './FactionTokenSpaceDescription'
+import { LocationDescription, Locator } from '@gamepark/react-game'
+import { factionTokenDescription } from '../material/FactionTokenDescription'
 
-export class FactionTokenSpaceLocator extends ItemLocator {
-  locationDescription = new FactionTokenSpaceDescription()
+export class FactionTokenSpaceLocator extends Locator {
+  locationDescription = new LocationDescription(factionTokenDescription)
   parentItemType = MaterialType.FactionCard
-
-  getPositionOnParent() {
-    return { x: 49.7, y: 64.5 }
-  }
+  positionOnParent = { x: 49.7, y: 64.5 }
 }

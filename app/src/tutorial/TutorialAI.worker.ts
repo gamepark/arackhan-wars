@@ -21,7 +21,7 @@ import {
   MaterialMove,
   MoveItem,
   MoveKind,
-  playMove,
+  playAction,
   RuleMoveType,
   XYCoordinates
 } from '@gamepark/rules-api'
@@ -40,7 +40,7 @@ self.onmessage = (e: MessageEvent<string>) => {
 }
 
 export function tutorialAI(game: MaterialGame, bot: number): MaterialMove[] {
-  if (game.tutorialStep) {
+  if (game.tutorial) {
     switch (game.rule?.id) {
       case RuleId.ChooseStartPlayer:
         return [{ kind: MoveKind.CustomMove, type: CustomMoveType.ChoosePlayer, data: bot }]
@@ -90,7 +90,7 @@ const placementAi = (game: MaterialGame, bot: number) => {
             .moveItem({ type: LocationType.Battlefield, ...space, rotation: true, player: bot }),
           new PlacementRule(game).validationMove
         ]
-        moves.forEach(move => playMove(rules, move))
+        moves.forEach(move => playAction(rules, move, bot))
         placements.push({
           moves, rules, score:
             evaluatePlacement(rules, isFirstPlayer, bot, moves[0]) + evaluatePlacement(rules, isFirstPlayer, bot, moves[1])
@@ -111,7 +111,7 @@ const placementAi = (game: MaterialGame, bot: number) => {
               .moveItem({ type: LocationType.Battlefield, ...battlefieldSpaces[l], rotation: true, player: bot }),
             new PlacementRule(game).validationMove
           ]
-          moves.forEach(move => playMove(rules, move))
+          moves.forEach(move => playAction(rules, move, bot))
           placements.push({
             moves, rules, score:
               evaluatePlacement(rules, isFirstPlayer, bot, moves[0]) + evaluatePlacement(rules, isFirstPlayer, bot, moves[1])
@@ -125,8 +125,8 @@ const placementAi = (game: MaterialGame, bot: number) => {
     const opponent = rules.players.find(p => p !== bot)!
     for (const placement of placements) {
       for (let i = 0; i < 2; i++) {
-        playMove(placement.rules, placement.rules.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(opponent)
-          .moveItem({ type: LocationType.AstralPlane }))
+        playAction(placement.rules, placement.rules.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(opponent)
+          .moveItem({ type: LocationType.AstralPlane }), bot)
       }
     }
   }
@@ -283,7 +283,7 @@ const getNegamax = (
   const moves = getMoves(rules, activePlayer)
   for (const move of moves) {
     const rulesCopy = new ArackhanWarsRules(JSON.parse(JSON.stringify(rules.game)))
-    playMove(rulesCopy, move)
+    playAction(rulesCopy, move, bot)
     const test = getNegamax(rulesCopy, bot, stop, score, getMoves, timeLimit, depth + 1)
     if (!result || (activePlayer === bot ? (test.value > result.value) : (test.value < result.value))) {
       result = test

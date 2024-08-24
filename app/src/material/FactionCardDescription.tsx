@@ -14,7 +14,7 @@ import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import { CardDescription, ItemContext, MaterialContext } from '@gamepark/react-game'
-import { displayLocationHelp, isCustomMove, isCustomMoveType, isMoveItemType, Location, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { isCustomMove, isCustomMoveType, isMoveItemType, Location, MaterialGame, MaterialItem, MaterialMove, MaterialMoveBuilder } from '@gamepark/rules-api'
 import { differenceBy, range } from 'lodash'
 import { isDeckbuilding } from '../deckbuilding/deckbuilding.util'
 import BlightCardBack from '../images/cards/blight/BlightCardBack.jpg'
@@ -234,8 +234,8 @@ import EN1047WinterProtects from '../images/cards/whitelands/en/EN1047WinterProt
 import WhitelandsCardBack from '../images/cards/whitelands/WhitelandsCardBack.jpg'
 import { CombatIcon } from '../locators/CombatIconLocator'
 import { CombatResult } from '../locators/CombatResultIconLocator'
-
 import { FactionCardHelp } from './FactionCardHelp'
+import displayLocationHelp = MaterialMoveBuilder.displayLocationHelp
 
 export class FactionCardDescription extends CardDescription {
   images = {
@@ -457,7 +457,6 @@ export class FactionCardDescription extends CardDescription {
       const icon = cardRule.getDefense(attackers) >= (attackValue ?? 0) ? CombatResult.Defense : cardRule.canRegenerate ? CombatResult.Regeneration : CombatResult.Dead
       locations.push({ type: LocationType.CombatResultIcon, parent: index, id: icon, x: attackValue })
     }
-    locations.push({ type: LocationType.FactionCard, parent: index })
     for (const turnEffect of cardRule.targetingEffects) {
       if (turnEffect.type === EffectType.Mimic) {
         locations.unshift({ type: LocationType.CardTurnEffect, parent: index, id: turnEffect })
@@ -499,6 +498,14 @@ export class FactionCardDescription extends CardDescription {
       return false
     }
     return super.canLongClick(move, context)
+  }
+
+  getDropLocations(item: MaterialItem, move: MaterialMove, context: ItemContext) {
+    if (isCustomMove(move) && move.type === CustomMoveType.Attack) {
+      const targets = move.data.target !== undefined ? [move.data.target] : getCardRule(context.rules.game, context.index).omnistrikeTargets
+      return targets.map(target => ({ type: LocationType.FactionCard, parent: target }))
+    }
+    return super.getDropLocations(item, move, context)
   }
 
   isFlipped(item: Partial<MaterialItem>, context: MaterialContext) {
@@ -550,7 +557,7 @@ export class FactionCardDescription extends CardDescription {
 export const factionCardDescription = new FactionCardDescription()
 
 export const cardWidth = factionCardDescription.width
-export const cardHeight = factionCardDescription.width / factionCardDescription.ratio
+export const cardHeight = factionCardDescription.height
 
 export function getCardBattlefieldModifierLocations(game: MaterialGame, index: number) {
   const locations: Location[] = []
@@ -574,15 +581,15 @@ export function getCardBattlefieldModifierLocations(game: MaterialGame, index: n
   const cancelledAttributes = differenceBy(nativeAttributes, attributes, attribute => attribute.type)
   let attributeIconPosition = 0
   for (const attribute of cancelledAttributes) {
-    locations.push({ type: LocationType.AttributesIcons, id: { ...attribute, cancel: true }, x: attributeIconPosition++ })
+    locations.push({ type: LocationType.AttributesIcons, id: { ...attribute, cancel: true }, parent: index, x: attributeIconPosition++ })
   }
   const gainedAttributes = differenceBy(attributes, nativeAttributes, attribute => attribute.type)
   for (const attribute of gainedAttributes) {
-    locations.push({ type: LocationType.AttributesIcons, id: attribute, x: attributeIconPosition++ })
+    locations.push({ type: LocationType.AttributesIcons, id: attribute, parent: index, x: attributeIconPosition++ })
   }
   const hasSkill = isCreature(characteristics) && characteristics.getSkills().length > 0
   if (hasSkill && cardRule.effects.some(effect => effect.type === EffectType.LoseSkills)) {
-    locations.push({ type: LocationType.SkillLostIcon })
+    locations.push({ type: LocationType.SkillLostIcon, parent: index })
   }
   return locations
 }

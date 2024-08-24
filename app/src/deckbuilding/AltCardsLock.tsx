@@ -6,9 +6,10 @@ import { CardId, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/mat
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { usePlay, useRules } from '@gamepark/react-game'
-import { displayMaterialHelp } from '@gamepark/rules-api'
+import { MaterialMoveBuilder } from '@gamepark/rules-api'
 import { cardHeight, cardWidth } from '../material/FactionCardDescription'
 import { DeckbuildingRules } from './DeckbuildingRules'
+import displayMaterialHelp = MaterialMoveBuilder.displayMaterialHelp
 
 export const AltCardsLock = () => {
   const rules = useRules<DeckbuildingRules>()
@@ -38,4 +39,5 @@ const lockMask = (x: number) => css`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transform: translateZ(1em);
 `

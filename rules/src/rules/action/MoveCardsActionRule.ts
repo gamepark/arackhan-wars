@@ -57,7 +57,7 @@ export abstract class MoveCardsActionRule extends CardActionRule {
       const swap = battlefield.location(l => l.x === coordinates.x && l.y === coordinates.y)
       if (swap.length) {
         if (!canSwap || swap.getIndex() === card.getIndex()) return false
-        if (!this.getCardsAllowedToMove().getItem(swap.getIndex())) return false
+        if (!this.getCardsAllowedToMove().getIndexes().includes(swap.getIndex())) return false
         return distance === 1 ||
           (cardRule.thereIsAnotherCardAdjacentTo(coordinates)
             && getCardRule(this.game, swap.getIndex()).thereIsAnotherCardAdjacentTo(cardRule.item.location as XYCoordinates))

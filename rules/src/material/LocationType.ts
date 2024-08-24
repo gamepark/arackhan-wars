@@ -1,5 +1,6 @@
 export enum LocationType {
-  Table = 1, // The table
+  BattleMatSpot,
+  RoundTrackerSpot, // The table
   PlayerDeck, // The player deck
   PlayerHand, // The player hand
   Battlefield, // The battlefield Space

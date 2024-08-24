@@ -20,7 +20,7 @@ import { roundTrackerDescription } from '../material/RoundTrackerDescription'
 import { TutorialSetup } from './TutorialSetup'
 
 export class Tutorial extends MaterialTutorial {
-  version = 6
+  version = 7
   options = { players: 2 }
   setup = new TutorialSetup()
 
@@ -258,7 +258,7 @@ export class Tutorial extends MaterialTutorial {
         text: () => <Trans defaults="tuto.attack.solve"><strong/></Trans>,
         position: { x: 30, y: 0 }
       },
-      focus: (game: MaterialGame) => this.steps[game.tutorialStep! - 1].focus!(game),
+      focus: (game: MaterialGame) => this.steps[game.tutorial!.step - 1].focus!(game),
       move: {
         filter: isCustomMoveType(CustomMoveType.SolveAttack)
       }

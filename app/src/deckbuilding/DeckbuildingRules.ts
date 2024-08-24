@@ -11,7 +11,7 @@ import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import {
   CustomMove,
   FillGapStrategy,
-  isEnumValue,
+  getEnumValues,
   isMoveItemType,
   ItemMove,
   LocalMovePreview,
@@ -205,6 +205,6 @@ export class DeckBuildingSetup extends MaterialGameSetup<number, MaterialType, L
   }
 }
 
-const allCards = Object.values(FactionCard).filter(isEnumValue)
+const allCards = getEnumValues(FactionCard)
 
 export const cardToItem = (card: FactionCard, location: Location) => ({ id: { front: card, back: FactionCardsCharacteristics[card].faction }, location })

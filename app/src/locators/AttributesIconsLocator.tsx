@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
 import { AttributeType } from '@gamepark/arackhan-wars/material/cards/Attribute'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { ItemLocator, LocationDescription } from '@gamepark/react-game'
+import { LocationDescription, Locator } from '@gamepark/react-game'
 import { Location } from '@gamepark/rules-api'
 import flightCancel from '../images/icons/attributes/flight-cancel.png'
 import flight from '../images/icons/attributes/flight.png'
@@ -23,13 +22,10 @@ import stealth from '../images/icons/attributes/stealth.png'
 import swarmCancel from '../images/icons/attributes/swarm-cancel.png'
 import swarm from '../images/icons/attributes/swarm.png'
 
-export class AttributesIconsLocator extends ItemLocator {
+export class AttributesIconsLocator extends Locator {
   locationDescription = attributesIconDescription
   parentItemType = MaterialType.FactionCard
-
-  getPositionOnParent(location: Location) {
-    return { x: 18 + location.x! * 15, y: 87 }
-  }
+  getPositionOnParent = ({ x = 0 }: Location) => ({ x: 18 + x * 15, y: 87 })
 }
 
 class AttributesIconsDescription extends LocationDescription {
@@ -60,13 +56,7 @@ class AttributesIconsDescription extends LocationDescription {
     [AttributeType.Perforation]: perforationCancel
   }
 
-  getImage(location: Location) {
-    return location.id.cancel ? this.attributeCancelImages[location.id.type] : this.attributeImages[location.id.type]
-  }
-
-  extraCss = css`
-    pointer-events: none;
-  `
+  getImage = ({ id }: Location) => id.cancel ? this.attributeCancelImages[id.type] : this.attributeImages[id.type]
 }
 
 export const attributesIconDescription = new AttributesIconsDescription()

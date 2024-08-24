@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { ItemLocator, LocationDescription } from '@gamepark/react-game'
+import { LocationDescription, Locator } from '@gamepark/react-game'
 
-export class CardValueLocator extends ItemLocator {
+export class CardValueLocator extends Locator {
   locationDescription = new CardValueDescription()
   parentItemType = MaterialType.FactionCard
   positionOnParent = { x: 89.5, y: 7.5 }
@@ -11,10 +11,10 @@ export class CardValueLocator extends ItemLocator {
 
 class CardValueDescription extends LocationDescription {
   width = 1
-  ratio = 1
-  borderRadius = this.width / 2
+  height = 1
+  borderRadius = 0.5
 
-  getExtraCss = () => css`
+  extraCss = css`
     border: 0.1em solid green;
   `
 }

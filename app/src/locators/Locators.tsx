@@ -1,5 +1,5 @@
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { ItemLocator } from '@gamepark/react-game'
+import { Locator } from '@gamepark/react-game'
 import { AstralPlaneLocator } from './AstralPlaneLocator'
 import { AttributesIconsLocator } from './AttributesIconsLocator'
 import { battleFieldLocator } from './BattlefieldLocator'
@@ -15,11 +15,10 @@ import { PlayerHandLocator } from './PlayerHandLocator'
 import { PlayerTokenStockLocator } from './PlayerTokenStockLocator'
 import { RoundTrackerLocator } from './RoundTrackerLocator'
 import { SkillLostIconLocator } from './SkillLostIconLocator'
-import { TableLocator } from './TableLocator'
 import { UnderCardLocator } from './UnderCardLocator'
 
-export const Locators: Partial<Record<LocationType, ItemLocator>> = {
-  [LocationType.Table]: new TableLocator(),
+export const Locators: Partial<Record<LocationType, Locator>> = {
+  [LocationType.RoundTrackerSpot]: new Locator({ coordinates: { x: 50 } }),
   [LocationType.PlayerDeck]: new PlayerDeckLocator(),
   [LocationType.PlayerHand]: new PlayerHandLocator(),
   [LocationType.Battlefield]: battleFieldLocator,

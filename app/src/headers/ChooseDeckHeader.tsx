@@ -7,10 +7,11 @@ import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { DeckValidator } from '@gamepark/arackhan-wars/rules/DeckValidator'
 import { Deck, useMe } from '@gamepark/react-client'
 import { MaterialComponent, RulesDialog, ThemeButton, usePlay, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
-import { displayMaterialHelp, MoveKind } from '@gamepark/rules-api'
+import { MaterialMoveBuilder, MoveKind } from '@gamepark/rules-api'
 import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { DeckList } from '../deckbuilding/DeckList'
+import displayMaterialHelp = MaterialMoveBuilder.displayMaterialHelp
 
 export const ChooseDeckHeader = () => {
   const { t } = useTranslation()

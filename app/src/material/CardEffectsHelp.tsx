@@ -4,7 +4,7 @@ import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { MaterialComponent, Picture, pointerCursorCss, usePlay, useRules } from '@gamepark/react-game'
-import { displayMaterialHelp, Location } from '@gamepark/rules-api'
+import { Location, MaterialMoveBuilder } from '@gamepark/rules-api'
 import { TFunction } from 'i18next'
 import { Trans, useTranslation } from 'react-i18next'
 import { attributesIconDescription } from '../locators/AttributesIconsLocator'
@@ -12,6 +12,7 @@ import { CombatIcon, combatIconDescription } from '../locators/CombatIconLocator
 import { skillLostIconDescription } from '../locators/SkillLostIconLocator'
 import { alignIcon } from './AttributeHelp'
 import { getCardBattlefieldModifierLocations } from './FactionCardDescription'
+import displayMaterialHelp = MaterialMoveBuilder.displayMaterialHelp
 
 export const CardEffectsHelp = ({ index }: { index: number }) => {
   const { t } = useTranslation()

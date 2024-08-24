@@ -4,9 +4,10 @@ import { FactionToken } from '@gamepark/arackhan-wars/material/FactionToken'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { HistoryEntry, PlayMoveButton, usePlayerName } from '@gamepark/react-game'
-import { displayMaterialHelp, MaterialGame, MoveItem } from '@gamepark/rules-api'
+import { MaterialGame, MaterialMoveBuilder, MoveItem } from '@gamepark/rules-api'
 import merge from 'lodash/merge'
 import { Trans, useTranslation } from 'react-i18next'
+import displayMaterialHelp = MaterialMoveBuilder.displayMaterialHelp
 
 type RevealCardHistoryProps = {
   move: MoveItem

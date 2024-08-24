@@ -3,9 +3,10 @@ import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { HistoryEntry, PlayMoveButton, usePlayerName, useRules } from '@gamepark/react-game'
-import { displayLocationHelp } from '@gamepark/rules-api'
+import { MaterialMoveBuilder } from '@gamepark/rules-api'
 import { Trans } from 'react-i18next'
 import { FactionTokenBackground } from './RevealCardHistory'
+import displayLocationHelp = MaterialMoveBuilder.displayLocationHelp
 
 type ChooseDeckHistoryProps = {
   player: number

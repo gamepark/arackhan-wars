@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { ItemLocator, LocationDescription } from '@gamepark/react-game'
+import { Locator, LocationDescription } from '@gamepark/react-game'
 import { Location } from '@gamepark/rules-api'
 import attackIcon from '../images/icons/attack.png'
 import defenseIcon from '../images/icons/defense.png'
@@ -10,7 +10,7 @@ export enum CombatIcon {
   Attack = 1, Defense
 }
 
-export class CombatIconLocator extends ItemLocator {
+export class CombatIconLocator extends Locator {
   locationDescription = combatIconDescription
   parentItemType = MaterialType.FactionCard
 
@@ -29,26 +29,20 @@ class CombatIconDescription extends LocationDescription {
     [CombatIcon.Defense]: defenseIcon
   }
 
-  getImage(location: Location) {
-    return location.x !== undefined ? this.images[location.id] : undefined
-  }
+  getImage = ({ x, id }: Location) => x !== undefined ? this.images[id] : undefined
 
-  getExtraCss(location: Location) {
-    return css`
-      pointer-events: none;
-
-      &:after {
-        content: '${location.x}';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: ${location.y! > 0 ? 'darkgreen' : 'darkred'};
-        font-family: "Cinzel", sans-serif;
-        font-size: 0.45em;
-      }
-    `
-  }
+  getExtraCss = ({ x, y }: Location) => css`
+    &:after {
+      content: '${x}';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: ${(y)! > 0 ? 'darkgreen' : 'darkred'};
+      font-family: "Cinzel", sans-serif;
+      font-size: 0.45em;
+    }
+  `
 }
 
 export const combatIconDescription = new CombatIconDescription()

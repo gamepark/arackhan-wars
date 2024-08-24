@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { Trans, useTranslation } from 'react-i18next'
-import { linkButtonCss, PlayMoveButton } from '@gamepark/react-game'
-import { displayLocationHelp } from '@gamepark/rules-api'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
+import { linkButtonCss, PlayMoveButton } from '@gamepark/react-game'
+import { MaterialMoveBuilder } from '@gamepark/rules-api'
+import { Trans, useTranslation } from 'react-i18next'
+import displayLocationHelp = MaterialMoveBuilder.displayLocationHelp
 
 export const BattleMatHelp = () => {
   const { t } = useTranslation()
