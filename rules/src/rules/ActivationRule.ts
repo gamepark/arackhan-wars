@@ -47,7 +47,7 @@ export class ActivationRule extends PlayerTurnRule {
     moves.push(...new MoveRules(this.game).getPlayerMoves())
     moves.push(...new ActionRule(this.game).getPlayerMoves())
     if (!this.remind<Attack[]>(Memory.Attacks).length && !this.remind<number[]>(Memory.MovedCards).length) {
-      moves.push(this.rules().customMove(CustomMoveType.Pass, this.remind(Memory.IsInitiativeSequence)))
+      moves.push(this.customMove(CustomMoveType.Pass, this.remind(Memory.IsInitiativeSequence)))
     }
     return moves
   }
@@ -77,7 +77,7 @@ export class ActivationRule extends PlayerTurnRule {
     } else {
       const endOfTurnRule = new EndOfTurnRule(this.game)
       if (endOfTurnRule.cardsMoves.length > 0) {
-        return [this.rules().startRule(RuleId.EndOfTurn)]
+        return [this.startRule(RuleId.EndOfTurn)]
       } else {
         return endOfTurnRule.endPlayerTurn()
       }
@@ -89,6 +89,6 @@ export class ActivationRule extends PlayerTurnRule {
     if (nextPlayer === this.remind(Memory.StartPlayer)) {
       this.forget(Memory.IsInitiativeSequence)
     }
-    return [this.rules().startPlayerTurn(RuleId.ActivationRule, nextPlayer)]
+    return [this.startPlayerTurn(RuleId.ActivationRule, nextPlayer)]
   }
 }

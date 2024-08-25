@@ -21,7 +21,7 @@ export class MoveRules extends PlayerTurnRule {
         moves.push(this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(movedCard).rotateItem(true))
       }
       if (movedCards.length > 1) {
-        moves.push(this.rules().customMove(CustomMoveType.Deactivate))
+        moves.push(this.customMove(CustomMoveType.Deactivate))
       }
     }
     return moves

@@ -24,11 +24,11 @@ export class MimicryActionRule extends CardActionRule {
   getPlayerMoves() {
     if (this.target === undefined) {
       return this.creaturesOnBattlefield.player(this.player).getIndexes()
-        .map(index => this.rules().customMove(CustomMoveType.ChooseCard, index))
+        .map(index => this.customMove(CustomMoveType.ChooseCard, index))
     } else {
       return this.creaturesOnBattlefield.getIndexes()
         .filter(index => index !== this.target)
-        .map(index => this.rules().customMove(CustomMoveType.ChooseCard, index))
+        .map(index => this.customMove(CustomMoveType.ChooseCard, index))
     }
   }
 

@@ -50,7 +50,7 @@ export class BackupActionRule extends CardActionRule {
       eligibleCards.moveItems({ type: LocationType.Battlefield, ...spot, player: this.player })
     )
     if (this.remind(Memory.Count) < 2) {
-      moves.push(this.rules().customMove(CustomMoveType.Pass))
+      moves.push(this.customMove(CustomMoveType.Pass))
     }
     return moves
   }

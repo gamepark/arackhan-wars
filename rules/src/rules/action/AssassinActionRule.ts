@@ -29,6 +29,6 @@ export class AssassinActionRule extends MoveCardsActionRule {
 
   afterCardAction(): MaterialMove[] {
     this.memorize<number[]>(Memory.OncePerRound, cards => [...cards, this.cardIndex])
-    return [this.rules().startRule(RuleId.ActivationRule)]
+    return [this.startRule(RuleId.ActivationRule)]
   }
 }

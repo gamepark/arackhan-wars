@@ -37,26 +37,26 @@ export class AttackRule extends PlayerTurnRule {
       const attackerRules = getCardRule(this.game, card)
       if (attackerRules.hasOmnistrike) {
         if (potentialTargets.some(target => attackerRules.canMeleeAttackTarget(target))) {
-          moves.push(this.rules().customMove(CustomMoveType.Attack, { card }))
+          moves.push(this.customMove(CustomMoveType.Attack, { card }))
         }
         if (attackerRules.range > 1) {
           for (const target of potentialTargets) {
             if (attackerRules.canAttackTarget(target) && !attackerRules.canMeleeAttackTarget(target)) {
-              moves.push(this.rules().customMove(CustomMoveType.Attack, { card, target }))
+              moves.push(this.customMove(CustomMoveType.Attack, { card, target }))
             }
           }
         }
       } else {
         for (const target of potentialTargets) {
           if (attackerRules.canAttackTarget(target)) {
-            moves.push(this.rules().customMove(CustomMoveType.Attack, { card, target }))
+            moves.push(this.customMove(CustomMoveType.Attack, { card, target }))
           }
         }
       }
     }
 
     if (this.remind<Attack[]>(Memory.Attacks).length > 0 && !this.remind<number[]>(Memory.MovedCards).length) {
-      moves.push(this.rules().customMove(CustomMoveType.SolveAttack))
+      moves.push(this.customMove(CustomMoveType.SolveAttack))
     }
 
     return moves
@@ -134,7 +134,7 @@ export class AttackRule extends PlayerTurnRule {
 
     if (perforations.length > 0) {
       this.memorize<Perforation[]>(Memory.Perforations, perforations)
-      moves.push(this.rules().startRule(RuleId.SolvePerforations))
+      moves.push(this.startRule(RuleId.SolvePerforations))
     } else {
       moves.push(...this.cleanAttacks())
     }

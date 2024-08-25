@@ -55,7 +55,7 @@ export class NemesioGreyOrderActionRule extends CardActionRule {
       this.memorize<TargetingEffect[]>(Memory.RoundEffects, effects => [...effects,
         { targets: [nemesio], effect: { type: EffectType.Mimic, target } }
       ])
-      return [this.rules().startRule(RuleId.ActivationRule)]
+      return [this.startRule(RuleId.ActivationRule)]
     }
     return []
   }

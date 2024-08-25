@@ -14,7 +14,7 @@ export class RevealRule extends MaterialRulesPart {
     return [
       ...this.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane).rotation(true)
         .sort(item => item.location.player === startPlayer ? 0 : 1).rotateItems(false),
-      this.rules().startPlayerTurn(RuleId.ActivationRule, startPlayer)
+      this.startPlayerTurn(RuleId.ActivationRule, startPlayer)
     ]
   }
 

@@ -37,7 +37,7 @@ export abstract class CardActionRule extends PlayerTurnRule {
         moves.push(token.rotateItem(true))
       }
     }
-    moves.push(this.rules().startRule(RuleId.ActivationRule))
+    moves.push(this.startRule(RuleId.ActivationRule))
     return moves
   }
 

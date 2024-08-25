@@ -12,7 +12,7 @@ import { RuleId } from './RuleId'
 export class ChooseFactionRule extends SimultaneousRule {
 
   getActivePlayerLegalMoves(player: number) {
-    return factions.map(faction => this.rules().customMove(CustomMoveType.ChooseFaction, { player, faction }))
+    return factions.map(faction => this.customMove(CustomMoveType.ChooseFaction, { player, faction }))
   }
 
   onCustomMove(move: CustomMove): MaterialMove[] {
@@ -21,12 +21,12 @@ export class ChooseFactionRule extends SimultaneousRule {
         if (move.data.faction !== undefined) {
           this.memorize(Memory.PlayerDeck, PreBuildDecks[move.data.faction], move.data.player)
         }
-        return [this.rules().endPlayerTurn(move.data.player)]
+        return [this.endPlayerTurn(move.data.player)]
       case CustomMoveType.ChooseDeck:
         if (move.data.cards !== undefined) {
           this.memorize(Memory.PlayerDeck, move.data.cards, move.data.player)
         }
-        return [this.rules().endPlayerTurn(move.data.player)]
+        return [this.endPlayerTurn(move.data.player)]
       case CustomMoveType.RevealDecks:
         for (let i = 0; i < this.game.players.length; i++) {
           this.memorize(Memory.PlayerDeck, move.data[i], this.game.players[i])
@@ -51,8 +51,8 @@ export class ChooseFactionRule extends SimultaneousRule {
         }))
       ))
     }
-    moves.push(this.rules().customMove(CustomMoveType.RevealDecks, decks))
-    moves.push(this.rules().startPlayerTurn(RuleId.ChooseStartPlayer, this.game.players[0]))
+    moves.push(this.customMove(CustomMoveType.RevealDecks, decks))
+    moves.push(this.startPlayerTurn(RuleId.ChooseStartPlayer, this.game.players[0]))
     return moves
   }
 

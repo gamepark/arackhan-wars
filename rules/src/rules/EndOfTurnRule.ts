@@ -13,7 +13,7 @@ export class EndOfTurnRule extends PlayerTurnRule {
   getPlayerMoves() {
     return [
       ...this.cardsMoves,
-      this.rules().customMove(CustomMoveType.Pass)
+      this.customMove(CustomMoveType.Pass)
     ]
   }
 
@@ -48,9 +48,9 @@ export class EndOfTurnRule extends PlayerTurnRule {
       .moveItems({ type: LocationType.PlayerDiscard, player: this.player })
     )
     if (nextPlayer !== this.remind(Memory.StartPlayer)) {
-      moves.push(this.rules().startPlayerTurn(RuleId.ActivationRule, nextPlayer))
+      moves.push(this.startPlayerTurn(RuleId.ActivationRule, nextPlayer))
     } else {
-      moves.push(this.rules().startRule(RuleId.EndOfRoundRule))
+      moves.push(this.startRule(RuleId.EndOfRoundRule))
     }
     return moves
   }

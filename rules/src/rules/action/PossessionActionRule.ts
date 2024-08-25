@@ -48,7 +48,7 @@ export class PossessionActionRule extends CardActionRule {
           id: this.remind(Memory.PlayerFactionToken, this.player),
           location: { parent: move.itemIndex, type: LocationType.FactionTokenSpace, player: this.player }
         }),
-        this.rules().startRule(RuleId.ActivationRule)
+        this.startRule(RuleId.ActivationRule)
       ]
     }
     return []

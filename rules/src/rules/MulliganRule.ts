@@ -38,9 +38,9 @@ export class MulliganRule extends SimultaneousRule {
     const moves: MaterialMove[] = cardsInHand.moveItems({ type: LocationType.PlayerDeck, player })
 
     if (cardsInHand.length < START_HAND) {
-      moves.push(this.rules().customMove(CustomMoveType.Mulligan, { player }))
+      moves.push(this.customMove(CustomMoveType.Mulligan, { player }))
     } else {
-      moves.push(this.rules().endPlayerTurn(player))
+      moves.push(this.endPlayerTurn(player))
     }
 
     return moves
@@ -57,7 +57,7 @@ export class MulliganRule extends SimultaneousRule {
       .player(player)
 
     const moves: MaterialMove[] = [
-      this.rules().endPlayerTurn(player),
+      this.endPlayerTurn(player),
       cardsInDeck.shuffle()
     ]
 
@@ -78,6 +78,6 @@ export class MulliganRule extends SimultaneousRule {
   }
 
   getMovesAfterPlayersDone() {
-    return [this.rules().startPlayerTurn(RuleId.PlacementRule, this.remind(Memory.StartPlayer))]
+    return [this.startPlayerTurn(RuleId.PlacementRule, this.remind(Memory.StartPlayer))]
   }
 }

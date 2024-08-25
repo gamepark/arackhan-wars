@@ -20,6 +20,6 @@ export class ChooseDeckRule extends ChooseFactionRule {
   }
 
   getActivePlayerLegalMoves(player: number) {
-    return publisherDecks.map(cards => this.rules().customMove(CustomMoveType.ChooseDeck, { player, cards }))
+    return publisherDecks.map(cards => this.customMove(CustomMoveType.ChooseDeck, { player, cards }))
   }
 }

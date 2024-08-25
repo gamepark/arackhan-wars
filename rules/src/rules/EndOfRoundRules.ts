@@ -68,12 +68,12 @@ export class EndOfRoundRules extends MaterialRulesPart {
 
     const round = this.material(MaterialType.RoundTrackerToken).getItem()!.location.x!
     if (round === NUMBER_OF_ROUNDS) {
-      moves.push(this.rules().endGame())
+      moves.push(this.endGame())
     } else {
       moves.push(this.material(MaterialType.RoundTrackerToken).moveItem(item => (
         { type: LocationType.RoundTracker, x: round + 1, rotation: !item.location.rotation }
       )))
-      moves.push(this.rules().startRule(RuleId.DrawRule))
+      moves.push(this.startRule(RuleId.DrawRule))
     }
 
     return moves

@@ -11,7 +11,7 @@ export class ActionRule extends PlayerTurnRule {
   getPlayerMoves() {
     return this.availableCards
       .filter(index => getCardRule(this.game, index).canPerformAction)
-      .map(index => this.rules().customMove(CustomMoveType.PerformAction, index))
+      .map(index => this.customMove(CustomMoveType.PerformAction, index))
   }
 
   get availableCards() {
@@ -35,7 +35,7 @@ export class ActionRule extends PlayerTurnRule {
       }
     }
     this.memorize<number[]>(Memory.MovedCards, [])
-    moves.push(this.rules().startRule(getCardRule(this.game, move.data).characteristics!.action!))
+    moves.push(this.startRule(getCardRule(this.game, move.data).characteristics!.action!))
     return moves
   }
 }

@@ -71,9 +71,9 @@ export class PlacementRule extends PlayerTurnRule {
 
   get validationMove() {
     if (this.nextPlayer !== this.remind(Memory.StartPlayer)) {
-      return this.rules().startPlayerTurn(RuleId.PlacementRule, this.nextPlayer)
+      return this.startPlayerTurn(RuleId.PlacementRule, this.nextPlayer)
     } else {
-      return this.rules().startRule(RuleId.RevealRule)
+      return this.startRule(RuleId.RevealRule)
     }
   }
 }

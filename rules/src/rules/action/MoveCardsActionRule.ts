@@ -36,7 +36,7 @@ export abstract class MoveCardsActionRule extends CardActionRule {
       }
     }
     if (this.remind<number[]>(Memory.MovedCards).length > 0) {
-      moves.push(this.rules().customMove(CustomMoveType.Pass))
+      moves.push(this.customMove(CustomMoveType.Pass))
     }
     return moves
   }

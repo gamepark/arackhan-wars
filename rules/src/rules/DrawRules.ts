@@ -10,7 +10,7 @@ export class DrawRules extends MaterialRulesPart {
       ...this.game.players.flatMap(player =>
         this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(player)
           .deck().deal({ type: LocationType.PlayerHand, player }, 2)),
-      this.rules().startRule(RuleId.PlacementRule)
+      this.startRule(RuleId.PlacementRule)
     ]
   }
 }
