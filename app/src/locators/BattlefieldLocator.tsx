@@ -1,11 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { FactionCard, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { ItemContext, Locator, MaterialContext } from '@gamepark/react-game'
+import { DropAreaDescription, ItemContext, Locator, MaterialContext } from '@gamepark/react-game'
 import { Location, MaterialItem } from '@gamepark/rules-api'
+import { factionCardDescription } from '../material/FactionCardDescription'
 
 export class BattlefieldLocator extends Locator {
   parentItemType = MaterialType.BattleMat
+  locationDescription = new DropAreaDescription(factionCardDescription)
 
   coordinates = { z: 1 }
 

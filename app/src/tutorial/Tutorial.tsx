@@ -86,7 +86,7 @@ export class Tutorial extends MaterialTutorial {
       },
       focus: () => ({
         locations: startingCoordinates.map(({ x, y }) => ({ type: LocationType.Battlefield, x, y })),
-        scale: 0.5
+        scale: 0.5, margin: { right: 30 }
       })
     },
     {
