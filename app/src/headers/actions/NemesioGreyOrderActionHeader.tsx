@@ -15,7 +15,7 @@ export const NemesioGreyOrderActionHeader = () => {
   const nemesio = rules.remind(Memory.ActionCard)
   const actionCard = rules.material(MaterialType.FactionCard).getItem(nemesio)?.id.front
   const card = t(`card.name.${getUniqueCard(actionCard)}`)
-  if (!rules.remind<number[]>(Memory.OncePerRound).includes(nemesio)) {
+  if (rules.remind(Memory.TargetCard) === undefined) {
     if (playerId === activePlayer) {
       return <>{t('header.destroy.you', { card })}</>
     } else {

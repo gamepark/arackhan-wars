@@ -30,7 +30,7 @@ export class NemesioGreyOrderActionRule extends CardActionRule {
   }
 
   getPlayerMoves() {
-    if (!this.remind<number[]>(Memory.OncePerRound).includes(this.cardIndex)) {
+    if (this.remind(Memory.TargetCard) === undefined) {
       return this.cardsToSacrifice.moveItems((_, index) => ({ type: LocationType.PlayerDiscard, player: getCardRule(this.game, index).originalOwner }))
     } else {
       return this.otherCreatures.selectItems()
@@ -47,8 +47,9 @@ export class NemesioGreyOrderActionRule extends CardActionRule {
   afterItemMove(move: ItemMove) {
     const nemesio = this.cardIndex
     if (isMoveItemType(MaterialType.FactionCard)(move)) {
-      this.memorize<number[]>(Memory.OncePerRound, cards => [...cards, nemesio])
+      this.memorize(Memory.TargetCard, move.itemIndex)
     } else if (isSelectItemType(MaterialType.FactionCard)(move)) {
+      this.forget(Memory.TargetCard)
       const card = this.material(MaterialType.FactionCard).getItem<CardId>(move.itemIndex)!
       delete card.selected
       const target = card.id!.front
