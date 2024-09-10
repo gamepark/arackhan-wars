@@ -47,6 +47,8 @@ export class EndOfRoundRules extends MaterialRulesPart {
       for (const effect of cardRule.effects) {
         if (effect.type === EffectType.Trigger && effect.condition === TriggerCondition.EndOfRound) {
           if (effect.action === TriggerAction.Destroy) {
+            const token = this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(cardIndex)
+            tokensToIgnore.push(...token.getIndexes())
             moves.push(...cardRule.destroyCard())
           }
         }
