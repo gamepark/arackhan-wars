@@ -10,7 +10,7 @@ import { CardActionRule } from './CardActionRule'
 
 export abstract class MoveCardsActionRule extends CardActionRule {
   moves?: number
-  maxDistance?: number
+  maxDistance: number = Infinity
 
   canPlay(): boolean {
     const cardsAllowedToMove = this.getCardsAllowedToMove()
@@ -49,26 +49,12 @@ export abstract class MoveCardsActionRule extends CardActionRule {
 
   getLegalDestinations(card: Material): XYCoordinates[] {
     const battlefield = this.battlefield
-    const canSwap = this.canSwap()
     const cardRule = getCardRule(this.game, card.getIndex())
-    return battlefieldCoordinates.filter(coordinates => {
-      const distance = getDistanceBetweenSquares(cardRule.item.location as XYCoordinates, coordinates)
-      if (this.maxDistance !== undefined && distance > this.maxDistance) return false
-      const swap = battlefield.location(l => l.x === coordinates.x && l.y === coordinates.y)
-      if (swap.length) {
-        if (!canSwap || swap.getIndex() === card.getIndex()) return false
-        if (!this.getCardsAllowedToMove().getIndexes().includes(swap.getIndex())) return false
-        return distance === 1 ||
-          (cardRule.thereIsAnotherCardAdjacentTo(coordinates)
-            && getCardRule(this.game, swap.getIndex()).thereIsAnotherCardAdjacentTo(cardRule.item.location as XYCoordinates))
-      }
-      return cardRule.thereIsAnotherCardAdjacentTo(coordinates)
-    })
-  }
-
-  canSwap() {
-    if (!this.moves) return true
-    return this.moves - this.remind<number[]>(Memory.MovedCards).length > 1
+    return battlefieldCoordinates.filter(coordinates =>
+      getDistanceBetweenSquares(cardRule.item.location as XYCoordinates, coordinates) <= this.maxDistance
+      && battlefield.location(l => l.x === coordinates.x && l.y === coordinates.y).length === 0
+      && cardRule.thereIsAnotherCardAdjacentTo(coordinates)
+    )
   }
 
   beforeItemMove(move: ItemMove): MaterialMove[] {

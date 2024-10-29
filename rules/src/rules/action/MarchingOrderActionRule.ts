@@ -13,8 +13,4 @@ export class MarchingOrderActionRule extends MoveCardsActionRule {
       !movedCards.includes(index) && getCardRule(this.game, index).families.includes(Family.Legion6)
     )
   }
-
-  canSwap(): boolean {
-    return false
-  }
 }
