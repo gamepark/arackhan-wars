@@ -2,7 +2,6 @@
 import { css, Interpolation, keyframes, Theme } from '@emotion/react'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
-import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
 import { EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
@@ -587,8 +586,7 @@ export function getCardBattlefieldModifierLocations(game: MaterialGame, index: n
   for (const attribute of gainedAttributes) {
     locations.push({ type: LocationType.AttributesIcons, id: attribute, parent: index, x: attributeIconPosition++ })
   }
-  const hasSkill = isCreature(characteristics) && characteristics.getSkills().length > 0
-  if (hasSkill && cardRule.effects.some(effect => effect.type === EffectType.LoseSkills)) {
+  if (cardRule.loseSkills(cardRule.initialSkills)) {
     locations.push({ type: LocationType.SkillLostIcon, parent: index })
   }
   return locations

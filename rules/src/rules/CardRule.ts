@@ -10,6 +10,7 @@ import {
   MaterialRulesPart,
   XYCoordinates
 } from '@gamepark/rules-api'
+import { isEqual } from 'lodash'
 import intersection from 'lodash/intersection'
 import max from 'lodash/max'
 import sumBy from 'lodash/sumBy'
@@ -63,7 +64,7 @@ import {
 } from '../material/cards/Effect'
 import { FactionCardCharacteristics } from '../material/cards/FactionCardCharacteristics'
 import { Family } from '../material/cards/Family'
-import { Land } from '../material/cards/Land'
+import { isLand, Land } from '../material/cards/Land'
 import { isSpell, Spell } from '../material/cards/Spell'
 import { CardId, FactionCard, FactionCardsCharacteristics, getUniqueCard } from '../material/FactionCard'
 import { LocationType } from '../material/LocationType'
@@ -76,7 +77,6 @@ import { Memory } from './Memory'
 export class CardRule extends MaterialRulesPart {
   private abilitiesCache: Ability[] | undefined = undefined
   private effectsCache: Effect[] | undefined = undefined
-  private immuneToEnemySpellsCache: boolean | undefined = undefined
 
   constructor(game: MaterialGame, public index: number) {
     super(game)
@@ -154,63 +154,99 @@ export class CardRule extends MaterialRulesPart {
     return this.cardNames.some(card => FactionCardsCharacteristics[card].legendary)
   }
 
-  private hasLostSkills(depth: number) {
-    return this.cardsThatMightAffect.some(card =>
-        card.index !== this.index && card.getAbilities(depth + 1).some(ability =>
-          ability.effects.some(isLoseSkills) && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
-        ) && !this.isImmuneTo(card, depth + 1)
-    )
-  }
-
   get abilities(): Ability[] {
     if (!this.abilitiesCache) {
-      this.abilitiesCache = this.getAbilities()
+      this.abilitiesCache = this.processAbilities()
     }
     return this.abilitiesCache
   }
 
-  private getAbilities(depth = 1): Ability[] {
-    const characteristics = this.characteristics
-    const swapSkills = this.targetingEffects.find(isSwapSkills)
-    let abilities = characteristics?.getAbilities() ?? []
-    if (isCreature(characteristics)) {
-      if (characteristics.hasSkill() && depth < 3 && this.hasLostSkills(depth)) {
-        abilities = characteristics.getWeaknesses()
-      } else if (swapSkills) {
-        const otherCreatureIndex = swapSkills.creatures.find(index => index !== this.index)!
-        const otherCreature = FactionCardsCharacteristics[this.material(MaterialType.FactionCard).getItem<CardId>(otherCreatureIndex)!.id!.front]
-        abilities = (otherCreature as Creature).getSkills().concat(characteristics.getWeaknesses())
-      }
-    }
-    for (const addCharacteristic of this.targetingEffects.filter(isAddCharacteristics)) {
-      const card = FactionCardsCharacteristics[addCharacteristic.card]
-      if (isCreature(card) && card.hasSkill() && depth < 3 && this.hasLostSkills(depth)) {
-        abilities = abilities.concat(card.getWeaknesses())
-      } else {
-        abilities = abilities.concat(card.getAbilities())
-      }
-    }
-    return abilities
+  private processAbilities(): Ability[] {
+    return this.skills.concat(this.weaknesses).concat(this.spellEffects).concat(this.benefits)
   }
 
-  isImmuneTo(rule: CardRule, depth = 1) {
-    return rule.item.location.player !== this.item.location.player && rule.isSpell && this.getIsImmuneToEnemySpells(depth)
+  private get characteristicsForSkills() {
+    const swapSkills = this.targetingEffects.find(isSwapSkills)
+    if (swapSkills) {
+      const otherCreatureIndex = swapSkills.creatures.find(index => index !== this.index)!
+      return FactionCardsCharacteristics[this.material(MaterialType.FactionCard).getItem<CardId>(otherCreatureIndex)!.id!.front]
+    }
+    return this.characteristics
+  }
+
+  loseSkills(skills: Ability[], lookAtEnemySkills = true) {
+    const hasLoseSkillsAbility = skills.some(skill => skill.effects.some(isLoseSkills))
+    const hasLoseSkillsWeakness = this.weaknesses.some(weakness => weakness.effects.some(isLoseSkills))
+    return this.cardsThatMightAffect.some(card => {
+      const isImmune = skills.some(skill =>
+        skill.effects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
+        && skill.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
+      )
+      if (isImmune) return false
+      const isLoseMySkills = (skill: Ability) =>
+        skill.effects.some(isLoseSkills) && skill.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
+      return (!hasLoseSkillsAbility && lookAtEnemySkills && card.skillsIgnoringEnemySkills.some(isLoseMySkills))
+        || (!hasLoseSkillsWeakness && card.weaknesses.some(isLoseMySkills))
+        || card.spellEffects.some(isLoseMySkills)
+        || card.benefits.some(isLoseMySkills)
+    })
+  }
+
+  get initialSkills() {
+    const characteristicsForSkills = this.characteristicsForSkills
+    if (!isCreature(characteristicsForSkills)) return []
+    const skills = [...characteristicsForSkills.getSkills()]
+    for (const addCharacteristic of this.targetingEffects.filter(isAddCharacteristics)) {
+      const card = FactionCardsCharacteristics[addCharacteristic.card]
+      if (isCreature(card)) skills.push(...card.getSkills())
+    }
+    return skills
+  }
+
+  private get skills(): Ability[] {
+    const skills = this.initialSkills
+    return this.loseSkills(skills) ? [] : skills
+  }
+
+  private get skillsIgnoringEnemySkills(): Ability[] {
+    const skills = this.initialSkills
+    return this.loseSkills(skills, false) ? [] : skills
+  }
+
+  private get weaknesses() {
+    const weaknesses = this.characteristics?.getWeaknesses() ?? []
+    for (const addCharacteristic of this.targetingEffects.filter(isAddCharacteristics)) {
+      weaknesses.push(...FactionCardsCharacteristics[addCharacteristic.card].getWeaknesses())
+    }
+    return weaknesses
+  }
+
+  private get spellEffects() {
+    const characteristics = this.characteristics
+    const effects = isSpell(characteristics) ? characteristics.getEffects() : []
+    for (const addCharacteristic of this.targetingEffects.filter(isAddCharacteristics)) {
+      const card = FactionCardsCharacteristics[addCharacteristic.card]
+      if (isSpell(card)) effects.push(...card.getEffects())
+    }
+    return effects
+  }
+
+  private get benefits() {
+    const characteristics = this.characteristics
+    const benefits = isLand(characteristics) ? characteristics.getBenefits() : []
+    for (const addCharacteristic of this.targetingEffects.filter(isAddCharacteristics)) {
+      const card = FactionCardsCharacteristics[addCharacteristic.card]
+      if (isLand(card)) benefits.push(...card.getBenefits())
+    }
+    return benefits
+  }
+
+  isImmuneTo(rule: CardRule) {
+    return rule.item.location.player !== this.item.location.player && rule.isSpell && this.isImmuneToEnemySpells
   }
 
   get isImmuneToEnemySpells() {
-    return this.getIsImmuneToEnemySpells()
-  }
-
-  getIsImmuneToEnemySpells(depth = 1) {
-    if (this.immuneToEnemySpellsCache === undefined) {
-      this.immuneToEnemySpellsCache = this.cardsThatMightAffect.some(rule =>
-        rule.getAbilities(depth + 1).some(ability =>
-          ability.effects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
-          && ability.isApplicable(this.game, rule.cardMaterial, this.cardMaterial)
-        )
-      ) || this.targetingEffects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
-    }
-    return this.immuneToEnemySpellsCache
+    return this.effects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
   }
 
   get cardsThatMightAffect() {
@@ -223,34 +259,43 @@ export class CardRule extends MaterialRulesPart {
 
   get effects(): Effect[] {
     if (!this.effectsCache) {
-      this.effectsCache = this.cardsThatMightAffect.flatMap(card =>
-        this.isImmuneTo(card) ? []
-          : card.abilities.filter(ability => ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial))
-            .flatMap(ability => {
-              const effects: Effect[] = []
-              const multiplier = ability.getMultiplierFor(this.cardMaterial, this.game)
-              for (let i = 0; i < multiplier; i++) {
-                effects.push(...ability.effects)
+      const cards = this.cardsThatMightAffect
+      const mySkills = this.skills
+      const myWeaknesses = this.weaknesses
+      const isImmuneToEnemySpells = cards.some(card =>
+        card.abilities.some(ability => ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
+          && ability.effects.some(effect => effect.type === EffectType.ImmuneToEnemySpells))
+      )
+      this.effectsCache = cards.flatMap(card => {
+        const isEnemy = card.item.location.player !== this.item.location.player
+        if (isImmuneToEnemySpells && card.isSpell && isEnemy) return []
+        // Errata: creature are not affected by enemy creatures skills that they have, or allied creatures weaknesses that they have
+        const isAnotherCreature = card.isCreature && card.index !== this.index
+        const isAlliedCreature = isAnotherCreature && !isEnemy
+        const isEnemyCreature = isAnotherCreature && isEnemy
+        return card.abilities.filter(ability => ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial))
+          .flatMap(ability => {
+            const abilityEffects = ability.effects.filter(effect => {
+              if (isAlliedCreature) {
+                return !myWeaknesses.some(weakness => weakness.effects.some(weaknessEffect => isEqual(weaknessEffect, effect)))
+              } else if (isEnemyCreature) {
+                return !mySkills.some(skill => skill.effects.some(skillEffect => isEqual(skillEffect, effect)))
               }
-              return effects
+              return true
             })
-      ).concat(...this.targetingEffects)
+            const effects: Effect[] = []
+            const multiplier = ability.getMultiplierFor(this.cardMaterial, this.game)
+            for (let i = 0; i < multiplier; i++) {
+              effects.push(...abilityEffects)
+            }
+            return effects
+          })
+      }).concat(...this.targetingEffects)
       if (this.effectsCache.some(effect => effect.type === EffectType.IgnoreAttackDefenseModifiers)) {
         this.effectsCache = this.effectsCache.filter(effect => effect.type !== EffectType.Attack && effect.type !== EffectType.Defense)
       }
     }
     return this.effectsCache
-  }
-
-  private getAttributeEffects(): Effect[] {
-    return this.cardsThatMightAffect.flatMap(card =>
-      this.isImmuneTo(card) ? []
-        : card.abilities.filter(ability =>
-          ability.effects.some(effect => effect.type === EffectType.LoseAttributes || effect.type === EffectType.GainAttributes
-            || effect.type === EffectType.AddCharacteristics)
-          && ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
-        ).flatMap(ability => ability.effects)
-    ).concat(...this.targetingEffects)
   }
 
   get targetingEffects(): Effect[] {
@@ -262,7 +307,7 @@ export class CardRule extends MaterialRulesPart {
   }
 
   get attributes(): Attribute[] {
-    const effects = this.getAttributeEffects()
+    const effects = this.effects
     if (effects.some(effect => effect.type === EffectType.LoseAttributes && !effect.attributes)) {
       return []
     }
