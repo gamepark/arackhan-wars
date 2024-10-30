@@ -1,5 +1,6 @@
 import { FactionToken } from '@gamepark/arackhan-wars/material/FactionToken'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
+import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { MaterialContext, RoundTokenDescription } from '@gamepark/react-game'
 import { MaterialItem } from '@gamepark/rules-api'
@@ -50,8 +51,12 @@ export class FactionTokenDescription extends RoundTokenDescription {
     player: item.location.player
   })
 
-  isFlipped(item: Partial<MaterialItem>) {
-    return item.location?.rotation === true
+  isFlipped(item: Partial<MaterialItem>, context: MaterialContext) {
+    if (item.location?.rotation) return true
+    if (item.location?.type === LocationType.FactionTokenSpace) {
+      return !getCardRule(context.rules.game, item.location.parent!).isActive
+    }
+    return false
   }
 
   help = FactionTokenHelp
