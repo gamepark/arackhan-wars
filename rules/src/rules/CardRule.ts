@@ -775,6 +775,7 @@ export class CardRule extends MaterialRulesPart {
     cardCopy.getItem()!.location.y = y
     const cardRules = new CardRule(gameCopy, this.index)
     return !cardRules.isActive || !cardRules.attributes.some(attribute => attribute.type === AttributeType.Movement)
+      || (this.isInitiativeSequence && !cardRules.attributes.some(attribute => attribute.type === AttributeType.Initiative))
   }
 
   private canMoveOrSwapPosition(location: XYCoordinates, distance?: number) {

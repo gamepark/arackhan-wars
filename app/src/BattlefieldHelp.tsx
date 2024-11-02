@@ -13,6 +13,7 @@ import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { MaterialContext, useMaterialContext, useRules } from '@gamepark/react-game'
 import { Location, MaterialGame, MaterialItem, XYCoordinates } from '@gamepark/rules-api'
 import { RefObject, useEffect, useRef, useState } from 'react'
+import initiativeCancel from './images/icons/attributes/initiative-cancel.png'
 import movementCancel from './images/icons/attributes/movement-cancel.png'
 import { attributesIconDescription } from './locators/AttributesIconsLocator'
 import { battleFieldLocator } from './locators/BattlefieldLocator'
@@ -70,7 +71,9 @@ function MovementHelp() {
             cardCopy.getItem()!.location.x = x
             cardCopy.getItem()!.location.y = y
             const cardRulesCopy = new CardRule(gameCopy, cardRules.index)
-            if (!cardRulesCopy.isActive || !cardRulesCopy.attributes.some(attribute => attribute.type === AttributeType.Movement)) {
+            if (rules?.remind(Memory.IsInitiativeSequence) && !cardRulesCopy.hasInitiative) {
+              movementBlocks.push({ location: { type: LocationType.Battlefield, x, y } })
+            } else if (!cardRulesCopy.isActive || !cardRulesCopy.attributes.some(attribute => attribute.type === AttributeType.Movement)) {
               for (const rule of cardRulesCopy.cardsThatMightAffect) {
                 if (!cardRulesCopy.isImmuneTo(rule) && rule.index !== cardIndex && rule.abilities.some(ability =>
                     ability.isApplicable(gameCopy, rule.cardMaterial, cardCopy)
@@ -105,8 +108,9 @@ function MovementHelp() {
   if (!movementBlocks.length) return null
   return <>
     <canvas ref={ref} css={canvasCss} width={100 * scale} height={100 * scale}/>
-    {movementBlocks.map(({ location }) =>
-      <div key={`${location.x}_${location.y}`} css={movementCancelIcon(battleFieldLocator.getPositionOnParent(location, context))}/>
+    {movementBlocks.map(({ card, location }) =>
+      <div key={`${location.x}_${location.y}`}
+           css={movementCancelIcon(battleFieldLocator.getPositionOnParent(location, context), card !== undefined ? movementCancel : initiativeCancel)}/>
     )}
   </>
 }
@@ -167,13 +171,13 @@ const canvasCss = css`
   pointer-events: none;
 `
 
-const movementCancelIcon = ({ x, y }: XYCoordinates) => css`
+const movementCancelIcon = ({ x, y }: XYCoordinates, icon: string) => css`
   position: absolute;
   left: ${29}em;
   top: ${29}em;
   width: ${attributesIconDescription.ratio * 2.5}em;
   height: ${2.5}em;
-  background-image: url(${movementCancel});
+  background-image: url(${icon});
   background-size: cover;
   transform: translate(-50%, -50%) translate3d(${(x - 50) * platMatSize / 100}em, ${(y - 52) * platMatSize / 100}em, 20em);
   filter: drop-shadow(0 0 0.1em black) drop-shadow(0 0 0.1em black) drop-shadow(0 0 0.1em black);

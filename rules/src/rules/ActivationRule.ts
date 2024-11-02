@@ -4,6 +4,7 @@ import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { ActionRule } from './ActionRule'
 import { Attack, AttackRule } from './AttackRule'
+import { resetCardsRulesCache } from './CardRule'
 import { EndOfTurnRule } from './EndOfTurnRule'
 import { Memory } from './Memory'
 import { MoveRules } from './MoveRules'
@@ -54,6 +55,11 @@ export class ActivationRule extends PlayerTurnRule {
 
   beforeItemMove(move: ItemMove) {
     return new MoveRules(this.game).beforeItemMove(move)
+  }
+
+  afterItemMove(move: ItemMove) {
+    resetCardsRulesCache()
+    return new MoveRules(this.game).afterItemMove(move)
   }
 
   onCustomMove(move: CustomMove) {

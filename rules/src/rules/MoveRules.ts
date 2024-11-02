@@ -61,6 +61,18 @@ export class MoveRules extends PlayerTurnRule {
     return moves
   }
 
+  afterItemMove(move: ItemMove) {
+    if (isMoveItem(move) && move.itemType === MaterialType.FactionCard && move.location.type === LocationType.Battlefield) {
+      if (this.remind(Memory.IsInitiativeSequence)) {
+        const cardRule = getCardRule(this.game, move.itemIndex)
+        if (!cardRule.hasInitiative) {
+          return [this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(move.itemIndex).rotateItem(true)]
+        }
+      }
+    }
+    return []
+  }
+
   onFlipFactionToken(move: MoveItem) {
     const token = this.material(MaterialType.FactionToken).getItem(move.itemIndex)
     this.memorize<number[]>(Memory.MovedCards, movedCards => movedCards.filter(card => card !== token?.location.parent))
