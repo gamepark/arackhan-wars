@@ -94,7 +94,7 @@ export const DeckCards = ({ cards }: { cards: FactionCard[] }) => {
       <MaterialComponent type={MaterialType.FactionCard} itemId={{ front: card, back: FactionCardsCharacteristics[card].faction }}
                          onClick={() => play(displayMaterialHelp(MaterialType.FactionCard, {
                            id: { front: card, back: FactionCardsCharacteristics[card].faction }
-                         }), { local: true })}/>
+                         }), { transient: true })}/>
     </li>)}
   </ul>
 }

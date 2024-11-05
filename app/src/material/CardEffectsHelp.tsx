@@ -30,7 +30,7 @@ export const CardEffectsHelp = ({ index }: { index: number }) => {
           {cardsUnder.entries.map(([index, card]) =>
             <li key={index}>
               <MaterialComponent type={MaterialType.FactionCard} itemId={card.id} css={pointerCursorCss}
-                                 onClick={() => play(displayMaterialHelp(MaterialType.FactionCard, card, index), { local: true })}/>
+                                 onClick={() => play(displayMaterialHelp(MaterialType.FactionCard, card, index), { transient: true })}/>
             </li>
           )}
         </ol>
