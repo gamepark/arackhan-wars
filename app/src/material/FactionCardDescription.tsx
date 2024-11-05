@@ -499,12 +499,12 @@ export class FactionCardDescription extends CardDescription {
     return super.canLongClick(move, context)
   }
 
-  getDropLocations(item: MaterialItem, move: MaterialMove, context: ItemContext) {
+  getMoveDropLocations(context: ItemContext, move: MaterialMove) {
     if (isCustomMove(move) && move.type === CustomMoveType.Attack) {
       const targets = move.data.target !== undefined ? [move.data.target] : getCardRule(context.rules.game, context.index).omnistrikeTargets
       return targets.map(target => ({ type: LocationType.FactionCard, parent: target }))
     }
-    return super.getDropLocations(item, move, context)
+    return super.getMoveDropLocations(context, move)
   }
 
   isFlipped(item: Partial<MaterialItem>, context: MaterialContext) {
