@@ -35,7 +35,7 @@ export class StandardBearerActionRule extends MoveCardsActionRule {
     if (this.remind(Memory.Direction) === undefined) {
       const { x, y } = move.location
       const origin = this.actionCard.location
-      const direction = origin.y! - 1 === y ? Direction.North : origin.y! + 1 === y ? Direction.South : origin.x! - 1 === x ? Direction.East : Direction.West
+      const direction = origin.y! - 1 === y ? Direction.North : origin.y! + 1 === y ? Direction.South : origin.x! - 1 === x ? Direction.West : Direction.East
       this.memorize(Memory.Direction, direction)
     }
     return super.beforeCardMove(move)
