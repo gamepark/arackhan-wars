@@ -9,7 +9,7 @@ import { ClotheType, EyebrowType, EyeType, FacialHairType, GraphicType, MouthTyp
 import ClotheColorName from '@gamepark/avataaars/dist/avatar/clothes/ClotheColorName'
 import SkinColor from '@gamepark/avataaars/dist/avatar/SkinColor'
 import HairColorName from '@gamepark/avataaars/dist/avatar/top/HairColorName'
-import { MaterialTutorial, Picture, TutorialStep } from '@gamepark/react-game'
+import { MaterialContext, MaterialTutorial, Picture, TutorialStep } from '@gamepark/react-game'
 import { isCustomMove, isCustomMoveType, isMoveItem, MaterialGame, MaterialMove } from '@gamepark/rules-api'
 import { TFunction } from 'i18next'
 import { Trans } from 'react-i18next'
@@ -258,7 +258,7 @@ export class Tutorial extends MaterialTutorial {
         text: () => <Trans defaults="tuto.attack.solve"><strong/></Trans>,
         position: { x: 30, y: 0 }
       },
-      focus: (game: MaterialGame) => this.steps[game.tutorial!.step - 1].focus!(game),
+      focus: (game: MaterialGame, context: MaterialContext) => this.steps[game.tutorial!.step - 1].focus!(game, context),
       move: {
         filter: isCustomMoveType(CustomMoveType.SolveAttack)
       }

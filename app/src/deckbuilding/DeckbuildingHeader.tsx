@@ -28,9 +28,7 @@ export const DeckbuildingHeader = () => {
     <DeckListButton/>
     {' '}
     <SaveButton/>
-    {' '}
-    <DeckName/>
-    {' ~ '}
+    {' ~ ' + rules?.name + ' ~ '}
     {validator.isValid ? t('header.deck.valid') : t('header.deck.invalid')}
   </>
 }
@@ -79,6 +77,8 @@ const SaveButton = () => {
                  title={t('deck.save')!}>
       <FontAwesomeIcon icon={faDownload}/>
     </ThemeButton>
+    {' '}
+    <ThemeButton onClick={() => setNameDialogOpen(true)} title={t('deck.rename')!}><FontAwesomeIcon icon={faPen}/></ThemeButton>
     <NameDeckDialog open={open} submit={rename} cancel={() => setNameDialogOpen(false)}/>
     <RulesDialog open={maxDeckDialogOpen} close={() => setMaxDeckDialogOpen(false)}>
       <div css={maxDeckDialogCss}>
@@ -91,7 +91,7 @@ const SaveButton = () => {
         <div css={buttonLine}>
           <ThemeButton onClick={() => setMaxDeckDialogOpen(false)}>{t('OK')}</ThemeButton>
           {!isSubscriber &&
-              <ThemeButton onClick={() => window.location.href = `${PLATFORM_URI}/${locale}/subscription`}>{t('Subscribe')}</ThemeButton>
+            <ThemeButton onClick={() => window.location.href = `${PLATFORM_URI}/${locale}/subscription`}>{t('Subscribe')}</ThemeButton>
           }
         </div>
       </div>
@@ -198,23 +198,6 @@ const dialogButtons = css`
   justify-content: space-between;
   margin-bottom: 1em;
 `
-
-const DeckName = () => {
-  const { t } = useTranslation()
-  const rules = useRules<DeckbuildingRules>()
-  const play = usePlay()
-  const [open, setOpen] = useState(false)
-  const rename = useCallback((name: string) => {
-    play(rules!.rename(name))
-    setOpen(false)
-  }, [rules, play])
-  return <>
-    <ThemeButton onClick={() => setOpen(true)} title={t('deck.rename')!}><FontAwesomeIcon icon={faPen}/></ThemeButton>
-    {' ~ '}
-    {rules?.name}
-    <NameDeckDialog open={open} submit={rename} cancel={() => setOpen(false)}/>
-  </>
-}
 
 type NameDeckDialogProps = {
   submit: (name: string) => void
