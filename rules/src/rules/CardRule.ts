@@ -179,7 +179,7 @@ export class CardRule extends MaterialRulesPart {
     const hasLoseSkillsWeakness = this.weaknesses.some(weakness => weakness.effects.some(isLoseSkills))
     return this.cardsThatMightAffect.some(card => {
       const isImmune = skills.some(skill =>
-        skill.effects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
+        card.isSpell && skill.effects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
         && skill.isApplicable(this.game, this.cardMaterial, this.cardMaterial)
       )
       if (isImmune) return false
