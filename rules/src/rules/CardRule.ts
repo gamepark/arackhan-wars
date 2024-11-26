@@ -214,7 +214,7 @@ export class CardRule extends MaterialRulesPart {
   }
 
   private get weaknesses() {
-    const weaknesses = this.characteristics?.getWeaknesses() ?? []
+    const weaknesses = [...this.characteristics?.getWeaknesses() ?? []]
     for (const addCharacteristic of this.targetingEffects.filter(isAddCharacteristics)) {
       weaknesses.push(...FactionCardsCharacteristics[addCharacteristic.card].getWeaknesses())
     }
