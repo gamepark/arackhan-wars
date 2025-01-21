@@ -19,7 +19,7 @@ export class NemesioNakkaActionRule extends MoveCardsActionRule {
     return this.battlefield.player(this.player)
       .index(index => {
         const cardRule = getCardRule(this.game, index)
-        return cardRule.isCreature && cardRule.value <= 8
+        return cardRule.isCreature && cardRule.value <= 8 && cardRule.index !== this.cardIndex
       }).getItems().map(item => item.location as XYCoordinates)
   }
 }
