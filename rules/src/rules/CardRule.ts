@@ -177,12 +177,11 @@ export class CardRule extends MaterialRulesPart {
   loseSkills(skills: Ability[], lookAtEnemySkills = true) {
     const hasLoseSkillsAbility = skills.some(skill => skill.effects.some(isLoseSkills))
     const hasLoseSkillsWeakness = this.weaknesses.some(weakness => weakness.effects.some(isLoseSkills))
+    const isImmuneToEnemySpells = this.cardsThatMightAffect.some(card =>
+      card.initialSkills.some(skill => skill.effects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
+        && skill.isApplicable(this.game, this.cardMaterial, this.cardMaterial)))
     return this.cardsThatMightAffect.some(card => {
-      const isImmune = skills.some(skill =>
-        card.isSpell && skill.effects.some(effect => effect.type === EffectType.ImmuneToEnemySpells)
-        && skill.isApplicable(this.game, this.cardMaterial, this.cardMaterial)
-      )
-      if (isImmune) return false
+      if (isImmuneToEnemySpells && card.isSpell) return false
       const isLoseMySkills = (skill: Ability) =>
         skill.effects.some(isLoseSkills) && skill.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
       return (!hasLoseSkillsAbility && lookAtEnemySkills && card.skillsIgnoringEnemySkills.some(isLoseMySkills))
