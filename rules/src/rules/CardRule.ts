@@ -271,9 +271,11 @@ export class CardRule extends MaterialRulesPart {
     const cards = this.cardsThatMightAffect
     const mySkills = this.skills
     const myWeaknesses = this.weaknesses
-    const isImmuneToEnemySpells = cards.some(card =>
-      card.abilities.some(ability => ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
-        && ability.effects.some(effect => effect.type === EffectType.ImmuneToEnemySpells))
+    const isImmuneToEnemySpells = cards.some(card => {
+      const abilitiesOfInterest = effectPredicate ? card.abilities.filter(ability => ability.effects.some(effectPredicate)) : card.abilities
+        return abilitiesOfInterest.some(ability => ability.isApplicable(this.game, card.cardMaterial, this.cardMaterial)
+          && ability.effects.some(effect => effect.type === EffectType.ImmuneToEnemySpells))
+      }
     )
     return cards.flatMap(card => {
       const isEnemy = card.item.location.player !== this.item.location.player
