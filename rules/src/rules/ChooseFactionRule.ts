@@ -1,4 +1,4 @@
-import { CustomMove, MaterialMove, SimultaneousRule } from '@gamepark/rules-api'
+import { CustomMove, isCreateItemsAtOnce, ItemMove, MaterialMove, SimultaneousRule } from '@gamepark/rules-api'
 import { PreBuildDecks } from '../material/cards/PreBuildDecks'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { Faction, factions } from '../material/Faction'
@@ -56,11 +56,17 @@ export class ChooseFactionRule extends SimultaneousRule {
     return moves
   }
 
+  afterItemMove(move: ItemMove) {
+    if (isCreateItemsAtOnce(move) && move.itemType === MaterialType.FactionCard) {
+      const player = move.items[0].location.player
+      return [this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(player).shuffle()]
+    }
+    return []
+  }
+
   onRuleEnd() {
     this.provideFactionTokens()
-    return this.game.players.map(player =>
-      this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(player).shuffle()
-    )
+    return []
   }
 
   provideFactionTokens() {
