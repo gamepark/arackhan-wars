@@ -1,19 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
-import { HistoryEntry, usePlayerName } from '@gamepark/react-game'
-import { MaterialGame } from '@gamepark/rules-api'
+import { MoveComponentProps, usePlayerName } from '@gamepark/react-game'
 import { useTranslation } from 'react-i18next'
-import { FactionTokenBackground } from './RevealCardHistory'
 
-type PassHistoryProps = {
-  game: MaterialGame
-  player: number
-}
-
-export const PassHistory = ({ game, player }: PassHistoryProps) => {
+export const PassHistory = ({ context: { game } }: MoveComponentProps) => {
   const { t } = useTranslation()
-  const playerName = usePlayerName(player)
-  return <HistoryEntry backgroundColor={FactionTokenBackground[game.memory[Memory.PlayerFactionToken][player]]} depth={1}>
-    {t('history.pass', { player: playerName })}
-  </HistoryEntry>
+  const playerName = usePlayerName(game.rule.player)
+  return <>{t('history.pass', { player: playerName })}</>
 }

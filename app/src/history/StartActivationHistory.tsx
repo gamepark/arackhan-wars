@@ -1,20 +1,14 @@
 /** @jsxImportSource @emotion/react */
+import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
-import { HistoryEntry, usePlayerName } from '@gamepark/react-game'
-import { MaterialGame } from '@gamepark/rules-api'
+import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
+import { MoveComponentProps, usePlayerName } from '@gamepark/react-game'
+import { StartPlayerTurn } from '@gamepark/rules-api'
 import { useTranslation } from 'react-i18next'
-import { FactionTokenBackground } from './RevealCardHistory'
 
-type StartActivationHistoryProps = {
-  game: MaterialGame
-  player: number
-  initiative?: boolean
-}
-
-export const StartActivationHistory = ({ game, player, initiative }: StartActivationHistoryProps) => {
+export const StartActivationHistory = ({ move, context: { game } }: MoveComponentProps<StartPlayerTurn>) => {
   const { t } = useTranslation()
-  const playerName = usePlayerName(player)
-  return <HistoryEntry player={player} backgroundColor={FactionTokenBackground[game.memory[Memory.PlayerFactionToken][player]]} borderTop>
-    {t(`history.activation${initiative ? '.initiative' : ''}`, { player: playerName })}
-  </HistoryEntry>
+  const initiative = game.rule?.id === RuleId.RevealRule || new ArackhanWarsRules(game).remind(Memory.IsInitiativeSequence)
+  const playerName = usePlayerName(move.player)
+  return <>{t(`history.activation${initiative ? '.initiative' : ''}`, { player: playerName })}</>
 }

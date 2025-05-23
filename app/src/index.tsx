@@ -28,7 +28,7 @@ ReactDOM.render(
       <GameProvider game="arackhan-wars" GameSetup={ArackhanWarsSetup} Rules={ArackhanWarsRules} optionsSpec={ArackhanWarsOptionsSpec}
                     material={Material} locators={Locators} materialI18n={materialI18n} animations={arackhanWarsAnimations}
                     tutorial={new Tutorial()} ai={window.Worker ? tutorialAI : undefined} version={2}
-                    MaterialHistory={ArackhanWarsHistory}
+                    logs={new ArackhanWarsHistory()}
                     theme={theme}>
         <App/>
       </GameProvider>

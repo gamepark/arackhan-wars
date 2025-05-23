@@ -2,28 +2,22 @@
 import { getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { FactionToken } from '@gamepark/arackhan-wars/material/FactionToken'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
-import { HistoryEntry, PlayMoveButton, usePlayerName } from '@gamepark/react-game'
-import { MaterialGame, MaterialMoveBuilder, MoveItem } from '@gamepark/rules-api'
+import { MoveComponentProps, PlayMoveButton, usePlayerName } from '@gamepark/react-game'
+import { MaterialMoveBuilder } from '@gamepark/rules-api'
 import merge from 'lodash/merge'
 import { Trans, useTranslation } from 'react-i18next'
 import displayMaterialHelp = MaterialMoveBuilder.displayMaterialHelp
 
-type RevealCardHistoryProps = {
-  move: MoveItem
-  game: MaterialGame
-}
-
-export const RevealCardHistory = ({ move, game }: RevealCardHistoryProps) => {
+export const RevealCardHistory = ({ move, context: { game } }: MoveComponentProps) => {
   const { t } = useTranslation()
   const player = usePlayerName(move.location.player)
   const card = merge(game.items[move.itemType]![move.itemIndex], move.reveal, { location: move.location })
-  return <HistoryEntry player={move.location.player} backgroundColor={FactionTokenBackground[game.memory[Memory.PlayerFactionToken][move.location.player!]]}>
+  return (
     <Trans defaults={`history.reveal${move.location.y !== undefined ? '.at' : ''}`}
            values={{ ...move.location, player, card: t(`card.name.${getUniqueCard(card.id.front)}`) }}>
       <PlayMoveButton move={displayMaterialHelp(MaterialType.FactionCard, card, move.itemIndex, 0)} local/>
     </Trans>
-  </HistoryEntry>
+  )
 }
 
 export const FactionTokenBackground: Record<FactionToken, string> = {

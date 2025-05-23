@@ -1,14 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { HistoryEntry } from '@gamepark/react-game'
+import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
+import { MoveComponentProps } from '@gamepark/react-game'
 import { useTranslation } from 'react-i18next'
 
-type NewRoundHistoryProps = {
-  round: number
-}
-
-export const NewRoundHistory = ({ round }: NewRoundHistoryProps) => {
+export const NewRoundHistory = ({ context: { game } }: MoveComponentProps) => {
   const { t } = useTranslation()
-  return <HistoryEntry borderTop>
-    {t('history.round', { round })}
-  </HistoryEntry>
+  return <>{t('history.round', { round: new ArackhanWarsRules(game).round })}</>
 }
