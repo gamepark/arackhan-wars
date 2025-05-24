@@ -75,7 +75,7 @@ export class AttackRule extends PlayerTurnRule {
 
   onCustomMove(move: CustomMove) {
     if (move.type === CustomMoveType.Attack) {
-      delete this.game.droppedItem
+      delete this.game.droppedItems
       const targets = move.data.target !== undefined ? [move.data.target] : getCardRule(this.game, move.data.card).omnistrikeTargets
       this.memorize<number[]>(Memory.MovedCards, movedCard => movedCard.filter(card => card !== move.data.card))
       this.memorize<Attack[]>(Memory.Attacks, attacks => [...attacks, { card: move.data.card, targets }])
