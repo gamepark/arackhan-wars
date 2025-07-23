@@ -1,4 +1,4 @@
-import { isMoveItem, ItemMove } from '@gamepark/rules-api'
+import { isMoveItem, ItemMove, Location } from '@gamepark/rules-api'
 import { isCreature } from '../../material/cards/Creature'
 import { CardId, FactionCardsCharacteristics } from '../../material/FactionCard'
 import { LocationType } from '../../material/LocationType'
@@ -25,7 +25,7 @@ export class ReplaceWithCreatureActionRule extends CardActionRule {
   }
 
   getPlayerMoves() {
-    return this.getEligibleCards().moveItems(this.remind(Memory.Location))
+    return this.getEligibleCards().moveItems(this.remind<Location>(Memory.Location))
   }
 
   afterItemMove(move: ItemMove) {
