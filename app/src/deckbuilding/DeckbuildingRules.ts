@@ -55,11 +55,11 @@ export class DeckbuildingRules extends MaterialRules<number, MaterialType, Locat
   }
 
   changeFilter(filter: DeckbuildingFilter, value?: Faction | CardType | AttributeType) {
-    return new DeckbuildingRule(this.game).rules().customMove(DeckbuildingMove.ChangeFilter, { filter, value })
+    return new DeckbuildingRule(this.game).customMove(DeckbuildingMove.ChangeFilter, { filter, value })
   }
 
   changePage(page: number) {
-    return new DeckbuildingRule(this.game).rules().customMove(DeckbuildingMove.ChangePage, page)
+    return new DeckbuildingRule(this.game).customMove(DeckbuildingMove.ChangePage, page)
   }
 
   get name() {
@@ -67,7 +67,7 @@ export class DeckbuildingRules extends MaterialRules<number, MaterialType, Locat
   }
 
   rename(name: string) {
-    return new DeckbuildingRule(this.game).rules().customMove(DeckbuildingMove.Rename, name)
+    return new DeckbuildingRule(this.game).customMove(DeckbuildingMove.Rename, name)
   }
 
   get page() {
@@ -112,13 +112,13 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
     if (!isMoveItemType(MaterialType.FactionCard)(move)) return []
     const movedCard = this.material(MaterialType.FactionCard).getItem(move.itemIndex)
     const replacedCard = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).location(l => l.x === move.location.x)
-    if (movedCard?.location.type === LocationType.DeckbuildingBook) {
+    if (movedCard.location.type === LocationType.DeckbuildingBook) {
       moves.push(this.material(MaterialType.FactionCard).createItem(movedCard))
       if (replacedCard.length) {
         moves.push(replacedCard.deleteItem())
       }
     } else if (replacedCard.length) {
-      moves.push(replacedCard.moveItem({ type: LocationType.PlayerDeck, x: movedCard?.location.x }))
+      moves.push(replacedCard.moveItem({ type: LocationType.PlayerDeck, x: movedCard.location.x }))
     }
     return moves
   }
