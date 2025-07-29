@@ -18,6 +18,7 @@ export default function DeckbuildingApp() {
   useEffect(() => {
     if (game && !game.helpDisplay) {
       const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
+      storage.setup = game
       storage.state = game
       localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
     }

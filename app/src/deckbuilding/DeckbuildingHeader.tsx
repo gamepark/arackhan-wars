@@ -67,7 +67,7 @@ const SaveButton = () => {
   }, [saveDeck, cards])
 
   const rename = useCallback((name: string) => {
-    play(rules!.rename(name))
+    play(rules!.rename(name), { transient: true })
     save(name)
     setNameDialogOpen(false)
   }, [rules])
@@ -123,7 +123,7 @@ const DeckListButton = () => {
 
   const createNewDeck = useCallback(() => {
     play(rules!.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).deleteItemsAtOnce())
-    play(rules!.rename(''))
+    play(rules!.rename(''), { transient: true })
     const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
     storage.deck = {}
     localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
@@ -134,9 +134,8 @@ const DeckListButton = () => {
   const [deckToDelete, setDeckToDelete] = useState<Deck>()
 
   const openDeck = useCallback((deck: Deck) => {
-    play(rules!.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).deleteItemsAtOnce())
     play(rules!.material(MaterialType.FactionCard).createItemsAtOnce(deck.cards.map((card, x) => cardToItem(card, { type: LocationType.PlayerDeck, x }))))
-    play(rules!.rename(deck.name))
+    play(rules!.rename(deck.name), { transient: true })
     const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
     storage.deck = deck
     localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
