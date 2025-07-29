@@ -57,7 +57,7 @@ const CardLocationRule = (props: MaterialHelpProps) => {
     case LocationType.PlayerDiscard:
       return <p>
         <Trans defaults={item.location?.player === playerId ? 'rules.card.discard.mine' : 'rules.card.discard'} values={{ player }}>
-          <PlayMoveButton css={linkButtonCss} move={displayLocationHelp({ type: LocationType.PlayerDiscard, player: item.location?.player })} local/>
+          <PlayMoveButton css={linkButtonCss} move={displayLocationHelp({ type: LocationType.PlayerDiscard, player: item.location?.player })} transient/>
         </Trans>
       </p>
     default:

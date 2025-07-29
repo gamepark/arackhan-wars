@@ -11,7 +11,7 @@ export const BattleMatHelp = () => {
     <h2>{t('rules.battle-mat.title')}</h2>
     <p>{t('rules.battle-mat.purpose')}</p>
     <Trans defaults="rules.battle-mat.players">
-      <PlayMoveButton css={linkButtonCss} move={displayLocationHelp({ type: LocationType.AstralPlane })} local/>
+      <PlayMoveButton css={linkButtonCss} move={displayLocationHelp({ type: LocationType.AstralPlane })} transient/>
     </Trans>
     <p>{t('rules.battle-mat.battlefield')}</p>
   </>

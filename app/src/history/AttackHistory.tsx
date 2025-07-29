@@ -17,8 +17,8 @@ export const AttackHistory = ({ context: { game }, move: { data: { card, target 
              card: t(`card.name.${getUniqueCard(cardItem.id.front)}`),
              target: targetItem?.id ? t(`card.name.${getUniqueCard(targetItem.id.front)}`) : ''
            }}>
-      <PlayMoveButton move={displayMaterialHelp(MaterialType.FactionCard, cardItem, card, 0)} local/>
-      {targetItem && <PlayMoveButton move={displayMaterialHelp(MaterialType.FactionCard, targetItem, target, 0)} local/>}
+      <PlayMoveButton move={displayMaterialHelp(MaterialType.FactionCard, cardItem, card, 0)} transient/>
+      {targetItem && <PlayMoveButton move={displayMaterialHelp(MaterialType.FactionCard, targetItem, target, 0)} transient/>}
     </Trans>
   )
 }

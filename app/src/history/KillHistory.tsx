@@ -12,7 +12,7 @@ import displayMaterialHelp = MaterialMoveBuilder.displayMaterialHelp
   if (!cardItem?.id?.front) return null
   return (
     <Trans defaults="history.kill" values={{ card: t(`card.name.${getUniqueCard(cardItem.id.front)}`) }}>
-      <PlayMoveButton move={displayMaterialHelp(MaterialType.FactionCard, cardItem, move.itemIndex, 0)} local/>
+      <PlayMoveButton move={displayMaterialHelp(MaterialType.FactionCard, cardItem, move.itemIndex, 0)} transient/>
     </Trans>
   )
 }

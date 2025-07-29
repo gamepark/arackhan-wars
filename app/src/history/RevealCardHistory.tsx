@@ -15,7 +15,7 @@ export const RevealCardHistory = ({ move, context: { game } }: MoveComponentProp
   return (
     <Trans defaults={`history.reveal${move.location.y !== undefined ? '.at' : ''}`}
            values={{ ...move.location, player, card: t(`card.name.${getUniqueCard(card.id.front)}`) }}>
-      <PlayMoveButton move={displayMaterialHelp(MaterialType.FactionCard, card, move.itemIndex, 0)} local/>
+      <PlayMoveButton move={displayMaterialHelp(MaterialType.FactionCard, card, move.itemIndex, 0)} transient/>
     </Trans>
   )
 }

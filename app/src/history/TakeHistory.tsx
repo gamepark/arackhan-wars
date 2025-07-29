@@ -14,7 +14,7 @@ export const TakeHistory = ({ move, context: { game } }: MoveComponentProps<Move
   if (!cardItem?.id?.front) return null
   return (
     <Trans defaults="history.take" values={{ player: playerName, card: t(`card.name.${getUniqueCard(cardItem.id.front)}`) }}>
-      <PlayMoveButton move={displayMaterialHelp(MaterialType.FactionCard, cardItem, card, 0)} local/>
+      <PlayMoveButton move={displayMaterialHelp(MaterialType.FactionCard, cardItem, card, 0)} transient/>
     </Trans>
   )
 }

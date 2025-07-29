@@ -13,7 +13,7 @@ export const ChooseDeckHistory = ({ move }: MoveComponentProps<CustomMove>) => {
   if (!rules) return null
   return (
     <Trans defaults="history.deck" values={{ player: playerName }}>
-      <PlayMoveButton move={displayLocationHelp({ type: LocationType.PlayerDeck, player })} local/>
+      <PlayMoveButton move={displayLocationHelp({ type: LocationType.PlayerDeck, player })} transient/>
     </Trans>
   )
 }
