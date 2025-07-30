@@ -541,6 +541,8 @@ export class FactionCardDescription extends CardDescription {
     return
   }
 
+  stockLocation = { type: LocationType.DeckbuildingBook }
+
   displayHelp(item: MaterialItem, context: ItemContext) {
     if (item.location.type === LocationType.PlayerDeck || item.location.type === LocationType.PlayerDiscard) {
       if (!isDeckbuilding) {
