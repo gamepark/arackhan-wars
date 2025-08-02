@@ -143,7 +143,7 @@ const DeckListButton = () => {
   }, [rules])
 
   const deleteAndCloseDeck = useCallback(() => {
-    deleteDeck({ variables: { id: deckToDelete!.id } })
+    void deleteDeck({ variables: { id: deckToDelete!.id } })
     const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
     if (storage.deck?.id === deckToDelete!.id) {
       delete storage.deck.id

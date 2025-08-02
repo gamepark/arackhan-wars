@@ -12,6 +12,7 @@ import {
   CustomMove,
   FillGapStrategy,
   getEnumValues,
+  isCreateItemTypeAtOnce,
   isMoveItemType,
   ItemMove,
   LocalMovePreview,
@@ -109,18 +110,22 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
 
   beforeItemMove(move: ItemMove) {
     const moves: MaterialMove[] = []
-    if (!isMoveItemType(MaterialType.FactionCard)(move)) return []
-    const movedCard = this.material(MaterialType.FactionCard).getItem(move.itemIndex)
-    const replacedCard = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).location(l => l.x === move.location.x)
-    if (movedCard.location.type === LocationType.DeckbuildingBook) {
-      moves.push(this.material(MaterialType.FactionCard).createItem(movedCard))
-      if (replacedCard.length) {
-        moves.push(replacedCard.deleteItem())
+    if (isMoveItemType(MaterialType.FactionCard)(move)) {
+      const movedCard = this.material(MaterialType.FactionCard).getItem(move.itemIndex)
+      const replacedCard = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).location(l => l.x === move.location.x)
+      if (movedCard.location.type === LocationType.DeckbuildingBook) {
+        moves.push(this.material(MaterialType.FactionCard).createItem(movedCard))
+        if (replacedCard.length) {
+          moves.push(replacedCard.deleteItem())
+        }
+      } else if (replacedCard.length) {
+        moves.push(replacedCard.moveItem({ type: LocationType.PlayerDeck, x: movedCard.location.x }))
       }
-    } else if (replacedCard.length) {
-      moves.push(replacedCard.moveItem({ type: LocationType.PlayerDeck, x: movedCard.location.x }))
+      return moves
+    } if (isCreateItemTypeAtOnce(MaterialType.FactionCard)(move)) {
+      return [this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).deleteItemsAtOnce()]
     }
-    return moves
+    return []
   }
 
   onCustomMove(move: CustomMove) {
