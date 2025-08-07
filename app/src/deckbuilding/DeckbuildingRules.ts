@@ -122,7 +122,7 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
         moves.push(replacedCard.moveItem({ type: LocationType.PlayerDeck, x: movedCard.location.x }))
       }
       return moves
-    } if (isCreateItemTypeAtOnce(MaterialType.FactionCard)(move)) {
+    } if (isCreateItemTypeAtOnce(MaterialType.FactionCard)(move) && move.items[0]?.location.type === LocationType.PlayerDeck) {
       return [this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).deleteItemsAtOnce()]
     }
     return []
