@@ -34,11 +34,11 @@ export class BackupActionRule extends CardActionRule {
       return isCreature(characteristics) && characteristics.family === Family.Legion6
     }).getItems()
     if (!myLegion6.length) return []
-    const enemyCreatures = battlefield.player(player => player !== this.player).id<CardId>(id => isCreature(FactionCardsCharacteristics[id.front])).getItems()
+    const enemyCards = battlefield.player(player => player !== this.player).getItems()
     return battlefieldCoordinates.filter(coordinates =>
       !battlefield.location(l => l.x === coordinates.x && l.y === coordinates.y).length
       && myLegion6.some(legion => areAdjacentSquares(coordinates, legion.location))
-      && !enemyCreatures.some(enemy => areAdjacentSquares(coordinates, enemy.location))
+      && !enemyCards.some(enemy => areAdjacentSquares(coordinates, enemy.location))
     )
   }
 
