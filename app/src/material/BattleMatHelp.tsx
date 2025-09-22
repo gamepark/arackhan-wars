@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { linkButtonCss, PlayMoveButton } from '@gamepark/react-game'
 import { MaterialMoveBuilder } from '@gamepark/rules-api'
@@ -10,7 +9,7 @@ export const BattleMatHelp = () => {
   return <>
     <h2>{t('rules.battle-mat.title')}</h2>
     <p>{t('rules.battle-mat.purpose')}</p>
-    <Trans defaults="rules.battle-mat.players">
+    <Trans i18nKey="rules.battle-mat.players">
       <PlayMoveButton css={linkButtonCss} move={displayLocationHelp({ type: LocationType.AstralPlane })} transient/>
     </Trans>
     <p>{t('rules.battle-mat.battlefield')}</p>

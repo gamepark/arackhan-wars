@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { FactionCard, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { DropAreaDescription, ItemContext, Locator, MaterialContext } from '@gamepark/react-game'

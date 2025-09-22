@@ -1,6 +1,5 @@
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import { GameProvider } from '@gamepark/react-game'
 import { isDeleteItemTypeAtOnce, isMoveItemType } from '@gamepark/rules-api'
 import { useEffect } from 'react'
@@ -11,7 +10,7 @@ import DeckbuildingApp from './DeckbuildingApp'
 import { DeckbuildingHelp } from './DeckbuildingHelp'
 import { DeckbuildingLocators } from './DeckbuildingLocators'
 import { DeckbuildingMaterial } from './DeckbuildingMaterial'
-import { DeckbuildingRules, DeckBuildingSetup } from './DeckbuildingRules'
+import { DeckbuildingRuleId, DeckbuildingRules, DeckBuildingSetup } from './DeckbuildingRules'
 
 export const DeckbuildingProvider = () => {
   useEffect(() => {
@@ -20,7 +19,7 @@ export const DeckbuildingProvider = () => {
   }, [])
   return <GameProvider game="arackhan-wars" storage="arackhan-wars-deckbuilding" GameSetup={DeckBuildingSetup} Rules={DeckbuildingRules}
                        material={DeckbuildingMaterial} locators={DeckbuildingLocators} materialI18n={materialI18n} animations={arackhanWarsAnimations}
-                       theme={theme} rulesHelp={{[RuleId.Deckbuilding]: DeckbuildingHelp}}>
+                       theme={theme} rulesHelp={{[DeckbuildingRuleId]: DeckbuildingHelp}}>
     <DeckbuildingApp/>
   </GameProvider>
 }

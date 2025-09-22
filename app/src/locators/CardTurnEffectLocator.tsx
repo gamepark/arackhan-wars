@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { isMimic } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationDescription, Locator, MaterialContext } from '@gamepark/react-game'

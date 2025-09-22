@@ -7,7 +7,6 @@ import { Faction } from '@gamepark/arackhan-wars/material/Faction'
 import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import {
   CustomMove,
   FillGapStrategy,
@@ -22,9 +21,10 @@ import {
   MaterialRules,
   PlayerTurnRule
 } from '@gamepark/rules-api'
-import range from 'lodash/range'
+import { range } from 'es-toolkit'
 import { CardType, DeckbuildingFilter } from './DeckbuildingFilter'
 
+export const DeckbuildingRuleId = 0
 const Page = 100
 const Name = 101
 const PageSize = 18
@@ -44,7 +44,7 @@ export class DeckbuildingRules extends MaterialRules<number, MaterialType, Locat
   }
 
   rules = {
-    [RuleId.Deckbuilding]: DeckbuildingRule
+    [DeckbuildingRuleId]: DeckbuildingRule
   }
 
   itemsCanMerge() {
@@ -199,14 +199,14 @@ class DeckbuildingRule extends PlayerTurnRule<number, MaterialType, LocationType
 export class DeckBuildingSetup extends MaterialGameSetup<number, MaterialType, LocationType> {
   Rules = DeckbuildingRules
 
-  setupMaterial(_options: any) {
+  setupMaterial() {
     this.material(MaterialType.FactionCard).createItemsAtOnce(allCards.slice(0, 18).map(card =>
       cardToItem(card, { type: LocationType.DeckbuildingBook })
     ))
   }
 
   start() {
-    this.startPlayerTurn(RuleId.Deckbuilding, 1)
+    this.startPlayerTurn(DeckbuildingRuleId, 1)
   }
 }
 

@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
@@ -31,10 +30,10 @@ const PlayerChooseDeckHeader = () => {
   const [dialogOpen, setDialogOpen] = useState(true)
   const [deck, setDeck] = useState<Deck>()
   return <>
-    <Trans defaults="header.deck.choose"><ThemeButton onClick={() => setDialogOpen(true)}/></Trans>
+    <Trans i18nKey="header.deck.choose"><ThemeButton onClick={() => setDialogOpen(true)}/></Trans>
     <RulesDialog open={dialogOpen} close={() => setDialogOpen(false)}>
       <div css={rulesCss}>
-        <h2><Trans defaults="header.deck.choose"><span/></Trans></h2>
+        <h2><Trans i18nKey="header.deck.choose"><span/></Trans></h2>
         {deck ?
           <DeckDisplay deck={deck} cancel={() => setDeck(undefined)}/>
           :

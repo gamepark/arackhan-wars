@@ -1,5 +1,5 @@
 import { Location, XYCoordinates } from '@gamepark/rules-api'
-import range from 'lodash/range'
+import { range } from 'es-toolkit'
 import { LocationType } from './LocationType'
 
 const xMax = 7, yMax = 5

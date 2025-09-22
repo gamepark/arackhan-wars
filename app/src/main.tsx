@@ -1,26 +1,25 @@
-/** @jsxImportSource @emotion/react */
-import { ArackhanWarsOptionsSpec } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
-import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
-import { ArackhanWarsSetup } from '@gamepark/arackhan-wars/ArackhanWarsSetup'
+import { ArackhanWarsOptionsSpec } from '@gamepark/arackhan-wars/ArackhanWarsOptions.ts'
+import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules.ts'
+import { ArackhanWarsSetup } from '@gamepark/arackhan-wars/ArackhanWarsSetup.ts'
 import { addStylesheetUrl, GameProvider, setupTranslation } from '@gamepark/react-game'
 import { StrictMode } from 'react'
-import ReactDOM from 'react-dom'
-import { arackhanWarsAnimations } from './animations/ArackhanWarsAnimations'
+import { createRoot } from 'react-dom/client'
+import { arackhanWarsAnimations } from './animations/ArackhanWarsAnimations.ts'
 import App from './App'
-import { isDeckbuilding } from './deckbuilding/deckbuilding.util'
-import { DeckbuildingProvider } from './deckbuilding/DeckbuildingProvider'
-import { ArackhanWarsHistory } from './history/ArackhanWarsHistory'
+import { isDeckbuilding } from './deckbuilding/deckbuilding.util.ts'
+import { DeckbuildingProvider } from './deckbuilding/DeckbuildingProvider.tsx'
+import { ArackhanWarsHistory } from './history/ArackhanWarsHistory.tsx'
 import { Locators } from './locators/Locators'
 import { Material, materialI18n } from './material/Material'
-import { theme } from './theme'
+import { theme } from './theme.ts'
 import translations from './translations.json'
-import { Tutorial } from './tutorial/Tutorial'
-import { tutorialAI } from './tutorial/TutorialAI'
+import { Tutorial } from './tutorial/Tutorial.tsx'
+import { tutorialAI } from './tutorial/TutorialAI.ts'
 
 setupTranslation(translations, { debug: false })
 addStylesheetUrl('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap')
 
-ReactDOM.render(
+createRoot(document.getElementById('root')!).render(
   <StrictMode>
     {isDeckbuilding ?
       <DeckbuildingProvider/>
@@ -33,6 +32,5 @@ ReactDOM.render(
         <App/>
       </GameProvider>
     }
-  </StrictMode>,
-  document.getElementById('root')
+  </StrictMode>
 )

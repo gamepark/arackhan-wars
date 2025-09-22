@@ -1,5 +1,5 @@
 import { listToListing } from '@gamepark/rules-api'
-import sumBy from 'lodash/sumBy'
+import { sumBy } from 'es-toolkit'
 import { AttributeType } from '../material/cards/Attribute'
 import { FactionCardCharacteristics } from '../material/cards/FactionCardCharacteristics'
 import { DeckListing } from '../material/cards/PreBuildDecks'

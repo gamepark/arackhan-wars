@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { Locator, LocationDescription } from '@gamepark/react-game'
@@ -29,7 +28,7 @@ class CombatIconDescription extends LocationDescription {
     [CombatIcon.Defense]: defenseIcon
   }
 
-  getImage = ({ x, id }: Location) => x !== undefined ? this.images[id] : undefined
+  getImage = ({ x, id }: Location) => x !== undefined ? this.images[id as CombatIcon] : undefined
 
   getExtraCss = ({ x, y }: Location) => css`
     &:after {

@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationDescription, Locator } from '@gamepark/react-game'

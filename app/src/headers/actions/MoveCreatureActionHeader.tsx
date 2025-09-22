@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
@@ -18,7 +17,7 @@ export const MoveCreatureActionHeader = () => {
   const count = rules.remind<number>(Memory.Count) ?? 1
   const pass = useLegalMove(isCustomMoveType(CustomMoveType.Pass))
   if (playerId === activePlayer) {
-    return <Trans defaults="action.move.creature" values={{ card: t(`card.name.${getUniqueCard(actionCard)}`), count }}><PlayMoveButton move={pass}/></Trans>
+    return <Trans i18nKey="action.move.creature" values={{ card: t(`card.name.${getUniqueCard(actionCard)}`), count }}><PlayMoveButton move={pass}/></Trans>
   } else {
     return <>{t('action.move.creature.player', { card: t(`card.name.${getUniqueCard(actionCard)}`), player, count })}</>
   }

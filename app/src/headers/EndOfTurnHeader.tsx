@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
@@ -23,9 +22,9 @@ export const EndOfTurnHeader = () => {
     )
     if (cardIndex !== undefined) {
       const card = rules.material(MaterialType.FactionCard).getItem(cardIndex)?.id.front
-      return <Trans defaults="header.end-of-turn.you" values={{ card: t(`card.name.${getUniqueCard(card)}`) }}><PlayMoveButton move={pass}/></Trans>
+      return <Trans i18nKey="header.end-of-turn.you" values={{ card: t(`card.name.${getUniqueCard(card)}`) }}><PlayMoveButton move={pass}/></Trans>
     } else {
-      return <Trans defaults="header.end-of-turn.pass"><PlayMoveButton move={pass}/></Trans>
+      return <Trans i18nKey="header.end-of-turn.pass"><PlayMoveButton move={pass}/></Trans>
     }
   } else {
     return <>{t('header.end-of-turn', { player })}</>

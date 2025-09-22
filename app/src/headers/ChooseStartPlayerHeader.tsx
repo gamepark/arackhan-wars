@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { PlayMoveButton, RulesDialog, ThemeButton, useGame, useLegalMoves, usePlayerId, usePlayerName } from '@gamepark/react-game'
 import { CustomMove, isCustomMove, MaterialGame } from '@gamepark/rules-api'
@@ -17,10 +16,10 @@ export const ChooseStartPlayerHeader = () => {
   }
   return (
     <>
-      <Trans defaults="header.start.choice"><ThemeButton onClick={() => setDialogOpen(true)}/></Trans>
+      <Trans i18nKey="header.start.choice"><ThemeButton onClick={() => setDialogOpen(true)}/></Trans>
       <RulesDialog open={dialogOpen} close={() => setDialogOpen(false)}>
         <div css={rulesCss}>
-          <h2><Trans defaults="header.start.choice"><span/></Trans></h2>
+          <h2><Trans i18nKey="header.start.choice"><span/></Trans></h2>
           <p>
             <PlayMoveButton move={legalMoves.find(move => move.data === player)}>
               {t('rules.start.choose.me')}

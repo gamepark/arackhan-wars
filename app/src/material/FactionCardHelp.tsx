@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -23,8 +22,9 @@ import { isDeckbuilding } from '../deckbuilding/deckbuilding.util'
 import astral from '../images/icons/astral.png'
 import captureFlag from '../images/icons/capture-flag.png'
 import { AbilityHelp } from './AbilityHelp'
-import { alignIcon, AttributeHelp } from './AttributeHelp'
+import { AttributeHelp } from './AttributeHelp'
 import { CardEffectsHelp } from './CardEffectsHelp'
+import { alignIcon } from './help-css-util.ts'
 import displayLocationHelp = MaterialMoveBuilder.displayLocationHelp
 
 export const FactionCardHelp = (props: MaterialHelpProps) => {
@@ -56,7 +56,7 @@ const CardLocationRule = (props: MaterialHelpProps) => {
       return <InGameLocationRule {...props}/>
     case LocationType.PlayerDiscard:
       return <p>
-        <Trans defaults={item.location?.player === playerId ? 'rules.card.discard.mine' : 'rules.card.discard'} values={{ player }}>
+        <Trans i18nKey={item.location?.player === playerId ? 'rules.card.discard.mine' : 'rules.card.discard'} values={{ player }}>
           <PlayMoveButton css={linkButtonCss} move={displayLocationHelp({ type: LocationType.PlayerDiscard, player: item.location?.player })} transient/>
         </Trans>
       </p>
@@ -76,7 +76,7 @@ const InGameLocationRule = ({ item: { location }, itemIndex }: MaterialHelpProps
       (location?.player === playerId ? t('rules.card.battlefield.mine') : t('rules.card.battlefield', { player }))
       : (location?.player === playerId ? t('rules.card.astral-plane.mine') : t('rules.card.astral-plane', { player }))
     }{' '}
-    <Trans defaults={cardRule.isActive ? 'rules.card.active' : 'rules.card.deactivated'}><strong/></Trans>
+    <Trans i18nKey={cardRule.isActive ? 'rules.card.active' : 'rules.card.deactivated'}><strong/></Trans>
   </p>
 }
 
@@ -95,27 +95,27 @@ const CardFrontRule = (props: MaterialHelpProps) => {
   const isSubscriber = !!useMe()?.user?.subscriptionSince
   return <>
     {isCreature(characteristics) && <>
-      <p><Trans defaults="rules.card.creature" values={characteristics}><strong/></Trans></p>
+      <p><Trans i18nKey="rules.card.creature" values={characteristics}><strong/></Trans></p>
       {characteristics.family &&
-        <p><Trans defaults="rules.card.family" values={{ family: t(`card.family.${characteristics.family}`) }}><strong/></Trans></p>
+        <p><Trans i18nKey="rules.card.family" values={{ family: t(`card.family.${characteristics.family}`) }}><strong/></Trans></p>
       }
     </>}
     {isSpell(characteristics) && (
-      characteristics.discardTiming === DiscardTiming.ActivationOrEndOfTurn ? <p><Trans defaults="rules.card.spell.active"><strong/></Trans></p>
-        : <p><Trans defaults="rules.card.spell.passive"><strong/></Trans></p>
+      characteristics.discardTiming === DiscardTiming.ActivationOrEndOfTurn ? <p><Trans i18nKey="rules.card.spell.active"><strong/></Trans></p>
+        : <p><Trans i18nKey="rules.card.spell.passive"><strong/></Trans></p>
     )}
     {isSpell(characteristics) && characteristics.astral &&
       <p css={alignIcon}>
         <Picture src={astral}/>
         &nbsp;
-        <span><Trans defaults={`rules.card.spell.astral`}><strong/></Trans></span>
+        <span><Trans i18nKey={`rules.card.spell.astral`}><strong/></Trans></span>
       </p>
     }
     {isLand(characteristics) &&
       <p css={alignIcon}>
         <Picture src={captureFlag}/>
         &nbsp;
-        <span><Trans defaults={`rules.card.land`} values={characteristics}><strong/></Trans></span>
+        <span><Trans i18nKey={`rules.card.land`} values={characteristics}><strong/></Trans></span>
       </p>
     }
     {characteristics.getAttributes().map(attribute => <AttributeHelp key={attribute.type} attribute={attribute}/>)}
@@ -146,19 +146,19 @@ const CardFrontRule = (props: MaterialHelpProps) => {
       })
     )}
     {characteristics.action && <>
-      <p><strong>{t('card.action')}</strong> - <Trans defaults={`action.${FactionCardsCharacteristics[factionCard].action}`}><strong/><em/></Trans></p>
+      <p><strong>{t('card.action')}</strong> - <Trans i18nKey={`action.${FactionCardsCharacteristics[factionCard].action}`}><strong/><em/></Trans></p>
       {item.location && item.location.player === playerId && onBattlefieldAndAstralPlane(item.location) && <PerformActionButton {...props}/>}
     </>}
     {item.location?.type === LocationType.Battlefield && <CardEffectsHelp index={itemIndex!}/>}
-    <p><Trans defaults="rules.card.value" values={{ value: characteristics.value }}><strong/></Trans></p>
+    <p><Trans i18nKey="rules.card.value" values={{ value: characteristics.value }}><strong/></Trans></p>
     {characteristics.deckBuildingValue &&
-      <p><Trans defaults="rules.card.deck-value" values={{ value: characteristics.deckBuildingValue }}><strong/></Trans></p>
+      <p><Trans i18nKey="rules.card.deck-value" values={{ value: characteristics.deckBuildingValue }}><strong/></Trans></p>
     }
     {characteristics.legendary &&
-      <p><Trans defaults="rules.card.legendary"><strong/></Trans></p>
+      <p><Trans i18nKey="rules.card.legendary"><strong/></Trans></p>
     }
     {characteristics.limit &&
-      <p><Trans defaults="rules.card.limit" values={{ limit: characteristics.limit }}><strong/></Trans></p>
+      <p><Trans i18nKey="rules.card.limit" values={{ limit: characteristics.limit }}><strong/></Trans></p>
     }
     {isDeckbuilding && !isSubscriber && characteristics.altOf &&
       <p css={css`color: darkred`}><FontAwesomeIcon icon={faLock}/> {t('alt.subscribers.only')}</p>

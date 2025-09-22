@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { FactionToken } from '@gamepark/arackhan-wars/material/FactionToken'
 import { MaterialHelpProps } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
@@ -13,6 +12,6 @@ export const FactionTokenHelp = (props: MaterialHelpProps) => {
     </h2>
     <p>{t('rules.faction-token.purpose')}</p>
     {item.id === FactionToken.Neutral && <p>{t('rules.faction-token.neutral.purpose')}</p>}
-    {item.location?.rotation && <p><Trans defaults="rules.faction-token.flipped"><strong/></Trans></p>}
+    {item.location?.rotation && <p><Trans i18nKey="rules.faction-token.flipped"><strong/></Trans></p>}
   </>
 }

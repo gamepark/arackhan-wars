@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload'
 import { faListCheck } from '@fortawesome/free-solid-svg-icons/faListCheck'
@@ -59,18 +58,18 @@ const SaveButton = () => {
       setNameDialogOpen(true)
       return
     }
-    saveDeck({ variables: { id: storage.deck?.id, boardGame: 'arackhan-wars', name, cards } }).then(({ data: { saveDeck: deck } }) => {
-      storage.deck = deck
+    saveDeck({ variables: { id: storage.deck?.id, boardGame: 'arackhan-wars', name, cards } }).then(({ data }) => {
+      storage.deck = data?.saveDeck
       localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
       setDeck(deck)
     })
-  }, [saveDeck, cards])
+  }, [saveDeck, cards, hasMaxDecks])
 
   const rename = useCallback((name: string) => {
     play(rules!.rename(name), { transient: true })
     save(name)
     setNameDialogOpen(false)
-  }, [rules])
+  }, [rules, play, save])
 
   return <>
     <ThemeButton onClick={() => save(rules?.name)} disabled={deck?.id && deck?.name === rules?.name && shallowEqual(deck?.cards, cards)}
@@ -128,7 +127,7 @@ const DeckListButton = () => {
     storage.deck = {}
     localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
     setOpen(false)
-  }, [rules])
+  }, [rules, play])
 
   const [deleteDeck] = useDeleteDeck()
   const [deckToDelete, setDeckToDelete] = useState<Deck>()
@@ -140,7 +139,7 @@ const DeckListButton = () => {
     storage.deck = deck
     localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
     setOpen(false)
-  }, [rules])
+  }, [rules, play])
 
   const deleteAndCloseDeck = useCallback(() => {
     void deleteDeck({ variables: { id: deckToDelete!.id } })
@@ -150,7 +149,7 @@ const DeckListButton = () => {
       localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
     }
     setDeckToDelete(undefined)
-  }, [deckToDelete])
+  }, [deckToDelete, deleteDeck])
 
   return <>
     <ThemeButton onClick={() => setOpen(true)} title={t('deck.list')!}><FontAwesomeIcon icon={faListCheck}/></ThemeButton>

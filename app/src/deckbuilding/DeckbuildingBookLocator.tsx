@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { DropAreaDescription, FlexLocator } from '@gamepark/react-game'
 import { cardHeight, cardWidth } from '../material/FactionCardDescription'
 

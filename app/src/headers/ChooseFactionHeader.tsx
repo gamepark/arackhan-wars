@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { factions } from '@gamepark/arackhan-wars/material/Faction'
@@ -27,10 +26,10 @@ const PlayerChooseFactionHeader = () => {
   const legalMoves = useLegalMoves<CustomMove>()
   const [dialogOpen, setDialogOpen] = useState(true)
   return <>
-    <Trans defaults="header.faction.choose"><ThemeButton onClick={() => setDialogOpen(true)}/></Trans>
+    <Trans i18nKey="header.faction.choose"><ThemeButton onClick={() => setDialogOpen(true)}/></Trans>
     <RulesDialog open={dialogOpen} close={() => setDialogOpen(false)}>
       <div css={rulesCss}>
-        <h2><Trans defaults="header.faction.choose"><span/></Trans></h2>
+        <h2><Trans i18nKey="header.faction.choose"><span/></Trans></h2>
         <ul css={factionListCss}>
           {factions.map(faction =>
             <li key={faction}>

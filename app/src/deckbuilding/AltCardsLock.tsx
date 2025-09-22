@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

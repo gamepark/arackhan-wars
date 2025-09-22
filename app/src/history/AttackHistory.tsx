@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { MoveComponentProps, PlayMoveButton } from '@gamepark/react-game'
@@ -12,7 +11,7 @@ export const AttackHistory = ({ context: { game }, move: { data: { card, target 
   if (!cardItem?.id?.front) return null
   const targetItem = target !== undefined ? game.items[MaterialType.FactionCard]![target] : undefined
   return (
-    <Trans defaults={`history.attack${targetItem === undefined ? '.omnistrike' : ''}`}
+    <Trans i18nKey={`history.attack${targetItem === undefined ? '.omnistrike' : ''}`}
            values={{
              card: t(`card.name.${getUniqueCard(cardItem.id.front)}`),
              target: targetItem?.id ? t(`card.name.${getUniqueCard(targetItem.id.front)}`) : ''

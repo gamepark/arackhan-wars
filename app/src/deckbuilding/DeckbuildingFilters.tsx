@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { AttributeType, attributeTypes } from '@gamepark/arackhan-wars/material/cards/Attribute'
 import { Faction, factions } from '@gamepark/arackhan-wars/material/Faction'

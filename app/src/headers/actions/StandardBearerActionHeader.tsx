@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
@@ -18,7 +17,7 @@ export const StandardBearerActionHeader = () => {
     if (direction === undefined) {
       return <>{t('standard-bearer.move')}</>
     } else {
-      return <Trans defaults="standard-bearer.move.legion"><PlayMoveButton move={pass}/></Trans>
+      return <Trans i18nKey="standard-bearer.move.legion"><PlayMoveButton move={pass}/></Trans>
     }
   } else {
     return <>{t('standard-bearer.player', { player })}</>

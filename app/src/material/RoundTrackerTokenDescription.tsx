@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { FactionToken } from '@gamepark/arackhan-wars/material/FactionToken'
 import { RoundTokenDescription } from '@gamepark/react-game'
 import { MaterialItem } from '@gamepark/rules-api'

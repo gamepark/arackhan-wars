@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
@@ -13,7 +12,7 @@ export const MarchingOrderActionHeader = () => {
   const player = usePlayerName(activePlayer)
   const pass = useLegalMove(isCustomMoveType(CustomMoveType.Pass))
   if (playerId === activePlayer) {
-    return <Trans defaults="marching-order.move"><PlayMoveButton move={pass}/></Trans>
+    return <Trans i18nKey="marching-order.move"><PlayMoveButton move={pass}/></Trans>
   } else {
     return <>{t('marching-order.player', { player })}</>
   }

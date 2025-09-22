@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MoveComponentProps, PlayMoveButton, usePlayerName, useRules } from '@gamepark/react-game'
@@ -12,7 +11,7 @@ export const ChooseDeckHistory = ({ move }: MoveComponentProps<CustomMove>) => {
   const rules = useRules<ArackhanWarsRules>()
   if (!rules) return null
   return (
-    <Trans defaults="history.deck" values={{ player: playerName }}>
+    <Trans i18nKey="history.deck" values={{ player: playerName }}>
       <PlayMoveButton move={displayLocationHelp({ type: LocationType.PlayerDeck, player })} transient/>
     </Trans>
   )

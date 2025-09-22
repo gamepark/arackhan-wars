@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 
 import { useDndMonitor } from '@dnd-kit/core'
 import { css } from '@emotion/react'
@@ -42,7 +41,7 @@ function AttacksHelp() {
         drawArrow(ctx, attacker.location, defender.location, context)
       }
     }
-  }, [rules, attacks])
+  }, [rules, attacks, context])
 
   if (!attacks?.length) return null
   return <canvas ref={ref} css={canvasCss} width={100 * scale} height={100 * scale}/>
@@ -103,7 +102,7 @@ function MovementHelp() {
         drawArrow(ctx, movementBlock.card.location, movementBlock.location, context)
       }
     }
-  }, [rules, movementBlocks])
+  }, [rules, movementBlocks, context])
 
   if (!movementBlocks.length) return null
   return <>
@@ -115,7 +114,7 @@ function MovementHelp() {
   </>
 }
 
-const getCanvasContext = (ref: RefObject<HTMLCanvasElement>) => {
+const getCanvasContext = (ref: RefObject<HTMLCanvasElement | null>) => {
   if (!ref.current) return
   const ctx = ref.current.getContext('2d')
   if (!ctx) return

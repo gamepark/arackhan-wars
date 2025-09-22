@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import roundTrack from '../images/boards/round-track.jpg'
 import { BoardDescription } from '@gamepark/react-game'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'

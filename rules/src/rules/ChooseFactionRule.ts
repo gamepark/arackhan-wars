@@ -19,7 +19,7 @@ export class ChooseFactionRule extends SimultaneousRule {
     switch (move.type) {
       case CustomMoveType.ChooseFaction:
         if (move.data.faction !== undefined) {
-          this.memorize(Memory.PlayerDeck, PreBuildDecks[move.data.faction], move.data.player)
+          this.memorize(Memory.PlayerDeck, PreBuildDecks[move.data.faction as Faction], move.data.player)
         }
         return [this.endPlayerTurn(move.data.player)]
       case CustomMoveType.ChooseDeck:

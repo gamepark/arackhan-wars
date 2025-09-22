@@ -1,5 +1,5 @@
 import { areAdjacentSquares, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
-import intersection from 'lodash/intersection'
+import { intersection } from 'es-toolkit'
 import { getCardRule } from '../../rules/CardRule'
 import { Memory } from '../../rules/Memory'
 import { MaterialType } from '../MaterialType'

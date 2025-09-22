@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { Ability, AbilityMultiplier } from '@gamepark/arackhan-wars/material/cards/Ability'
 import { itself } from '@gamepark/arackhan-wars/material/cards/AbilityTargetFilter'
@@ -16,9 +15,9 @@ import {
   TriggerCondition
 } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { FactionCard, FactionCardsCharacteristics, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
+import { merge } from 'es-toolkit/compat'
 import { TFunction } from 'i18next'
-import { merge } from 'lodash'
-import { Trans, TransProps, useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 export const AbilityHelp = ({ type, ability, card }: { type: string, ability: Ability, card: FactionCard }) => {
   const { t } = useTranslation()
@@ -33,7 +32,7 @@ export const AbilityHelp = ({ type, ability, card }: { type: string, ability: Ab
   </>
 }
 
-const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: TFunction): TransProps<any> => {
+const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: TFunction) => {
   const targets = ability.filters[0] === itself ? '' : t(`targets.${ability.filters.map(filter => filter.text).join('.')}`,
     ability.filters.reduce((values, filter) => merge(values, filter.values?.(t)), {}))
 
@@ -137,7 +136,7 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
       } else {
         return { defaults: 'ability.attributes.lose', values: { targets } }
       }
-    case EffectType.GainAttributes:
+    case EffectType.GainAttributes: {
       const attribute = effect.attributes[0]
       if (!targets) {
         return {
@@ -155,6 +154,7 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
           values: { targets, attribute: t(`attribute.${attribute.type}`, attribute), condition: ability.condition.getText(t) }
         }
       }
+    }
     case EffectType.LoseSkills:
       return { defaults: 'ability.skills.lose', values: { targets } }
     case EffectType.Deactivated:
@@ -187,27 +187,30 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
           break
       }
       return {}
-    case EffectType.CannotAttack:
-      const values: any = {}
-      if (effect.limitation === AttackLimitation.InGroupNotFamily) {
-        values.family = t(`card.family.${(FactionCardsCharacteristics[card] as Creature).family}`)
-      }
-      if (targets) {
-        values.targets = targets
-        return {
-          defaults: effect.limitation ?
-            `ability.targets.attack.limit.${attackLimitationText[effect.limitation]}`
-            : 'ability.targets.attack.limit',
-          values
+    case EffectType.CannotAttack: {
+      {
+        const values: Record<string, string> = {}
+        if (effect.limitation === AttackLimitation.InGroupNotFamily) {
+          values.family = t(`card.family.${(FactionCardsCharacteristics[card] as Creature).family}`)
         }
-      } else {
-        return {
-          defaults: effect.limitation ?
-            `ability.attack.limit.${attackLimitationText[effect.limitation]}`
-            : 'ability.attack.limit',
-          values
+        if (targets) {
+          values.targets = targets
+          return {
+            defaults: effect.limitation ?
+              `ability.targets.attack.limit.${attackLimitationText[effect.limitation]}`
+              : 'ability.targets.attack.limit',
+            values
+          }
+        } else {
+          return {
+            defaults: effect.limitation ?
+              `ability.attack.limit.${attackLimitationText[effect.limitation]}`
+              : 'ability.attack.limit',
+            values
+          }
         }
       }
+    }
     case EffectType.CanOnlyAttack:
       if (targets) {
         return { defaults: `ability.targets.attack.condition.${attackConditionText[effect.condition]}`, values: { targets } }

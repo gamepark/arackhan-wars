@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'

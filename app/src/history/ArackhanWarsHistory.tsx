@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { FactionToken } from '@gamepark/arackhan-wars/material/FactionToken'
@@ -18,7 +17,7 @@ import { MoveCardHistory } from './MoveCardHistory'
 import { NewRoundHistory } from './NewRoundHistory'
 import { PassHistory } from './PassHistory'
 import { PlaceCardHistory } from './PlaceCardHistory'
-import { FactionTokenBackground, RevealCardHistory } from './RevealCardHistory'
+import { RevealCardHistory } from './RevealCardHistory'
 import { StartActivationHistory } from './StartActivationHistory'
 import { TakeHistory } from './TakeHistory'
 
@@ -90,6 +89,15 @@ const logCss = (factionToken?: FactionToken) => css`
   margin: 0;
   color: rgb(0, 36, 72);
 `
+
+const FactionTokenBackground: Record<FactionToken, string> = {
+  [FactionToken.Whitelands]: '#C6E8F3',
+  [FactionToken.Nakka]: '#CDE5CB',
+  [FactionToken.GreyOrder]: '#E3E3E3',
+  [FactionToken.Blight]: '#F9CDCA',
+  [FactionToken.Neutral]: '#FEDCB9'
+}
+
 
 const borderTop = css`
   border-top: 0.05em solid black;

@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css, Interpolation, keyframes, Theme } from '@emotion/react'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
@@ -14,7 +13,7 @@ import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import { CardDescription, ItemContext, MaterialContext } from '@gamepark/react-game'
 import { isCustomMove, isCustomMoveType, isMoveItemType, Location, MaterialGame, MaterialItem, MaterialMove, MaterialMoveBuilder } from '@gamepark/rules-api'
-import { differenceBy, range } from 'lodash'
+import { differenceBy, range } from 'es-toolkit'
 import { isDeckbuilding } from '../deckbuilding/deckbuilding.util'
 import BlightCardBack from '../images/cards/blight/BlightCardBack.jpg'
 import EN1144AbominableHydra from '../images/cards/blight/en/EN1144AbominableHydra.jpg'

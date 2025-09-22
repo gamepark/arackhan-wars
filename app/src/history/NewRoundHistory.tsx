@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { MoveComponentProps } from '@gamepark/react-game'
 import { useTranslation } from 'react-i18next'

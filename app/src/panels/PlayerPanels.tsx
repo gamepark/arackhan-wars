@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { usePlayerId, usePlayers } from '@gamepark/react-game'
 import { ArackhanPlayerPanel } from './ArackhanPlayerPanel'
 

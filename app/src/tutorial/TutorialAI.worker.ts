@@ -1,10 +1,10 @@
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
 import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
-import { FactionCardCharacteristics } from '@gamepark/arackhan-wars/material/cards/FactionCardCharacteristics'
 import { PreBuildDecks } from '@gamepark/arackhan-wars/material/cards/PreBuildDecks'
 import { isSpell, Spell } from '@gamepark/arackhan-wars/material/cards/Spell'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
+import { Faction } from '@gamepark/arackhan-wars/material/Faction.ts'
 import { CardId, FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
@@ -25,17 +25,12 @@ import {
   RuleMoveType,
   XYCoordinates
 } from '@gamepark/rules-api'
-import minBy from 'lodash/minBy'
-import partition from 'lodash/partition'
-import sortBy from 'lodash/sortBy'
-import sumBy from 'lodash/sumBy'
-import uniqBy from 'lodash/uniqBy'
+import { minBy, partition, sumBy, uniqBy } from 'es-toolkit'
+import { sortBy } from 'es-toolkit/compat'
 
-// eslint-disable-next-line no-restricted-globals
 self.onmessage = (e: MessageEvent<string>) => {
   const data = JSON.parse(e.data) as [MaterialGame, number]
   const result = tutorialAI(...data)
-  // eslint-disable-next-line no-restricted-globals
   self.postMessage(JSON.stringify(result))
 }
 
@@ -200,26 +195,26 @@ const evaluatePlacement = (rules: ArackhanWarsRules, isFirstPlayer: boolean, bot
 const countAdjacentTargets = (rules: ArackhanWarsRules, space: XYCoordinates, bot: number): number => {
   return rules.material(MaterialType.FactionCard)
     .location(location => location.type === LocationType.Battlefield && areAdjacentSquares(space, location))
-    .player(p => p !== bot).id<CardId>(id => id.front && !isSpell(FactionCardCharacteristics[id.front])).length
+    .player(p => p !== bot).id<CardId>(id => id.front && !isSpell(FactionCardsCharacteristics[id.front])).length
 }
 
 const countAdjacentEnemyCreatures = (rules: ArackhanWarsRules, space: XYCoordinates, bot: number): number => {
   return rules.material(MaterialType.FactionCard)
     .location(location => location.type === LocationType.Battlefield && areAdjacentSquares(space, location))
-    .player(p => p !== bot).id<CardId>(id => id.front && isCreature(FactionCardCharacteristics[id.front])).length
+    .player(p => p !== bot).id<CardId>(id => id.front && isCreature(FactionCardsCharacteristics[id.front])).length
 }
 
 const hasTargetWithDefenseEqualTo = (rules: ArackhanWarsRules, space: XYCoordinates, bot: number, defense: number): boolean => {
   return rules.material(MaterialType.FactionCard)
     .location(location => location.type === LocationType.Battlefield && areAdjacentSquares(space, location))
-    .player(p => p !== bot).id<CardId>(id => id.front && !isSpell(FactionCardCharacteristics[id.front]))
+    .player(p => p !== bot).id<CardId>(id => id.front && !isSpell(FactionCardsCharacteristics[id.front]))
     .getIndexes().some(index => getCardRule(rules.game, index).defense === defense)
 }
 
 const countAdjacentAllyCreatures = (rules: ArackhanWarsRules, space: XYCoordinates, bot: number): number => {
   return rules.material(MaterialType.FactionCard)
     .location(location => location.type === LocationType.Battlefield && areAdjacentSquares(space, location))
-    .player(bot).id<CardId>(id => id.front && isCreature(FactionCardCharacteristics[id.front])).length
+    .player(bot).id<CardId>(id => id.front && isCreature(FactionCardsCharacteristics[id.front])).length
 }
 
 const getActivationNegamax = (rules: ArackhanWarsRules, bot: number, timeLimit = new Date().getTime() + 10000): Negamax => {
@@ -311,7 +306,7 @@ const getPotential = (rules: ArackhanWarsRules, player: number) => {
 }
 
 const getRemainingCards = (rules: ArackhanWarsRules, player: number): FactionCard[] => {
-  const faction = rules.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(player).getItem()!.id.back
+  const faction = rules.material(MaterialType.FactionCard).location(LocationType.PlayerHand).player(player).getItem()!.id.back as Faction
   const played = rules.material(MaterialType.FactionCard)
     .location(location => location.type === LocationType.Battlefield || location.type === LocationType.PlayerDiscard)
     .getItems().map(item => item.id.front).filter(card => card !== undefined) as FactionCard[]

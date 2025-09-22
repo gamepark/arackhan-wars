@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { PLATFORM_URI, useMe } from '@gamepark/react-client'
 import { Dialog } from '@gamepark/react-game'

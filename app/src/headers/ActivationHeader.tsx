@@ -30,24 +30,24 @@ const MyActivationHeader = () => {
     const deactivate = legalMoves.find(isMoveItemType(MaterialType.FactionToken))!
     const performAction = legalMoves.find(isCustomMoveType(CustomMoveType.PerformAction))!
     if (performAction) {
-      return <Trans defaults="header.move.action" values={{ card: t(`card.name.${getUniqueCard(movedCardId)}`) }}>
+      return <Trans i18nKey="header.move.action" values={{ card: t(`card.name.${getUniqueCard(movedCardId)}`) }}>
         <PlayMoveButton move={performAction}/>
         <PlayMoveButton move={deactivate}/>
       </Trans>
     }
-    return <Trans defaults="header.move.you" values={{ card: t(`card.name.${getUniqueCard(movedCardId)}`) }}>
+    return <Trans i18nKey="header.move.you" values={{ card: t(`card.name.${getUniqueCard(movedCardId)}`) }}>
       <PlayMoveButton move={deactivate}/>
     </Trans>
   } else if (movedCards.length > 1) {
     const deactivate = legalMoves.find(isCustomMoveType(CustomMoveType.Deactivate))!
-    return <Trans defaults="header.moves.you" values={{ x: movedCards.length }}>
+    return <Trans i18nKey="header.moves.you" values={{ x: movedCards.length }}>
       <PlayMoveButton move={deactivate}/>
     </Trans>
   }
 
   const solveAttack = legalMoves.find(isCustomMoveType(CustomMoveType.SolveAttack))
   if (solveAttack) {
-    return <Trans defaults="header.attack.solve">
+    return <Trans i18nKey="header.attack.solve">
       <PlayMoveButton move={solveAttack}/>
     </Trans>
   }
@@ -55,7 +55,7 @@ const MyActivationHeader = () => {
   const pass = legalMoves.find(isCustomMoveType(CustomMoveType.Pass))
   const sequence = rules.remind(Memory.IsInitiativeSequence) ? 'initiative' : 'activation'
   const options = legalMoves.length === 1 ? 'pass' : 'me'
-  return <Trans defaults={`header.${sequence}.${options}`}><PlayMoveButton move={pass}/></Trans>
+  return <Trans i18nKey={`header.${sequence}.${options}`}><PlayMoveButton move={pass}/></Trans>
 }
 
 const OtherPlayerActivationHeader = () => {

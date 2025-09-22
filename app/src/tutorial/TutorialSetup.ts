@@ -21,7 +21,7 @@ export class TutorialSetup extends ArackhanWarsSetup {
     this.placeRoundTracker()
   }
 
-  setupPlayer(player: number, faction: Faction) {
+  setupPlayer(player: number, faction: Faction.Whitelands | Faction.Blight) {
     this.memorize(Memory.PlayerFactionToken, faction, player)
     this.createPlayerDeck(player, faction)
     const requiredCards = this.requiredCards[faction]

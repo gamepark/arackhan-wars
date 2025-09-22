@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 // noinspection SpellCheckingInspection
 
 import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'

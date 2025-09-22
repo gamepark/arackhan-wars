@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { MaterialContext, PileLocator } from '@gamepark/react-game'
 import { Location } from '@gamepark/rules-api'
 

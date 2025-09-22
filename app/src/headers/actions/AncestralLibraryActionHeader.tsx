@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'

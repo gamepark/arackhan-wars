@@ -1,6 +1,6 @@
 import { MaterialGame, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { isCreature } from '../../material/cards/Creature'
-import { FactionCardsCharacteristics } from '../../material/FactionCard'
+import { CardId, FactionCardsCharacteristics } from '../../material/FactionCard'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
 import { getCardRule } from '../CardRule'
@@ -44,7 +44,7 @@ export abstract class CardActionRule extends PlayerTurnRule {
   discardActionCard() {
     const card = this.material(MaterialType.FactionCard).index(this.cardIndex)
     const moves: MaterialMove[] = [card.moveItem({ type: LocationType.PlayerDiscard, player: this.player })]
-    if (isCreature(FactionCardsCharacteristics[card.getItem()?.id.front])) {
+    if (isCreature(FactionCardsCharacteristics[card.getItem<CardId>()!.id.front])) {
       moves.unshift(this.material(MaterialType.FactionToken).parent(this.cardIndex).deleteItem())
     }
     return moves

@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck'
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark'
@@ -8,7 +7,7 @@ import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { DeckValidator } from '@gamepark/arackhan-wars/rules/DeckValidator'
 import { useRules } from '@gamepark/react-game'
-import partition from 'lodash/partition'
+import { partition } from 'es-toolkit'
 import { useTranslation } from 'react-i18next'
 import { DeckbuildingRules } from './DeckbuildingRules'
 

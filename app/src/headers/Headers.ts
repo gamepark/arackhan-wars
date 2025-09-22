@@ -1,5 +1,5 @@
-import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
+import { ComponentType } from 'react'
 import { AncestralLibraryActionHeader } from './actions/AncestralLibraryActionHeader'
 import { BackupActionHeader } from './actions/BackupActionHeader'
 import { CardActionHeader } from './actions/CardActionHeader'
@@ -28,7 +28,7 @@ import { MulliganHeader } from './MulliganHeader'
 import { PlacementHeader } from './PlacementHeader'
 import { RevealHeader } from './RevealHeader'
 
-export const Headers: Partial<Record<RuleId, () => ReactJSXElement>> = {
+export const Headers: Partial<Record<RuleId, ComponentType>> = {
   [RuleId.ChooseFaction]: ChooseFactionHeader,
   [RuleId.ChooseDeck]: ChooseDeckHeader,
   [RuleId.ChooseStartPlayer]: ChooseStartPlayerHeader,

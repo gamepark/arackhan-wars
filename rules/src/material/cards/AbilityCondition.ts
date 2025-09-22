@@ -1,6 +1,6 @@
 import { Material, MaterialGame } from '@gamepark/rules-api'
+import { merge } from 'es-toolkit/compat'
 import { TFunction } from 'i18next'
-import { merge } from 'lodash'
 import { ArackhanWarsRules } from '../../ArackhanWarsRules'
 import { getCardRule } from '../../rules/CardRule'
 import { Memory } from '../../rules/Memory'

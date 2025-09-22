@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { DropAreaDescription, Locator, MaterialContext } from '@gamepark/react-game'
 import { Location } from '@gamepark/rules-api'

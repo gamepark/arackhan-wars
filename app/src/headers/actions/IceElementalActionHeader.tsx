@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { PlayMoveButton, useLegalMoves, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
@@ -11,7 +10,7 @@ export const IceElementalActionHeader = () => {
   const player = usePlayerName(activePlayer)
   const legalMoves = useLegalMoves()
   if (playerId === activePlayer) {
-    return <Trans defaults="header.ice-elemental.you">
+    return <Trans i18nKey="header.ice-elemental.you">
       {legalMoves.map((move, index) => <PlayMoveButton key={index} move={move}/>)}
     </Trans>
   } else {

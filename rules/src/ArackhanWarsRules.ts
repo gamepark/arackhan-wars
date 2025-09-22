@@ -12,7 +12,7 @@ import {
   SecretMaterialRules,
   TimeLimit
 } from '@gamepark/rules-api'
-import sumBy from 'lodash/sumBy'
+import { sumBy } from 'es-toolkit'
 import { isCreature } from './material/cards/Creature'
 import { CustomMoveType } from './material/CustomMoveType'
 import { Faction } from './material/Faction'
@@ -139,7 +139,7 @@ export class ArackhanWarsRules extends SecretMaterialRules<number, MaterialType,
     return 60
   }
 
-  play(move: any) {
+  play(move: MaterialMove) {
     const consequences = super.play(move)
     resetCardsRulesCache()
     return consequences

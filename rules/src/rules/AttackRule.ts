@@ -1,6 +1,6 @@
 import { CustomMove, MaterialMove, PlayerTurnRule, XYCoordinates } from '@gamepark/rules-api'
-import mapValues from 'lodash/mapValues'
-import partition from 'lodash/partition'
+import { partition } from 'es-toolkit'
+import { mapValues } from 'es-toolkit/compat'
 import { onBattlefieldAndAstralPlane } from '../material/Board'
 import { AttributeType } from '../material/cards/Attribute'
 import { EffectType, TriggerCondition } from '../material/cards/Effect'

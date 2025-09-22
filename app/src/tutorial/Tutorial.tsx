@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { CardId, FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
@@ -47,7 +46,7 @@ export class Tutorial extends MaterialTutorial {
 
   steps: TutorialStep[] = [
     {
-      popup: { text: () => <Trans defaults="tuto.welcome"><strong/><em/></Trans> }
+      popup: { text: () => <Trans i18nKey="tuto.welcome"><strong/><em/></Trans> }
     },
     {
       popup: {
@@ -72,7 +71,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.placement.1"><em/></Trans>,
+        text: () => <Trans i18nKey="tuto.placement.1"><em/></Trans>,
         position: { x: 30, y: -10 }
       },
       focus: () => ({
@@ -91,7 +90,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: (t: TFunction) => <Trans defaults="tuto.place-card" values={{ card: t(`card.name.${FactionCard.LunarWendigo}`) }}><em/></Trans>,
+        text: (t: TFunction) => <Trans i18nKey="tuto.place-card" values={{ card: t(`card.name.${FactionCard.LunarWendigo}`) }}><em/></Trans>,
         position: { x: 30, y: -10 }
       },
       focus: (game: MaterialGame) => ({
@@ -105,7 +104,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: (t: TFunction) => <Trans defaults="tuto.place-card" values={{ card: t(`card.name.${FactionCard.NihilistPenguin}`) }}><em/></Trans>,
+        text: (t: TFunction) => <Trans i18nKey="tuto.place-card" values={{ card: t(`card.name.${FactionCard.NihilistPenguin}`) }}><em/></Trans>,
         position: { x: 30, y: -10 }
       },
       focus: (game: MaterialGame) => ({
@@ -120,7 +119,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.placement.validation"><strong/></Trans>
+        text: () => <Trans i18nKey="tuto.placement.validation"><strong/></Trans>
       },
       move: {}
     },
@@ -163,7 +162,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.activation"><strong/></Trans>,
+        text: () => <Trans i18nKey="tuto.activation"><strong/></Trans>,
         position: { x: 30, y: 0 }
       },
       focus: (game: MaterialGame) => ({
@@ -177,7 +176,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.creatures"><strong/></Trans>,
+        text: () => <Trans i18nKey="tuto.creatures"><strong/></Trans>,
         position: { x: 30, y: 0 }
       },
       focus: (game: MaterialGame) => ({
@@ -191,7 +190,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.attack.value"><strong/></Trans>,
+        text: () => <Trans i18nKey="tuto.attack.value"><strong/></Trans>,
         position: { x: 30, y: 0 }
       },
       focus: (game: MaterialGame) => ({
@@ -204,7 +203,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.defense.value"><strong/></Trans>,
+        text: () => <Trans i18nKey="tuto.defense.value"><strong/></Trans>,
         position: { x: 30, y: 0 }
       },
       focus: (game: MaterialGame) => ({
@@ -217,7 +216,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.attack.rule"><strong/></Trans>,
+        text: () => <Trans i18nKey="tuto.attack.rule"><strong/></Trans>,
         position: { x: 30, y: 0 }
       },
       focus: (game: MaterialGame) => ({
@@ -233,7 +232,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: (t: TFunction) => <Trans defaults="tuto.attack" values={{
+        text: (t: TFunction) => <Trans i18nKey="tuto.attack" values={{
           card1: t(`card.name.${FactionCard.LunarWendigo}`),
           card2: t(`card.name.${FactionCard.ScuttleJaw}`)
         }}><em/></Trans>,
@@ -255,7 +254,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.attack.solve"><strong/></Trans>,
+        text: () => <Trans i18nKey="tuto.attack.solve"><strong/></Trans>,
         position: { x: 30, y: 0 }
       },
       focus: (game: MaterialGame, context: MaterialContext) => this.steps[game.tutorial!.step - 1].focus!(game, context),
@@ -265,7 +264,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: (t: TFunction) => <Trans defaults="tuto.deactivate" values={{ card: t(`card.name.${FactionCard.LunarWendigo}`) }}><em/></Trans>,
+        text: (t: TFunction) => <Trans i18nKey="tuto.deactivate" values={{ card: t(`card.name.${FactionCard.LunarWendigo}`) }}><em/></Trans>,
         position: { x: 30, y: 0 }
       },
       focus: (game: MaterialGame) => ({
@@ -276,7 +275,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: (t: TFunction) => <Trans defaults="tuto.movement" values={{ card: t(`card.name.${FactionCard.NihilistPenguin}`) }}><em/><strong/></Trans>,
+        text: (t: TFunction) => <Trans i18nKey="tuto.movement" values={{ card: t(`card.name.${FactionCard.NihilistPenguin}`) }}><em/><strong/></Trans>,
         position: { x: 30, y: 0 }
       },
       focus: (game: MaterialGame) => ({
@@ -290,7 +289,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: (t: TFunction) => <Trans defaults="tuto.move.penguin" values={{
+        text: (t: TFunction) => <Trans i18nKey="tuto.move.penguin" values={{
           card1: t(`card.name.${FactionCard.NihilistPenguin}`),
           card2: t(`card.name.${FactionCard.LunarWendigo}`),
           card3: t(`card.name.${FactionCard.SwampOgre}`)
@@ -313,7 +312,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.pass.1"><strong/></Trans>,
+        text: () => <Trans i18nKey="tuto.pass.1"><strong/></Trans>,
         position: { x: 30, y: 0 }
       },
       move: {
@@ -322,7 +321,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.end-round-1"><strong/></Trans>
+        text: () => <Trans i18nKey="tuto.end-round-1"><strong/></Trans>
       }
     },
     {
@@ -340,7 +339,7 @@ export class Tutorial extends MaterialTutorial {
     { move: { player: 2 } },
     {
       popup: {
-        text: (t: TFunction) => <Trans defaults="tuto.skills" values={
+        text: (t: TFunction) => <Trans i18nKey="tuto.skills" values={
           { card1: t(`card.name.${FactionCard.ShieldOfDawn}`), card2: t(`card.name.${FactionCard.LunarWendigo}`) }
         }><em/></Trans>,
         position: { x: 30, y: -10 }
@@ -355,7 +354,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: (t: TFunction) => <Trans defaults="tuto.place-card" values={{ card: t(`card.name.${FactionCard.ShieldOfDawn}`) }}><em/></Trans>,
+        text: (t: TFunction) => <Trans i18nKey="tuto.place-card" values={{ card: t(`card.name.${FactionCard.ShieldOfDawn}`) }}><em/></Trans>,
         position: { x: 30, y: -10 }
       },
       focus: (game: MaterialGame) => ({
@@ -369,7 +368,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: (t: TFunction) => <Trans defaults="tuto.spell" values={{ card: t(`card.name.${FactionCard.IceMeteor}`) }}><em/></Trans>,
+        text: (t: TFunction) => <Trans i18nKey="tuto.spell" values={{ card: t(`card.name.${FactionCard.IceMeteor}`) }}><em/></Trans>,
         position: { x: 30, y: -10 }
       },
       focus: (game: MaterialGame) => ({
@@ -380,12 +379,12 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.astral"><Picture src={astral} css={inlineIcon}/></Trans>
+        text: () => <Trans i18nKey="tuto.astral"><Picture src={astral} css={inlineIcon}/></Trans>
       }
     },
     {
       popup: {
-        text: (t: TFunction) => <Trans defaults="tuto.place-card" values={{ card: t(`card.name.${FactionCard.IceMeteor}`) }}><em/></Trans>,
+        text: (t: TFunction) => <Trans i18nKey="tuto.place-card" values={{ card: t(`card.name.${FactionCard.IceMeteor}`) }}><em/></Trans>,
         position: { x: 30, y: -10 }
       },
       focus: (game: MaterialGame) => ({
@@ -399,7 +398,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.placement.validation"><strong/></Trans>,
+        text: () => <Trans i18nKey="tuto.placement.validation"><strong/></Trans>,
         position: { x: 30, y: 0 }
       },
       move: {}
@@ -416,7 +415,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: (t: TFunction) => <Trans defaults="tuto.activation.2" values={{
+        text: (t: TFunction) => <Trans i18nKey="tuto.activation.2" values={{
           card1: t(`card.name.${FactionCard.NihilistPenguin}`),
           card2: t(`card.name.${FactionCard.LunarWendigo}`),
           card3: t(`card.name.${FactionCard.ShieldOfDawn}`)
@@ -436,7 +435,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: (t: TFunction) => <Trans defaults="tuto.group-attack" values={{
+        text: (t: TFunction) => <Trans i18nKey="tuto.group-attack" values={{
           card1: t(`card.name.${FactionCard.SwampTroll}`),
           card2: t(`card.name.${FactionCard.LunarWendigo}`)
         }}><strong/><em/></Trans>,
@@ -457,7 +456,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: (t: TFunction) => <Trans defaults="tuto.attack.meteor" values={{
+        text: (t: TFunction) => <Trans i18nKey="tuto.attack.meteor" values={{
           card1: t(`card.name.${FactionCard.SwampTroll}`),
           card2: t(`card.name.${FactionCard.IceMeteor}`)
         }}><strong/><em/></Trans>,
@@ -480,7 +479,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: (t: TFunction) => <Trans defaults="tuto.attack.solve" values={{
+        text: (t: TFunction) => <Trans i18nKey="tuto.attack.solve" values={{
           card1: t(`card.name.${FactionCard.SwampTroll}`),
           card2: t(`card.name.${FactionCard.IceMeteor}`)
         }}><strong/><em/></Trans>,
@@ -501,7 +500,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: (t: TFunction) => <Trans defaults="tuto.pass.2" values={{
+        text: (t: TFunction) => <Trans i18nKey="tuto.pass.2" values={{
           card1: t(`card.name.${FactionCard.ShieldOfDawn}`),
           card2: t(`card.name.${FactionCard.SwampOgre}`)
         }}><em/><strong/></Trans>,
@@ -522,7 +521,7 @@ export class Tutorial extends MaterialTutorial {
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.land"><strong/></Trans>,
+        text: () => <Trans i18nKey="tuto.land"><strong/></Trans>,
         position: { x: 0, y: -20 }
       },
       focus: (game: MaterialGame) => ({

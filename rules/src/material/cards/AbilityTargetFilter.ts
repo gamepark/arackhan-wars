@@ -1,7 +1,7 @@
 import { areAdjacentSquares, Material, MaterialGame } from '@gamepark/rules-api'
 import { TFunction } from 'i18next'
 import { getCardRule } from '../../rules/CardRule'
-import { FactionCard, FactionCardsCharacteristics } from '../FactionCard'
+import { CardId, FactionCard, FactionCardsCharacteristics } from '../FactionCard'
 import { AttributeType } from './Attribute'
 import { isCreature } from './Creature'
 import { Family } from './Family'
@@ -10,7 +10,7 @@ import { isLand } from './Land'
 export type AbilityTargetFilter = {
   filter: (source: Material, target: Material, game: MaterialGame) => boolean
   text?: string
-  values?: (t: TFunction) => Record<string, any>
+  values?: (t: TFunction) => Record<string, number | string>
 }
 
 export const itself: AbilityTargetFilter = {
@@ -40,12 +40,12 @@ export const family = (family: Family): AbilityTargetFilter => ({
 })
 
 export const creature: AbilityTargetFilter = {
-  filter: (_source: Material, target: Material) => isCreature(FactionCardsCharacteristics[target.getItem()!.id.front]),
+  filter: (_source: Material, target: Material) => isCreature(FactionCardsCharacteristics[target.getItem<CardId>()!.id.front]),
   text: 'creature'
 }
 
 export const land: AbilityTargetFilter = {
-  filter: (_source: Material, target: Material) => isLand(FactionCardsCharacteristics[target.getItem()!.id.front]),
+  filter: (_source: Material, target: Material) => isLand(FactionCardsCharacteristics[target.getItem<CardId>()!.id.front]),
   text: 'land'
 }
 

@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationDescription, Locator } from '@gamepark/react-game'
 import skillCancelEn from '../images/icons/en/skill-cancel-en.png'

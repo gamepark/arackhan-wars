@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
 import { isLand } from '@gamepark/arackhan-wars/material/cards/Land'
@@ -8,7 +7,7 @@ import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { DeckValidator } from '@gamepark/arackhan-wars/rules/DeckValidator'
 import { Picture, useRules } from '@gamepark/react-game'
-import sumBy from 'lodash/sumBy'
+import { sumBy } from 'es-toolkit'
 import creature from '../images/icons/creature.png'
 import land from '../images/icons/land.png'
 import spell from '../images/icons/spell.png'

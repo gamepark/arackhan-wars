@@ -1,8 +1,7 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { DropAreaDescription, FlexLocator } from '@gamepark/react-game'
-import { range } from 'lodash'
+import { range } from 'es-toolkit'
 import { cardHeight, cardWidth, factionCardDescription } from '../material/FactionCardDescription'
 
 export class BuildingDeckLocator extends FlexLocator {

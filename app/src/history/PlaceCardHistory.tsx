@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { MoveComponentProps, PlayMoveButton, usePlayerName } from '@gamepark/react-game'
@@ -12,7 +11,7 @@ export const PlaceCardHistory = ({ move, context: { game } }: MoveComponentProps
   const card = game.items[MaterialType.FactionCard]![move.itemIndex]
   if (!card?.id?.front) return null
   return (
-    <Trans defaults="history.place"
+    <Trans i18nKey="history.place"
            values={{ ...move.location, player: playerName, card: t(`card.name.${getUniqueCard(card.id.front)}`) }}>
       <PlayMoveButton move={displayMaterialHelp(MaterialType.FactionCard, card, move.itemIndex, 0)} transient/>
     </Trans>

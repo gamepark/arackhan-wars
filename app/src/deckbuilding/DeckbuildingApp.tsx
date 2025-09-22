@@ -1,10 +1,9 @@
-/** @jsxImportSource @emotion/react */
-import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 import { FailuresDialog, FullscreenDialog, LoadingScreen, MaterialHeader, MaterialImageLoader, Menu, useGame } from '@gamepark/react-game'
 import { MaterialGame } from '@gamepark/rules-api'
 import { useEffect, useState } from 'react'
 import DeckbuildingGameDisplay from './DeckbuildingGameDisplay'
 import { DeckbuildingHeader } from './DeckbuildingHeader'
+import { DeckbuildingRuleId } from './DeckbuildingRules.ts'
 import { LoginDialog } from './LoginDialog'
 
 export default function DeckbuildingApp() {
@@ -28,7 +27,7 @@ export default function DeckbuildingApp() {
     <>
       <DeckbuildingGameDisplay/>
       <LoadingScreen display={loading} author={['Robert Palmer', 'Mickaël Bour']} artist="Robert Palmer" publisher="Nothing But Games" developer="Game Park"/>
-      <MaterialHeader rulesStepsHeaders={{ [RuleId.Deckbuilding]: DeckbuildingHeader }} loading={loading}/>
+      <MaterialHeader rulesStepsHeaders={{ [DeckbuildingRuleId]: DeckbuildingHeader }} loading={loading}/>
       <MaterialImageLoader onImagesLoad={() => setImagesLoading(false)}/>
       <Menu/>
       <FailuresDialog/>

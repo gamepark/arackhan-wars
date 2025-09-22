@@ -12,7 +12,7 @@ export const PlacementHeader = () => {
   if (player !== activePlayer) {
     return <>{t('header.placement', { player: playerName })}</>
   } else if (validate) {
-    return <Trans defaults="header.placement.validate">
+    return <Trans i18nKey="header.placement.validate">
       <PlayMoveButton move={validate} auto={15}/>
       <UndoMovesButton moves={2}/>
     </Trans>

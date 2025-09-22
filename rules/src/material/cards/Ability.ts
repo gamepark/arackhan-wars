@@ -1,5 +1,5 @@
 import { Material, MaterialGame } from '@gamepark/rules-api'
-import sumBy from 'lodash/sumBy'
+import { sumBy } from 'es-toolkit'
 import { ArackhanWarsRules } from '../../ArackhanWarsRules'
 import { LocationType } from '../LocationType'
 import { MaterialType } from '../MaterialType'

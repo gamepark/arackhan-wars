@@ -1,6 +1,8 @@
 import { MaterialGame, MaterialMove } from '@gamepark/rules-api'
 
-const worker = new Worker(new URL('./TutorialAI.worker.ts', import.meta.url))
+const worker = new Worker(new URL('./TutorialAI.worker.ts', import.meta.url), {
+  type: 'module'
+})
 
 export async function tutorialAI(game: MaterialGame, bot: number): Promise<MaterialMove[]> {
   const promise = new Promise<MaterialMove[]>((resolve, reject) => {

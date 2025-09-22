@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons/faCircleExclamation'
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye'

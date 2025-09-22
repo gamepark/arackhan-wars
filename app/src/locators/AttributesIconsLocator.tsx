@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { AttributeType } from '@gamepark/arackhan-wars/material/cards/Attribute'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationDescription, Locator } from '@gamepark/react-game'
@@ -56,7 +55,7 @@ class AttributesIconsDescription extends LocationDescription {
     [AttributeType.Perforation]: perforationCancel
   }
 
-  getImage = ({ id }: Location) => id.cancel ? this.attributeCancelImages[id.type] : this.attributeImages[id.type]
+  getImage = ({ id }: Location) => id.cancel ? this.attributeCancelImages[id.type as AttributeType] : this.attributeImages[id.type as AttributeType]
 }
 
 export const attributesIconDescription = new AttributesIconsDescription()

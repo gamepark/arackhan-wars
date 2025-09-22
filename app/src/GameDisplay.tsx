@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { pointerWithin } from '@dnd-kit/core'
 import { css } from '@emotion/react'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
@@ -35,5 +34,5 @@ function useOpponentDeckDisplay() {
   useEffect(() => {
     if (isChooseStartPlayer && player !== undefined)
       play(displayLocationHelp({ type: LocationType.PlayerDeck, player: player === 1 ? 2 : 1 }), { transient: true })
-  }, [isChooseStartPlayer, player])
+  }, [isChooseStartPlayer, player, play])
 }

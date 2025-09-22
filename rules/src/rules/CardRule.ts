@@ -10,11 +10,8 @@ import {
   MaterialRulesPart,
   XYCoordinates
 } from '@gamepark/rules-api'
-import { isEqual } from 'lodash'
-import intersection from 'lodash/intersection'
-import max from 'lodash/max'
-import sumBy from 'lodash/sumBy'
-import uniq from 'lodash/uniq'
+import { intersection, isEqual, sumBy, uniq } from 'es-toolkit'
+import { max } from 'es-toolkit/compat'
 import { ArackhanWarsRules } from '../ArackhanWarsRules'
 import { battlefieldCoordinates } from '../material/Board'
 import { Ability } from '../material/cards/Ability'
@@ -129,12 +126,13 @@ export class CardRule extends MaterialRulesPart {
               return sumBy(this.material(MaterialType.FactionCard).location(LocationType.UnderCard).parent(this.index).getIndexes(), index =>
                 getCardRule(this.game, index).value
               )
-            case ExtraScoreType.MastersOfAracKhan:
+            case ExtraScoreType.MastersOfAracKhan: {
               const creatures = this.material(MaterialType.FactionCard).id<CardId>(id => id.front && isCreature(FactionCardsCharacteristics[id.front]))
               const adjacentAlliedCreatures = creatures.player(this.owner).location(l => areAdjacentSquares(this.item.location, l))
               const scoredEnemies = creatures.player(p => p !== this.owner).location(l => areAdjacentSquares(this.item.location, l)
                 || adjacentAlliedCreatures.location(allyLocation => areAdjacentSquares(l, allyLocation)).length > 0)
-              return sumBy(scoredEnemies.getItems(), item => FactionCardsCharacteristics[item.id.front].value)
+              return sumBy(scoredEnemies.getItems<CardId>(), item => FactionCardsCharacteristics[item.id.front].value)
+            }
           }
         }
         return 0
