@@ -10,7 +10,7 @@ export class AssassinActionRule extends MoveCardsActionRule {
   getCardsAllowedToMove(): Material {
     return this.battlefield.player(this.player).index(index => {
       const cardRule = getCardRule(this.game, index)
-      return index === this.cardIndex || cardRule.value <= 4
+      return index === this.cardIndex || (cardRule.isCreature && cardRule.value <= 4)
     })
   }
 
