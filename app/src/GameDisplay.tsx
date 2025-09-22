@@ -34,5 +34,5 @@ function useOpponentDeckDisplay() {
   useEffect(() => {
     if (isChooseStartPlayer && player !== undefined)
       play(displayLocationHelp({ type: LocationType.PlayerDeck, player: player === 1 ? 2 : 1 }), { transient: true })
-  }, [isChooseStartPlayer, player, play])
+  }, [isChooseStartPlayer, player])
 }
