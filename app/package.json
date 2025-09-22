@@ -1,6 +1,6 @@
 {
   "name": "@gamepark/arackhan-wars-app",
-  "version": "3.7.0",
+  "version": "3.7.1",
   "private": true,
   "type": "module",
   "description": "The user interface of AracKhan Wars adaptation for Game Park",
