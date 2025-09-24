@@ -772,8 +772,8 @@ __metadata:
   linkType: hard
 
 "@gamepark/react-game@npm:~7.0.1":
-  version: 7.0.1
-  resolution: "@gamepark/react-game@npm:7.0.1"
+  version: 7.0.2
+  resolution: "@gamepark/react-game@npm:7.0.2"
   dependencies:
     "@apollo/client": "npm:^4.0.5"
     "@datadog/browser-logs": "npm:^6.19.0"
@@ -807,7 +807,7 @@ __metadata:
     react-dom: ^19.1.1
     react-i18next: ^15.7.3
     react-redux: ^9.2.0
-  checksum: 10c0/b52506af32b38d942c63b31210c473ab70189560d9b24e8bc856eeb605023a2c9b1537f695279e7de562ea86c810e0e639a7362159a04763c5939bfcba85fcce
+  checksum: 10c0/4e2c3a6c15a7ab3fcee84e2e3aee55a7b7309650424ec16b05d35a229cdc109a1a85a2b3791a30716dca0054564d6761abe9d2224417b28239e8383b0d6edf73
   languageName: node
   linkType: hard
 
