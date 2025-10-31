@@ -3,9 +3,7 @@ import { faLock } from '@fortawesome/free-solid-svg-icons/faLock'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
-import { Attribute } from '@gamepark/arackhan-wars/material/cards/Attribute'
 import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
-import { EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { DiscardTiming } from '@gamepark/arackhan-wars/material/cards/FactionCardCharacteristics'
 import { isLand } from '@gamepark/arackhan-wars/material/cards/Land'
 import { isSpell } from '@gamepark/arackhan-wars/material/cards/Spell'
@@ -130,20 +128,6 @@ const CardFrontRule = (props: MaterialHelpProps) => {
     )}
     {characteristics.getWeaknesses().map((weakness, index) =>
       <AbilityHelp key={index} type={t('card.weakness')} ability={weakness} card={factionCard}/>
-    )}
-    {characteristics.getAbilities().map(ability =>
-      ability.effects.map(effect => {
-        switch (effect.type) {
-          case EffectType.GainAttributes:
-            return effect.attributes.map(attribute => <AttributeHelp key={attribute.type} attribute={attribute}/>)
-          case EffectType.LoseAttributes:
-            return effect.attributes?.map(attributeType =>
-              <AttributeHelp key={attributeType} attribute={{ type: attributeType } as Attribute}/>
-            )
-          default:
-            return null
-        }
-      })
     )}
     {characteristics.action && <>
       <p><strong>{t('card.action')}</strong> - <Trans i18nKey={`action.${FactionCardsCharacteristics[factionCard].action}`}><strong/><em/></Trans></p>

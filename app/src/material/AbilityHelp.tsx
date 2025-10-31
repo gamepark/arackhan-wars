@@ -18,6 +18,7 @@ import { FactionCard, FactionCardsCharacteristics, getUniqueCard } from '@gamepa
 import { merge } from 'es-toolkit/compat'
 import { TFunction } from 'i18next'
 import { Trans, useTranslation } from 'react-i18next'
+import { getAttributeText } from './AttributeHelp.tsx'
 
 export const AbilityHelp = ({ type, ability, card }: { type: string, ability: Ability, card: FactionCard }) => {
   const { t } = useTranslation()
@@ -128,30 +129,36 @@ const getAbilityText = (card: FactionCard, ability: Ability, effect: Effect, t: 
         }
       }
     case EffectType.LoseAttributes:
-      if (effect.attributes?.length === 1) {
-        return {
-          i18nKey: 'ability.attribute.lose',
-          values: { targets, attribute: t(`attribute.${effect.attributes[0]}`) }
-        }
-      } else {
-        return { i18nKey: 'ability.attributes.lose', values: { targets } }
+      switch (effect.attributes?.length) {
+        case 1:
+          return {
+            i18nKey: 'ability.attribute.lose',
+            values: { targets, attribute: t(`attribute.${effect.attributes[0]}`) }
+          }
+        case 2:
+          return {
+            i18nKey: 'ability.attribute.lose.2',
+            values: { targets, attribute1: t(`attribute.${effect.attributes[0]}`), attribute2: t(`attribute.${effect.attributes[1]}`) }
+          }
+        default:
+          return { i18nKey: 'ability.attributes.lose', values: { targets } }
       }
     case EffectType.GainAttributes: {
       const attribute = effect.attributes[0]
       if (!targets) {
         return {
           i18nKey: 'ability.attribute.gain.if',
-          values: { attribute: t(`attribute.${attribute.type}`, attribute), condition: ability.condition!.getText(t) }
+          values: { attribute: getAttributeText(attribute, t), condition: ability.condition!.getText(t) }
         }
       } else if (!ability.condition) {
         return {
           i18nKey: 'ability.attribute.give',
-          values: { targets, attribute: t(`attribute.${attribute.type}`, attribute) }
+          values: { targets, attribute: getAttributeText(attribute, t) }
         }
       } else {
         return {
           i18nKey: 'ability.attribute.give.if',
-          values: { targets, attribute: t(`attribute.${attribute.type}`, attribute), condition: ability.condition.getText(t) }
+          values: { targets, attribute: getAttributeText(attribute, t), condition: ability.condition.getText(t) }
         }
       }
     }

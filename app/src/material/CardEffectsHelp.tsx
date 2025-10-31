@@ -9,6 +9,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { attributesIconDescription } from '../locators/AttributesIconsLocator'
 import { CombatIcon, combatIconDescription } from '../locators/CombatIconLocator'
 import { skillLostIconDescription } from '../locators/SkillLostIconLocator'
+import { getAttributeText } from './AttributeHelp.tsx'
 import { getCardBattlefieldModifierLocations } from './FactionCardDescription'
 import { alignIcon } from './help-css-util.ts'
 import displayMaterialHelp = MaterialMoveBuilder.displayMaterialHelp
@@ -63,7 +64,7 @@ const getEffectImage = (location: Location) => {
 const getEffectText = (location: Location, t: TFunction) => {
   switch (location.type) {
     case LocationType.AttributesIcons: {
-      const attribute = t(`attribute.${location.id.type}`, location.id)
+      const attribute = getAttributeText(location.id, t)
       return <Trans i18nKey={location.id.cancel ? 'rules.card.attribute.lost' : 'rules.card.attribute.gain'} values={{ attribute }}><strong/></Trans>
     }
     case LocationType.CombatIcon:
