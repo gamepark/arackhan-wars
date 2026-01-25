@@ -1,7 +1,7 @@
 import { ArackhanWarsOptionsSpec } from '@gamepark/arackhan-wars/ArackhanWarsOptions.ts'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules.ts'
 import { ArackhanWarsSetup } from '@gamepark/arackhan-wars/ArackhanWarsSetup.ts'
-import { addStylesheetUrl, GameProvider, setupTranslation } from '@gamepark/react-game'
+import { addStylesheetUrl, GameProvider } from '@gamepark/react-game'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { arackhanWarsAnimations } from './animations/ArackhanWarsAnimations.ts'
@@ -12,11 +12,9 @@ import { ArackhanWarsHistory } from './history/ArackhanWarsHistory.tsx'
 import { Locators } from './locators/Locators'
 import { Material, materialI18n } from './material/Material'
 import { theme } from './theme.ts'
-import translations from './translations.json'
 import { Tutorial } from './tutorial/Tutorial.tsx'
 import { tutorialAI } from './tutorial/TutorialAI.ts'
 
-setupTranslation(translations, { debug: false })
 addStylesheetUrl('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap')
 
 createRoot(document.getElementById('root')!).render(

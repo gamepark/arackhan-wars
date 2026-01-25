@@ -69,7 +69,7 @@ const DeckDisplay = ({ deck, cancel }: { deck: Deck, cancel: () => void }) => {
   const { t } = useTranslation()
   const play = usePlay()
   const player = usePlayerId()
-  const isSubscriber = !!useMe()?.user?.subscriptionSince
+  const isSubscriber = !!useMe()?.user?.isSubscriber
   const cards = isSubscriber ? deck.cards : deck.cards.map(getUniqueCard)
   return (
     <>

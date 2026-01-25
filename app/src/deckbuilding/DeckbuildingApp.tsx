@@ -26,7 +26,7 @@ export default function DeckbuildingApp() {
   return (
     <>
       <DeckbuildingGameDisplay/>
-      <LoadingScreen display={loading} author={['Robert Palmer', 'Mickaël Bour']} artist="Robert Palmer" publisher="Nothing But Games" developer="Game Park"/>
+      <LoadingScreen display={loading}/>
       <MaterialHeader rulesStepsHeaders={{ [DeckbuildingRuleId]: DeckbuildingHeader }} loading={loading}/>
       <MaterialImageLoader onImagesLoad={() => setImagesLoading(false)}/>
       <Menu/>

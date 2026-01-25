@@ -37,15 +37,15 @@ const SaveButton = () => {
   const rules = useRules<DeckbuildingRules>()
   const cards = rules?.material(MaterialType.FactionCard)
     .location(LocationType.PlayerDeck).sort(item => item.location.x!)
-    .getItems<CardId>().map(item => item.id!.front)
-  const [saveDeck] = useSaveDeck()
+    .getItems<CardId>().map(item => item.id!.front) ?? []
+  const { mutateAsync: saveDeck } = useSaveDeck('arackhan-wars')
   const [deck, setDeck] = useState(() => JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!).deck)
   const [open, setNameDialogOpen] = useState(false)
   const play = usePlay()
   const { data } = useMyDecks('arackhan-wars')
-  const isSubscriber = !!useMe()?.user?.subscriptionSince
+  const isSubscriber = !!useMe()?.user?.isSubscriber
   const max = isSubscriber ? SUBSCRIBER_MAX_DECKS : DEFAULT_MAX_DECKS
-  const hasMaxDecks = (data?.myDecks.length ?? 0) >= max
+  const hasMaxDecks = (data?.length ?? 0) >= max
   const [maxDeckDialogOpen, setMaxDeckDialogOpen] = useState(false)
 
   const save = useCallback((name: string) => {
@@ -58,8 +58,9 @@ const SaveButton = () => {
       setNameDialogOpen(true)
       return
     }
-    saveDeck({ variables: { id: storage.deck?.id, boardGame: 'arackhan-wars', name, cards } }).then(({ data }) => {
-      storage.deck = data?.saveDeck
+    saveDeck({ id: storage.deck?.id, boardGame: 'arackhan-wars', name, cards }).then((deck) => {
+      const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
+      storage.deck = deck
       localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
       setDeck(deck)
     })
@@ -118,7 +119,7 @@ const DeckListButton = () => {
   const play = usePlay()
   const [open, setOpen] = useState(false)
   const { data } = useMyDecks('arackhan-wars')
-  const isSubscriber = !!useMe()?.user?.subscriptionSince
+  const isSubscriber = !!useMe()?.user?.isSubscriber
 
   const createNewDeck = useCallback(() => {
     play(rules!.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).deleteItemsAtOnce())
@@ -129,7 +130,7 @@ const DeckListButton = () => {
     setOpen(false)
   }, [rules, play])
 
-  const [deleteDeck] = useDeleteDeck()
+  const { mutate: deleteDeck } = useDeleteDeck('arackhan-wars')
   const [deckToDelete, setDeckToDelete] = useState<Deck>()
 
   const openDeck = useCallback((deck: Deck) => {
@@ -142,9 +143,11 @@ const DeckListButton = () => {
   }, [rules, play])
 
   const deleteAndCloseDeck = useCallback(() => {
-    void deleteDeck({ variables: { id: deckToDelete!.id } })
+    const id = deckToDelete?.id
+    if (!id) return
+    deleteDeck(id)
     const storage = JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!)
-    if (storage.deck?.id === deckToDelete!.id) {
+    if (storage.deck?.id === id) {
       delete storage.deck.id
       localStorage.setItem('arackhan-wars-deckbuilding', JSON.stringify(storage))
     }
@@ -155,7 +158,7 @@ const DeckListButton = () => {
     <ThemeButton onClick={() => setOpen(true)} title={t('deck.list')!}><FontAwesomeIcon icon={faListCheck}/></ThemeButton>
     <RulesDialog open={open} close={() => setOpen(false)}>
       <div css={decksCss}>
-        <h2>{t('deck.list')} ({data?.myDecks.length ?? '?'}/{isSubscriber ? SUBSCRIBER_MAX_DECKS : DEFAULT_MAX_DECKS})</h2>
+        <h2>{t('deck.list')} ({data?.length ?? '?'}/{isSubscriber ? SUBSCRIBER_MAX_DECKS : DEFAULT_MAX_DECKS})</h2>
         <ThemeButton onClick={createNewDeck}>{t('deck.create')!}</ThemeButton>
         <DeckList openDeck={openDeck} deleteDeck={setDeckToDelete}/>
       </div>

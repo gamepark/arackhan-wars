@@ -18,8 +18,7 @@ type DeckList = {
 export const DeckList = ({ openDeck, deleteDeck }: DeckList) => {
   const { t } = useTranslation()
 
-  const { data } = useMyDecks('arackhan-wars')
-  const decks: Deck[] = data?.myDecks ?? []
+  const { data: decks = [] } = useMyDecks('arackhan-wars')
   return (
     <>
       <ul css={deckList}>
