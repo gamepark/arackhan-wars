@@ -74,7 +74,7 @@ const DeckDisplay = ({ deck, cancel }: { deck: Deck, cancel: () => void }) => {
   return (
     <>
       <div css={buttonLine}>
-        <ThemeButton onClick={cancel}>{t('Cancel')}</ThemeButton>
+        <ThemeButton onClick={cancel}>{t('Cancel', { ns: 'common' })}</ThemeButton>
         <h3>{deck.name}</h3>
         <ThemeButton disabled={!new DeckValidator(cards).isValid}
                      onClick={() => play({ kind: MoveKind.CustomMove, type: CustomMoveType.ChooseDeck, data: { player, cards } })}>

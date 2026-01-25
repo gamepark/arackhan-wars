@@ -89,7 +89,7 @@ const SaveButton = () => {
           : <p>{t('max.deck.subscribe', { max: SUBSCRIBER_MAX_DECKS })}</p>
         }
         <div css={buttonLine}>
-          <ThemeButton onClick={() => setMaxDeckDialogOpen(false)}>{t('OK')}</ThemeButton>
+          <ThemeButton onClick={() => setMaxDeckDialogOpen(false)}>{t('OK', { ns: 'common' })}</ThemeButton>
           {!isSubscriber &&
             <ThemeButton onClick={() => window.location.href = `${PLATFORM_URI}/${locale}/subscription`}>{t('Subscribe')}</ThemeButton>
           }
@@ -167,8 +167,8 @@ const DeckListButton = () => {
       <div css={confirmDeleteDialog}>
         <p>{t('deck.delete.confirm', { name: deckToDelete?.name })}</p>
         <div css={dialogButtons}>
-          <ThemeButton onClick={() => setDeckToDelete(undefined)}>{t('Cancel')}</ThemeButton>
-          <ThemeButton onClick={deleteAndCloseDeck}>{t('Confirm')}</ThemeButton>
+          <ThemeButton onClick={() => setDeckToDelete(undefined)}>{t('Cancel', { ns: 'common' })}</ThemeButton>
+          <ThemeButton onClick={deleteAndCloseDeck}>{t('Confirm', { ns: 'common' })}</ThemeButton>
         </div>
       </div>
     </RulesDialog>
@@ -215,8 +215,8 @@ const NameDeckDialog = ({ submit, cancel, ...props }: NameDeckDialogProps) => {
       <h2 css={css`margin: 0.5em 0;`}>{t('deck.name')}</h2>
       <input type="text" css={nameInput} maxLength={50} value={name} onChange={event => setName(event.target.value)}/>
       <div css={nameDialogButtons}>
-        <ThemeButton onClick={cancel}>{t('Cancel')}</ThemeButton>
-        <ThemeButton onClick={() => submit(name)}>{t('Validate')}</ThemeButton>
+        <ThemeButton onClick={cancel}>{t('Cancel', { ns: 'common' })}</ThemeButton>
+        <ThemeButton onClick={() => submit(name)}>{t('Validate', { ns: 'common' })}</ThemeButton>
       </div>
     </RulesDialog>
   )
