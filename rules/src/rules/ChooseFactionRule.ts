@@ -11,7 +11,7 @@ import { RuleId } from './RuleId'
 
 export class ChooseFactionRule extends SimultaneousRule {
 
-  getActivePlayerLegalMoves(player: number) {
+  getActivePlayerLegalMoves(player: number): MaterialMove[] {
     return factions.map(faction => this.customMove(CustomMoveType.ChooseFaction, { player, faction }))
   }
 

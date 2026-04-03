@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep:*)",
+      "Bash(curl:*)",
+      "WebFetch(domain:translations.game-park.com)",
+      "Bash(npx tsc:*)"
+    ]
+  }
+}
