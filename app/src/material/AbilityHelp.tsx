@@ -18,7 +18,7 @@ import { FactionCard, FactionCardsCharacteristics, getUniqueCard } from '@gamepa
 import { merge } from 'es-toolkit/compat'
 import { TFunction } from 'i18next'
 import { Trans, useTranslation } from 'react-i18next'
-import { getAttributeText } from './AttributeHelp.tsx'
+import { getAttributeText } from './getAttributeText.ts'
 
 export const AbilityHelp = ({ type, ability, card }: { type: string, ability: Ability, card: FactionCard }) => {
   const { t } = useTranslation()

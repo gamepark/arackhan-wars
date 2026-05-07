@@ -9,7 +9,7 @@ import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { DeckValidator } from '@gamepark/arackhan-wars/rules/DeckValidator'
 import { Deck, PLATFORM_URI, useDeleteDeck, useMe, useMyDecks, useSaveDeck } from '@gamepark/react-client'
 import { DialogProps, RulesDialog, ThemeButton, usePlay, useRules } from '@gamepark/react-game'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { shallowEqual } from 'react-redux'
 import { cardToItem, DeckbuildingRules } from './DeckbuildingRules'
@@ -35,9 +35,11 @@ export const DeckbuildingHeader = () => {
 const SaveButton = () => {
   const { t } = useTranslation()
   const rules = useRules<DeckbuildingRules>()
-  const cards = rules?.material(MaterialType.FactionCard)
-    .location(LocationType.PlayerDeck).sort(item => item.location.x!)
-    .getItems<CardId>().map(item => item.id!.front) ?? []
+  const cards = useMemo(() =>
+    rules?.material(MaterialType.FactionCard)
+      .location(LocationType.PlayerDeck).sort(item => item.location.x!)
+      .getItems<CardId>().map(item => item.id!.front) ?? [],
+  [rules])
   const { mutateAsync: saveDeck } = useSaveDeck('arackhan-wars')
   const [deck, setDeck] = useState(() => JSON.parse(localStorage.getItem('arackhan-wars-deckbuilding')!).deck)
   const [open, setNameDialogOpen] = useState(false)
@@ -79,7 +81,7 @@ const SaveButton = () => {
     </ThemeButton>
     {' '}
     <ThemeButton onClick={() => setNameDialogOpen(true)} title={t('deck.rename')!}><FontAwesomeIcon icon={faPen}/></ThemeButton>
-    <NameDeckDialog open={open} submit={rename} cancel={() => setNameDialogOpen(false)}/>
+    <NameDeckDialog key={rules?.name ?? ''} open={open} name={rules?.name ?? ''} submit={rename} cancel={() => setNameDialogOpen(false)}/>
     <RulesDialog open={maxDeckDialogOpen} close={() => setMaxDeckDialogOpen(false)}>
       <div css={maxDeckDialogCss}>
         <h2>{t('max.deck')}</h2>
@@ -201,15 +203,14 @@ const dialogButtons = css`
 `
 
 type NameDeckDialogProps = {
+  name: string
   submit: (name: string) => void
   cancel: () => void
 } & DialogProps
 
-const NameDeckDialog = ({ submit, cancel, ...props }: NameDeckDialogProps) => {
+const NameDeckDialog = ({ name: initialName, submit, cancel, ...props }: NameDeckDialogProps) => {
   const { t } = useTranslation()
-  const rules = useRules<DeckbuildingRules>()
-  const [name, setName] = useState<string>(rules?.name ?? '')
-  useEffect(() => setName(rules?.name ?? ''), [rules?.name])
+  const [name, setName] = useState(initialName)
   return (
     <RulesDialog {...props} css={nameDialogCss}>
       <h2 css={css`margin: 0.5em 0;`}>{t('deck.name')}</h2>
