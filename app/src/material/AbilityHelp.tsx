@@ -14,7 +14,8 @@ import {
   TriggerAction,
   TriggerCondition
 } from '@gamepark/arackhan-wars/material/cards/Effect'
-import { FactionCard, FactionCardsCharacteristics, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
+import { FactionCardsCharacteristics, getUniqueCard } from '@gamepark/arackhan-wars/material/cards/FactionCardsCharacteristics'
+import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { merge } from 'es-toolkit/compat'
 import { TFunction } from 'i18next'
 import { Trans, useTranslation } from 'react-i18next'

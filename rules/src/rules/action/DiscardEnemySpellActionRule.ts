@@ -2,7 +2,7 @@ import { isMoveItem, ItemMove } from '@gamepark/rules-api'
 import { onBattlefieldAndAstralPlane } from '../../material/Board'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
-import { getCardRule } from '../CardRule'
+import { getCardRule } from '../cardRulesCache'
 import { CardActionRule } from './CardActionRule'
 
 export class DiscardEnemySpellActionRule extends CardActionRule {

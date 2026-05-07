@@ -1,6 +1,7 @@
 import { isMoveItem, ItemMove, Location } from '@gamepark/rules-api'
 import { isCreature } from '../../material/cards/Creature'
-import { CardId, FactionCardsCharacteristics } from '../../material/FactionCard'
+import { FactionCardsCharacteristics } from '../../material/cards/FactionCardsCharacteristics'
+import { CardId } from '../../material/FactionCard'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
 import { Memory } from '../Memory'

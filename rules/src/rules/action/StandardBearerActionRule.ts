@@ -2,7 +2,7 @@ import { Direction, getSquareInDirection, Material, MaterialMove, MoveItem, XYCo
 import { isInBattlefield } from '../../material/Board'
 import { Family } from '../../material/cards/Family'
 import { MaterialType } from '../../material/MaterialType'
-import { getCardRule } from '../CardRule'
+import { getCardRule } from '../cardRulesCache'
 import { Memory } from '../Memory'
 import { MoveCardsActionRule } from './MoveCardsActionRule'
 

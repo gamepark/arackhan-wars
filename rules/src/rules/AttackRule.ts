@@ -8,7 +8,7 @@ import { isLand } from '../material/cards/Land'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import { getCardRule } from './CardRule'
+import { getCardRule } from './cardRulesCache'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 

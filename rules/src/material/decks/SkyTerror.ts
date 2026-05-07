@@ -1,4 +1,4 @@
-import { DeckListing } from '../cards/PreBuildDecks'
+import { DeckListing } from '../cards/DeckListing'
 import { FactionCard } from '../FactionCard'
 
 export const SkyTerror: DeckListing = {

@@ -1,6 +1,6 @@
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
-import { getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
+import { getUniqueCard } from '@gamepark/arackhan-wars/material/cards/FactionCardsCharacteristics'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'

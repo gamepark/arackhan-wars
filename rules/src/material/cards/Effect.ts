@@ -1,7 +1,8 @@
-import { FactionCard } from '../FactionCard'
-import { AbilityTargetFilter } from './AbilityTargetFilter'
-import { AttackCondition, AttackLimitation } from './AttackLimitation'
-import { Attribute, AttributeType } from './Attribute'
+import type { FactionCard } from '../FactionCard'
+import type { AbilityTargetFilter } from './AbilityTargetFilter'
+import { AttackLimitation } from './AttackLimitation'
+import type { AttackCondition } from './AttackLimitation'
+import type { Attribute, AttributeType } from './Attribute'
 
 export type Effect = ModifyAttack | ModifyDefense
   | GainAttributes | LoseAttributes | LoseSkills

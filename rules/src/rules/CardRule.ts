@@ -14,7 +14,8 @@ import { intersection, isEqual, sumBy, uniq } from 'es-toolkit'
 import { max } from 'es-toolkit/compat'
 import { ArackhanWarsRules } from '../ArackhanWarsRules'
 import { battlefieldCoordinates } from '../material/Board'
-import { Ability } from '../material/cards/Ability'
+import { AbilityMultiplier } from '../material/cards/Ability'
+import type { Ability } from '../material/cards/Ability'
 import {
   AttackByCreaturesOnlyInGroup,
   AttackByCreaturesOnlyInGroupOrSpells,
@@ -31,14 +32,11 @@ import {
   NoAttackInGroupNotFamily,
   NoAttackOnAdjacentCard
 } from '../material/cards/AttackLimitation'
-import { Attribute, AttributeType, isMovement, isRangedAttack } from '../material/cards/Attribute'
+import { AttributeType, isMovement, isRangedAttack } from '../material/cards/Attribute'
+import type { Attribute } from '../material/cards/Attribute'
 import { Creature, isCreature } from '../material/cards/Creature'
 import {
-  AttackerConstraint,
-  DefenderConstraint,
-  Effect,
   EffectType,
-  EndOfTurn,
   EndOfTurnAction,
   ExtraScoreType,
   isAddCharacteristics,
@@ -54,21 +52,29 @@ import {
   ModifyAttackCondition,
   ModifyDefenseCondition,
   ModifyMovementCondition,
-  Possession,
-  Trigger,
   TriggerAction,
   TriggerCondition
 } from '../material/cards/Effect'
-import { FactionCardCharacteristics } from '../material/cards/FactionCardCharacteristics'
-import { Family } from '../material/cards/Family'
+import type {
+  AttackerConstraint,
+  DefenderConstraint,
+  Effect,
+  EndOfTurn,
+  Possession,
+  Trigger
+} from '../material/cards/Effect'
+import type { FactionCardCharacteristics } from '../material/cards/FactionCardCharacteristics'
+import type { Family } from '../material/cards/Family'
 import { isLand, Land } from '../material/cards/Land'
 import { isSpell, Spell } from '../material/cards/Spell'
-import { CardId, FactionCard, FactionCardsCharacteristics, getUniqueCard } from '../material/FactionCard'
+import { FactionCardsCharacteristics, getUniqueCard } from '../material/cards/FactionCardsCharacteristics'
+import { CardId, FactionCard } from '../material/FactionCard'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import { CardActionRule } from './action/CardActionRule'
-import { TargetingEffect } from './action/TargetingEffect'
-import { Attack } from './AttackRule'
+import type { CardActionRule } from './action/CardActionRule'
+import type { TargetingEffect } from './action/TargetingEffect'
+import type { Attack } from './AttackRule'
+import { getCardRule, setCardRuleFactory } from './cardRulesCache'
 import { Memory } from './Memory'
 
 export class CardRule extends MaterialRulesPart {
@@ -142,6 +148,10 @@ export class CardRule extends MaterialRulesPart {
 
   get isCreature() {
     return isCreature(this.characteristics)
+  }
+
+  get isLand() {
+    return isLand(this.characteristics)
   }
 
   get isSpell() {
@@ -293,13 +303,27 @@ export class CardRule extends MaterialRulesPart {
             return true
           })
           const effects: Effect[] = []
-          const multiplier = ability.getMultiplierFor(this.cardMaterial, this.game)
+          const multiplier = this.getAbilityMultiplier(ability, this.cardMaterial)
           for (let i = 0; i < multiplier; i++) {
             effects.push(...abilityEffects)
           }
           return effects
         })
     }).concat(...this.targetingEffects)
+  }
+
+  private getAbilityMultiplier(ability: Ability, card: Material): number {
+    const multipliers = ability.multipliers
+    if (multipliers === undefined) return 1
+    if (Array.isArray(multipliers)) {
+      const battlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
+      return sumBy(battlefield.getIndexes(), index =>
+        multipliers.every(multiplier => multiplier.filter(card, battlefield.index(index), this.game)) ? 1 : 0
+      )
+    } else if (multipliers === AbilityMultiplier.ExtraFactionToken) {
+      return this.material(MaterialType.FactionToken).location(LocationType.FactionCard).parent(card.getIndex()).length
+    }
+    return 1
   }
 
   get targetingEffects(): Effect[] {
@@ -852,24 +876,9 @@ export class CardRule extends MaterialRulesPart {
   }
 }
 
-let cardsRulesCache: {
-  game: MaterialGame,
-  rules: Record<number, CardRule>
-} | undefined
+setCardRuleFactory((game, cardIndex) => new CardRule(game, cardIndex))
 
-export function getCardRule(game: MaterialGame, cardIndex: number) {
-  if (cardsRulesCache?.game !== game) {
-    cardsRulesCache = { game, rules: {} }
-  }
-  if (!cardsRulesCache.rules[cardIndex]) {
-    cardsRulesCache.rules[cardIndex] = new CardRule(game, cardIndex)
-  }
-  return cardsRulesCache.rules[cardIndex]
-}
-
-export function resetCardsRulesCache() {
-  cardsRulesCache = undefined
-}
+export { getCardRule, resetCardsRulesCache } from './cardRulesCache'
 
 export enum Path {
   Unknown, Blocked, CanStop, CanGoThrough

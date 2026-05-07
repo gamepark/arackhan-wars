@@ -1,4 +1,5 @@
-import { FactionCard, getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
+import { getUniqueCard } from '@gamepark/arackhan-wars/material/cards/FactionCardsCharacteristics'
+import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { DropAreaDescription, ItemContext, Locator, MaterialContext } from '@gamepark/react-game'
 import { Location, MaterialItem } from '@gamepark/rules-api'

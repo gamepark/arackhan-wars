@@ -6,8 +6,6 @@ import { GreyOrderPreBuildDeck } from './greyorder/GreyOrderPreBuildDeck'
 import { NakkaPreBuildDeck } from './nakka/NakkaPreBuildDeck'
 import { WhitelandsPreBuildDeck } from './whitelands/WhitelandsPreBuildDeck'
 
-export type DeckListing = Partial<Record<FactionCard, number>>
-
 export const PreBuildDecks: Record<Faction, FactionCard[]> = {
   [Faction.Blight]: listingToList(BlightPreBuildDeck),
   [Faction.GreyOrder]: listingToList(GreyOrderPreBuildDeck),

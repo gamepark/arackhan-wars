@@ -1,5 +1,5 @@
 import { Material } from '@gamepark/rules-api'
-import { getCardRule } from '../CardRule'
+import { getCardRule } from '../cardRulesCache'
 import { MoveCardsActionRule } from './MoveCardsActionRule'
 
 export class ForcedExileActionRule extends MoveCardsActionRule {

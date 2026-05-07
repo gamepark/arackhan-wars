@@ -1,5 +1,5 @@
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
-import { getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
+import { getUniqueCard } from '@gamepark/arackhan-wars/material/cards/FactionCardsCharacteristics'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'

@@ -1,9 +1,10 @@
 import { MaterialGame, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { isCreature } from '../../material/cards/Creature'
-import { CardId, FactionCardsCharacteristics } from '../../material/FactionCard'
+import { FactionCardsCharacteristics } from '../../material/cards/FactionCardsCharacteristics'
+import { CardId } from '../../material/FactionCard'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
-import { getCardRule } from '../CardRule'
+import { getCardRule } from '../cardRulesCache'
 import { Memory } from '../Memory'
 import { RuleId } from '../RuleId'
 

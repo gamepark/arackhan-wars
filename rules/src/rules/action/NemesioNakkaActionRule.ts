@@ -1,5 +1,5 @@
 import { Material, XYCoordinates } from '@gamepark/rules-api'
-import { getCardRule } from '../CardRule'
+import { getCardRule } from '../cardRulesCache'
 import { MoveCardsActionRule } from './MoveCardsActionRule'
 
 export class NemesioNakkaActionRule extends MoveCardsActionRule {

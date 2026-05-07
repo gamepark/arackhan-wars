@@ -1,6 +1,6 @@
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
-import { getCardRule } from '../CardRule'
+import { getCardRule } from '../cardRulesCache'
 import { CardActionRule } from './CardActionRule'
 
 export class TheGreyOrderRisesActionRule extends CardActionRule {

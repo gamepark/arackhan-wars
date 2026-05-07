@@ -1,5 +1,5 @@
 import { FactionCard } from '../../FactionCard'
-import { DeckListing } from '../PreBuildDecks'
+import { DeckListing } from '../DeckListing'
 
 export const WhitelandsPreBuildDeck: DeckListing = {
   [FactionCard.NihilistPenguin]: 4,

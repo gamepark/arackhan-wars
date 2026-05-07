@@ -1,12 +1,11 @@
 import { Material, MaterialGame } from '@gamepark/rules-api'
 import { merge } from 'es-toolkit/compat'
 import { TFunction } from 'i18next'
-import { ArackhanWarsRules } from '../../ArackhanWarsRules'
-import { getCardRule } from '../../rules/CardRule'
+import { getCardRule } from '../../rules/cardRulesCache'
 import { Memory } from '../../rules/Memory'
 import { LocationType } from '../LocationType'
 import { MaterialType } from '../MaterialType'
-import { AbilityTargetFilter } from './AbilityTargetFilter'
+import type { AbilityTargetFilter } from './AbilityTargetFilter'
 
 export abstract class AbilityCondition {
   abstract match(game: MaterialGame, source: Material): boolean
@@ -20,7 +19,7 @@ export class ThereIsOnBattlefield extends AbilityCondition {
   }
 
   match(game: MaterialGame, source: Material) {
-    const battlefieldCards = new ArackhanWarsRules(game).material(MaterialType.FactionCard).location(LocationType.Battlefield)
+    const battlefieldCards = getCardRule(game, source.getIndex()).material(MaterialType.FactionCard).location(LocationType.Battlefield)
     return battlefieldCards.getIndexes().some(index => this.filters.every(filter => filter.filter(source, battlefieldCards.index(index), game)))
   }
 
@@ -39,7 +38,7 @@ export class ThereIsNotOnBattlefield extends AbilityCondition {
   }
 
   match(game: MaterialGame, source: Material) {
-    const battlefieldCards = new ArackhanWarsRules(game).material(MaterialType.FactionCard).location(LocationType.Battlefield)
+    const battlefieldCards = getCardRule(game, source.getIndex()).material(MaterialType.FactionCard).location(LocationType.Battlefield)
     return !battlefieldCards.getIndexes().some(index => this.filters.every(filter => filter.filter(source, battlefieldCards.index(index), game)))
   }
 
@@ -54,8 +53,7 @@ export const thereIsNot = (...filters: AbilityTargetFilter[]) => new ThereIsNotO
 
 export class StartRound extends AbilityCondition {
   match(game: MaterialGame, source: Material) {
-    const rules = new ArackhanWarsRules(game)
-    return rules.remind(Memory.StartPlayer) === source.getItem()?.location?.player
+    return getCardRule(game, source.getIndex()).remind(Memory.StartPlayer) === source.getItem()?.location?.player
   }
 
   getText(t: TFunction) {
@@ -67,8 +65,7 @@ export const startRound = new StartRound()
 
 export class DoNotStartRound extends AbilityCondition {
   match(game: MaterialGame, source: Material) {
-    const rules = new ArackhanWarsRules(game)
-    return rules.remind(Memory.StartPlayer) !== source.getItem()?.location?.player
+    return getCardRule(game, source.getIndex()).remind(Memory.StartPlayer) !== source.getItem()?.location?.player
   }
 
   getText(t: TFunction) {

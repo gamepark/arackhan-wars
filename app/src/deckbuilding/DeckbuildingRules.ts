@@ -4,7 +4,8 @@ import { FactionCardCharacteristics } from '@gamepark/arackhan-wars/material/car
 import { isLand } from '@gamepark/arackhan-wars/material/cards/Land'
 import { isSpell } from '@gamepark/arackhan-wars/material/cards/Spell'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
-import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
+import { FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/cards/FactionCardsCharacteristics'
+import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import {

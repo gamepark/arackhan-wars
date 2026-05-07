@@ -1,5 +1,5 @@
 import { FactionCard } from '../../FactionCard'
-import { DeckListing } from '../PreBuildDecks'
+import { DeckListing } from '../DeckListing'
 
 export const NakkaPreBuildDeck: DeckListing = {
   [FactionCard.DeathCrawler]: 1,

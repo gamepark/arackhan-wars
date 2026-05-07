@@ -1,12 +1,8 @@
 import { Material, MaterialGame } from '@gamepark/rules-api'
-import { sumBy } from 'es-toolkit'
-import { ArackhanWarsRules } from '../../ArackhanWarsRules'
-import { LocationType } from '../LocationType'
-import { MaterialType } from '../MaterialType'
-import { AbilityCondition } from './AbilityCondition'
-import { AbilityTargetFilter, itself } from './AbilityTargetFilter'
-import { AttackCondition, AttackLimitation } from './AttackLimitation'
-import { Attribute, AttributeType } from './Attribute'
+import type { AbilityCondition } from './AbilityCondition'
+import type { AbilityTargetFilter } from './AbilityTargetFilter'
+import type { AttackCondition, AttackLimitation } from './AttackLimitation'
+import type { Attribute, AttributeType } from './Attribute'
 import {
   Effect,
   EffectType,
@@ -20,6 +16,11 @@ import {
   TriggerAction,
   TriggerCondition
 } from './Effect'
+
+const itself: AbilityTargetFilter = {
+  filter: (source: Material, target: Material) => source.getIndex() === target.getIndex(),
+  text: 'itself'
+}
 
 export class Ability {
 
@@ -52,20 +53,6 @@ export class Ability {
     if (!source.getItem() || !target.getItem()) return false
     if (this.condition && !this.condition.match(game, source)) return false
     return this.filters.every(filter => filter.filter(source, target, game))
-  }
-
-  getMultiplierFor(card: Material, game: MaterialGame) {
-    const multipliers = this.multipliers
-    if (multipliers === undefined) return 1
-    if (Array.isArray(multipliers)) {
-      const battlefield = new ArackhanWarsRules(game).material(MaterialType.FactionCard).location(LocationType.Battlefield)
-      return sumBy(battlefield.getIndexes(), index =>
-        multipliers!.every(multiplier => multiplier.filter(card, battlefield.index(index), game)) ? 1 : 0
-      )
-    } else if (multipliers === AbilityMultiplier.ExtraFactionToken) {
-      return new ArackhanWarsRules(game).material(MaterialType.FactionToken).location(LocationType.FactionCard).parent(card.getIndex()).length
-    }
-    return 1
   }
 
   attack(modifier: number, condition?: ModifyAttackCondition) {

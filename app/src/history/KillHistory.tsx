@@ -1,4 +1,4 @@
-import { getUniqueCard } from '@gamepark/arackhan-wars/material/FactionCard'
+import { getUniqueCard } from '@gamepark/arackhan-wars/material/cards/FactionCardsCharacteristics'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { MoveComponentProps, PlayMoveButton } from '@gamepark/react-game'
 import { MaterialMoveBuilder, MoveItem } from '@gamepark/rules-api'

@@ -2,8 +2,9 @@ import { listToListing } from '@gamepark/rules-api'
 import { sumBy } from 'es-toolkit'
 import { AttributeType } from '../material/cards/Attribute'
 import { FactionCardCharacteristics } from '../material/cards/FactionCardCharacteristics'
-import { DeckListing } from '../material/cards/PreBuildDecks'
-import { FactionCard, FactionCardsCharacteristics, getUniqueCard } from '../material/FactionCard'
+import { DeckListing } from '../material/cards/DeckListing'
+import { FactionCardsCharacteristics, getUniqueCard } from '../material/cards/FactionCardsCharacteristics'
+import { FactionCard } from '../material/FactionCard'
 
 export class DeckValidator {
   characteristics: FactionCardCharacteristics[]

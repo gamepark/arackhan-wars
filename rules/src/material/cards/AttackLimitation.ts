@@ -1,6 +1,6 @@
 import { areAdjacentSquares, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
 import { intersection } from 'es-toolkit'
-import { getCardRule } from '../../rules/CardRule'
+import { getCardRule } from '../../rules/cardRulesCache'
 import { Memory } from '../../rules/Memory'
 import { MaterialType } from '../MaterialType'
 import { Family } from './Family'

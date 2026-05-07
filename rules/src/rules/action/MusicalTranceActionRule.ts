@@ -1,6 +1,6 @@
 import { Material } from '@gamepark/rules-api'
 import { Family } from '../../material/cards/Family'
-import { getCardRule } from '../CardRule'
+import { getCardRule } from '../cardRulesCache'
 import { Memory } from '../Memory'
 import { MoveCardsActionRule } from './MoveCardsActionRule'
 

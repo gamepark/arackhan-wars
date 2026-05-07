@@ -1,7 +1,7 @@
 import { isSelectItemType, ItemMove } from '@gamepark/rules-api'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
-import { getCardRule } from '../CardRule'
+import { getCardRule } from '../cardRulesCache'
 import { CardActionRule } from './CardActionRule'
 
 export class TomurDiscActionRule extends CardActionRule {

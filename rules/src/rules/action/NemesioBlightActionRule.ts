@@ -1,7 +1,7 @@
 import { MaterialMove } from '@gamepark/rules-api'
 import { EffectType } from '../../material/cards/Effect'
 import { MaterialType } from '../../material/MaterialType'
-import { getCardRule } from '../CardRule'
+import { getCardRule } from '../cardRulesCache'
 import { Memory } from '../Memory'
 import { CardActionRule } from './CardActionRule'
 import { TargetingEffect } from './TargetingEffect'

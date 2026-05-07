@@ -10,7 +10,7 @@ import { attributesIconDescription } from '../locators/AttributesIconsLocator'
 import { CombatIcon, combatIconDescription } from '../locators/CombatIconLocator'
 import { skillLostIconDescription } from '../locators/SkillLostIconLocator'
 import { getAttributeText } from './getAttributeText.ts'
-import { getCardBattlefieldModifierLocations } from './FactionCardDescription'
+import { getCardBattlefieldModifierLocations } from './getCardBattlefieldModifierLocations'
 import { alignIcon } from './help-css-util.ts'
 import displayMaterialHelp = MaterialMoveBuilder.displayMaterialHelp
 

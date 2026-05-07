@@ -1,4 +1,4 @@
-import { getCardRule } from '../CardRule'
+import { getCardRule } from '../cardRulesCache'
 import { ReplaceWithCreatureActionRule } from './ReplaceWithCreatureActionRule'
 
 export class NoviceFairyActionRule extends ReplaceWithCreatureActionRule {

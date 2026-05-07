@@ -3,7 +3,7 @@ import { isSpell } from '../material/cards/Spell'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { AttackRule } from './AttackRule'
-import { getCardRule } from './CardRule'
+import { getCardRule } from './cardRulesCache'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 
