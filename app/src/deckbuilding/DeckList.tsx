@@ -29,8 +29,8 @@ export const DeckList = ({ openDeck, deleteDeck }: DeckList) => {
               {!new DeckValidator(deck.cards).isValid && <FontAwesomeIcon icon={faCircleExclamation} css={invalidDeckWarning}/>}
             </h3>
             <div>
-              <FontAwesomeIcon css={iconButton} icon={faEye} onClick={() => openDeck(deck)} title={t('deck.open')!}/>
-              {deleteDeck && <FontAwesomeIcon css={iconButton} icon={faTrashCan} onClick={() => deleteDeck(deck)} title={t('deck.delete')!}/>}
+              <FontAwesomeIcon css={iconButton} icon={faEye} onClick={() => openDeck(deck)} aria-label={t('deck.open')!}/>
+              {deleteDeck && <FontAwesomeIcon css={iconButton} icon={faTrashCan} onClick={() => deleteDeck(deck)} aria-label={t('deck.delete')!}/>}
             </div>
           </li>
         )}
@@ -40,7 +40,7 @@ export const DeckList = ({ openDeck, deleteDeck }: DeckList) => {
           <li key={i}>
             <h3 css={deckNameCss(FactionCardsCharacteristics[cards[0]].faction)} onClick={() => openDeck({ cards, name: t(`deck.${i}`) })}>{t(`deck.${i}`)}</h3>
             <div>
-              <FontAwesomeIcon css={iconButton} icon={faEye} onClick={() => openDeck({ cards, name: t(`deck.${i}`) })} title={t('deck.open')!}/>
+              <FontAwesomeIcon css={iconButton} icon={faEye} onClick={() => openDeck({ cards, name: t(`deck.${i}`) })} aria-label={t('deck.open')!}/>
             </div>
           </li>
         )}
