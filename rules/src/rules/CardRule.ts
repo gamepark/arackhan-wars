@@ -74,7 +74,7 @@ import { MaterialType } from '../material/MaterialType'
 import type { CardActionRule } from './action/CardActionRule'
 import type { TargetingEffect } from './action/TargetingEffect'
 import type { Attack } from './AttackRule'
-import { getCardRule, setCardRuleFactory } from './cardRulesCache'
+import { getCardRule } from './cardRulesCache'
 import { Memory } from './Memory'
 
 export class CardRule extends MaterialRulesPart {
@@ -875,8 +875,6 @@ export class CardRule extends MaterialRulesPart {
     ]
   }
 }
-
-setCardRuleFactory((game, cardIndex) => new CardRule(game, cardIndex))
 
 export { getCardRule, resetCardsRulesCache } from './cardRulesCache'
 
