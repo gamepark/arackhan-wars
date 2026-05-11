@@ -3,7 +3,8 @@
   "version": "2.5.1",
   "description": "The rules of AracKhan Wars adapted for Game Park",
   "sideEffects": [
-    "./dist/index.js"
+    "./dist/index.js",
+    "./dist/rules/CardRule.js"
   ],
   "type": "module",
   "main": "dist/index.js",
