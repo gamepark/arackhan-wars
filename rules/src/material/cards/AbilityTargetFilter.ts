@@ -39,12 +39,12 @@ export const family = (family: Family): AbilityTargetFilter => ({
 })
 
 export const creature: AbilityTargetFilter = {
-  filter: (_source: Material, target: Material) => isCreature(FactionCardsCharacteristics[target.getItem()!.id.front]),
+  filter: (_source: Material, target: Material) => isCreature(FactionCardsCharacteristics[(target.getItem()!.id as { front: any }).front as keyof typeof FactionCardsCharacteristics]),
   text: 'creature'
 }
 
 export const land: AbilityTargetFilter = {
-  filter: (_source: Material, target: Material) => isLand(FactionCardsCharacteristics[target.getItem()!.id.front]),
+  filter: (_source: Material, target: Material) => isLand(FactionCardsCharacteristics[(target.getItem()!.id as { front: any }).front as keyof typeof FactionCardsCharacteristics]),
   text: 'land'
 }
 

@@ -1,7 +1,6 @@
-/** @jsxImportSource @emotion/react */
-import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
+import { ReactNode } from 'react'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
-import { FailuresDialog, FullscreenDialog, LoadingScreen, MaterialHeader, MaterialImageLoader, Menu, useGame } from '@gamepark/react-game'
+import { FailuresDialog, FullscreenDialog, LoadingScreen, MaterialGameSounds, MaterialHeader, MaterialImageLoader, Menu, useGame } from '@gamepark/react-game'
 import { MaterialGame } from '@gamepark/rules-api'
 import { useEffect, useState } from 'react'
 import GameDisplay from './GameDisplay'
@@ -27,10 +26,11 @@ export default function App() {
   const loading = !game || isJustDisplayed || isImagesLoading
   return (
     <>
-      <GameDisplay/>
-      <LoadingScreen display={loading} author={['Robert Palmer', 'Mickaël Bour']} artist="Robert Palmer" publisher="Nothing But Games" developer="Game Park"/>
+      {!!game && <GameDisplay/>}
+      <LoadingScreen display={loading}/>
       <MaterialHeader rulesStepsHeaders={RulesHeaders} GameOverRule={GameOverRule} loading={loading}/>
       <MaterialImageLoader onImagesLoad={() => setImagesLoading(false)}/>
+      <MaterialGameSounds/>
       <Menu/>
       <FailuresDialog/>
       <FullscreenDialog/>
@@ -38,7 +38,7 @@ export default function App() {
   )
 }
 
-const RulesHeaders: Record<RuleId, () => ReactJSXElement> = {
+const RulesHeaders: Record<RuleId, () => ReactNode> = {
   [RuleId.ChooseStartPlayer]: ChooseStartPlayerHeader,
   [RuleId.Mulligan]: MulliganHeader,
   [RuleId.DrawRule]: DrawHeader,

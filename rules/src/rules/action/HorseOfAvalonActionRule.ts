@@ -17,12 +17,12 @@ export class HorseOfAvalonActionRule extends CardActionRule {
     return this.material(MaterialType.FactionCard)
       .location(LocationType.Hand)
       .player(this.player)
-      .filter(item => isCreature(FactionCardsCharacteristics[item.id.front]))
-      .moveItems({ location })
+      .filter(item => isCreature(FactionCardsCharacteristics[(item.id as { front: any }).front as keyof typeof FactionCardsCharacteristics]))
+      .moveItems(location)
   }
 
   afterItemMove(move: ItemMove) {
-    if (isMoveItem(move) && move.itemType === MaterialType.FactionCard && move.position.location?.type === LocationType.Battlefield) {
+    if (isMoveItem(move) && move.itemType === MaterialType.FactionCard && move.location.type === LocationType.Battlefield) {
       return [
         this.material(MaterialType.FactionToken)
           .player(this.player)

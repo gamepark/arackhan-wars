@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import board from '../images/boards/core-box-battle-mat.jpg'
 import { BoardDescription, MaterialContext } from '@gamepark/react-game'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'

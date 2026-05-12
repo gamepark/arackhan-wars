@@ -21,7 +21,7 @@ export abstract class CardActionRule extends PlayerTurnRule<PlayerId, MaterialTy
 
   discardActionCard() {
     return this.material(MaterialType.FactionCard).index(this.remind(Memory.ActionCard)).moveItem({
-      location: { type: LocationType.PlayerDiscard, player: this.player }
+      type: LocationType.PlayerDiscard, player: this.player
     })
   }
 

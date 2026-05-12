@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import roundTrackToken from '../images/tokens/round-token-front.jpg'
 import { RoundTokenDescription } from '@gamepark/react-game'
 import { RoundTrackerRules } from './RoundTrackerRules'

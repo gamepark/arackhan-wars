@@ -61,7 +61,7 @@ export class ArackhanWarsSetup extends MaterialGameSetup<PlayerId, MaterialType,
       .player(player)
       .sort(card => -card.location.x!)
       .limit(quantity)
-      .moveItems({ location: { type: LocationType.Hand, player } })
+      .moveItems({ type: LocationType.Hand, player })
   }
 
   placeRoundTracker() {

@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 
 import { useRules } from '@gamepark/react-game'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
@@ -26,11 +25,11 @@ export default function AttacksDisplay() {
     ctx.strokeStyle = 'rgba(139, 0, 0, 0.5)'
     for (const attack of attacks) {
       const attacker = rules.material(MaterialType.FactionCard).getItem(attack.card)
-      const a = battleFieldLocator.getPositionOnParent(attacker!.location)
+      const a = battleFieldLocator.getPositionOnParent(attacker!.location, { rules, player: rules.players[0] } as any)
       a.y -= 2
       for (const target of attack.targets) {
         const defender = rules.material(MaterialType.FactionCard).getItem(target)
-        const b = battleFieldLocator.getPositionOnParent(defender!.location)
+        const b = battleFieldLocator.getPositionOnParent(defender!.location, { rules, player: rules.players[0] } as any)
         b.y -= 2
         const start = getCoordinatesOnLineAtDistance(a, b, 3)
         const end = getCoordinatesOnLineAtDistance(b, a, 3)

@@ -9,11 +9,7 @@ import { Memory } from './Memory'
 
 export class MulliganRule extends SimultaneousRule<PlayerId, MaterialType, LocationType> {
 
-  getLegalMoves(player: PlayerId): MaterialMove<PlayerId, MaterialType, LocationType>[] {
-
-    if (!this.isTurnToPlay(player)) {
-      return []
-    }
+  getActivePlayerLegalMoves(player: PlayerId): MaterialMove<PlayerId, MaterialType, LocationType>[] {
 
     const cardsInHand = this
       .material(MaterialType.FactionCard)
@@ -23,10 +19,8 @@ export class MulliganRule extends SimultaneousRule<PlayerId, MaterialType, Locat
 
     const moves: MaterialMove[] =
       cardsInHand.moveItems({
-        location: {
-          type: LocationType.PlayerDeck,
-          player
-        }
+        type: LocationType.PlayerDeck,
+        player
       })
 
     if (cardsInHand.length < START_HAND) {
@@ -63,7 +57,7 @@ export class MulliganRule extends SimultaneousRule<PlayerId, MaterialType, Locat
       ...cardsInDeck
         .sort(card => -card.location.x!)
         .limit(START_HAND - cardsInHand)
-        .moveItems({ location: { type: LocationType.Hand, player } })
+        .moveItems({ type: LocationType.Hand, player })
     )
 
     return moves

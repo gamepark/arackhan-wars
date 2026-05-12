@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import NihilistPenguin from '../images/cards/whitelands/fr/s1-aw1-022-fr-nihilist-penguin.jpg'
 import LunarWendigo from '../images/cards/whitelands/fr/s1-aw1-019-fr-lunar-wendigo.jpg'
 import ShieldOfDawn from '../images/cards/whitelands/fr/s1-aw1-027-fr-shield-of-dawn.jpg'

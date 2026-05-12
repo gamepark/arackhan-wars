@@ -9,7 +9,7 @@ import {
   MaterialRulesPart,
   XYCoordinates
 } from '@gamepark/rules-api'
-import sumBy from 'lodash/sumBy'
+import { sumBy } from 'es-toolkit'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { battlefieldCoordinates, onBattlefieldAndAstralPlane } from '../material/Board'
 import { Ability } from '../material/cards/Ability'
@@ -137,7 +137,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
   }
 
   get isTokenFlipped() {
-    return this.token.getItem()?.rotation?.y === 1
+    return (this.token.getItem()?.location.rotation as { y?: number } | undefined)?.y === 1
   }
 
   get hasInitiative() {
@@ -273,7 +273,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
     if (effect.action === TriggerAction.SelfDestroy) {
       return [
         ...this.material(MaterialType.FactionToken).location(LocationType.FactionTokenSpace).parent(this.index).deleteItems(),
-        this.cardMaterial.moveItem({ location: { type: LocationType.PlayerDiscard, player: this.owner } })
+        this.cardMaterial.moveItem({ type: LocationType.PlayerDiscard, player: this.owner })
       ]
     }
     return []
@@ -289,7 +289,7 @@ export class CardRule extends MaterialRulesPart<PlayerId, MaterialType, Location
 
   get legalMovements() {
     return this.legalDestinations.map(({ x, y }) =>
-      this.cardMaterial.moveItem({ location: { type: LocationType.Battlefield, x, y, player: this.owner } })
+      this.cardMaterial.moveItem({ type: LocationType.Battlefield, x, y, player: this.owner })
     )
   }
 

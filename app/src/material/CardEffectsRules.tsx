@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { Picture, useRules } from '@gamepark/react-game'
 import { getCardBattlefieldModifierLocations } from './FactionCardDescription'
 import { Trans, useTranslation } from 'react-i18next'
@@ -29,22 +28,23 @@ export const CardEffectsRules = ({ index }: { index: number }) => {
   </>
 }
 
-const getEffectImage = (location: Location) => {
+const getEffectImage = (location: Location): string | undefined => {
   switch (location.type) {
     case LocationType.AttributesIcons:
       return attributesIconDescription.getImage(location)
     case LocationType.CombatIcon:
-      return combatIconDescription.images[location.id]
+      return combatIconDescription.images[location.id as CombatIcon]
     case LocationType.SkillLostIcon:
       return skillLostIconDescription.image
   }
+  return undefined
 }
 
 const getEffectText = (location: Location, t: TFunction) => {
   switch (location.type) {
     case LocationType.AttributesIcons:
       const attribute = t(`attribute.${location.id.type}`, location.id)
-      return <Trans defaults={location.id.cancel ? 'rules.card.attribute.lost' : 'rules.card.attribute.gain'} values={{ attribute }}><strong/></Trans>
+      return <Trans i18nKey={location.id.cancel ? 'rules.card.attribute.lost' : 'rules.card.attribute.gain'} values={{ attribute }}><strong/></Trans>
     case LocationType.CombatIcon:
       return <strong>{t(`rules.card.${location.id === CombatIcon.Attack ? 'attack' : 'defense'}.${location.y! > 0 ? 'gain' : 'lost'}`, { modifier: location.y })}</strong>
     case LocationType.SkillLostIcon:

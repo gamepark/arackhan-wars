@@ -1,17 +1,20 @@
-/** @jsxImportSource @emotion/react */
-import { DeckLocator, MaterialContext } from '@gamepark/react-game'
-import { Location, XYCoordinates } from '@gamepark/rules-api'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
-import { PlayerDiscardDescription } from './PlayerDiscardDescription'
+import { DeckLocator, DropAreaDescription, ItemContext, MaterialContext } from '@gamepark/react-game'
+import { Location } from '@gamepark/rules-api'
+import discard from '../images/locations/discard.png'
+import { PlayerDiscardRules } from './PlayerDiscardRules'
 
-export class PlayerDiscardLocator extends DeckLocator<PlayerId, MaterialType, LocationType> {
+export class PlayerDiscardLocator extends DeckLocator {
   locationDescription = new PlayerDiscardDescription()
   parentItemType = MaterialType.BattleMat
+  getPositionOnParent = (location: Location, { player = 1 }: MaterialContext) => location.player === player ? { x: 8.4, y: 90 } : { x: 91.4, y: 9.85 }
+  getRotateZ = (location: Location, { player = 1 }: ItemContext) => location.player === player ? 0 : 180
+}
 
-  getPositionOnParent(location: Location, context: MaterialContext): XYCoordinates {
-    const bottomPlayerId = context.player ?? 1
-    return location.player === bottomPlayerId ? { x: 8.4, y: 90 } : { x: 91.4, y: 9.85 }
-  }
+class PlayerDiscardDescription extends DropAreaDescription {
+  width = 6.55
+  height = 9.14
+  borderRadius = 0.4
+  help = PlayerDiscardRules
+  helpImage = discard
 }

@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { useTranslation } from 'react-i18next'
 import { usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
@@ -9,7 +8,7 @@ export const MoveCreatureActionHeader = () => {
   const { t } = useTranslation()
   const playerId = usePlayerId()
   const rules = useRules<ArackhanWarsRules>()!
-  const actionCard = rules.material(MaterialType.FactionCard).getItem(rules.remind(Memory.ActionCard))?.id.front
+  const actionCard = (rules.material(MaterialType.FactionCard).getItem(rules.remind(Memory.ActionCard))?.id as {front?: any} | undefined)?.front
   const activePlayer = rules.getActivePlayer()
   const player = usePlayerName(activePlayer)
   if (playerId === activePlayer) {

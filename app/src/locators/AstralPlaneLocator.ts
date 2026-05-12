@@ -1,24 +1,25 @@
-/** @jsxImportSource @emotion/react */
-import { ItemLocator, MaterialContext } from '@gamepark/react-game'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { Location, MaterialItem, XYCoordinates } from '@gamepark/rules-api'
+import { DropAreaDescription, Locator, MaterialContext } from '@gamepark/react-game'
+import { Location } from '@gamepark/rules-api'
+import AstralPlaneImage from '../images/locations/astral-plane.png'
 import { factionCardDescription } from '../material/FactionCardDescription'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
-import { AstralPlaneDescription } from './AstralPlaneDescription'
+import { AstralPlaneRules } from './AstralPlaneRules'
 
-export class AstralPlaneLocator extends ItemLocator<PlayerId, MaterialType, LocationType> {
+export class AstralPlaneLocator extends Locator {
   locationDescription = new AstralPlaneDescription()
   parentItemType = MaterialType.BattleMat
 
-
-  getPositionOnParent(location: Location, context: MaterialContext): XYCoordinates {
-    const bottomPlayerId = context.player ?? 1
+  getPositionOnParent(location: Location, { player = 1 }: MaterialContext) {
     const deltaX = location.x! * (factionCardDescription.width + 5.3)
-    return location.player === bottomPlayerId ? { x: 68.3 + deltaX, y: 90 } : { x: 31.55 - deltaX, y: 9.85 }
+    return location.player === player ? { x: 68.3 + deltaX, y: 90 } : { x: 31.55 - deltaX, y: 9.85 }
+  }
+}
+
+class AstralPlaneDescription extends DropAreaDescription {
+  constructor() {
+    super(factionCardDescription)
   }
 
-  isHidden(item: MaterialItem): boolean {
-    return item.rotation?.y === 1
-  }
+  help = AstralPlaneRules
+  helpImage = AstralPlaneImage
 }

@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { useTranslation } from 'react-i18next'
 import { usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'

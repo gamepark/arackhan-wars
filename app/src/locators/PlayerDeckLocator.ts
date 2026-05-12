@@ -1,25 +1,21 @@
-/** @jsxImportSource @emotion/react */
-import { DeckLocator, ItemContext, MaterialContext } from '@gamepark/react-game'
+import { css } from '@emotion/react'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
-import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
-import { Location, MaterialItem, XYCoordinates } from '@gamepark/rules-api'
-import { PlayerId } from '@gamepark/arackhan-wars/ArackhanWarsOptions'
-import { PlayerDeckDescription } from './PlayerDeckDescription'
+import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
+import { DeckLocator, DropAreaDescription, ItemContext, LocationContext, MaterialContext } from '@gamepark/react-game'
+import { Location } from '@gamepark/rules-api'
+import { factionCardDescription } from '../material/FactionCardDescription'
 
-export class PlayerDeckLocator extends DeckLocator<PlayerId, MaterialType, LocationType> {
+export class PlayerDeckLocator extends DeckLocator {
   locationDescription = new PlayerDeckDescription()
   parentItemType = MaterialType.BattleMat
+  getPositionOnParent = (location: Location, { player = 1 }: MaterialContext) => location.player === player ? { x: 92.2, y: 90 } : { x: 7.7, y: 9.9 }
+  getRotateZ = (location: Location, { player = 1 }: ItemContext) => location.player === player ? 0 : 180
+}
 
-  delta = { x: -0.04, y: -0.04, z: 0.1 }
-  hidden = true
-
-  getPositionOnParent(location: Location, context: MaterialContext): XYCoordinates {
-    const bottomPlayerId = context.player ?? 1
-    return location.player === bottomPlayerId ? { x: 92.2, y: 90 } : { x: 7.7, y: 9.9 }
+class PlayerDeckDescription extends DropAreaDescription {
+  constructor() {
+    super(factionCardDescription)
   }
 
-  getRotation(item: MaterialItem<PlayerId, LocationType>, context: ItemContext<PlayerId, MaterialType, LocationType>): number {
-    const bottomPlayerId = context.player ?? 1
-    return item.location.player === bottomPlayerId ? 0 : 180
-  }
+  getExtraCss = (_: Location, { rules }: LocationContext) => rules.game.rule?.id === RuleId.Mulligan && css`font-size: 1.2em;`
 }

@@ -9,19 +9,15 @@ import {
   MaterialRulesCreator,
   MoveItem,
   MoveKind,
-  playMove,
   RuleMoveType,
   XYCoordinates
 } from '@gamepark/rules-api'
+import { Faction } from '@gamepark/arackhan-wars/material/Faction'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
-import minBy from 'lodash/minBy'
-import partition from 'lodash/partition'
-import sortBy from 'lodash/sortBy'
-import sumBy from 'lodash/sumBy'
-import uniqBy from 'lodash/uniqBy'
+import { minBy, partition, sortBy, sumBy, uniqBy } from 'es-toolkit'
 import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
 import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
@@ -67,13 +63,13 @@ type PlacementTest = {
 
 const placementAi = (game: MaterialGame, bot: number) => {
   const rules = new ArackhanWarsRules(game)
-  const opponentPlacedCards = rules.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane).filter(item => !item.id.front).getIndexes()
+  const opponentPlacedCards = rules.material(MaterialType.FactionCard).location(onBattlefieldAndAstralPlane).filter(item => !(item.id as {front: any, back: any}).front).getIndexes()
   const battlefieldSpaces = new PlacementRule(game).battlefieldLegalSpaces
   const cards = rules.material(MaterialType.FactionCard).location(LocationType.Hand).player(bot).getIndexes()
   const [astralCards, battlefieldCards] = partition(cards, card =>
-    (FactionCardsCharacteristics[rules.material(MaterialType.FactionCard).getItem(card)!.id.front as FactionCard] as Spell).astral
+    (FactionCardsCharacteristics[(rules.material(MaterialType.FactionCard).getItem(card)!.id as {front: any, back: any}).front as FactionCard] as Spell).astral
   )
-  const battlefieldUniqCards = uniqBy(battlefieldCards, card => rules.material(MaterialType.FactionCard).getItem(card)!.id.front)
+  const battlefieldUniqCards = uniqBy(battlefieldCards, card => (rules.material(MaterialType.FactionCard).getItem(card)!.id as {front: any, back: any}).front)
   const isFirstPlayer = !opponentPlacedCards.length
   const placements: PlacementTest[] = []
   // Consider placing one astral card + one battlefield card
@@ -83,16 +79,16 @@ const placementAi = (game: MaterialGame, bot: number) => {
         const rules = new ArackhanWarsRules(JSON.parse(JSON.stringify(game)))
         const moves: MaterialMove[] = [
           rules.material(MaterialType.FactionCard).index(astralCard).moveItem({
-            location: { type: LocationType.AstralPlane, x: 0, player: bot },
+            type: LocationType.AstralPlane, x: 0, player: bot,
             rotation: { y: 1 }
           }),
           rules.material(MaterialType.FactionCard).index(battlefieldCard).moveItem({
-            location: { type: LocationType.Battlefield, ...space, player: bot },
+            type: LocationType.Battlefield, ...space, player: bot,
             rotation: { y: 1 }
           }),
           new PlacementRule(game).validationMove
         ]
-        moves.forEach(move => playMove(rules, move))
+        moves.forEach(move => rules.play(move))
         placements.push({
           moves, rules, score:
             evaluatePlacement(rules, isFirstPlayer, bot, moves[0]) + evaluatePlacement(rules, isFirstPlayer, bot, moves[1])
@@ -108,16 +104,16 @@ const placementAi = (game: MaterialGame, bot: number) => {
           const rules = new ArackhanWarsRules(JSON.parse(JSON.stringify(game)))
           const moves = [
             rules.material(MaterialType.FactionCard).index(battlefieldUniqCards[i]).moveItem({
-              location: { type: LocationType.Battlefield, ...battlefieldSpaces[k], player: bot },
+              type: LocationType.Battlefield, ...battlefieldSpaces[k], player: bot,
               rotation: { y: 1 }
             }),
             rules.material(MaterialType.FactionCard).index(battlefieldUniqCards[j]).moveItem({
-              location: { type: LocationType.Battlefield, ...battlefieldSpaces[l], player: bot },
+              type: LocationType.Battlefield, ...battlefieldSpaces[l], player: bot,
               rotation: { y: 1 }
             }),
             new PlacementRule(game).validationMove
           ]
-          moves.forEach(move => playMove(rules, move))
+          moves.forEach(move => rules.play(move))
           placements.push({
             moves, rules, score:
               evaluatePlacement(rules, isFirstPlayer, bot, moves[0]) + evaluatePlacement(rules, isFirstPlayer, bot, moves[1])
@@ -131,8 +127,8 @@ const placementAi = (game: MaterialGame, bot: number) => {
     const opponent = rules.players.find(p => p !== bot)!
     for (const placement of placements) {
       for (let i = 0; i < 2; i++) {
-        playMove(placement.rules, placement.rules.material(MaterialType.FactionCard).location(LocationType.Hand).player(opponent).moveItem({
-          location: { type: LocationType.AstralPlane }
+        placement.rules.play(placement.rules.material(MaterialType.FactionCard).location(LocationType.Hand).player(opponent).moveItem({
+          type: LocationType.AstralPlane
         }))
       }
     }
@@ -151,11 +147,11 @@ const placementAi = (game: MaterialGame, bot: number) => {
 }
 
 const evaluatePlacement = (rules: ArackhanWarsRules, isFirstPlayer: boolean, bot: number, move: MaterialMove): number => {
-  if (!isMoveItem(move) || move.position.location?.type === LocationType.AstralPlane) {
+  if (!isMoveItem(move) || move.location?.type === LocationType.AstralPlane) {
     return 0
   }
   let score = 0
-  const space = move.position.location as XYCoordinates
+  const space = move.location as XYCoordinates
   const cardIndex = rules.material(MaterialType.FactionCard).location(location =>
     location.type === LocationType.Battlefield && location.x === space.x && location.y === space.y
   ).getIndex()
@@ -207,26 +203,26 @@ const evaluatePlacement = (rules: ArackhanWarsRules, isFirstPlayer: boolean, bot
 const countAdjacentTargets = (rules: ArackhanWarsRules, space: XYCoordinates, bot: number): number => {
   return rules.material(MaterialType.FactionCard)
     .location(location => location.type === LocationType.Battlefield && areAdjacentSquares(space, location))
-    .player(p => p !== bot).filter(item => item.id.front && !isSpell(FactionCardCharacteristics[item.id.front])).length
+    .player(p => p !== bot).filter(item => (item.id as {front: any, back: any}).front && !isSpell(FactionCardCharacteristics[(item.id as {front: any, back: any}).front as keyof typeof FactionCardCharacteristics])).length
 }
 
 const countAdjacentEnemyCreatures = (rules: ArackhanWarsRules, space: XYCoordinates, bot: number): number => {
   return rules.material(MaterialType.FactionCard)
     .location(location => location.type === LocationType.Battlefield && areAdjacentSquares(space, location))
-    .player(p => p !== bot).filter(item => item.id.front && isCreature(FactionCardCharacteristics[item.id.front])).length
+    .player(p => p !== bot).filter(item => (item.id as {front: any, back: any}).front && isCreature(FactionCardCharacteristics[(item.id as {front: any, back: any}).front as keyof typeof FactionCardCharacteristics])).length
 }
 
 const hasTargetWithDefenseEqualTo = (rules: ArackhanWarsRules, space: XYCoordinates, bot: number, defense: number): boolean => {
   return rules.material(MaterialType.FactionCard)
     .location(location => location.type === LocationType.Battlefield && areAdjacentSquares(space, location))
-    .player(p => p !== bot).filter(item => item.id.front && !isSpell(FactionCardCharacteristics[item.id.front]))
+    .player(p => p !== bot).filter(item => (item.id as {front: any, back: any}).front && !isSpell(FactionCardCharacteristics[(item.id as {front: any, back: any}).front as keyof typeof FactionCardCharacteristics]))
     .getIndexes().some(index => getCardRule(rules.game, index).defense === defense)
 }
 
 const countAdjacentAllyCreatures = (rules: ArackhanWarsRules, space: XYCoordinates, bot: number): number => {
   return rules.material(MaterialType.FactionCard)
     .location(location => location.type === LocationType.Battlefield && areAdjacentSquares(space, location))
-    .player(bot).filter(item => item.id.front && isCreature(FactionCardCharacteristics[item.id.front])).length
+    .player(bot).filter(item => (item.id as {front: any, back: any}).front && isCreature(FactionCardCharacteristics[(item.id as {front: any, back: any}).front as keyof typeof FactionCardCharacteristics])).length
 }
 
 const getActivationNegamax = (rules: ArackhanWarsRules, bot: number, timeLimit = new Date().getTime() + 10000): Negamax => {
@@ -291,7 +287,7 @@ const getNegamax = <Rules extends MaterialRules>(
   for (const move of moves) {
     const Rules = rules.constructor as MaterialRulesCreator
     const rulesCopy = new Rules(JSON.parse(JSON.stringify(rules.game))) as Rules
-    playMove(rulesCopy, move)
+    rulesCopy.play(move)
     const test = getNegamax(rulesCopy, bot, stop, score, getMoves, timeLimit, depth + 1)
     if (!result || (activePlayer === bot ? (test.value > result.value) : (test.value < result.value))) {
       result = test
@@ -319,16 +315,16 @@ const getPotential = (rules: ArackhanWarsRules, player: number) => {
 }
 
 const getRemainingCards = (rules: ArackhanWarsRules, player: number): FactionCard[] => {
-  const faction = rules.material(MaterialType.FactionCard).location(LocationType.Hand).player(player).getItem()!.id.back
+  const faction = rules.material(MaterialType.FactionCard).location(LocationType.Hand).player(player).getItem<{ front?: FactionCard, back: Faction }>()!.id.back
   const played = rules.material(MaterialType.FactionCard)
     .location(location => location.type === LocationType.Battlefield || location.type === LocationType.PlayerDiscard)
-    .getItems().map(item => item.id.front).filter(card => card !== undefined) as FactionCard[]
+    .getItems().map(item => (item.id as {front: any, back: any}).front as FactionCard).filter(card => card !== undefined)
   const remainingCards = subtract(PreBuildDecks[faction], played)
-  return sortBy(remainingCards, card => -FactionCardsCharacteristics[card].getDeckBuildingValue())
+  return sortBy(remainingCards as unknown as object[], [(card: any) => -FactionCardsCharacteristics[card as FactionCard].getDeckBuildingValue()]) as unknown as FactionCard[]
 }
 
 const subtract = (a: FactionCard[], b: FactionCard[]): FactionCard[] => {
   return [...b.reduce((acc, v) => acc.set(v, (acc.get(v) || 0) - 1),
-    a.reduce((acc, v) => acc.set(v, (acc.get(v) || 0) + 1), new Map())
+    a.reduce((acc, v) => acc.set(v, (acc.get(v) || 0) + 1), new Map<FactionCard, number>())
   )].reduce<FactionCard[]>((acc, [v, count]) => count > 0 ? acc.concat(Array(Math.abs(count)).fill(v)) : acc, [])
 }

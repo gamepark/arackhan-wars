@@ -1,17 +1,16 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { Ability } from '@gamepark/arackhan-wars/material/cards/Ability'
 import { AttackCondition, AttackLimitation } from '@gamepark/arackhan-wars/material/cards/AttackLimitation'
 import { Effect, EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { TFunction } from 'i18next'
-import { merge } from 'lodash'
+import { merge } from 'es-toolkit'
 import { Trans, TransProps, useTranslation } from 'react-i18next'
 
 export const AbilityRule = ({ type, ability, card }: { type: string, ability: Ability, card: FactionCard }) => {
   const { t } = useTranslation()
   const targets = t(`target.${ability.filters.map(filter => filter.text).join('.')}`,
-    ability.filters.reduce((values, filter) => merge(values, filter.values?.(t)), {}))
+    ability.filters.reduce<Record<string, any>>((values, filter) => merge(values, filter.values?.(t) ?? {}), {})) as string
   return <>
     {ability.effects.map((effect, index) =>
       <p key={index}>

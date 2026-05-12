@@ -14,12 +14,12 @@ export class TeleportationActionRule extends CardActionRule {
       return myCards.filter((_, index) => {
         const rule = getCardRule(this.game, index)
         return rule.isCreature && rule.thereIsAnotherCardAdjacentTo({ x, y })
-      }).moveItems({ location: { type: LocationType.Battlefield, x, y, player: this.player } })
+      }).moveItems({ type: LocationType.Battlefield, x, y, player: this.player })
     })
   }
 
   afterItemMove(move: ItemMove<number, number, number>) {
-    if (isMoveItem(move) && move.itemType === MaterialType.FactionCard && move.position.location?.type === LocationType.Battlefield) {
+    if (isMoveItem(move) && move.itemType === MaterialType.FactionCard && move.location.type === LocationType.Battlefield) {
       return super.afterCardAction()
     }
     return []

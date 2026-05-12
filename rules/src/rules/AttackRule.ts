@@ -1,7 +1,5 @@
 import { CustomMove, MaterialMove, PlayerTurnRule, XYCoordinates } from '@gamepark/rules-api'
-import mapValues from 'lodash/mapValues'
-import partition from 'lodash/partition'
-import uniq from 'lodash/uniq'
+import { mapValues, partition, uniq } from 'es-toolkit'
 import { PlayerId } from '../ArackhanWarsOptions'
 import { onBattlefieldAndAstralPlane } from '../material/Board'
 import { isLand } from '../material/cards/Land'
@@ -77,7 +75,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
 
   onCustomMove(move: CustomMove): MaterialMove<PlayerId, MaterialType, LocationType>[] {
     if (move.type === CustomMoveType.Attack) {
-      delete this.game.droppedItem
+      delete this.game.droppedItems
       const targets = move.data.target !== undefined ? [move.data.target] : getCardRule(this.game, move.data.card).omnistrikeTargets
       this.memorize<number[]>(Memory.MovedCards, movedCard => movedCard.filter(card => card !== move.data.card))
       this.memorize<Attack[]>(Memory.Attacks, attacks => [...attacks, { card: move.data.card, targets }])
@@ -95,7 +93,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
 
     moves.push(...this.material(MaterialType.FactionToken)
       .parent(parent => attacks.some(attack => attack.card === parent))
-      .moveItems({ rotation: { y: 1 } }))
+      .moveItems<any, any, { y: number }>({ rotation: { y: 1 } }))
 
     const attackValues = this.attackValues
     const defeatedEnemies = Object.keys(attackValues).map(key => parseInt(key))
@@ -104,7 +102,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       getCardRule(this.game, enemy).canRegenerate && !attacks.some(attack => attack.targets.includes(enemy) && getCardRule(this.game, attack.card).isSpell)
     )
     for (const regeneratingEnemy of regeneratingEnemies) {
-      moves.push(this.material(MaterialType.FactionToken).parent(regeneratingEnemy).moveItem({ rotation: { y: 1 } }))
+      moves.push(...this.material(MaterialType.FactionToken).parent(regeneratingEnemy).moveItems<any, any, { y: number }>({ rotation: { y: 1 } }))
     }
     for (const killedEnemy of killedEnemies) {
       moves.push(...this.onSuccessfulAttack(killedEnemy))
@@ -134,7 +132,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
 
     moves.push(...this.material(MaterialType.FactionCard)
       .filter((_, index) => attacks.some(attack => attack.card === index) && getCardRule(this.game, index).isSpell)
-      .moveItems({ location: { type: LocationType.PlayerDiscard, player: this.player } })
+      .moveItems({ type: LocationType.PlayerDiscard, player: this.player })
     )
 
     this.memorize(Memory.Attacks, [])
@@ -160,7 +158,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
         attackedBy[target].push(attack.card)
       }
     }
-    return mapValues(attackedBy, (attackers, card) => getCardRule(this.game, parseInt(card)).getDamagesInflicted(attackers))
+    return mapValues(attackedBy, (attackers, card) => getCardRule(this.game, parseInt(card as unknown as string)).getDamagesInflicted(attackers))
   }
 
   onSuccessfulAttack(enemy: number) {
@@ -170,9 +168,7 @@ export class AttackRule extends PlayerTurnRule<PlayerId, MaterialType, LocationT
       const card = this.material(MaterialType.FactionCard).index(enemy)
       return [
         this.material(MaterialType.FactionToken).parent(enemy).deleteItem(),
-        card.moveItem(
-          { location: { type: LocationType.PlayerDiscard, player: card.getItem()?.location.player } }
-        )
+        card.moveItem({ type: LocationType.PlayerDiscard, player: card.getItem()?.location.player })
       ]
     }
   }

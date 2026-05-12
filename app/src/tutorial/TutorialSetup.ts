@@ -7,17 +7,17 @@ import { Memory } from '@gamepark/arackhan-wars/rules/Memory'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
 
 export class TutorialSetup extends ArackhanWarsSetup {
-  requiredCards = {
+  requiredCards: Partial<Record<Faction, FactionCard[]>> = {
     [Faction.Whitelands]: [FactionCard.LunarWendigo, FactionCard.NihilistPenguin, FactionCard.ShieldOfDawn, FactionCard.IceMeteor, FactionCard.FortressOfMyjir],
     [Faction.Blight]: [FactionCard.ScuttleJaw, FactionCard.SwampOgre, FactionCard.ForgePatriarch, FactionCard.SwampTroll]
   }
 
   setupPlayer(player: number, faction: Faction) {
     this.createPlayerDeck(player, faction)
-    const requiredCards = this.requiredCards[faction]
+    const requiredCards = this.requiredCards[faction] ?? []
     const playerDeck = this.material(MaterialType.FactionCard).location(LocationType.PlayerDeck).player(player)
     for (const requiredCard of requiredCards) {
-      playerDeck.filter(item => item.id.front === requiredCard).moveItem({ location: { type: LocationType.Hand, player } })
+      playerDeck.filter(item => (item.id as { front?: FactionCard })?.front === requiredCard).moveItem({ type: LocationType.Hand, player })
     }
     this.shufflePlayerDeck(player)
     this.draw(player, START_HAND - requiredCards.length)

@@ -14,7 +14,7 @@ export class MimicryActionRule extends CardActionRule {
 
   getPlayerMoves() {
     const creaturesOnBattlefield = this.material(MaterialType.FactionCard).location(LocationType.Battlefield)
-      .filter((item) => isCreature(FactionCardsCharacteristics[item.id.front]))
+      .filter((item) => isCreature(FactionCardsCharacteristics[(item.id as { front: any }).front as keyof typeof FactionCardsCharacteristics]))
 
     if (this.target === undefined) {
       return creaturesOnBattlefield.player(this.player).getIndexes()
@@ -38,13 +38,13 @@ export class MimicryActionRule extends CardActionRule {
         this.memorize(Memory.TargetCard, move.data)
       } else {
         this.forget(Memory.TargetCard)
-        const mimicTarget = this.material(MaterialType.FactionCard).getItem(move.data)?.id.front as FactionCard
+        const mimicTarget = (this.material(MaterialType.FactionCard).getItem(move.data)?.id as { front: any })?.front as FactionCard
         this.memorize<TurnEffect[]>(Memory.TurnEffects, turnEffects =>
           [...turnEffects, { targets: [target], effect: { type: EffectType.Mimic, target: mimicTarget } }]
         )
         const cardRule = getCardRule(this.game, target)
         if (cardRule.isTokenFlipped) {
-          moves.push(cardRule.token.moveItem({ rotation: {} }))
+          moves.push(...cardRule.token.moveItems({ rotation: {} }))
         }
         moves.push(...super.afterCardAction())
       }

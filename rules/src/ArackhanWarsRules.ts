@@ -8,7 +8,7 @@ import {
   SecretMaterialRules,
   TimeLimit
 } from '@gamepark/rules-api'
-import sumBy from 'lodash/sumBy'
+import { sumBy } from 'es-toolkit'
 import { PlayerId } from './ArackhanWarsOptions'
 import { isCreature } from './material/cards/Creature'
 import { isSpell } from './material/cards/Spell'
@@ -113,7 +113,7 @@ export const hideCardFrontToOthers: HidingStrategy = (
 export const hideCardWhenRotated: HidingStrategy = (
   item: MaterialItem<PlayerId, LocationType>, player?: PlayerId
 ) => {
-  if (item.rotation?.y) {
+  if ((item.location.rotation as { y?: number } | undefined)?.y) {
     return item.location.player === player ? [] : ['id.front']
   }
 

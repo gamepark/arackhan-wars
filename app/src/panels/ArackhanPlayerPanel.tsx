@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { Faction } from '@gamepark/arackhan-wars/material/Faction'
@@ -26,7 +25,7 @@ export const ArackhanPlayerPanel: FC<PlayerPanelProps> = ({ player, bottom }) =>
   const faction = useMemo<Faction>(() =>
       rules.material(MaterialType.FactionCard).location(location =>
         location.player === player && (location.type === LocationType.Hand || location.type === LocationType.PlayerDeck)
-      ).getItem()?.id.back ?? Faction.GreyOrder
+      ).getItem<{ front?: any, back: Faction }>()?.id.back ?? Faction.GreyOrder
     , [player])
   const score = useMemo(() => rules?.getScore(player), [rules, player])
   const playerTime = usePlayerTime(player)

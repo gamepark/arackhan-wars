@@ -13,7 +13,7 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
     const placedCards = this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
       .player(this.player)
-      .rotation(rotation => rotation?.y === 1)
+      .rotation(rotation => (rotation as { y?: number } | undefined)?.y === 1)
     if (placedCards.length === 2) {
       return [this.validationMove]
     }
@@ -26,14 +26,14 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
 
     for (let x = 0; x < 2; x++) {
       moves.push(...astralCards.moveItems({
-        location: { type: LocationType.AstralPlane, x, player: this.player },
+        type: LocationType.AstralPlane, x, player: this.player,
         rotation: { y: 1 }
       }))
     }
 
     for (const space of this.battlefieldLegalSpaces) {
       moves.push(...otherCards.moveItems({
-        location: { type: LocationType.Battlefield, ...space, player: this.player },
+        type: LocationType.Battlefield, ...space, player: this.player,
         rotation: { y: 1 }
       }))
     }
@@ -42,7 +42,7 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
   }
 
   isAstral(item: MaterialItem): boolean {
-    const card = FactionCardsCharacteristics[item.id.front]
+    const card = FactionCardsCharacteristics[(item.id as { front: any }).front as keyof typeof FactionCardsCharacteristics]
     return isSpell(card) && card.astral
   }
 
@@ -64,7 +64,7 @@ export class PlacementRule extends PlayerTurnRule<PlayerId, MaterialType, Locati
   }
 
   isPlacedThisTurnByMe(card: MaterialItem) {
-    return card.rotation && card.location.player === this.player
+    return card.location.rotation && card.location.player === this.player
   }
 
   get validationMove() {

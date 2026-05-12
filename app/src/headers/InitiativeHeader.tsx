@@ -12,6 +12,6 @@ export const InitiativeHeader = () => {
   if (!legalMoves.length) {
     return <>{t('header.initiative', { player: playerName })}</>
   } else {
-    return <Trans defaults="header.initiative.me"><PlayMoveButton move={legalMoves.find(isCustomMoveType(CustomMoveType.Pass))}/></Trans>
+    return <Trans i18nKey="header.initiative.me"><PlayMoveButton move={legalMoves.find(isCustomMoveType(CustomMoveType.Pass))}/></Trans>
   }
 }

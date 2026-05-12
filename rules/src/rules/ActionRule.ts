@@ -1,4 +1,4 @@
-import { isDeadEndMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { MaterialType } from '../material/MaterialType'
 import { CustomMoveType } from '../material/CustomMoveType'
 import { PlayerId } from '../ArackhanWarsOptions'
@@ -7,15 +7,12 @@ import { getCardRule } from './CardRule'
 import { Memory } from './Memory'
 import { Attack } from './AttackRule'
 import { onBattlefieldAndAstralPlane } from '../material/Board'
-import { ArackhanWarsRules } from '../ArackhanWarsRules'
-import { RuleId } from './RuleId'
 
 export class ActionRule extends PlayerTurnRule<PlayerId, MaterialType, LocationType> {
   getPlayerMoves(): MaterialMove[] {
     return this.availableCards
       .filter(index => getCardRule(this.game, index).canPerformAction)
       .map(index => this.rules().customMove(CustomMoveType.PerformAction, index))
-      .filter(move => !isDeadEndMove(move, this.game, ArackhanWarsRules, game => game.rule?.id === RuleId.ActivationRule))
   }
 
   get availableCards() {

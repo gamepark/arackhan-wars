@@ -13,7 +13,7 @@ export class RevealRule extends MaterialRulesPart<PlayerId, MaterialType, Locati
   getAutomaticMoves() {
     const revealCards = this.material(MaterialType.FactionCard)
       .location(onBattlefieldAndAstralPlane)
-      .filter(item => !!item.rotation?.y)
+      .filter(item => !!(item.location.rotation as { y?: number } | undefined)?.y)
       .moveItems({ rotation: {} })
 
     return [

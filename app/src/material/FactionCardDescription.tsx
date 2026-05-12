@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import WhitelandsBack from '../images/cards/whitelands/whitelands-card-back.jpg'
 import BlightBack from '../images/cards/blight/blight-card-back.jpg'
 import NakkaBack from '../images/cards/nakka/nakka-card-back.jpg'
@@ -70,7 +69,7 @@ import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { FactionCard } from '@gamepark/arackhan-wars/material/FactionCard'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
 import { CombatIcon } from '../locators/CombatIconLocator'
-import { differenceBy } from 'lodash'
+import { differenceBy } from 'es-toolkit'
 import { EffectType } from '@gamepark/arackhan-wars/material/cards/Effect'
 import { isCreature } from '@gamepark/arackhan-wars/material/cards/Creature'
 import { Attack } from '@gamepark/arackhan-wars/rules/AttackRule'
@@ -144,7 +143,7 @@ export class FactionCardDescription extends CardDescription {
   }
 
   getLocations(item: MaterialItem, { index, rules }: ItemContext): Location[] {
-    if (item.location.type !== LocationType.Battlefield || item.id.front === undefined) return []
+    if (item.location.type !== LocationType.Battlefield || (item.id as {front: any, back: any}).front === undefined) return []
 
     const locations: Location[] = getCardBattlefieldModifierLocations(rules.game, index)
     const cardRule = getCardRule(rules.game, index)

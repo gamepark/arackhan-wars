@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules'
 import { onBattlefieldAndAstralPlane } from '@gamepark/arackhan-wars/material/Board'
 import { Attribute } from '@gamepark/arackhan-wars/material/cards/Attribute'
@@ -11,8 +10,9 @@ import { CustomMoveType } from '@gamepark/arackhan-wars/material/CustomMoveType'
 import { FactionCard, FactionCardsCharacteristics } from '@gamepark/arackhan-wars/material/FactionCard'
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { getCardRule } from '@gamepark/arackhan-wars/rules/CardRule'
-import { linkButtonCss, MaterialRulesProps, Picture, PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
-import { displayLocationRules, isCustomMove } from '@gamepark/rules-api'
+import { linkButtonCss, MaterialHelpProps, Picture, PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
+import { isCustomMove, MaterialMoveBuilder } from '@gamepark/rules-api'
+import displayLocationHelp = MaterialMoveBuilder.displayLocationHelp
 import { Trans, useTranslation } from 'react-i18next'
 import astral from '../images/icons/astral.png'
 import captureFlag from '../images/icons/capture-flag.png'
@@ -20,19 +20,19 @@ import { AbilityRule } from './AbilityRule'
 import { alignIcon, AttributeRule } from './AttributeRule'
 import { CardEffectsRules } from './CardEffectsRules'
 
-export const FactionCardRules = (props: MaterialRulesProps) => {
+export const FactionCardRules = (props: MaterialHelpProps) => {
   const { item, itemIndex, closeDialog } = props
   const { t } = useTranslation()
   const chooseCard = useLegalMove(move => isCustomMove(move) && move.type === CustomMoveType.ChooseCard && move.data === itemIndex)
   return <>
-    <h2>{item.id.front ? t(`card.name.${item.id.front}`) : t('rules.card.faction', { faction: t(`faction.${item.id.back}`) })}</h2>
+    <h2>{(item.id as {front: any, back: any}).front ? t(`card.name.${(item.id as {front: any, back: any}).front}`) : t('rules.card.faction', { faction: t(`faction.${(item.id as {front: any, back: any}).back}`) })}</h2>
     <CardLocationRule {...props}/>
     {chooseCard && <PlayMoveButton move={chooseCard} onPlay={closeDialog}>{t('card.choose')}</PlayMoveButton>}
-    {item.id.front && <CardFrontRule {...props}/>}
+    {(item.id as {front: any, back: any}).front && <CardFrontRule {...props}/>}
   </>
 }
 
-const CardLocationRule = (props: MaterialRulesProps) => {
+const CardLocationRule = (props: MaterialHelpProps) => {
   const { item } = props
   const { t } = useTranslation()
   const playerId = usePlayerId()
@@ -47,8 +47,8 @@ const CardLocationRule = (props: MaterialRulesProps) => {
       return <InGameLocationRule {...props}/>
     case LocationType.PlayerDiscard:
       return <p>
-        <Trans defaults={item.location?.player === playerId ? 'rules.card.discard.mine' : 'rules.card.discard'} values={{ player }}>
-          <PlayMoveButton css={linkButtonCss} move={displayLocationRules({ type: LocationType.PlayerDiscard, player: item.location?.player })} local/>
+        <Trans i18nKey={item.location?.player === playerId ? 'rules.card.discard.mine' : 'rules.card.discard'} values={{ player }}>
+          <PlayMoveButton css={linkButtonCss} move={displayLocationHelp({ type: LocationType.PlayerDiscard, player: item.location?.player })} transient/>
         </Trans>
       </p>
     default:
@@ -56,7 +56,7 @@ const CardLocationRule = (props: MaterialRulesProps) => {
   }
 }
 
-const InGameLocationRule = ({ item: { location }, itemIndex }: MaterialRulesProps) => {
+const InGameLocationRule = ({ item: { location }, itemIndex }: MaterialHelpProps) => {
   const { t } = useTranslation()
   const playerId = usePlayerId()
   const player = usePlayerName(location?.player)
@@ -67,45 +67,45 @@ const InGameLocationRule = ({ item: { location }, itemIndex }: MaterialRulesProp
       (location?.player === playerId ? t('rules.card.battlefield.mine') : t('rules.card.battlefield', { player }))
       : (location?.player === playerId ? t('rules.card.astral-plane.mine') : t('rules.card.astral-plane', { player }))
     }{' '}
-    <Trans defaults={cardRule.isActive ? 'rules.card.active' : 'rules.card.deactivated'}><strong/></Trans>
+    <Trans i18nKey={cardRule.isActive ? 'rules.card.active' : 'rules.card.deactivated'}><strong/></Trans>
   </p>
 }
 
-const PerformActionButton = ({ itemIndex, closeDialog }: MaterialRulesProps) => {
+const PerformActionButton = ({ itemIndex, closeDialog }: MaterialHelpProps) => {
   const { t } = useTranslation()
   const performAction = useLegalMove(move => isCustomMove(move) && move.type === CustomMoveType.PerformAction && move.data === itemIndex)
   return performAction ? <PlayMoveButton move={performAction} onPlay={closeDialog}>{t('card.action.perform')}</PlayMoveButton> : null
 }
 
-const CardFrontRule = (props: MaterialRulesProps) => {
+const CardFrontRule = (props: MaterialHelpProps) => {
   const { item, itemIndex } = props
   const { t } = useTranslation()
   const playerId = usePlayerId()
-  const factionCard = item.id.front as FactionCard
+  const factionCard = (item.id as {front: any, back: any}).front as FactionCard
   const characteristics = FactionCardsCharacteristics[factionCard]
   return <>
     {isCreature(characteristics) && <>
-        <p><Trans defaults="rules.card.creature" values={characteristics}><strong/></Trans></p>
+        <p><Trans i18nKey="rules.card.creature" values={characteristics}><strong/></Trans></p>
       {characteristics.family &&
-          <p><Trans defaults="rules.card.family" values={{ family: t(`card.family.${characteristics.family}`) }}><strong/></Trans></p>
+          <p><Trans i18nKey="rules.card.family" values={{ family: t(`card.family.${characteristics.family}`) }}><strong/></Trans></p>
       }
     </>}
     {isSpell(characteristics) && (
-      characteristics.discardTiming === DiscardTiming.ActivationOrEndOfTurn ? <p><Trans defaults="rules.card.spell.active"><strong/></Trans></p>
-        : <p><Trans defaults="rules.card.spell.passive"><strong/></Trans></p>
+      characteristics.discardTiming === DiscardTiming.ActivationOrEndOfTurn ? <p><Trans i18nKey="rules.card.spell.active"><strong/></Trans></p>
+        : <p><Trans i18nKey="rules.card.spell.passive"><strong/></Trans></p>
     )}
     {isSpell(characteristics) && characteristics.astral &&
         <p css={alignIcon}>
             <Picture src={astral}/>
             &nbsp;
-            <span><Trans defaults={`rules.card.spell.astral`}><strong/></Trans></span>
+            <span><Trans i18nKey={`rules.card.spell.astral`}><strong/></Trans></span>
         </p>
     }
     {isLand(characteristics) &&
         <p css={alignIcon}>
             <Picture src={captureFlag}/>
             &nbsp;
-            <span><Trans defaults={`rules.card.land`} values={characteristics}><strong/></Trans></span>
+            <span><Trans i18nKey={`rules.card.land`} values={characteristics}><strong/></Trans></span>
         </p>
     }
     {characteristics.getAttributes().map(attribute => <AttributeRule key={attribute.type} attribute={attribute}/>)}
@@ -136,19 +136,19 @@ const CardFrontRule = (props: MaterialRulesProps) => {
       })
     )}
     {characteristics.action && <>
-        <p><strong>{t('card.action')}</strong> - <Trans defaults={`action.${factionCard}`}><strong/><em/></Trans></p>
+        <p><strong>{t('card.action')}</strong> - <Trans i18nKey={`action.${factionCard}`}><strong/><em/></Trans></p>
       {item.location && item.location.player === playerId && onBattlefieldAndAstralPlane(item.location) && <PerformActionButton {...props}/>}
     </>}
     {item.location?.type === LocationType.Battlefield && <CardEffectsRules index={itemIndex!}/>}
-    <p><Trans defaults="rules.card.value" values={{ value: characteristics.value }}><strong/></Trans></p>
+    <p><Trans i18nKey="rules.card.value" values={{ value: characteristics.value }}><strong/></Trans></p>
     {characteristics.deckBuildingValue &&
-        <p><Trans defaults="rules.card.deck-value" values={{ value: characteristics.deckBuildingValue }}><strong/></Trans></p>
+        <p><Trans i18nKey="rules.card.deck-value" values={{ value: characteristics.deckBuildingValue }}><strong/></Trans></p>
     }
     {characteristics.legendary &&
-        <p><Trans defaults="rules.card.legendary"><strong/></Trans></p>
+        <p><Trans i18nKey="rules.card.legendary"><strong/></Trans></p>
     }
     {characteristics.limit &&
-        <p><Trans defaults="rules.card.limit" values={{ limit: characteristics.limit }}><strong/></Trans></p>
+        <p><Trans i18nKey="rules.card.limit" values={{ limit: characteristics.limit }}><strong/></Trans></p>
     }
   </>
 }

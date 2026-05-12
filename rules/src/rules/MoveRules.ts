@@ -10,7 +10,7 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
   getPlayerMoves(): MaterialMove[] {
     const movedCards = this.remind<number[]>(Memory.MovedCards)
     if (movedCards.length) {
-      return [this.material(MaterialType.FactionToken).parent(movedCards[0]).moveItem({ rotation: { y: 1 } })]
+      return this.material(MaterialType.FactionToken).parent(movedCards[0]).moveItems<any, any, { y: number }>({ rotation: { y: 1 } })
     }
     const attacks = this.remind<Attack[]>(Memory.Attacks)
     return this.material(MaterialType.FactionCard)
@@ -23,14 +23,14 @@ export class MoveRules extends PlayerTurnRule<PlayerId, MaterialType, LocationTy
 
   beforeItemMove(move: ItemMove): MaterialMove[] {
     if (isMoveItem(move)) {
-      if (move.itemType === MaterialType.FactionCard && move.position.location?.type === LocationType.Battlefield) {
+      if (move.itemType === MaterialType.FactionCard && move.location.type === LocationType.Battlefield) {
         this.memorize(Memory.MovedCards, movedCards => [...movedCards, move.itemIndex])
         const cardToSwap = this.material(MaterialType.FactionCard)
           .location(location => location.type === LocationType.Battlefield
-            && location.x === move.position.location?.x && location.y === move.position.location?.y)
+            && location.x === move.location.x && location.y === move.location.y)
         if (cardToSwap.length) {
           const swapLocation = this.material(MaterialType.FactionCard).getItem(move.itemIndex)!.location
-          return [cardToSwap.moveItem({ location: { ...swapLocation } })]
+          return [cardToSwap.moveItem({ ...swapLocation })]
         }
       }
       if (move.itemType === MaterialType.FactionToken) {
