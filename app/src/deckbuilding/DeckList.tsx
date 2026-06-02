@@ -65,8 +65,12 @@ const deckNameCss = (faction?: Faction) => css`
   margin: 0 1em 0 0;
   font-size: 1em;
   font-weight: normal;
-  color: ${faction ? factionColor[faction] : '#6B4135'};
   cursor: pointer;
+
+  // && doubles the class selector to win over the dialog container's "h3" color rule (see theme.ts)
+  && {
+    color: ${faction ? factionColor[faction] : '#6B4135'};
+  }
 
   &:hover {
     text-decoration: underline;
