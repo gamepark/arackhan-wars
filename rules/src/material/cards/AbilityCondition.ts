@@ -1,6 +1,5 @@
-import { Material, MaterialGame } from '@gamepark/rules-api'
+import { Material, MaterialGame, TFunction } from '@gamepark/rules-api'
 import { merge } from 'es-toolkit/compat'
-import { TFunction } from 'i18next'
 import { getCardRule } from '../../rules/cardRulesCache'
 import { Memory } from '../../rules/Memory'
 import { LocationType } from '../LocationType'

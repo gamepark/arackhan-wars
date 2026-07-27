@@ -1,5 +1,4 @@
-import { OptionsSpec } from '@gamepark/rules-api'
-import { TFunction } from 'i18next'
+import { OptionsSpec, TFunction } from '@gamepark/rules-api'
 
 /**
  * This is the type of object that the game receives when a new game is started.
