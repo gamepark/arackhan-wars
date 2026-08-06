@@ -1,5 +1,5 @@
 import './rules/CardRule'
 
 export { ArackhanWarsRules } from './ArackhanWarsRules'
-export { ArackhanWarsOptionsSpec } from './ArackhanWarsOptions'
+export { ArackhanWarsOptionsSpecV2 } from './ArackhanWarsOptions'
 export { ArackhanWarsSetup } from './ArackhanWarsSetup'

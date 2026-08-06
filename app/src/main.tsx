@@ -1,4 +1,4 @@
-import { ArackhanWarsOptionsSpec } from '@gamepark/arackhan-wars/ArackhanWarsOptions.ts'
+import { ArackhanWarsOptionsSpecV2 } from '@gamepark/arackhan-wars/ArackhanWarsOptions.ts'
 import { ArackhanWarsRules } from '@gamepark/arackhan-wars/ArackhanWarsRules.ts'
 import { ArackhanWarsSetup } from '@gamepark/arackhan-wars/ArackhanWarsSetup.ts'
 import { addStylesheetUrl, GameProvider } from '@gamepark/react-game'
@@ -22,7 +22,7 @@ createRoot(document.getElementById('root')!).render(
     {isDeckbuilding ?
       <DeckbuildingProvider/>
       :
-      <GameProvider game="arackhan-wars" GameSetup={ArackhanWarsSetup} Rules={ArackhanWarsRules} optionsSpec={ArackhanWarsOptionsSpec}
+      <GameProvider game="arackhan-wars" GameSetup={ArackhanWarsSetup} Rules={ArackhanWarsRules} optionsSpec={ArackhanWarsOptionsSpecV2}
                     material={Material} locators={Locators} materialI18n={materialI18n} animations={arackhanWarsAnimations}
                     tutorial={new Tutorial()} ai={window.Worker ? tutorialAI : undefined} version={2}
                     logs={new ArackhanWarsHistory()}

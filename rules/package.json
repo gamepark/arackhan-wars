@@ -2,10 +2,7 @@
   "name": "@gamepark/arackhan-wars",
   "version": "2.5.1",
   "description": "The rules of AracKhan Wars adapted for Game Park",
-  "sideEffects": [
-    "./dist/index.js",
-    "./dist/rules/CardRule.js"
-  ],
+  "sideEffects": false,
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,12 +22,12 @@
     "lint": "eslint --fix"
   },
   "peerDependencies": {
-    "@gamepark/rules-api": ">=7",
+    "@gamepark/rules-api": ">=7.7",
     "es-toolkit": "^1.45.1"
   },
   "devDependencies": {
-    "@gamepark/rules-api": "~7.6.5",
-    "es-toolkit": "^1.49.0",
+    "@gamepark/rules-api": "~7.7.2",
+    "es-toolkit": "^1.50.0",
     "vitest": "^4.1.10"
   }
 }
