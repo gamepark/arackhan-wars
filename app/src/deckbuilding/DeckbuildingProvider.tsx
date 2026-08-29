@@ -14,8 +14,8 @@ import { DeckbuildingRuleId, DeckbuildingRules, DeckBuildingSetup } from './Deck
 
 export const DeckbuildingProvider = () => {
   useEffect(() => {
-    arackhanWarsAnimations.when().move((move) => isMoveItemType(MaterialType.FactionCard)(move) && move.location.type === LocationType.PlayerDeck).duration(0.2)
-    arackhanWarsAnimations.when().move((move) => isDeleteItemTypeAtOnce(MaterialType.FactionCard)(move)).duration(0)
+    arackhanWarsAnimations.configure((move) => isMoveItemType(MaterialType.FactionCard)(move) && move.location.type === LocationType.PlayerDeck).duration(200)
+    arackhanWarsAnimations.configure((move) => isDeleteItemTypeAtOnce(MaterialType.FactionCard)(move)).skip()
   }, [])
   return <GameProvider game="arackhan-wars" storage="arackhan-wars-deckbuilding" GameSetup={DeckBuildingSetup} Rules={DeckbuildingRules}
                        material={DeckbuildingMaterial} locators={DeckbuildingLocators} materialI18n={materialI18n} animations={arackhanWarsAnimations}

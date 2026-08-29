@@ -1,22 +1,24 @@
 import { LocationType } from '@gamepark/arackhan-wars/material/LocationType'
 import { MaterialType } from '@gamepark/arackhan-wars/material/MaterialType'
 import { RuleId } from '@gamepark/arackhan-wars/rules/RuleId'
-import { MaterialGameAnimations } from '@gamepark/react-game'
+import { and, isRule, MaterialGameAnimations } from '@gamepark/react-game'
 import { isCreateItemType, isDeleteItemType, isMoveItemType } from '@gamepark/rules-api'
 
 export const arackhanWarsAnimations = new MaterialGameAnimations()
 
-arackhanWarsAnimations.when().move(isCreateItemType(MaterialType.FactionCard)).duration(0)
-arackhanWarsAnimations.when().move(isDeleteItemType(MaterialType.FactionCard)).duration(0)
+arackhanWarsAnimations.configure(isCreateItemType(MaterialType.FactionCard)).skip()
+arackhanWarsAnimations.configure(isDeleteItemType(MaterialType.FactionCard)).skip()
 
-arackhanWarsAnimations.when()
-  .rule(RuleId.Mulligan)
-  .move(move =>
-    isMoveItemType(MaterialType.FactionCard)(move) && move.location.type === LocationType.PlayerHand
-  )
-  .duration(0.2)
+arackhanWarsAnimations
+  .configure(and(
+    isRule(RuleId.Mulligan),
+    move => isMoveItemType(MaterialType.FactionCard)(move) && move.location.type === LocationType.PlayerHand
+  ))
+  .duration(200)
 
-arackhanWarsAnimations.when()
-  .rule(RuleId.EndOfRoundRule)
-  .move(move => isMoveItemType(MaterialType.FactionToken)(move))
-  .duration(0.3)
+arackhanWarsAnimations
+  .configure(and(
+    isRule(RuleId.EndOfRoundRule),
+    move => isMoveItemType(MaterialType.FactionToken)(move)
+  ))
+  .duration(300)
