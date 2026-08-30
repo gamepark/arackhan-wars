@@ -19,7 +19,7 @@ import { roundTrackerDescription } from '../material/RoundTrackerDescription'
 import { TutorialSetup } from './TutorialSetup'
 
 export class Tutorial extends MaterialTutorial {
-  version = 7
+  version = 8
   options = { players: 2 }
   setup = new TutorialSetup()
 
@@ -409,6 +409,16 @@ export class Tutorial extends MaterialTutorial {
         filter: (move, game) => isCustomMove(move) && move.type === CustomMoveType.Attack
           && move.data.card === this.getBattlefieldCard(game, FactionCard.ForgePatriarch).getIndex()
       }
+    },
+    {
+      move: {
+        player: 2,
+        filter: (move, game) => isCustomMove(move) && move.type === CustomMoveType.Attack
+          && move.data.card === this.getBattlefieldCard(game, FactionCard.SwampTroll).getIndex()
+      }
+    },
+    {
+      move: { player: 2, filter: isCustomMoveType(CustomMoveType.SolveAttack) }
     },
     {
       move: { player: 2, filter: isCustomMoveType(CustomMoveType.Pass) }
