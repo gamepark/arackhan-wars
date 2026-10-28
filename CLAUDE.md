@@ -15,6 +15,7 @@ https://raw.githubusercontent.com/gamepark/gamepark.github.io/main/docs/[path]
 | Topic | Path |
 |-------|------|
 | Core concepts | `concepts/core-concepts.md` |
+| Game options | `features/game-options.md` |
 | Items & Locations | `concepts/items-and-locations.md` |
 | Hiding data | `concepts/hiding-data.md` |
 | Item moves | `features/item-moves.md` |
@@ -50,7 +51,11 @@ rules/src/                    # Server-side game logic
   │   └── *Rule.ts            # Rule implementations
   ├── ArackhanWarsRules.ts    # Main rules class
   ├── ArackhanWarsSetup.ts    # Initial game setup
-  └── ArackhanWarsOptions.ts  # Game configuration
+  └── ArackhanWarsOptions.ts  # OptionsSpecV2: option structure, no text
+
+app/public/
+  ├── translation/*.json      # Game texts, one file per locale
+  └── options/*.json          # Option labels, one file per locale
 
 app/src/                      # Client-side React UI
   ├── material/Material.tsx   # Visual descriptions (sizes, images)
@@ -95,6 +100,13 @@ Every game element is an item with a location:
 7. **Add Headers** - Display game text
 8. **Test** - Use `game.new()`, `game.view`, `game.legalMoves` in browser console
 
+## Lint
+
+After changing code, run `yarn lint` at the root alongside the `tsc` check — once per batch of
+changes. It runs **oxlint** (config in `.oxlintrc.json`) and catches what `tsc` cannot, chiefly the
+React hooks rules in `app/` (`rules-of-hooks`, `exhaustive-deps`). Fix its warnings rather than
+silencing them; a disable comment needs a reason.
+
 ## Console Commands (browser)
 
 ```javascript
@@ -125,6 +137,11 @@ getPlayerMoves() {
 }
 ```
 
+### Filter the Material, never loop over indexes
+Keep selections as `Material` (`filter((item, index) => …)`, `id(predicate)`…) and call `moveItems` on
+the result; never `getIndexes().map(i => this.material(X).index(i)…)`. Helpers return `Material`, not
+`number[]`. See `features/item-moves.md#filter-items`.
+
 ### Consequences
 ```typescript
 afterItemMove(move: ItemMove) {
@@ -145,13 +162,15 @@ Similar games on GitHub (gamepark org) for inspiration:
 
 ## Translations
 
-Translation files are located in `app/public/translation/` (one JSON file per language: `en.json`, `fr.json`, etc.). The project uses `i18next` + `react-i18next`.
+Translation files are located in `app/public/translation/` (one JSON file per language: `en.json`, `fr.json`, `de.json`, `es.json`, `it.json`, `ru.json`). The project uses `i18next` + `react-i18next`.
 
 ### Translation workflow
 
 **During development**: only write translations in the **developer's native language** file (e.g. `fr.json` for a French developer). Do not touch other language files — this saves tokens.
 
 **Before production release**: when asked, translate all texts into every other supported language in a dedicated pass.
+
+:bulb: The same native-language rule applies to `app/public/options/*.json`.
 
 ### Where translations are used
 - `app/public/translation/*.json` — UI texts (headers, dialogs, tooltips, buttons)
@@ -160,6 +179,42 @@ Translation files are located in `app/public/translation/` (one JSON file per la
 
 ### Translation keys convention
 Follow existing key naming patterns in the JSON files. Keep keys descriptive and organized by feature/screen.
+
+## Game Options
+
+Options are declared in `rules/src/[Game]Options.ts` with `OptionsSpecV2` — **plain JSON, no functions
+and no text**. The platform snapshots it when the bundle is prepared and reads it from its database.
+
+```typescript
+export const GameTemplateOptionsSpecV2: OptionsSpecV2 = {
+  specVersion: 2,
+  players: { min: 2, max: 4 },
+  identities: { values: getEnumValues(PlayerColor) }
+}
+```
+
+Three things do **not** belong in it:
+
+- **Texts** go to `app/public/options/{locale}.json`, keyed by convention: `option.<option>`,
+  `option.<option>.<value>`, `identities.<value>`, plus optional `.help` and `.warn` variants. Values
+  are addressed by value, so `PlayerColor.Blue = 1` gives `identities.1`.
+- **`subscriberRequired`, `competitiveDisabled`, `competitivePlayers`** belong to the platform database.
+- **`validate`** no longer exists. Express constraints as `playerCount` (on an option or a value),
+  `requires` on a value, or a `forbidden-combination` rule whose `message` is a key in the options
+  document.
+
+Read `features/game-options.md` before changing this file — the shape is precise and the platform
+depends on it. Never reintroduce a v1 `OptionsSpec`.
+
+## Backward Compatibility
+
+Saved games store enum values as numbers (`MaterialType`, `LocationType`, `RuleId`, `Memory`, ids…).
+Check the `version` in `rules/package.json`:
+
+- **Below 1.0.0**: the game is not in production. Consistency of the code comes before stable enum
+  values: put a new value where it belongs, renumber freely, rename and restructure.
+- **1.0.0 or above**: backward compatibility wins. Never shift existing values: append new ones at
+  the end, and keep every game already started playable.
 
 ## When Helping
 

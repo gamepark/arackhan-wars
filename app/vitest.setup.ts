@@ -22,7 +22,7 @@ const screen = {
 }
 const window = {
   localStorage, document, screen, Promise, devicePixelRatio: 1, innerWidth: 1000, innerHeight: 800,
-  location: { search: '', href: 'http://localhost/', pathname: '/' },
+  location: { search: '', href: 'http://localhost/', hostname: 'localhost', pathname: '/' },
   addEventListener: () => {}, removeEventListener: () => {}, getComputedStyle: () => ({}),
   matchMedia: () => ({ matches: false, addEventListener: () => {}, addListener: () => {} })
 }
