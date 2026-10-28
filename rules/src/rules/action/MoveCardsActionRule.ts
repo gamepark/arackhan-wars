@@ -16,8 +16,9 @@ export abstract class MoveCardsActionRule extends CardActionRule {
     const cardsAllowedToMove = this.getCardsAllowedToMove()
     for (const index of cardsAllowedToMove.getIndexes()) {
       const card = cardsAllowedToMove.index(index)
-      const legalDestinations = this.getLegalDestinations(card)
-      if (legalDestinations.length > 0) return true
+      const { x, y } = card.getItem()!.location
+      // Staying in place is not a move: Warp Path lists the card's own square among its destinations
+      if (this.getLegalDestinations(card).some(destination => destination.x !== x || destination.y !== y)) return true
     }
     return false
   }

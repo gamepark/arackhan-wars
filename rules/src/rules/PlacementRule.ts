@@ -26,7 +26,9 @@ export class PlacementRule extends PlayerTurnRule {
     const astralCards = playerHand.id<CardId>(id => (FactionCardsCharacteristics[id.front] as Spell).astral)
     const otherCards = playerHand.id<CardId>(id => !(FactionCardsCharacteristics[id.front] as Spell).astral)
 
+    const astralPlane = factionCards.location(LocationType.AstralPlane).player(this.player)
     for (let x = 0; x < 2; x++) {
+      if (astralPlane.location(location => location.x === x).length) continue
       moves.push(...astralCards.moveItems({ type: LocationType.AstralPlane, x, rotation: true, player: this.player }))
     }
 
