@@ -9,18 +9,21 @@ export function setCardRuleFactory(f: CardRuleFactory) {
   factory = f
 }
 
-let cardsRulesCache: { game: MaterialGame, rules: Record<number, CardRule> } | undefined
+// One cache per game: rules evaluated on a copy of the game (e.g. to test a movement) must not evict the cache of the original game
+let cardsRulesCache = new WeakMap<MaterialGame, Record<number, CardRule>>()
 
 export function getCardRule(game: MaterialGame, cardIndex: number): CardRule {
-  if (cardsRulesCache?.game !== game) {
-    cardsRulesCache = { game, rules: {} }
+  let rules = cardsRulesCache.get(game)
+  if (!rules) {
+    rules = {}
+    cardsRulesCache.set(game, rules)
   }
-  if (!cardsRulesCache.rules[cardIndex]) {
-    cardsRulesCache.rules[cardIndex] = factory!(game, cardIndex)
+  if (!rules[cardIndex]) {
+    rules[cardIndex] = factory!(game, cardIndex)
   }
-  return cardsRulesCache.rules[cardIndex]
+  return rules[cardIndex]
 }
 
 export function resetCardsRulesCache() {
-  cardsRulesCache = undefined
+  cardsRulesCache = new WeakMap()
 }

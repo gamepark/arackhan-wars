@@ -80,6 +80,11 @@ import { Memory } from './Memory'
 export class CardRule extends MaterialRulesPart {
   private abilitiesCache: Ability[] | undefined = undefined
   private effectsCache: Effect[] | undefined = undefined
+  private initialSkillsCache: Ability[] | undefined = undefined
+  private skillsCache: Ability[] | undefined = undefined
+  private skillsIgnoringEnemySkillsCache: Ability[] | undefined = undefined
+  private legalDestinationsCache: XYCoordinates[] | undefined = undefined
+  private locationCancelsMovementCache: Record<string, boolean> = {}
 
   constructor(game: MaterialGame, public index: number) {
     super(game)
@@ -199,7 +204,14 @@ export class CardRule extends MaterialRulesPart {
     })
   }
 
-  get initialSkills() {
+  get initialSkills(): Ability[] {
+    if (!this.initialSkillsCache) {
+      this.initialSkillsCache = this.processInitialSkills()
+    }
+    return this.initialSkillsCache
+  }
+
+  private processInitialSkills(): Ability[] {
     const characteristicsForSkills = this.characteristicsForSkills
     if (!isCreature(characteristicsForSkills)) return []
     const skills = [...characteristicsForSkills.getSkills()]
@@ -211,13 +223,19 @@ export class CardRule extends MaterialRulesPart {
   }
 
   private get skills(): Ability[] {
-    const skills = this.initialSkills
-    return this.loseSkills(skills) ? [] : skills
+    if (!this.skillsCache) {
+      const skills = this.initialSkills
+      this.skillsCache = this.loseSkills(skills) ? [] : skills
+    }
+    return this.skillsCache
   }
 
   private get skillsIgnoringEnemySkills(): Ability[] {
-    const skills = this.initialSkills
-    return this.loseSkills(skills, false) ? [] : skills
+    if (!this.skillsIgnoringEnemySkillsCache) {
+      const skills = this.initialSkills
+      this.skillsIgnoringEnemySkillsCache = this.loseSkills(skills, false) ? [] : skills
+    }
+    return this.skillsIgnoringEnemySkillsCache
   }
 
   private get weaknesses() {
@@ -698,7 +716,14 @@ export class CardRule extends MaterialRulesPart {
     )
   }
 
-  get legalDestinations() {
+  get legalDestinations(): XYCoordinates[] {
+    if (!this.legalDestinationsCache) {
+      this.legalDestinationsCache = this.processLegalDestinations()
+    }
+    return this.legalDestinationsCache
+  }
+
+  private processLegalDestinations(): XYCoordinates[] {
     if (!this.canBeActivated) return []
     if (this.canFly) {
       return battlefieldCoordinates.filter(coordinates => this.canMoveOrSwapPosition(coordinates))
@@ -797,10 +822,18 @@ export class CardRule extends MaterialRulesPart {
   }
 
   private locationCancelsMovement(x: number, y: number) {
-    const gameCopy: MaterialGame = JSON.parse(JSON.stringify(this.game))
-    const cardCopy = new ArackhanWarsRules(gameCopy).material(MaterialType.FactionCard).index(this.index)
-    cardCopy.getItem()!.location.x = x
-    cardCopy.getItem()!.location.y = y
+    const key = `${x},${y}`
+    if (this.locationCancelsMovementCache[key] === undefined) {
+      this.locationCancelsMovementCache[key] = this.processLocationCancelsMovement(x, y)
+    }
+    return this.locationCancelsMovementCache[key]
+  }
+
+  private processLocationCancelsMovement(x: number, y: number) {
+    // The copy is only read: copying the moved card is enough
+    const cards = [...this.game.items[MaterialType.FactionCard]!]
+    cards[this.index] = { ...cards[this.index], location: { ...cards[this.index].location, x, y } }
+    const gameCopy: MaterialGame = { ...this.game, items: { ...this.game.items, [MaterialType.FactionCard]: cards } }
     const cardRules = new CardRule(gameCopy, this.index)
     return !cardRules.isActive || !cardRules.attributes.some(attribute => attribute.type === AttributeType.Movement)
       || (this.isInitiativeSequence && !cardRules.attributes.some(attribute => attribute.type === AttributeType.Initiative))
