@@ -1,4 +1,5 @@
-import { areAdjacentSquares, Material, MaterialGame, TFunction } from '@gamepark/rules-api'
+import { areAdjacentSquares, Material, MaterialGame } from '@gamepark/rules-api'
+import { TFunction } from './TFunction'
 import { getCardRule } from '../../rules/cardRulesCache'
 import type { FactionCard } from '../FactionCard'
 import type { AttributeType } from './Attribute'
